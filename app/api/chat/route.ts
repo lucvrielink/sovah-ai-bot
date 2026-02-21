@@ -2,6 +2,18 @@ import OpenAI from "openai";
 import fs from "fs";
 import path from "path";
 
+// ✅ CORS (so Shopify can call Vercel)
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "https://sovahcare.com",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+// ✅ Handle preflight (browser sends OPTIONS first)
+export async function OPTIONS() {
+  return new Response(null, { status: 204, headers: corsHeaders });
+}
+
 // ✅ Load catalogs from /data
 const bundlesPath = path.join(process.cwd(), "data", "bundle_catalog.json");
 const productsPath = path.join(process.cwd(), "data", "product_catalog.json");
@@ -11,9 +23,8 @@ const PRODUCTS_JSON = fs.readFileSync(productsPath, "utf8");
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// ✅ PASTE your big Codex/SOVAH system prompt in the spot below
-// Keep it in English (your UI is English now).
-const SOVAH_SYSTEM_PROMPT =`
+// ✅ Keep it in English (your UI is English now).
+const SOVAH_SYSTEM_PROMPT = `
 SYSTEM / DEVELOPER INSTRUCTIONS — SOVAH Shopify Assistant (EN)
 
 ROLE
@@ -95,7 +106,7 @@ export async function POST(req: Request) {
     if (!message) {
       return new Response(JSON.stringify({ reply: "Missing message.", actions: [] }), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     }
 
@@ -115,7 +126,7 @@ export async function POST(req: Request) {
 
     return new Response(JSON.stringify({ reply, actions: [] }), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...corsHeaders },
     });
   } catch (e) {
     return new Response(
@@ -123,7 +134,7 @@ export async function POST(req: Request) {
         reply: "Sorry — something went wrong on our side. Please try again.",
         actions: [],
       }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+      { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }
 }
