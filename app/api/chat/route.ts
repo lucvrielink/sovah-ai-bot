@@ -128,13 +128,14 @@ export async function POST(req: Request) {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
-  } catch (e) {
-    return new Response(
-      JSON.stringify({
-        reply: "Sorry — something went wrong on our side. Please try again.",
-        actions: [],
-      }),
-      { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
-    );
-  }
+  } catch (e: any) {
+  console.error("SOVAH /api/chat error:", e);
+
+  return new Response(
+    JSON.stringify({
+      reply: "SERVER ERROR: " + (e?.message || "unknown"),
+      actions: [],
+    }),
+    { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+  );
 }
