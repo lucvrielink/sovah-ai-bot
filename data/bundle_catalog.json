@@ -1,0 +1,52 @@
+{
+  "bundles": [
+    {
+      "name": "Dry & Dehydrated Skin Routine",
+      "url": "https://sovahcare.com/products/dry-dehydrated-skin-routine",
+      "description": "The Dry & Dehydrated Skin Routine is designed for skin that feels tight, uncomfortable, or lacks moisture. This routine focuses on supporting hydration and helping maintain the skin’s natural moisture balance, leaving the skin feeling soft, smooth, and comfortable throughout the day.",
+      "products": ["Micellar Cleansing Water", "Hydrating Toner", "Hydrating Serum", "Moisturising Day Cream", "Ceramide Barrier Night Cream"]
+    },
+    {
+      "name": "Combination Skin Balance Routine",
+      "url": "https://sovahcare.com/products/combination-skin-balance-routine",
+      "description": "The Combination Skin Balance Routine is designed for skin that is oily in some areas and dry in others. This routine helps support hydration where needed while keeping oil-prone areas feeling balanced and comfortable, resulting in a more even-looking complexion.",
+      "products": ["Purifying Mousse", "Hydrating Toner", "Niacinamide Gel Moisturiser", "Sun Protection SPF50 Stick, no tint"]
+    },
+    {
+      "name": "Simple Daily Skincare Routine",
+      "url": "https://sovahcare.com/products/simple-daily-skincare-routine",
+      "description": "The Simple Daily Skincare Routine is designed for those who prefer an easy, no-fuss approach to skincare. This routine focuses on daily care essentials to help keep the skin feeling clean, comfortable, and well cared for without unnecessary steps.",
+      "products": ["Micellar Cleansing Water", "Moisturising Day Cream", "Ceramide Barrier Night Cream", "Sun Protection SPF50 Stick, no tint"]
+    },
+    {
+      "name": "Sensitive & Reactive Skin Routine",
+      "url": "https://sovahcare.com/products/sensitive-reactive-skin-routine",
+      "description": "Sensitive & Reactive Skin Routine is designed for skin that is easily irritated, reactive, or prone to redness. This gentle routine focuses on supporting the skin barrier and maintaining comfort, helping the skin feel calm, balanced, and well cared for without the use of harsh or aggressive ingredients.",
+      "products": ["Micellar Cleansing Water", "Hydrating Toner", "Hydrating Serum", "Calming Facial Oil", "Ceramide Barrier Night Cream"]
+    },
+    {
+      "name": "Normal & Balanced Skin Routine",
+      "url": "https://sovahcare.com/products/normal-balanced-skin-routine",
+      "description": "The Normal & Balanced Skin Routine is designed for skin that feels comfortable and well balanced, without specific concerns. This routine helps maintain the skin’s natural balance and supports a fresh, healthy-looking complexion with a simple and effective daily approach.",
+      "products": ["Micellar Cleansing Water", "Hydrating Toner", "Niacinamide Gel Moisturiser", "Sun Protection SPF50 Stick, no tint"]
+    },
+    {
+      "name": "Glow & Radiance Routine",
+      "url": "https://sovahcare.com/products/glow-radiance-routine",
+      "description": "The Glow & Radiance Routine is designed for skin that looks dull or uneven. This routine focuses on supporting a fresher, more radiant-looking complexion while keeping the skin hydrated and comfortable as part of a consistent daily routine.",
+      "products": ["Micellar Cleansing Water", "Vitamin C Serum", "Antioxidant Ginkgo Gel Booster", "Moisturising Day Cream", "Sun Protection SPF50 Stick, no tint"]
+    },
+    {
+      "name": "Firm & Smooth Skin Routine",
+      "url": "https://sovahcare.com/products/firm-smooth-skin-routine",
+      "description": "The Firm & Smooth Skin Routine is designed for skin showing early signs of aging, such as fine lines or loss of firmness. This routine focuses on supporting a smoother-looking complexion and maintaining skin comfort as part of a consistent daily skincare routine.",
+      "products": ["Micellar Cleansing Water", "Collagen Boost Serum", "Anti-Age Day Cream", "Peptide Anti-Aging Serum", "Ceramide Barrier Night Cream"]
+    },
+    {
+      "name": "Clear & Balanced Skin Routine",
+      "url": "https://sovahcare.com/products/clear-balanced-skin-routine",
+      "description": "The Clear & Balanced Skin Routine is designed for oily or blemish-prone skin that is prone to breakouts or excess shine. This routine focuses on helping maintain a balanced-looking complexion while keeping the skin feeling fresh, lightweight, and comfortable without over-drying.",
+      "products": ["Purifying Mousse", "Niacinamide Gel Moisturiser", "Oil-Free Hydrating Gel", "Sun Protection SPF50 Stick, no tint"]
+    }
+  ]
+}

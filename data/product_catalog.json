@@ -1,0 +1,293 @@
+{
+  "generated_from": "Shopify .js endpoints via browser tool",
+  "products": [
+    {
+      "title": "Micellar Cleansing Water",
+      "handle": "micellar-cleansing-water",
+      "url": "https://sovahcare.com/products/micellar-cleansing-water",
+      "first_available_variant_id": 51851602854226,
+      "source_tags": [
+        "All skin types",
+        "Cleanser (Type)",
+        "Cleansing (Concern)"
+      ],
+      "short_copy_nl": "Zachte reiniger voor dagelijks gebruik, geschikt voor alle huidtypes."
+    },
+    {
+      "title": "Hydrating Toner",
+      "handle": "hydrating-toner",
+      "url": "https://sovahcare.com/products/hydrating-toner",
+      "first_available_variant_id": 51881462956370,
+      "source_tags": [
+        "Dehydrated skin (Concern)",
+        "Dry (Skin type)",
+        "Fragrance Free (Claims)"
+      ],
+      "short_copy_nl": "Hydraterende, parfumvrije toner die helpt bij een comfortabel huidgevoel."
+    },
+    {
+      "title": "Hydrating Serum",
+      "handle": "hydrating-serum",
+      "url": "https://sovahcare.com/products/hydrating-serum",
+      "first_available_variant_id": 51886996390226,
+      "source_tags": [
+        "All skin types (Skin type)",
+        "Dehydrated skin (Concern)",
+        "Anti-age (Concern)"
+      ],
+      "short_copy_nl": "Licht hydraterend serum dat past bij droge of vochtarme huidbehoeften."
+    },
+    {
+      "title": "Double Hydration Boost Gel + HA",
+      "handle": "double-hydration-boost-gel-ha",
+      "url": "https://sovahcare.com/products/double-hydration-boost-gel-ha",
+      "first_available_variant_id": 51887105278290,
+      "source_tags": [
+        "Dehydrated skin (Concern)",
+        "Damaged skin barrier (Concern)",
+        "Hyaluronic Acid (Active ingredients)"
+      ],
+      "short_copy_nl": "Hydraterende gel met focus op vochtbalans en huidcomfort."
+    },
+    {
+      "title": "Moisturising Day Cream",
+      "handle": "moisturising-day-cream",
+      "url": "https://sovahcare.com/products/moisturising-day-cream",
+      "first_available_variant_id": 51887248539986,
+      "source_tags": [
+        "All skin types (Skin type)",
+        "Dehydrated skin (Concern)",
+        "Hydrating"
+      ],
+      "short_copy_nl": "Dagcrème die helpt om de huid zacht en gehydrateerd te houden."
+    },
+    {
+      "title": "Ceramide Barrier Night Cream",
+      "handle": "ceramide-barrier-night-cream",
+      "url": "https://sovahcare.com/products/ceramide-barrier-night-cream",
+      "first_available_variant_id": 51887297593682,
+      "source_tags": [
+        "Ceramides (Active ingredients)",
+        "Damaged skin barrier (Concern)",
+        "Deeply moisturizing"
+      ],
+      "short_copy_nl": "Rijke nachtcrème met ceramide-focus voor comfort en barrièreondersteuning."
+    },
+    {
+      "title": "Purifying Mousse",
+      "handle": "purifying-mousse",
+      "url": "https://sovahcare.com/products/purifying-mousse",
+      "first_available_variant_id": 51900553560402,
+      "source_tags": [
+        "Blemishes (Concern)",
+        "Cleanser (Type)",
+        "Cleansing (Concern)"
+      ],
+      "short_copy_nl": "Schuimende reiniger voor een frisse, lichte finish bij onzuiverheden."
+    },
+    {
+      "title": "Antioxidant Ginkgo Gel Booster",
+      "handle": "antioxidant-ginkgo-gel-booster",
+      "url": "https://sovahcare.com/products/antioxidant-ginkgo-gel-booster",
+      "first_available_variant_id": 51900617851218,
+      "source_tags": [
+        "Booster (Type)",
+        "Hydrating",
+        "No oil"
+      ],
+      "short_copy_nl": "Olievrije booster voor dagelijkse hydratatie en een frisse uitstraling."
+    },
+    {
+      "title": "Calming Facial Oil",
+      "handle": "calming-facial-oil",
+      "url": "https://sovahcare.com/products/calming-facial-oil",
+      "first_available_variant_id": 51900798566738,
+      "source_tags": [
+        "Adds glow",
+        "All skin types (Skin type)",
+        "CBD (Active ingredients)"
+      ],
+      "short_copy_nl": "Kalmerende gezichtsolie die helpt bij een comfortabel en soepel huidgevoel."
+    },
+    {
+      "title": "AHA Peeling Concentrate",
+      "handle": "aha-peeling-concentrate",
+      "url": "https://sovahcare.com/products/aha-peeling-concentrate",
+      "first_available_variant_id": 51900930589010,
+      "source_tags": [
+        "Exfoliator (Type)",
+        "Brightens",
+        "Dark spots (Concern)"
+      ],
+      "short_copy_nl": "Exfoliërend concentraat voor dofheid of textuur; rustig opbouwen wordt aangeraden."
+    },
+    {
+      "title": "Caffeine Gel Booster",
+      "handle": "caffeine-gel-booster",
+      "url": "https://sovahcare.com/products/caffeine-gel-booster",
+      "first_available_variant_id": 51901220454738,
+      "source_tags": [
+        "Booster (Type)",
+        "Caffeine (Active ingredients)",
+        "Hydrating"
+      ],
+      "short_copy_nl": "Lichte gelbooster met cafeïne voor een energieke, gehydrateerde look."
+    },
+    {
+      "title": "Oil-Free Hydrating Gel",
+      "handle": "oil-free-hydrating-gel",
+      "url": "https://sovahcare.com/products/oil-free-hydrating-gel",
+      "first_available_variant_id": 51901284352338,
+      "source_tags": [
+        "Blemishes (Concern)",
+        "Hyaluronic Acid (Active ingredients)",
+        "No oil"
+      ],
+      "short_copy_nl": "Olievrije gelhydratie die geschikt is voor een vettere of onzuivere huid."
+    },
+    {
+      "title": "Peptide Anti-Aging Serum",
+      "handle": "peptide-anti-aging-serum",
+      "url": "https://sovahcare.com/products/peptide-anti-aging-serum",
+      "first_available_variant_id": 51929446154578,
+      "source_tags": [
+        "Anti-age (Concern)",
+        "Dry (Skin type)",
+        "Hyaluronic Acid (Active ingredients)"
+      ],
+      "short_copy_nl": "Peptide-serum voor een gladdere uitstraling binnen een anti-age routine."
+    },
+    {
+      "title": "Collagen Boost Serum",
+      "handle": "collagen-boost-serum",
+      "url": "https://sovahcare.com/products/collagen-boost-serum",
+      "first_available_variant_id": 51929475711314,
+      "source_tags": [
+        "Anti-age (Concern)",
+        "Hyaluronic Acid (Active ingredients)",
+        "quick-absorbing texture"
+      ],
+      "short_copy_nl": "Snel intrekkend serum met focus op stevigheid en comfort."
+    },
+    {
+      "title": "Anti-Age Day Cream",
+      "handle": "anti-age-day-cream",
+      "url": "https://sovahcare.com/products/anti-age-day-cream",
+      "first_available_variant_id": 51929503367506,
+      "source_tags": [
+        "Anti-age (Concern)",
+        "Hyaluronic Acid (Active ingredients)",
+        "Hydrating"
+      ],
+      "short_copy_nl": "Dagcrème voor dagelijkse verzorging bij eerste tekenen van huidveroudering."
+    },
+    {
+      "title": "Natural Retinol Alternative Oil Serum",
+      "handle": "natural-retinol-alternative-oil-serum",
+      "url": "https://sovahcare.com/products/natural-retinol-alternative-oil-serum",
+      "first_available_variant_id": 51929571393874,
+      "source_tags": [
+        "Anti-age (Concern)",
+        "Dark spots (Concern)",
+        "Booster (Type)"
+      ],
+      "short_copy_nl": "Olie-serum als retinol-alternatief binnen een milde anti-age aanpak."
+    },
+    {
+      "title": "Smoothing Eye Cream",
+      "handle": "smoothing-eye-cream",
+      "url": "https://sovahcare.com/products/smoothing-eye-cream",
+      "first_available_variant_id": 51929683329362,
+      "source_tags": [
+        "Eye cream (Type)",
+        "Anti-age (Concern)",
+        "Hydrating"
+      ],
+      "short_copy_nl": "Oogcrème voor hydratatie en een gladder ogende oogcontour."
+    },
+    {
+      "title": "Vitamin C Serum",
+      "handle": "vitamin-c-serum",
+      "url": "https://sovahcare.com/products/vitamin-c-serum",
+      "first_available_variant_id": 51930475528530,
+      "source_tags": [
+        "2% Vitamin C",
+        "Dark spots (Concern)",
+        "Anti-age (Concern)"
+      ],
+      "short_copy_nl": "Vitamine C-serum voor een frissere, egaler ogende teint."
+    },
+    {
+      "title": "Brightening Face&Body Exfoliator with Kojic Acid",
+      "handle": "brightening-face-body-exfoliator-with-kojic-acid",
+      "url": "https://sovahcare.com/products/brightening-face-body-exfoliator-with-kojic-acid",
+      "first_available_variant_id": 51930578714962,
+      "source_tags": [
+        "Exfoliator (Type)",
+        "Kojic Acid (Active ingredients)",
+        "Dark spots (Concern)"
+      ],
+      "short_copy_nl": "Exfoliator voor gezicht en lichaam bij doffe of ongelijk ogende huid."
+    },
+    {
+      "title": "Dark Spot Face Cream with Kojic Acid",
+      "handle": "dark-spot-face-cream-with-kojic-acid",
+      "url": "https://sovahcare.com/products/dark-spot-face-cream-with-kojic-acid",
+      "first_available_variant_id": 51930733216082,
+      "source_tags": [
+        "Kojic Acid (Active ingredients)",
+        "Dark spots (Concern)",
+        "Brightening"
+      ],
+      "short_copy_nl": "Gezichtscrème met kojic acid-focus voor een egaler ogende teint."
+    },
+    {
+      "title": "All-In-One Facial Oil",
+      "handle": "all-in-one-facial-oil",
+      "url": "https://sovahcare.com/products/all-in-one-facial-oil",
+      "first_available_variant_id": 51930909180242,
+      "source_tags": [
+        "Facial oil (Type)",
+        "Adds glow",
+        "Dry (Skin type)"
+      ],
+      "short_copy_nl": "Voedende all-in-one olie die helpt bij glans en comfort."
+    },
+    {
+      "title": "Sun Protection SPF50 Stick, no tint",
+      "handle": "sun-protection-spf50-stick-no-tint",
+      "url": "https://sovahcare.com/products/sun-protection-spf50-stick-no-tint",
+      "first_available_variant_id": 51952704848210,
+      "source_tags": [
+        "Sun care (Concern)",
+        "Stick (Type)",
+        "All skin types (Skin type)"
+      ],
+      "short_copy_nl": "SPF50 stick zonder tint voor eenvoudige dagelijkse zonbescherming."
+    },
+    {
+      "title": "Acne Spot Care",
+      "handle": "acne-spot-care",
+      "url": "https://sovahcare.com/products/acne-spot-care",
+      "first_available_variant_id": 51984072966482,
+      "source_tags": [
+        "Acne prone skin (Skin type)",
+        "Blemishes (Concern)",
+        "For acne-prone skin"
+      ],
+      "short_copy_nl": "Gerichte spot care voor plaatselijk gebruik bij puistjes en onzuiverheden."
+    },
+    {
+      "title": "Niacinamide Gel Moisturiser",
+      "handle": "niacinamide-gel-moisturiser",
+      "url": "https://sovahcare.com/products/niacinamide-gel-moisturiser",
+      "first_available_variant_id": 52613226496338,
+      "source_tags": [
+        "All skin types (Skin type)",
+        "Dark spots (Concern)",
+        "Evens out skin tone"
+      ],
+      "short_copy_nl": "Niacinamide gelcrème die helpt bij balans en een egalere uitstraling."
+    }
+  ]
+}
