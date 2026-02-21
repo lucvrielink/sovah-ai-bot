@@ -21,6 +21,7 @@ const productsPath = path.join(process.cwd(), "data", "product_catalog.json");
 const BUNDLES_JSON = fs.readFileSync(bundlesPath, "utf8");
 const PRODUCTS_JSON = fs.readFileSync(productsPath, "utf8");
 
+// ✅ OpenAI client (requires OPENAI_API_KEY env var in Vercel)
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // ✅ Keep it in English (your UI is English now).
@@ -129,13 +130,14 @@ export async function POST(req: Request) {
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
   } catch (e: any) {
-  console.error("SOVAH /api/chat error:", e);
+    console.error("SOVAH /api/chat error:", e);
 
-  return new Response(
-    JSON.stringify({
-      reply: "SERVER ERROR: " + (e?.message || "unknown"),
-      actions: [],
-    }),
-    { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
-  );
+    return new Response(
+      JSON.stringify({
+        reply: "SERVER ERROR: " + (e?.message || "unknown"),
+        actions: [],
+      }),
+      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+    );
+  }
 }
