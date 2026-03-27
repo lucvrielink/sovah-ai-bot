@@ -256,18 +256,43 @@ function findMentionedProducts(text: string): Product[] {
 function cleanReply(reply: string): string {
   let cleaned = reply || "";
 
+  // remove raw urls
   cleaned = cleaned.replace(/https?:\/\/\S+/gi, "").trim();
 
+  // remove robotic labels
   cleaned = cleaned.replace(/^\s*[-•]?\s*Best match:\s*/gim, "");
   cleaned = cleaned.replace(/^\s*[-•]?\s*Best bundle:\s*/gim, "");
   cleaned = cleaned.replace(/^\s*[-•]?\s*Bundle:\s*/gim, "");
-  cleaned = cleaned.replace(/^\s*[-•]?\s*Add-on:\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Add-on(\s*\(optional\))?:\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Quick AM\s*\/\s*PM order.*$/gim, "");
   cleaned = cleaned.replace(/^\s*[-•]?\s*Simple AM\s*\/\s*PM order.*$/gim, "");
-  cleaned = cleaned.replace(/^\s*[-•]?\s*AM:\s*/gim, "");
-  cleaned = cleaned.replace(/^\s*[-•]?\s*PM:\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*AM:\s.*$/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*PM:\s.*$/gim, "");
 
+  // remove hypey openings
   cleaned = cleaned.replace(/^(Nice|Perfect|Amazing|Great)\s*[—\-–:]?\s*/i, "");
 
+  // remove opening question if recommendation is already clear
+  const hasBundleName =
+    cleaned.includes("Glow & Radiance Routine") ||
+    cleaned.includes("Clear & Balanced Skin Routine") ||
+    cleaned.includes("Dry & Dehydrated Skin Routine") ||
+    cleaned.includes("Sensitive & Reactive Skin Routine") ||
+    cleaned.includes("Simple Daily Skincare Routine") ||
+    cleaned.includes("Combination Skin Balance Routine") ||
+    cleaned.includes("Normal & Balanced Skin Routine") ||
+    cleaned.includes("Firm & Smooth Skin Routine");
+
+  if (hasBundleName) {
+    cleaned = cleaned.replace(/^Quick question:.*$/gim, "").trim();
+    cleaned = cleaned.replace(/^Do you have sensitive.*$/gim, "").trim();
+    cleaned = cleaned.replace(/^Is your skin sensitive.*$/gim, "").trim();
+  }
+
+  // remove bullet-only formatting
+  cleaned = cleaned.replace(/^\s*-\s*/gim, "");
+
+  // compress blank lines
   cleaned = cleaned.replace(/\n{3,}/g, "\n\n").trim();
 
   return cleaned;
