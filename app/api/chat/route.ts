@@ -35,6 +35,7 @@ type Product = {
   first_available_variant_id?: number;
   source_tags?: string[];
   short_copy_nl?: string;
+  short_copy_en?: string;
 };
 
 type BundleCatalog = {
@@ -82,16 +83,23 @@ Core rules:
   - "AM / PM"
   - "CTA"
 - Do not use bullet points unless the user explicitly asks for a list.
-- Most replies should be 2 to 4 short paragraphs max.
+- Most replies should be short.
 
 How to respond:
 - If the user is clear, recommend directly.
 - If the user is unclear, ask only 1 short question.
-- Do not try to do the full sales flow in one reply.
-- Do not give routine steps unless the user asks how to use it.
-- Do not give more than 1 add-on.
-- Prefer recommending 1 best-fit routine when the user asks about a goal, concern, or what fits them best.
-- If a single product is more relevant, answer that directly.
+- Do not try to do everything in one reply.
+- Do not include routine steps.
+- Do not include AM/PM order.
+- Do not describe ingredients.
+- Do not explain every product in the bundle.
+- For bundles:
+  - say the bundle name
+  - say very briefly what it is best for
+  - list the included product names only
+- For add-ons:
+  - mention at most 1 add-on
+  - give only a very short reason what it is for
 - End with one short natural next step.
 
 Routine mapping:
@@ -115,9 +123,11 @@ User: "I want more glow"
 Reply:
 "Glow & Radiance Routine looks like the best fit.
 
-It’s the strongest match for dull or uneven-looking skin and keeps the routine fresh, simple, and glow-focused.
+It is best for dull or uneven-looking skin that wants more glow.
 
-If you want an extra targeted step, AHA Peeling Concentrate can also be a good add-on for texture or dullness.
+Included products: Micellar Cleansing Water, Vitamin C Serum, Antioxidant Ginkgo Gel Booster, Moisturising Day Cream, Sun Protection SPF50 Stick, no tint.
+
+AHA Peeling Concentrate is a good add-on for texture or dullness.
 
 Want me to link you straight to it?"
 
@@ -164,7 +174,6 @@ function cleanReply(reply: string): string {
   cleaned = cleaned.replace(/^\s*[-•]?\s*AM:\s.*$/gim, "");
   cleaned = cleaned.replace(/^\s*[-•]?\s*PM:\s.*$/gim, "");
   cleaned = cleaned.replace(/^\s*[-•]\s*/gim, "");
-
   cleaned = cleaned.replace(/^(Nice|Perfect|Amazing|Great)\s*[—\-–:]?\s*/i, "");
 
   const hasBundleName =
@@ -188,58 +197,36 @@ function cleanReply(reply: string): string {
   return cleaned;
 }
 
+function getAddonName(text: string): string | null {
+  if (text.includes("AHA Peeling Concentrate")) return "AHA Peeling Concentrate";
+  if (text.includes("Acne Spot Care")) return "Acne Spot Care";
+  if (text.includes("Smoothing Eye Cream")) return "Smoothing Eye Cream";
+  return null;
+}
+
 function formatShortReply(reply: string): string {
   const text = cleanReply(reply);
 
   const bundle = findMentionedBundles(text)[0];
-  const addon =
-    text.includes("AHA Peeling Concentrate")
-      ? "AHA Peeling Concentrate"
-      : text.includes("Acne Spot Care")
-        ? "Acne Spot Care"
-        : text.includes("Smoothing Eye Cream")
-          ? "Smoothing Eye Cream"
-          : null;
+  const addon = getAddonName(text);
 
   if (bundle) {
-    const reasonMap: Record<string, string> = {
-      "Glow & Radiance Routine":
-        "It’s the strongest match for dull or uneven-looking skin and keeps the routine fresh, simple, and glow-focused.",
-      "Clear & Balanced Skin Routine":
-        "It’s the strongest match for oily or blemish-prone skin and keeps the routine lightweight and balanced.",
-      "Dry & Dehydrated Skin Routine":
-        "It suits skin that feels dry, tight, or low on hydration and keeps the routine comforting and simple.",
-      "Sensitive & Reactive Skin Routine":
-        "It’s the safest match for skin that feels delicate, reactive, or easily irritated.",
-      "Firm & Smooth Skin Routine":
-        "It’s the strongest match for smoother-looking skin, early fine lines, and firmness.",
-      "Simple Daily Skincare Routine":
-        "It’s ideal if you want an easy routine without unnecessary steps.",
-      "Combination Skin Balance Routine":
-        "It’s designed for skin that feels oilier in some areas and drier in others, without feeling heavy.",
-      "Normal & Balanced Skin Routine":
-        "It’s a strong everyday option if your skin feels fairly balanced and you want a simple routine.",
-    };
+    const desc = bundle.description || "A strong match from the current range.";
+    const productNames = (bundle.products || []).join(", ");
 
     const addonMap: Record<string, string> = {
-      "AHA Peeling Concentrate":
-        "If you want an extra targeted step, AHA Peeling Concentrate can be a good add-on for texture or dullness.",
-      "Acne Spot Care":
-        "If you want an extra targeted step, Acne Spot Care is a good add-on for visible blemishes.",
-      "Smoothing Eye Cream":
-        "If you want an extra targeted step for the eye area, Smoothing Eye Cream is a good add-on.",
+      "AHA Peeling Concentrate": "AHA Peeling Concentrate is a good add-on for texture or dullness.",
+      "Acne Spot Care": "Acne Spot Care is a good add-on for visible blemishes.",
+      "Smoothing Eye Cream": "Smoothing Eye Cream is a good add-on for the eye area.",
     };
 
     const parts = [
       `${bundle.name} looks like the best fit.`,
-      reasonMap[bundle.name] || "It looks like the strongest overall match from the current range.",
-    ];
-
-    if (addon && addonMap[addon]) {
-      parts.push(addonMap[addon]);
-    }
-
-    parts.push("Want me to link you straight to it?");
+      desc,
+      productNames ? `Included products: ${productNames}.` : "",
+      addon && addonMap[addon] ? addonMap[addon] : "",
+      "Want me to link you straight to it?",
+    ].filter(Boolean);
 
     return parts.join("\n\n").trim();
   }
