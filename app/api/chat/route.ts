@@ -419,6 +419,34 @@ function findMentionedBundles(text: string): Bundle[] {
   });
 }
 
+function findProductFromLooseIntent(text: string): Product | undefined {
+  const t = normalizeLoose(text);
+
+  const aliases: Record<string, string[]> = {
+    "Acne Spot Care": ["acne spot", "spot care", "acne spot care"],
+    "Vitamin C Serum": ["vitamin c", "vit c serum", "vitamin c serum"],
+    "Hydrating Serum": ["hydrating serum"],
+    "Hydrating Toner": ["hydrating toner", "toner"],
+    "Purifying Mousse": ["purifying mousse", "mousse cleanser", "mousse"],
+    "Smoothing Eye Cream": ["eye cream", "smoothing eye cream"],
+    "AHA Peeling Concentrate": ["aha", "aha peeling", "peeling concentrate"],
+    "Niacinamide Gel Moisturiser": ["niacinamide", "niacinamide moisturiser", "gel moisturiser"],
+    "Sun Protection SPF50 Stick, no tint": ["spf stick", "sun stick", "spf50 stick", "sun protection stick"],
+    "Micellar Cleansing Water": ["micellar", "micellar cleansing water"],
+    "Calming Facial Oil": ["calming oil", "facial oil", "calming facial oil"],
+    "Moisturising Day Cream": ["day cream", "moisturising day cream"],
+    "Ceramide Barrier Night Cream": ["night cream", "ceramide cream", "ceramide barrier night cream"],
+  };
+
+  for (const [productName, words] of Object.entries(aliases)) {
+    if (words.some((word) => t.includes(normalizeLoose(word)))) {
+      return getProductByName(productName);
+    }
+  }
+
+  return undefined;
+}
+
 function detectCompareRequest(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
@@ -680,6 +708,7 @@ export async function POST(req: Request) {
 
     const mentionedProducts = findMentionedProducts(combined);
     const mentionedBundles = findMentionedBundles(combined);
+    const looseProduct = findProductFromLooseIntent(message);
 
     if (detectCompareRequest(message)) {
       const compareItems = [...mentionedBundles, ...mentionedProducts].slice(0, 2);
@@ -703,6 +732,32 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: `**${product.title}**\n\n${shortProductDescription(product.title)}\n\nTell me your skin type and goal, and I’ll tell you if it fits.`,
           actions: buildActionsForProduct(product),
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    if (looseProduct && normalize(message).includes("where")) {
+      return new Response(
+        JSON.stringify({
+          reply: `**${looseProduct.title}**\n\nYou can find it here.`,
+          actions: buildActionsForProduct(looseProduct),
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    if (looseProduct && !wantsRoutine && !skinType && !goal) {
+      return new Response(
+        JSON.stringify({
+          reply: buildProductReply(looseProduct),
+          actions: buildActionsForProduct(looseProduct),
         }),
         {
           status: 200,
