@@ -327,7 +327,7 @@ function shortAddonDescription(addonName: string): string {
 function buildReply(bundle: Bundle, addonName?: string | null): string {
   const parts: string[] = [];
 
-  parts.push(bundle.name);
+  parts.push(`**${bundle.name}**`);
   parts.push(shortBundleDescription(bundle.name));
 
   if (bundle.products?.length) {
@@ -337,10 +337,8 @@ function buildReply(bundle: Bundle, addonName?: string | null): string {
   }
 
   if (addonName) {
-    parts.push(`Add-on: ${addonName}\n${shortAddonDescription(addonName)}`);
+    parts.push(`Add-on\n**${addonName}**\n${shortAddonDescription(addonName)}`);
   }
-
-  parts.push("Want me to link you straight to it?");
 
   return parts.join("\n\n");
 }
