@@ -84,6 +84,14 @@ function hasAny(text: string, words: string[]): boolean {
   return words.some((word) => text.includes(word));
 }
 
+function hasExactWord(text: string, words: string[]): boolean {
+  return words.some((word) => {
+    const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp(`(^|\\s)${escaped}(\\s|$)`, "i");
+    return pattern.test(text);
+  });
+}
+
 function normalizeLoose(text: string): string {
   return normalize(text).replace(/[-+&]/g, " ").replace(/\s+/g, " ").trim();
 }
@@ -261,17 +269,8 @@ function detectConversationIntent(text: string): ConversationIntent {
   const t = normalize(text);
 
   if (
-    hasAny(t, [
-      "hello",
-      "hi",
-      "hey",
-      "hallo",
-      "good morning",
-      "good afternoon",
-      "good evening",
-      "yo",
-      "heyy",
-    ])
+    hasExactWord(t, ["hello", "hi", "hey", "hallo", "yo"]) ||
+    hasAny(t, ["good morning", "good afternoon", "good evening"])
   ) {
     return "greeting";
   }
@@ -317,11 +316,11 @@ function detectConversationIntent(text: string): ConversationIntent {
     return "help";
   }
 
-  if (hasAny(t, ["yes", "yeah", "yep", "sure", "okay", "ok", "oke", "alright"])) {
+  if (hasExactWord(t, ["yes", "yeah", "yep", "sure", "okay", "ok", "oke", "alright"])) {
     return "yes";
   }
 
-  if (hasAny(t, ["no", "nope", "nah", "nee"])) {
+  if (hasExactWord(t, ["no", "nope", "nah", "nee"])) {
     return "no";
   }
 
@@ -429,7 +428,6 @@ function detectCompareRequest(text: string): boolean {
     "which is better",
     "vs",
     "versus",
-    "or",
   ]);
 }
 
