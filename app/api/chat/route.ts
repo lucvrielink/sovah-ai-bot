@@ -53,63 +53,19 @@ type ChatAction = {
   url: string;
 };
 
-type SessionState = {
-  wantsRoutine?: boolean;
-  skinType?: SkinType;
-  goal?: Goal;
-  updatedAt: number;
-};
-
 const bundleCatalog: BundleCatalog = JSON.parse(BUNDLES_JSON);
 const productCatalog: ProductCatalog = JSON.parse(PRODUCTS_JSON);
-
-// Simple in-memory session store
-const sessionStore = new Map<string, SessionState>();
-const SESSION_TTL_MS = 1000 * 60 * 30; // 30 min
-
-function cleanupSessions() {
-  const now = Date.now();
-  for (const [key, value] of sessionStore.entries()) {
-    if (now - value.updatedAt > SESSION_TTL_MS) {
-      sessionStore.delete(key);
-    }
-  }
-}
-
-function getSession(sessionId?: string): SessionState {
-  cleanupSessions();
-
-  if (!sessionId) {
-    return { updatedAt: Date.now() };
-  }
-
-  const existing = sessionStore.get(sessionId);
-  if (existing) {
-    existing.updatedAt = Date.now();
-    return existing;
-  }
-
-  const created: SessionState = { updatedAt: Date.now() };
-  sessionStore.set(sessionId, created);
-  return created;
-}
-
-function saveSession(sessionId: string | undefined, state: SessionState) {
-  if (!sessionId) return;
-  state.updatedAt = Date.now();
-  sessionStore.set(sessionId, state);
-}
 
 function hasAny(text: string, words: string[]): boolean {
   return words.some((word) => text.includes(word));
 }
 
-function normalizeMessage(message: string): string {
-  return (message || "").toLowerCase().trim();
+function normalize(text: string): string {
+  return (text || "").toLowerCase().trim();
 }
 
-function detectSkinType(message: string): SkinType | null {
-  const t = normalizeMessage(message);
+function detectSkinType(text: string): SkinType | null {
+  const t = normalize(text);
 
   if (t.includes("combination")) return "combination";
   if (t.includes("sensitive") || t.includes("reactive")) return "sensitive";
@@ -120,8 +76,8 @@ function detectSkinType(message: string): SkinType | null {
   return null;
 }
 
-function detectGoal(message: string): Goal | null {
-  const t = normalizeMessage(message);
+function detectGoal(text: string): Goal | null {
+  const t = normalize(text);
 
   if (hasAny(t, ["breakout", "breakouts", "acne", "blemish", "blemishes", "spots", "pimples", "blackheads"])) {
     return "breakouts";
@@ -142,8 +98,8 @@ function detectGoal(message: string): Goal | null {
   return null;
 }
 
-function detectRoutineRequest(message: string): boolean {
-  const t = normalizeMessage(message);
+function detectRoutineRequest(text: string): boolean {
+  const t = normalize(text);
   return hasAny(t, [
     "which routine fits me best",
     "what routine fits me best",
@@ -166,7 +122,7 @@ function getProductByName(name: string): Product | undefined {
   return productCatalog.products.find((product) => product.title === name);
 }
 
-function pickBundle(skinType: SkinType | undefined, goal: Goal | undefined): Bundle | undefined {
+function pickBundle(skinType: SkinType | null, goal: Goal | null): Bundle | undefined {
   if (!goal) return undefined;
 
   if (goal === "breakouts") {
@@ -206,7 +162,7 @@ function pickBundle(skinType: SkinType | undefined, goal: Goal | undefined): Bun
   return undefined;
 }
 
-function pickAddon(skinType: SkinType | undefined, goal: Goal | undefined): string | null {
+function pickAddon(skinType: SkinType | null, goal: Goal | null): string | null {
   if (!goal) return null;
 
   if (goal === "breakouts") return "Acne Spot Care";
@@ -241,16 +197,14 @@ function shortAddonDescription(addonName: string): string {
   return map[addonName] || "";
 }
 
-function buildShortReplyFromSelection(bundle: Bundle, addonName?: string | null): string {
+function buildReply(bundle: Bundle, addonName?: string | null): string {
   const parts: string[] = [];
 
   parts.push(bundle.name);
   parts.push(shortBundleDescription(bundle.name));
 
-  if (bundle.products && bundle.products.length > 0) {
-    parts.push(
-      `Included products:\n${bundle.products.map((product) => `- ${product}`).join("\n")}`
-    );
+  if (bundle.products?.length) {
+    parts.push(`Included products:\n${bundle.products.map((p) => `- ${p}`).join("\n")}`);
   }
 
   if (addonName) {
@@ -262,23 +216,15 @@ function buildShortReplyFromSelection(bundle: Bundle, addonName?: string | null)
   return parts.join("\n\n");
 }
 
-function buildActionsFromSelection(bundle: Bundle, addonName?: string | null): ChatAction[] {
+function buildActions(bundle: Bundle, addonName?: string | null): ChatAction[] {
   const actions: ChatAction[] = [
-    {
-      type: "OPEN_URL",
-      label: "View routine",
-      url: bundle.url,
-    },
+    { type: "OPEN_URL", label: "View routine", url: bundle.url },
   ];
 
   if (addonName) {
-    const addonProduct = getProductByName(addonName);
-    if (addonProduct) {
-      actions.push({
-        type: "OPEN_URL",
-        label: "View product",
-        url: addonProduct.url,
-      });
+    const addon = getProductByName(addonName);
+    if (addon) {
+      actions.push({ type: "OPEN_URL", label: "View product", url: addon.url });
     }
   }
 
@@ -297,7 +243,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const message: string | undefined = body?.message;
-    const sessionId: string | undefined = body?.sessionId;
+    const history: string[] = Array.isArray(body?.history) ? body.history : [];
 
     if (!message) {
       return new Response(JSON.stringify({ reply: "Missing message.", actions: [] }), {
@@ -306,93 +252,58 @@ export async function POST(req: Request) {
       });
     }
 
-    const state = getSession(sessionId);
+    // Use history + current message together
+    const fullHistory = [...history, message].slice(-10);
+    const combined = fullHistory.join(" \n ").toLowerCase();
 
-    const skinType = detectSkinType(message);
-    const goal = detectGoal(message);
-    const wantsRoutine = detectRoutineRequest(message);
+    const wantsRoutine = fullHistory.some((m) => detectRoutineRequest(m));
+    const skinType = detectSkinType(combined);
+    const goal = detectGoal(combined);
 
-    if (skinType) {
-      state.skinType = skinType;
-    }
-
-    if (goal) {
-      state.goal = goal;
-    }
-
-    if (wantsRoutine) {
-      state.wantsRoutine = true;
-    }
-
-    // Step-by-step routine flow
-    if (state.wantsRoutine) {
-      if (!state.skinType) {
-        saveSession(sessionId, state);
-        return new Response(JSON.stringify({ reply: askSkinType(), actions: [] }), {
-          status: 200,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        });
-      }
-
-      if (!state.goal) {
-        saveSession(sessionId, state);
-        return new Response(JSON.stringify({ reply: askGoal(), actions: [] }), {
-          status: 200,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        });
-      }
-
-      const bundle = pickBundle(state.skinType, state.goal);
-      const addon = pickAddon(state.skinType, state.goal);
-
-      if (bundle) {
-        const reply = buildShortReplyFromSelection(bundle, addon);
-        const actions = buildActionsFromSelection(bundle, addon);
-
-        state.wantsRoutine = false;
-        saveSession(sessionId, state);
-
-        return new Response(JSON.stringify({ reply, actions }), {
-          status: 200,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        });
-      }
-    }
-
-    // Breakouts need skin type first
-    if (goal === "breakouts" && !state.skinType) {
-      saveSession(sessionId, state);
+    // Step 1: routine request but no skin type yet
+    if (wantsRoutine && !skinType) {
       return new Response(JSON.stringify({ reply: askSkinType(), actions: [] }), {
         status: 200,
         headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     }
 
-    // If user sends only skin type outside the routine flow, ask goal
-    if (skinType && !goal) {
-      saveSession(sessionId, state);
+    // Step 2: skin type known but no goal yet
+    if (wantsRoutine && skinType && !goal) {
       return new Response(JSON.stringify({ reply: askGoal(), actions: [] }), {
         status: 200,
         headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     }
 
-    // Direct clear recommendation
-    const directBundle = pickBundle(state.skinType, state.goal);
-    const directAddon = pickAddon(state.skinType, state.goal);
+    // Breakouts without skin type -> ask first
+    if (goal === "breakouts" && !skinType) {
+      return new Response(JSON.stringify({ reply: askSkinType(), actions: [] }), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
 
-    if (directBundle && state.goal) {
-      const reply = buildShortReplyFromSelection(directBundle, directAddon);
-      const actions = buildActionsFromSelection(directBundle, directAddon);
-      saveSession(sessionId, state);
+    // If user sends only a skin type outside routine flow, still ask goal
+    if (!wantsRoutine && detectSkinType(message) && !detectGoal(combined)) {
+      return new Response(JSON.stringify({ reply: askGoal(), actions: [] }), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    const bundle = pickBundle(skinType, goal);
+    const addon = pickAddon(skinType, goal);
+
+    if (bundle) {
+      const reply = buildReply(bundle, addon);
+      const actions = buildActions(bundle, addon);
 
       return new Response(JSON.stringify({ reply, actions }), {
         status: 200,
         headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     }
-
-    saveSession(sessionId, state);
 
     return new Response(JSON.stringify({ reply: askSkinType(), actions: [] }), {
       status: 200,
