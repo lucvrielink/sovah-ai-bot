@@ -9,7 +9,10 @@ const corsHeaders = {
 };
 
 export async function OPTIONS() {
-  return new Response(null, { status: 204, headers: corsHeaders });
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
 }
 
 // Load catalogs
@@ -117,7 +120,6 @@ function detectSkinType(text: string): SkinType | null {
   if (
     hasAny(t, [
       "dry",
-      "dr y",
       "dehydrated",
       "dehydration",
       "tight",
@@ -379,15 +381,22 @@ export async function POST(req: Request) {
     const body = await req.json();
     const message: string | undefined = body?.message;
     const historyRaw: unknown = body?.history;
+
     const history: string[] = Array.isArray(historyRaw)
       ? historyRaw.filter((item): item is string => typeof item === "string")
       : [];
 
     if (!message) {
-      return new Response(JSON.stringify({ reply: "Missing message.", actions: [] }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
+      return new Response(
+        JSON.stringify({
+          reply: "Missing message.",
+          actions: [],
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
     }
 
     const fullHistory = [...history, message].slice(-10);
@@ -398,31 +407,55 @@ export async function POST(req: Request) {
     const goal = detectGoal(combined);
 
     if (wantsRoutine && !skinType) {
-      return new Response(JSON.stringify({ reply: askSkinType(), actions: [] }), {
-        status: 200,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
+      return new Response(
+        JSON.stringify({
+          reply: askSkinType(),
+          actions: [],
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
     }
 
     if (wantsRoutine && skinType && !goal) {
-      return new Response(JSON.stringify({ reply: askGoal(), actions: [] }), {
-        status: 200,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
+      return new Response(
+        JSON.stringify({
+          reply: askGoal(),
+          actions: [],
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
     }
 
     if (goal === "breakouts" && !skinType) {
-      return new Response(JSON.stringify({ reply: askSkinType(), actions: [] }), {
-        status: 200,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
+      return new Response(
+        JSON.stringify({
+          reply: askSkinType(),
+          actions: [],
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
     }
 
     if (!wantsRoutine && detectSkinType(message) && !goal) {
-      return new Response(JSON.stringify({ reply: askGoal(), actions: [] }), {
-        status: 200,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
+      return new Response(
+        JSON.stringify({
+          reply: askGoal(),
+          actions: [],
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
     }
 
     const bundle = pickBundle(skinType, goal);
@@ -432,16 +465,28 @@ export async function POST(req: Request) {
       const reply = buildReply(bundle, addon);
       const actions = buildActions(bundle, addon);
 
-      return new Response(JSON.stringify({ reply, actions }), {
-        status: 200,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
+      return new Response(
+        JSON.stringify({
+          reply,
+          actions,
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
     }
 
-    return new Response(JSON.stringify({ reply: askSkinType(), actions: [] }), {
-      status: 200,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
-    });
+    return new Response(
+      JSON.stringify({
+        reply: askSkinType(),
+        actions: [],
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      }
+    );
   } catch (e: unknown) {
     console.error("SOVAH /api/chat error:", e);
 
@@ -451,12 +496,6 @@ export async function POST(req: Request) {
         actions: [],
       }),
       {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
-    );
-  }
-}
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
       }
