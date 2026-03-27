@@ -198,6 +198,7 @@ OUTPUT RULES
 - Do not ask extra questions if the match is already clear.
 - For simple requests like “I want more glow”, reply directly in natural prose.
 - If the user gives a clear goal, recommend first and keep moving.
+- Keep the answer short.
 
 GOOD RESPONSE EXAMPLE
 “Glow & Radiance Routine looks like the best fit.
@@ -256,23 +257,22 @@ function findMentionedProducts(text: string): Product[] {
 function cleanReply(reply: string): string {
   let cleaned = reply || "";
 
-  // remove raw urls
   cleaned = cleaned.replace(/https?:\/\/\S+/gi, "").trim();
 
-  // remove robotic labels
-  cleaned = cleaned.replace(/^\s*[-•]?\s*Best match:\s*/gim, "");
-  cleaned = cleaned.replace(/^\s*[-•]?\s*Best bundle:\s*/gim, "");
-  cleaned = cleaned.replace(/^\s*[-•]?\s*Bundle:\s*/gim, "");
-  cleaned = cleaned.replace(/^\s*[-•]?\s*Add-on(\s*\(optional\))?:\s*/gim, "");
-  cleaned = cleaned.replace(/^\s*[-•]?\s*Quick AM\s*\/\s*PM order.*$/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Best match:?\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Best bundle:?\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Bundle:?\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Add-on(\s*\(optional\))?:?\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Benefits:?\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Quick question:.*$/gim, "");
   cleaned = cleaned.replace(/^\s*[-•]?\s*Simple AM\s*\/\s*PM order.*$/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Quick AM\s*\/\s*PM order.*$/gim, "");
   cleaned = cleaned.replace(/^\s*[-•]?\s*AM:\s.*$/gim, "");
   cleaned = cleaned.replace(/^\s*[-•]?\s*PM:\s.*$/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]\s*/gim, "");
 
-  // remove hypey openings
   cleaned = cleaned.replace(/^(Nice|Perfect|Amazing|Great)\s*[—\-–:]?\s*/i, "");
 
-  // remove opening question if recommendation is already clear
   const hasBundleName =
     cleaned.includes("Glow & Radiance Routine") ||
     cleaned.includes("Clear & Balanced Skin Routine") ||
@@ -289,13 +289,68 @@ function cleanReply(reply: string): string {
     cleaned = cleaned.replace(/^Is your skin sensitive.*$/gim, "").trim();
   }
 
-  // remove bullet-only formatting
-  cleaned = cleaned.replace(/^\s*-\s*/gim, "");
-
-  // compress blank lines
   cleaned = cleaned.replace(/\n{3,}/g, "\n\n").trim();
 
   return cleaned;
+}
+
+function formatShortReply(reply: string): string {
+  const text = cleanReply(reply);
+
+  const bundle = findMentionedBundles(text)[0];
+  const addon =
+    text.includes("AHA Peeling Concentrate")
+      ? "AHA Peeling Concentrate"
+      : text.includes("Acne Spot Care")
+        ? "Acne Spot Care"
+        : text.includes("Smoothing Eye Cream")
+          ? "Smoothing Eye Cream"
+          : null;
+
+  if (bundle) {
+    const reasonMap: Record<string, string> = {
+      "Glow & Radiance Routine":
+        "It’s the strongest match for dull or uneven-looking skin and keeps the routine fresh, simple, and glow-focused.",
+      "Clear & Balanced Skin Routine":
+        "It’s the strongest match for oily or blemish-prone skin and keeps the routine lightweight and balanced.",
+      "Dry & Dehydrated Skin Routine":
+        "It suits skin that feels dry, tight, or low on hydration and keeps the routine comforting and simple.",
+      "Sensitive & Reactive Skin Routine":
+        "It’s the safest match for skin that feels delicate, reactive, or easily irritated.",
+      "Firm & Smooth Skin Routine":
+        "It’s the strongest match for smoother-looking skin, early fine lines, and firmness.",
+      "Simple Daily Skincare Routine":
+        "It’s ideal if you want an easy routine without unnecessary steps.",
+      "Combination Skin Balance Routine":
+        "It’s designed for skin that feels oilier in some areas and drier in others, without feeling heavy.",
+      "Normal & Balanced Skin Routine":
+        "It’s a strong everyday option if your skin feels fairly balanced and you want a simple routine.",
+    };
+
+    const addonMap: Record<string, string> = {
+      "AHA Peeling Concentrate":
+        "If you want an extra targeted step, AHA Peeling Concentrate can be a good add-on for texture or dullness.",
+      "Acne Spot Care":
+        "If you want an extra targeted step, Acne Spot Care is a good add-on for visible blemishes.",
+      "Smoothing Eye Cream":
+        "If you want an extra targeted step for the eye area, Smoothing Eye Cream is a good add-on.",
+    };
+
+    const parts = [
+      `${bundle.name} looks like the best fit.`,
+      reasonMap[bundle.name] || "It looks like the strongest overall match from the current range.",
+    ];
+
+    if (addon && addonMap[addon]) {
+      parts.push(addonMap[addon]);
+    }
+
+    parts.push("Want me to link you straight to it?");
+
+    return parts.join("\n\n").trim();
+  }
+
+  return text;
 }
 
 function buildActions(reply: string): ChatAction[] {
@@ -359,7 +414,7 @@ export async function POST(req: Request) {
       response.output_text ||
       "Sorry — I couldn’t generate a reply just now. Please try again.";
 
-    const reply = cleanReply(rawReply);
+    const reply = formatShortReply(rawReply);
     const actions = buildActions(reply);
 
     return new Response(JSON.stringify({ reply, actions }), {
