@@ -56,22 +56,81 @@ type ChatAction = {
 const bundleCatalog: BundleCatalog = JSON.parse(BUNDLES_JSON);
 const productCatalog: ProductCatalog = JSON.parse(PRODUCTS_JSON);
 
-function hasAny(text: string, words: string[]): boolean {
-  return words.some((word) => text.includes(word));
+function normalize(text: string): string {
+  return (text || "")
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, " ")
+    .replace(/_/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-function normalize(text: string): string {
-  return (text || "").toLowerCase().trim();
+function hasAny(text: string, words: string[]): boolean {
+  return words.some((word) => text.includes(word));
 }
 
 function detectSkinType(text: string): SkinType | null {
   const t = normalize(text);
 
-  if (t.includes("combination")) return "combination";
-  if (t.includes("sensitive") || t.includes("reactive")) return "sensitive";
-  if (t.includes("oily") || t.includes("shiny")) return "oily";
-  if (t.includes("dry") || t.includes("dehydrated")) return "dry";
-  if (t.includes("normal")) return "normal";
+  if (
+    hasAny(t, [
+      "combination",
+      "combo skin",
+      "combo",
+      "combi skin",
+      "combi",
+      "oily t zone",
+      "oily in some areas",
+      "dry in others",
+    ])
+  ) {
+    return "combination";
+  }
+
+  if (
+    hasAny(t, [
+      "sensitive",
+      "sensetive",
+      "reactive",
+      "redness prone",
+      "irritated",
+      "skin barrier",
+      "barrier",
+    ])
+  ) {
+    return "sensitive";
+  }
+
+  if (
+    hasAny(t, [
+      "oily",
+      "oilly",
+      "oilie",
+      "shiny",
+      "greasy",
+      "oil prone",
+    ])
+  ) {
+    return "oily";
+  }
+
+  if (
+    hasAny(t, [
+      "dry",
+      "dr y",
+      "dehydrated",
+      "dehydration",
+      "tight",
+      "flaky",
+      "rough",
+    ])
+  ) {
+    return "dry";
+  }
+
+  if (hasAny(t, ["normal", "balanced skin", "balanced"])) {
+    return "normal";
+  }
 
   return null;
 }
@@ -79,19 +138,85 @@ function detectSkinType(text: string): SkinType | null {
 function detectGoal(text: string): Goal | null {
   const t = normalize(text);
 
-  if (hasAny(t, ["breakout", "breakouts", "acne", "blemish", "blemishes", "spots", "pimples", "blackheads"])) {
+  if (
+    hasAny(t, [
+      "breakout",
+      "breakouts",
+      "brakouts",
+      "acne",
+      "blemish",
+      "blemishes",
+      "spots",
+      "pimples",
+      "blackheads",
+      "clogged pores",
+    ])
+  ) {
     return "breakouts";
   }
-  if (hasAny(t, ["glow", "radiance", "dull", "bright", "brighter", "uneven", "texture", "pores"])) {
+
+  if (
+    hasAny(t, [
+      "glow",
+      "glowy",
+      "radiance",
+      "radiant",
+      "dull",
+      "bright",
+      "brighter",
+      "uneven",
+      "texture",
+      "pores",
+      "fresh look",
+      "more glow",
+    ])
+  ) {
     return "glow";
   }
-  if (hasAny(t, ["hydration", "hydrate", "moisture"])) {
+
+  if (
+    hasAny(t, [
+      "hydration",
+      "hydrate",
+      "hydrating",
+      "moisture",
+      "more moisture",
+      "comfort",
+    ])
+  ) {
     return "hydration";
   }
-  if (hasAny(t, ["anti-age", "anti aging", "anti-aging", "fine lines", "firmness", "wrinkles", "aging", "ageing"])) {
+
+  if (
+    hasAny(t, [
+      "anti age",
+      "anti-age",
+      "antiage",
+      "anti aging",
+      "anti-aging",
+      "ageing",
+      "aging",
+      "fine lines",
+      "firmness",
+      "wrinkles",
+      "smoothness",
+      "early aging",
+    ])
+  ) {
     return "antiage";
   }
-  if (hasAny(t, ["simple", "minimal", "no-fuss", "easy routine"])) {
+
+  if (
+    hasAny(t, [
+      "simple",
+      "minimal",
+      "easy routine",
+      "no fuss",
+      "no-fuss",
+      "basic routine",
+      "easy",
+    ])
+  ) {
     return "simple";
   }
 
@@ -204,7 +329,9 @@ function buildReply(bundle: Bundle, addonName?: string | null): string {
   parts.push(shortBundleDescription(bundle.name));
 
   if (bundle.products?.length) {
-    parts.push(`Included products:\n${bundle.products.map((p) => `- ${p}`).join("\n")}`);
+    parts.push(
+      `Included products:\n${bundle.products.map((product) => `- ${product}`).join("\n")}`
+    );
   }
 
   if (addonName) {
@@ -218,13 +345,21 @@ function buildReply(bundle: Bundle, addonName?: string | null): string {
 
 function buildActions(bundle: Bundle, addonName?: string | null): ChatAction[] {
   const actions: ChatAction[] = [
-    { type: "OPEN_URL", label: "View routine", url: bundle.url },
+    {
+      type: "OPEN_URL",
+      label: "View routine",
+      url: bundle.url,
+    },
   ];
 
   if (addonName) {
     const addon = getProductByName(addonName);
     if (addon) {
-      actions.push({ type: "OPEN_URL", label: "View product", url: addon.url });
+      actions.push({
+        type: "OPEN_URL",
+        label: "View product",
+        url: addon.url,
+      });
     }
   }
 
@@ -243,7 +378,10 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const message: string | undefined = body?.message;
-    const history: string[] = Array.isArray(body?.history) ? body.history : [];
+    const historyRaw: unknown = body?.history;
+    const history: string[] = Array.isArray(historyRaw)
+      ? historyRaw.filter((item): item is string => typeof item === "string")
+      : [];
 
     if (!message) {
       return new Response(JSON.stringify({ reply: "Missing message.", actions: [] }), {
@@ -252,15 +390,13 @@ export async function POST(req: Request) {
       });
     }
 
-    // Use history + current message together
     const fullHistory = [...history, message].slice(-10);
-    const combined = fullHistory.join(" \n ").toLowerCase();
+    const combined = fullHistory.join(" \n ");
 
     const wantsRoutine = fullHistory.some((m) => detectRoutineRequest(m));
     const skinType = detectSkinType(combined);
     const goal = detectGoal(combined);
 
-    // Step 1: routine request but no skin type yet
     if (wantsRoutine && !skinType) {
       return new Response(JSON.stringify({ reply: askSkinType(), actions: [] }), {
         status: 200,
@@ -268,7 +404,6 @@ export async function POST(req: Request) {
       });
     }
 
-    // Step 2: skin type known but no goal yet
     if (wantsRoutine && skinType && !goal) {
       return new Response(JSON.stringify({ reply: askGoal(), actions: [] }), {
         status: 200,
@@ -276,7 +411,6 @@ export async function POST(req: Request) {
       });
     }
 
-    // Breakouts without skin type -> ask first
     if (goal === "breakouts" && !skinType) {
       return new Response(JSON.stringify({ reply: askSkinType(), actions: [] }), {
         status: 200,
@@ -284,8 +418,7 @@ export async function POST(req: Request) {
       });
     }
 
-    // If user sends only a skin type outside routine flow, still ask goal
-    if (!wantsRoutine && detectSkinType(message) && !detectGoal(combined)) {
+    if (!wantsRoutine && detectSkinType(message) && !goal) {
       return new Response(JSON.stringify({ reply: askGoal(), actions: [] }), {
         status: 200,
         headers: { "Content-Type": "application/json", ...corsHeaders },
@@ -309,7 +442,7 @@ export async function POST(req: Request) {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error("SOVAH /api/chat error:", e);
 
     return new Response(
@@ -318,6 +451,12 @@ export async function POST(req: Request) {
         actions: [],
       }),
       {
+        status: 500,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      }
+    );
+  }
+}
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
       }
