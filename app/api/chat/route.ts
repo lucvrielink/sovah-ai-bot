@@ -222,7 +222,7 @@ function buildShortReplyFromSelection(bundle: Bundle, addonName?: string | null)
   parts.push(shortBundleDescription(bundle.name));
 
   if (bundle.products && bundle.products.length > 0) {
-    parts.push(`Included products: ${bundle.products.join(", ")}.`);
+    parts.push(`Included products:\n${bundle.products.map((product) => `- ${product}`).join("\n")}`);
   }
 
   if (addonName) {
@@ -307,11 +307,9 @@ export async function POST(req: Request) {
 
     const cleanedReply = cleanModelText(rawReply);
 
-    // First try: read model selection
     let selectedBundle = findMentionedBundles(cleanedReply)[0];
     let selectedAddon = detectAddonFromText(cleanedReply);
 
-    // Fallback: choose from user intent
     if (!selectedBundle) {
       selectedBundle = pickBundleFromIntent(intent);
     }
@@ -329,7 +327,6 @@ export async function POST(req: Request) {
       });
     }
 
-    // If still unclear, keep only a short question
     const fallbackReply = "What’s your skin type: dry, oily, combination, normal, or sensitive?";
 
     return new Response(JSON.stringify({ reply: fallbackReply, actions: [] }), {
