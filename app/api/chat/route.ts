@@ -2,19 +2,18 @@ import OpenAI from "openai";
 import fs from "fs";
 import path from "path";
 
-// CORS (so Shopify can call Vercel)
+// CORS
 const corsHeaders = {
   "Access-Control-Allow-Origin": "https://sovahcare.com",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
-// Handle preflight
 export async function OPTIONS() {
   return new Response(null, { status: 204, headers: corsHeaders });
 }
 
-// Load catalogs from /data
+// Load catalogs
 const bundlesPath = path.join(process.cwd(), "data", "bundle_catalog.json");
 const productsPath = path.join(process.cwd(), "data", "product_catalog.json");
 
@@ -55,93 +54,41 @@ type ChatAction = {
 const bundleCatalog: BundleCatalog = JSON.parse(BUNDLES_JSON);
 const productCatalog: ProductCatalog = JSON.parse(PRODUCTS_JSON);
 
-// OpenAI client
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const SOVAH_SYSTEM_PROMPT = `
 You are the SOVAH skincare assistant for sovahcare.com.
 
-Your tone:
-- premium
-- warm
-- natural
-- concise
+Your role:
+- help the user find the best SOVAH routine or add-on
+- think internally
+- keep replies short, warm, clear, and premium
 
-Core rules:
-- Keep replies short and easy to scan.
-- Never mention suppliers, manufacturers, private label partners, or Selfnamed.
-- Never make medical claims or diagnoses.
-- Only use the provided BUNDLES JSON and PRODUCTS JSON as the source of truth.
-- Do not invent products, claims, ingredients, or usage directions.
-- Do not include raw URLs in the reply.
-- The backend adds buttons separately.
-- Do not include AM/PM order.
-- Do not explain ingredients.
-- Do not explain every product in detail.
-- Do not use headings like:
-  - Best match
-  - Best bundle
-  - Bundle
-  - Benefits
-  - CTA
-- Only ask a question if the user is unclear.
+Rules:
+- never mention suppliers or private label partners
+- never make medical claims or diagnoses
+- only use the provided BUNDLES JSON and PRODUCTS JSON
+- do not include raw URLs
+- do not include AM/PM steps
+- do not explain ingredients
+- do not explain each product in detail
+- do not overload the user
+- if the user is unclear, ask only the next missing question
 
-Important decision rule:
-- If the user mentions breakouts, acne, pimples, blemishes, or spots, do not recommend a routine immediately unless their skin type is already clear.
-- First ask 1 short follow-up question about skin type.
-- Breakouts alone are not enough to choose a routine.
-- If the user has oily or combination skin with breakouts, Clear & Balanced Skin Routine is usually the best fit.
-- If the user has dry skin with breakouts, do not assume Clear & Balanced Skin Routine is the best fit.
-- If the user has sensitive or reactive skin with breakouts, be more cautious and keep the recommendation gentler.
+Important logic:
+- if the user asks which routine fits them best, do not recommend immediately unless both skin type and main goal are clear
+- if only skin type is known, ask for the main goal
+- if only main goal is known, ask for the skin type
+- if the user mentions breakouts but skin type is unclear, ask skin type first
+- only recommend once the match is clear
 
-How to respond:
-- If the user is clear, recommend directly.
-- If the user is unclear, ask 1 short question.
-- If the user mentions breakouts but not their skin type, ask their skin type first.
-- Recommend 1 best-fit bundle only after the match is clear.
-- Give 1 short sentence about what the bundle is best for.
-- Then show the included products under each other.
-- If relevant, mention 1 add-on only.
-- For the add-on:
-  - write the add-on title first
-  - then 1 short sentence about what it is for
-- End with 1 short natural next step.
-
-Routine mapping:
-- Oily or combination skin with breakouts -> Clear & Balanced Skin Routine
-- Dry, dehydrated, tight -> Dry & Dehydrated Skin Routine
-- Combination skin -> Combination Skin Balance Routine
-- Sensitive, reactive, redness-prone -> Sensitive & Reactive Skin Routine
-- Normal, balanced -> Normal & Balanced Skin Routine
-- Dull, uneven, wants glow -> Glow & Radiance Routine
-- Fine lines, firmness, early anti-age -> Firm & Smooth Skin Routine
-- Wants minimal, easy routine -> Simple Daily Skincare Routine
-
-Rules for add-ons:
-- Acne Spot Care only for breakouts, blemishes, pimples, or spots
-- AHA Peeling Concentrate only for texture, dullness, pores, uneven-looking skin, or exfoliation
-- Smoothing Eye Cream only for eye-area concerns or an extra anti-age eye step
-
-Good example:
-
-Glow & Radiance Routine
-
-It is best for dull or uneven-looking skin that wants more glow.
-
-Included products:
-- Micellar Cleansing Water
-- Vitamin C Serum
-- Antioxidant Ginkgo Gel Booster
-- Moisturising Day Cream
-- Sun Protection SPF50 Stick, no tint
-
-Add-on: AHA Peeling Concentrate
-A good add-on for texture or dullness.
-
-Want me to link you straight to it?
-
-If the user is unclear:
-Ask only 1 short question.
+When you have enough information:
+- recommend 1 best-fit bundle
+- give 1 short sentence about what it is best for
+- list included product names only
+- mention max 1 add-on if clearly relevant
+- give 1 short sentence about what the add-on is for
+- end with 1 short next step
 
 BUNDLES JSON:
 ${BUNDLES_JSON}
@@ -159,12 +106,12 @@ function containsExactName(text: string, name: string): boolean {
   return pattern.test(text);
 }
 
-function findMentionedBundles(text: string): Bundle[] {
-  return bundleCatalog.bundles.filter((bundle) => containsExactName(text, bundle.name));
+function hasAny(text: string, words: string[]): boolean {
+  return words.some((word) => text.includes(word));
 }
 
-function findMentionedProducts(text: string): Product[] {
-  return productCatalog.products.filter((product) => containsExactName(text, product.title));
+function findMentionedBundles(text: string): Bundle[] {
+  return bundleCatalog.bundles.filter((bundle) => containsExactName(text, bundle.name));
 }
 
 function detectAddonFromText(text: string): string | null {
@@ -174,44 +121,7 @@ function detectAddonFromText(text: string): string | null {
   return null;
 }
 
-function hasAny(text: string, words: string[]): boolean {
-  return words.some((word) => text.includes(word));
-}
-
-function detectIntentFromUserMessage(message: string): string | null {
-  const t = (message || "").toLowerCase();
-
-  if (hasAny(t, ["breakout", "breakouts", "acne", "blemish", "blemishes", "spots", "pimples", "blackheads"])) {
-    return "breakouts";
-  }
-  if (hasAny(t, ["glow", "radiance", "dull", "bright", "brighter", "uneven"])) {
-    return "glow";
-  }
-  if (hasAny(t, ["dry", "dehydrated", "tight", "hydration", "flaky", "rough"])) {
-    return "dry";
-  }
-  if (hasAny(t, ["sensitive", "reactive", "redness", "irritated", "barrier"])) {
-    return "sensitive";
-  }
-  if (hasAny(t, ["anti-age", "anti aging", "anti-aging", "fine lines", "firmness", "wrinkles", "aging", "ageing"])) {
-    return "antiage";
-  }
-  if (hasAny(t, ["simple", "minimal", "no-fuss", "easy routine"])) {
-    return "simple";
-  }
-  if (hasAny(t, ["combination", "oily t-zone"])) {
-    return "combination";
-  }
-  if (hasAny(t, ["normal skin", "balanced skin"])) {
-    return "normal";
-  }
-  if (hasAny(t, ["texture", "pores", "bumpy", "exfoliate", "exfoliation"])) {
-    return "texture";
-  }
-  return null;
-}
-
-function userProvidedSkinType(message: string): "dry" | "oily" | "combination" | "normal" | "sensitive" | null {
+function detectSkinType(message: string): "dry" | "oily" | "combination" | "normal" | "sensitive" | null {
   const t = (message || "").toLowerCase();
 
   if (t.includes("combination")) return "combination";
@@ -223,15 +133,54 @@ function userProvidedSkinType(message: string): "dry" | "oily" | "combination" |
   return null;
 }
 
+function detectGoal(
+  message: string
+): "hydration" | "glow" | "antiage" | "breakouts" | "simple" | null {
+  const t = (message || "").toLowerCase();
+
+  if (hasAny(t, ["breakout", "breakouts", "acne", "blemish", "blemishes", "spots", "pimples", "blackheads"])) {
+    return "breakouts";
+  }
+  if (hasAny(t, ["glow", "radiance", "dull", "bright", "brighter", "uneven", "texture", "pores"])) {
+    return "glow";
+  }
+  if (hasAny(t, ["hydration", "hydrate", "dry", "dehydrated", "tight", "flaky", "rough"])) {
+    return "hydration";
+  }
+  if (hasAny(t, ["anti-age", "anti aging", "anti-aging", "fine lines", "firmness", "wrinkles", "aging", "ageing"])) {
+    return "antiage";
+  }
+  if (hasAny(t, ["simple", "minimal", "no-fuss", "easy routine"])) {
+    return "simple";
+  }
+
+  return null;
+}
+
+function detectRoutineRequest(message: string): boolean {
+  const t = (message || "").toLowerCase();
+  return hasAny(t, [
+    "which routine fits me best",
+    "what routine fits me best",
+    "best routine for me",
+    "which routine",
+    "what routine",
+    "fits me best",
+    "help me choose",
+    "what do you recommend",
+    "recommend me a routine",
+  ]);
+}
+
 function getBundleByName(name: string): Bundle | undefined {
   return bundleCatalog.bundles.find((bundle) => bundle.name === name);
 }
 
-function pickBundle(message: string, intent: string | null): Bundle | undefined {
-  const skinType = userProvidedSkinType(message);
-
-  if (intent === "breakouts") {
-    if (!skinType) return undefined;
+function pickBundle(
+  skinType: "dry" | "oily" | "combination" | "normal" | "sensitive" | null,
+  goal: "hydration" | "glow" | "antiage" | "breakouts" | "simple" | null
+): Bundle | undefined {
+  if (goal === "breakouts") {
     if (skinType === "oily" || skinType === "combination") {
       return getBundleByName("Clear & Balanced Skin Routine");
     }
@@ -241,43 +190,44 @@ function pickBundle(message: string, intent: string | null): Bundle | undefined 
     if (skinType === "dry") {
       return getBundleByName("Dry & Dehydrated Skin Routine");
     }
-    return getBundleByName("Clear & Balanced Skin Routine");
+    return undefined;
   }
 
-  if (intent === "glow" || intent === "texture") {
+  if (goal === "glow") {
     return getBundleByName("Glow & Radiance Routine");
   }
-  if (intent === "dry") {
-    return getBundleByName("Dry & Dehydrated Skin Routine");
-  }
-  if (intent === "sensitive") {
-    return getBundleByName("Sensitive & Reactive Skin Routine");
-  }
-  if (intent === "antiage") {
+
+  if (goal === "antiage") {
     return getBundleByName("Firm & Smooth Skin Routine");
   }
-  if (intent === "simple") {
+
+  if (goal === "simple") {
     return getBundleByName("Simple Daily Skincare Routine");
   }
-  if (intent === "combination") {
-    return getBundleByName("Combination Skin Balance Routine");
+
+  if (goal === "hydration") {
+    if (skinType === "dry") return getBundleByName("Dry & Dehydrated Skin Routine");
+    if (skinType === "sensitive") return getBundleByName("Sensitive & Reactive Skin Routine");
+    if (skinType === "combination") return getBundleByName("Combination Skin Balance Routine");
+    return getBundleByName("Dry & Dehydrated Skin Routine");
   }
-  if (intent === "normal") {
-    return getBundleByName("Normal & Balanced Skin Routine");
+
+  if (!goal && skinType) {
+    if (skinType === "sensitive") return getBundleByName("Sensitive & Reactive Skin Routine");
+    if (skinType === "combination") return getBundleByName("Combination Skin Balance Routine");
+    if (skinType === "normal") return getBundleByName("Normal & Balanced Skin Routine");
   }
 
   return undefined;
 }
 
-function pickAddon(message: string, intent: string | null): string | null {
-  const skinType = userProvidedSkinType(message);
-
-  if (intent === "glow" || intent === "texture") return "AHA Peeling Concentrate";
-  if (intent === "breakouts") return "Acne Spot Care";
-  if (intent === "antiage") return "Smoothing Eye Cream";
-
-  if (skinType === "sensitive" && intent === "texture") return null;
-
+function pickAddon(
+  skinType: "dry" | "oily" | "combination" | "normal" | "sensitive" | null,
+  goal: "hydration" | "glow" | "antiage" | "breakouts" | "simple" | null
+): string | null {
+  if (goal === "breakouts") return "Acne Spot Care";
+  if (goal === "antiage") return "Smoothing Eye Cream";
+  if (goal === "glow" && skinType !== "sensitive") return "AHA Peeling Concentrate";
   return null;
 }
 
@@ -298,9 +248,9 @@ function shortBundleDescription(bundleName: string): string {
 
 function shortAddonDescription(addonName: string): string {
   const map: Record<string, string> = {
-    "AHA Peeling Concentrate": "AHA Peeling Concentrate is a good add-on for texture or dullness.",
-    "Acne Spot Care": "Acne Spot Care is a good add-on for visible blemishes.",
-    "Smoothing Eye Cream": "Smoothing Eye Cream is a good add-on for the eye area.",
+    "AHA Peeling Concentrate": "A good add-on for texture or dullness.",
+    "Acne Spot Care": "A good add-on for visible blemishes.",
+    "Smoothing Eye Cream": "A good add-on for the eye area.",
   };
 
   return map[addonName] || "";
@@ -309,7 +259,7 @@ function shortAddonDescription(addonName: string): string {
 function buildShortReplyFromSelection(bundle: Bundle, addonName?: string | null): string {
   const parts: string[] = [];
 
-  parts.push(`${bundle.name} looks like the best fit.`);
+  parts.push(bundle.name);
   parts.push(shortBundleDescription(bundle.name));
 
   if (bundle.products && bundle.products.length > 0) {
@@ -317,9 +267,7 @@ function buildShortReplyFromSelection(bundle: Bundle, addonName?: string | null)
   }
 
   if (addonName) {
-    parts.push(`Add-on: ${addonName}`);
-    const addonLine = shortAddonDescription(addonName);
-    if (addonLine) parts.push(addonLine);
+    parts.push(`Add-on: ${addonName}\n${shortAddonDescription(addonName)}`);
   }
 
   parts.push("Want me to link you straight to it?");
@@ -382,10 +330,38 @@ export async function POST(req: Request) {
       });
     }
 
-    const intent = detectIntentFromUserMessage(message);
-    const skinType = userProvidedSkinType(message);
+    const skinType = detectSkinType(message);
+    const goal = detectGoal(message);
+    const wantsRoutine = detectRoutineRequest(message);
 
-    if (intent === "breakouts" && !skinType) {
+    // Smart question flow
+    if (wantsRoutine && !skinType && !goal) {
+      return new Response(
+        JSON.stringify({
+          reply: "What’s your skin type: dry, oily, combination, normal, or sensitive?",
+          actions: [],
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    if (wantsRoutine && skinType && !goal) {
+      return new Response(
+        JSON.stringify({
+          reply: "What’s your main goal: hydration, glow, anti-age, breakouts, or simple routine?",
+          actions: [],
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    if (goal === "breakouts" && !skinType) {
       return new Response(
         JSON.stringify({
           reply: "What’s your skin type: oily, combination, dry, normal, or sensitive?",
@@ -417,10 +393,10 @@ export async function POST(req: Request) {
     let selectedAddon: string | null = detectAddonFromText(cleanedReply);
 
     if (!selectedBundle) {
-      selectedBundle = pickBundle(message, intent);
+      selectedBundle = pickBundle(skinType, goal);
     }
     if (!selectedAddon) {
-      selectedAddon = pickAddon(message, intent);
+      selectedAddon = pickAddon(skinType, goal);
     }
 
     if (selectedBundle) {
