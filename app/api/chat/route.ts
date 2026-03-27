@@ -121,7 +121,9 @@ function detectAddonFromText(text: string): string | null {
   return null;
 }
 
-function detectSkinType(message: string): "dry" | "oily" | "combination" | "normal" | "sensitive" | null {
+function detectSkinType(
+  message: string
+): "dry" | "oily" | "combination" | "normal" | "sensitive" | null {
   const t = (message || "").toLowerCase();
 
   if (t.includes("combination")) return "combination";
@@ -144,7 +146,7 @@ function detectGoal(
   if (hasAny(t, ["glow", "radiance", "dull", "bright", "brighter", "uneven", "texture", "pores"])) {
     return "glow";
   }
-  if (hasAny(t, ["hydration", "hydrate", "dry", "dehydrated", "tight", "flaky", "rough"])) {
+  if (hasAny(t, ["hydration", "hydrate", "moisture"])) {
     return "hydration";
   }
   if (hasAny(t, ["anti-age", "anti aging", "anti-aging", "fine lines", "firmness", "wrinkles", "aging", "ageing"])) {
@@ -334,7 +336,7 @@ export async function POST(req: Request) {
     const goal = detectGoal(message);
     const wantsRoutine = detectRoutineRequest(message);
 
-    // Smart question flow
+    // Ask for missing info in the right order
     if (wantsRoutine && !skinType && !goal) {
       return new Response(
         JSON.stringify({
@@ -348,7 +350,7 @@ export async function POST(req: Request) {
       );
     }
 
-    if (wantsRoutine && skinType && !goal) {
+    if (skinType && !goal) {
       return new Response(
         JSON.stringify({
           reply: "What’s your main goal: hydration, glow, anti-age, breakouts, or simple routine?",
