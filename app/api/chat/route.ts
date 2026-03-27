@@ -169,28 +169,37 @@ PRODUCT USAGE GUIDANCE
 - Do not invent complicated routines.
 
 RESPONSE STYLE
-- Keep most replies between 2 and 5 short paragraphs.
-- Start with the best match quickly.
-- Briefly explain why it fits.
-- Mention 1 relevant add-on only if it clearly fits.
-- End with one short, natural next step.
-- Do not use robotic headings like:
+- Sound natural, premium, warm, and concise.
+- Write like a luxury ecommerce skincare advisor.
+- Keep replies short and easy to scan.
+- Most replies should be 2 to 4 short paragraphs.
+- Do NOT use bullet points unless the user explicitly asks for a list.
+- Do NOT use headings or labels such as:
+  - “Best match”
   - “Best bundle”
+  - “Bundle”
   - “Add-on”
+  - “Simple AM / PM order”
   - “CTA”
-  - “AM / PM order”
-- Do not use stiff beauty words like “teint”.
+- Do NOT sound scripted or consultant-like.
+- Do NOT praise the user's question or goal with phrases like:
+  - “Nice”
+  - “Great goal”
+  - “Perfect”
+  - “Amazing”
 - Use simple premium English.
 
 OUTPUT RULES
 - Do not include raw URLs in the reply text.
 - Do not paste product page links into the message body.
-- The backend will attach buttons and links separately.
+- The backend will attach buttons separately.
+- Do not include routine order unless the user explicitly asks how to use the routine.
+- Do not include more than 1 add-on.
 - Do not ask extra questions if the match is already clear.
-- Do not overload the user with too many products.
-- For simple requests like “I want more glow”, answer directly and naturally.
+- For simple requests like “I want more glow”, reply directly in natural prose.
+- If the user gives a clear goal, recommend first and keep moving.
 
-GOOD RESPONSE STYLE EXAMPLE
+GOOD RESPONSE EXAMPLE
 “Glow & Radiance Routine looks like the best fit.
 
 It’s the strongest match for dull or uneven-looking skin and keeps the routine simple, fresh, and glow-focused.
@@ -242,6 +251,26 @@ function findMentionedBundles(text: string): Bundle[] {
 
 function findMentionedProducts(text: string): Product[] {
   return productCatalog.products.filter((product) => containsExactName(text, product.title));
+}
+
+function cleanReply(reply: string): string {
+  let cleaned = reply || "";
+
+  cleaned = cleaned.replace(/https?:\/\/\S+/gi, "").trim();
+
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Best match:\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Best bundle:\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Bundle:\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Add-on:\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*Simple AM\s*\/\s*PM order.*$/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*AM:\s*/gim, "");
+  cleaned = cleaned.replace(/^\s*[-•]?\s*PM:\s*/gim, "");
+
+  cleaned = cleaned.replace(/^(Nice|Perfect|Amazing|Great)\s*[—\-–:]?\s*/i, "");
+
+  cleaned = cleaned.replace(/\n{3,}/g, "\n\n").trim();
+
+  return cleaned;
 }
 
 function buildActions(reply: string): ChatAction[] {
@@ -301,10 +330,11 @@ export async function POST(req: Request) {
       metadata: sessionId ? { sessionId } : undefined,
     });
 
-    const reply =
+    const rawReply =
       response.output_text ||
       "Sorry — I couldn’t generate a reply just now. Please try again.";
 
+    const reply = cleanReply(rawReply);
     const actions = buildActions(reply);
 
     return new Response(JSON.stringify({ reply, actions }), {
