@@ -307,8 +307,8 @@ export async function POST(req: Request) {
 
     const cleanedReply = cleanModelText(rawReply);
 
-    let selectedBundle = findMentionedBundles(cleanedReply)[0];
-    let selectedAddon = detectAddonFromText(cleanedReply);
+    let selectedBundle: Bundle | undefined = findMentionedBundles(cleanedReply)[0];
+    let selectedAddon: string | null = detectAddonFromText(cleanedReply);
 
     if (!selectedBundle) {
       selectedBundle = pickBundleFromIntent(intent);
