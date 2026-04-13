@@ -26,6 +26,7 @@ type Bundle = {
   handle: string;
   url: string;
   variantId: number;
+  image: string;
   description: string;
   products: string[];
 };
@@ -35,6 +36,7 @@ type Addon = {
   handle: string;
   url: string;
   variantId: number;
+  image: string;
 };
 
 type RecommendationResult = {
@@ -46,42 +48,137 @@ type RecommendationResult = {
   steps: string[];
 };
 
-const VARIANT_IDS = {
-  products: {
-    "Micellar Cleansing Water": 51851602854226,
-    "Hydrating Toner": 51881462956370,
-    "Hydrating Serum": 51886996390226,
-    "Double Hydration Boost Gel + HA": 51887105278290,
-    "Moisturising Day Cream": 51887248539986,
-    "Ceramide Barrier Night Cream": 51887297593682,
-    "Purifying Mousse": 51900553560402,
-    "Antioxidant Ginkgo Gel Booster": 51900617851218,
-    "Calming Facial Oil": 51900798566738,
-    "AHA Peeling Concentrate": 51900930589010,
-    "Caffeine Gel Booster": 51901220454738,
-    "Oil-Free Hydrating Gel": 51901284352338,
-    "Peptide Anti-Aging Serum": 51929446154578,
-    "Collagen Boost Serum": 51929475711314,
-    "Anti-Age Day Cream": 51929503367506,
-    "Natural Retinol Alternative Oil Serum": 51929571393874,
-    "Smoothing Eye Cream": 51929683329362,
-    "Vitamin C Serum": 51930475528530,
-    "Brightening Face&Body Exfoliator with Kojic Acid": 51930578714962,
-    "Dark Spot Face Cream with Kojic Acid": 51930733216082,
-    "All-In-One Facial Oil": 51930909180242,
-    "Sun Protection SPF50 Stick, no tint": 51952704848210,
-    "Acne Spot Care": 51984072966482,
-    "Niacinamide Gel Moisturiser": 51984073851218,
+const PRODUCT_DATA = {
+  "Micellar Cleansing Water": {
+    variantId: 51851602854226,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796",
   },
-  routines: {
-    "Dry & Dehydrated Skin Routine": 52332020433234,
-    "Sensitive & Reactive Skin Routine": 52332074074450,
-    "Clear & Balanced Skin Routine": 52332389204306,
-    "Combination Skin Balance Routine": 52332448809298,
-    "Glow & Radiance Routine": 52332474302802,
-    "Firm & Smooth Skin Routine": 52332494487890,
-    "Simple Daily Skincare Routine": 52332514246994,
-    "Normal & Balanced Skin Routine": 52435433292114,
+  "Hydrating Toner": {
+    variantId: 51881462956370,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Toner-fragrance-free-vegan.jpg?v=1775136707",
+  },
+  "Hydrating Serum": {
+    variantId: 51886996390226,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Serum-vegan-natural-certified.jpg?v=1775136609",
+  },
+  "Double Hydration Boost Gel + HA": {
+    variantId: 51887105278290,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Double-Hydration-Boost-Gel-HA-natural-certified.jpg?v=1775136519",
+  },
+  "Moisturising Day Cream": {
+    variantId: 51887248539986,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Moisturising-Day-Cream-hyaluronic-moisturizer.jpg?v=1775136917",
+  },
+  "Ceramide Barrier Night Cream": {
+    variantId: 51887297593682,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Ceramide-Barrier-Night-Cream-barrier-repair-moisturizer_54139ef5-7701-4007-afb4-adb7140f7dd7.jpg?v=1775136179",
+  },
+  "Purifying Mousse": {
+    variantId: 51900553560402,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Purifying-Mousse-gluten-free-nut-free-vegan-natural-certified.jpg?v=1775137464",
+  },
+  "Antioxidant Ginkgo Gel Booster": {
+    variantId: 51900617851218,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Antioxidant-Ginkgo-Gel-Booster-hydrating-gel-serum.jpg?v=1775135203",
+  },
+  "Calming Facial Oil": {
+    variantId: 51900798566738,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Calming-Facial-Oil-nourishing-face-oil.jpg?v=1775135603",
+  },
+  "AHA Peeling Concentrate": {
+    variantId: 51900930589010,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-AHA-Peeling-Concentrate-exfoliating-face-serum.jpg?v=1775134637",
+  },
+  "Caffeine Gel Booster": {
+    variantId: 51901220454738,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Caffeine-Gel-Booster-hydrating-gel-serum.jpg?v=1775135510",
+  },
+  "Oil-Free Hydrating Gel": {
+    variantId: 51901284352338,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Oil-Free-Hydrating-Gel-vegan-natural-certified.jpg?v=1775137249",
+  },
+  "Peptide Anti-Aging Serum": {
+    variantId: 51929446154578,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Peptide-Anti-Aging-Serum-vegan-natural-certified-gluten-free_b3d3c1a2-9748-4728-9c8d-31ef88dd41fc.jpg?v=1775137936",
+  },
+  "Collagen Boost Serum": {
+    variantId: 51929475711314,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Collagen-Boost-Serum-firming-hydrating-serum.jpg?v=1775136257",
+  },
+  "Anti-Age Day Cream": {
+    variantId: 51929503367506,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Anti-Age-Day-Cream-hyaluronic-acid-moisturizer.jpg?v=1775135005",
+  },
+  "Natural Retinol Alternative Oil Serum": {
+    variantId: 51929571393874,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Natural-Retinol-Alternative-Oil-Serum-organic-certified.jpg?v=1775137069",
+  },
+  "Smoothing Eye Cream": {
+    variantId: 51929683329362,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Smoothing-Eye-Cream-gluten-free-vegan-natural-certified.jpg?v=1775137579",
+  },
+  "Vitamin C Serum": {
+    variantId: 51930475528530,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Vitamin-C-Serum-vegan-gluten-free-natural-certified_6292763e-027a-4de1-850b-3953b8983743.jpg?v=1775134504",
+  },
+  "Brightening Face&Body Exfoliator with Kojic Acid": {
+    variantId: 51930578714962,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Brightening-Face-and-Body-Exfoliator-Kojic-Acid.jpg?v=1775135392",
+  },
+  "Dark Spot Face Cream with Kojic Acid": {
+    variantId: 51930733216082,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Dark-Spot-Face-Cream-Kojic-Acid-vegan.jpg?v=1775136353",
+  },
+  "All-In-One Facial Oil": {
+    variantId: 51930909180242,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-All-In-One-Facial-Oil-nourishing-face-oil.jpg?v=1775134905",
+  },
+  "Sun Protection SPF50 Stick no tint": {
+    variantId: 51952704848210,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Sun-Protection-SPF50-Stick-no-tint.jpg?v=1775137726",
+  },
+  "Acne Spot Care": {
+    variantId: 51984072966482,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Acne-Spot-Care-acne-treatment-blemish-care_718e95d2-b927-4adc-b551-15bebb4fce84.jpg?v=1775133667",
+  },
+  "Niacinamide Gel Moisturiser": {
+    variantId: 51984073851218,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Niacinamide-Gel-Moisturiser-vitamin-B3-moisturizer_d227899e-7edf-4a39-a992-ce94684179df.jpg?v=1775138791",
+  },
+} as const;
+
+const ROUTINE_DATA = {
+  "Dry & Dehydrated Skin Routine": {
+    variantId: 52332020433234,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Dry_Dehydrated_Skin_Routine_Skincare_Set_for_Dry_and_Dehydrated_Skin.png?v=1776108066",
+  },
+  "Sensitive & Reactive Skin Routine": {
+    variantId: 52332074074450,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Sensitive_Reactive_Skin_Routine_Soothing_Skincare_for_Sensitive_and_Reactive_Skin.png?v=1776108959",
+  },
+  "Clear & Balanced Skin Routine": {
+    variantId: 52332389204306,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Clear_Balanced_Skin_Routine_Skincare_Set_for_Blemish-Prone_and_Combination_Skin.png?v=1776108960",
+  },
+  "Combination Skin Balance Routine": {
+    variantId: 52332448809298,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Combination_Skin_Balance_Routine_Balancing_Skincare_Set_for_Combination_Skin.png?v=1776109368",
+  },
+  "Glow & Radiance Routine": {
+    variantId: 52332474302802,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Glow_Radiance_Routine_Brightening_Skincare_Set_for_Glowing_Skin.png?v=1776109005",
+  },
+  "Firm & Smooth Skin Routine": {
+    variantId: 52332494487890,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Firm_Smooth_Skin_Routine_Firming_Anti-Aging_Skincare_for_Mature_Skin.png?v=1776108992",
+  },
+  "Simple Daily Skincare Routine": {
+    variantId: 52332514246994,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Simple_Daily_Skincare_Routine_Essential_Skincare_Set_for_Daily_Use.png?v=1776108956",
+  },
+  "Normal & Balanced Skin Routine": {
+    variantId: 52435433292114,
+    image: "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Normal_Balanced_Skin_Routine_Complete_Skincare_Set_for_Normal_Skin.png?v=1776108062",
   },
 } as const;
 
@@ -90,7 +187,8 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Dry & Dehydrated Skin Routine",
     handle: "dry-dehydrated-skin-routine",
     url: "/products/dry-dehydrated-skin-routine",
-    variantId: VARIANT_IDS.routines["Dry & Dehydrated Skin Routine"],
+    variantId: ROUTINE_DATA["Dry & Dehydrated Skin Routine"].variantId,
+    image: ROUTINE_DATA["Dry & Dehydrated Skin Routine"].image,
     description: "A hydration-focused routine for skin that feels dry, tight, or dehydrated.",
     products: [
       "Micellar Cleansing Water",
@@ -105,7 +203,8 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Sensitive & Reactive Skin Routine",
     handle: "sensitive-reactive-skin-routine",
     url: "/products/sensitive-reactive-skin-routine",
-    variantId: VARIANT_IDS.routines["Sensitive & Reactive Skin Routine"],
+    variantId: ROUTINE_DATA["Sensitive & Reactive Skin Routine"].variantId,
+    image: ROUTINE_DATA["Sensitive & Reactive Skin Routine"].image,
     description: "A gentle routine for skin that reacts easily and needs a calmer approach.",
     products: [
       "Micellar Cleansing Water",
@@ -120,7 +219,8 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Clear & Balanced Skin Routine",
     handle: "clear-balanced-skin-routine",
     url: "/products/clear-balanced-skin-routine",
-    variantId: VARIANT_IDS.routines["Clear & Balanced Skin Routine"],
+    variantId: ROUTINE_DATA["Clear & Balanced Skin Routine"].variantId,
+    image: ROUTINE_DATA["Clear & Balanced Skin Routine"].image,
     description: "A balancing routine for blemish-prone skin that wants clarity without overdoing it.",
     products: [
       "Purifying Mousse",
@@ -133,7 +233,8 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Combination Skin Balance Routine",
     handle: "combination-skin-balance-routine",
     url: "/products/combination-skin-balance-routine",
-    variantId: VARIANT_IDS.routines["Combination Skin Balance Routine"],
+    variantId: ROUTINE_DATA["Combination Skin Balance Routine"].variantId,
+    image: ROUTINE_DATA["Combination Skin Balance Routine"].image,
     description: "A routine for skin that needs balance between oilier and drier areas.",
     products: [
       "Purifying Mousse",
@@ -147,7 +248,8 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Glow & Radiance Routine",
     handle: "glow-radiance-routine",
     url: "/products/glow-radiance-routine",
-    variantId: VARIANT_IDS.routines["Glow & Radiance Routine"],
+    variantId: ROUTINE_DATA["Glow & Radiance Routine"].variantId,
+    image: ROUTINE_DATA["Glow & Radiance Routine"].image,
     description: "A routine for dull skin that needs more radiance and a fresher-looking finish.",
     products: [
       "Micellar Cleansing Water",
@@ -161,7 +263,8 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Firm & Smooth Skin Routine",
     handle: "firm-smooth-skin-routine",
     url: "/products/firm-smooth-skin-routine",
-    variantId: VARIANT_IDS.routines["Firm & Smooth Skin Routine"],
+    variantId: ROUTINE_DATA["Firm & Smooth Skin Routine"].variantId,
+    image: ROUTINE_DATA["Firm & Smooth Skin Routine"].image,
     description: "A more targeted routine focused on smoother- and firmer-looking skin.",
     products: [
       "Hydrating Toner",
@@ -176,7 +279,8 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Simple Daily Skincare Routine",
     handle: "simple-daily-skincare-routine",
     url: "/products/simple-daily-skincare-routine",
-    variantId: VARIANT_IDS.routines["Simple Daily Skincare Routine"],
+    variantId: ROUTINE_DATA["Simple Daily Skincare Routine"].variantId,
+    image: ROUTINE_DATA["Simple Daily Skincare Routine"].image,
     description: "A simple everyday routine that keeps things easy and effective.",
     products: [
       "Micellar Cleansing Water",
@@ -188,7 +292,8 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Normal & Balanced Skin Routine",
     handle: "normal-balanced-skin-routine",
     url: "/products/normal-balanced-skin-routine",
-    variantId: VARIANT_IDS.routines["Normal & Balanced Skin Routine"],
+    variantId: ROUTINE_DATA["Normal & Balanced Skin Routine"].variantId,
+    image: ROUTINE_DATA["Normal & Balanced Skin Routine"].image,
     description: "A balanced routine for skin that feels fairly stable and wants daily support.",
     products: [
       "Micellar Cleansing Water",
@@ -204,37 +309,43 @@ const ADDONS: Record<string, Addon> = {
     title: "Acne Spot Care",
     handle: "acne-spot-care",
     url: "/products/acne-spot-care",
-    variantId: VARIANT_IDS.products["Acne Spot Care"],
+    variantId: PRODUCT_DATA["Acne Spot Care"].variantId,
+    image: PRODUCT_DATA["Acne Spot Care"].image,
   },
   aha: {
     title: "AHA Peeling Concentrate",
     handle: "aha-peeling-concentrate",
     url: "/products/aha-peeling-concentrate",
-    variantId: VARIANT_IDS.products["AHA Peeling Concentrate"],
+    variantId: PRODUCT_DATA["AHA Peeling Concentrate"].variantId,
+    image: PRODUCT_DATA["AHA Peeling Concentrate"].image,
   },
   vitaminC: {
     title: "Vitamin C Serum",
     handle: "vitamin-c-serum",
     url: "/products/vitamin-c-serum",
-    variantId: VARIANT_IDS.products["Vitamin C Serum"],
+    variantId: PRODUCT_DATA["Vitamin C Serum"].variantId,
+    image: PRODUCT_DATA["Vitamin C Serum"].image,
   },
   kojicExfoliator: {
     title: "Brightening Face&Body Exfoliator with Kojic Acid",
     handle: "brightening-face-body-exfoliator-with-kojic-acid",
     url: "/products/brightening-face-body-exfoliator-with-kojic-acid",
-    variantId: VARIANT_IDS.products["Brightening Face&Body Exfoliator with Kojic Acid"],
+    variantId: PRODUCT_DATA["Brightening Face&Body Exfoliator with Kojic Acid"].variantId,
+    image: PRODUCT_DATA["Brightening Face&Body Exfoliator with Kojic Acid"].image,
   },
   kojicCream: {
     title: "Dark Spot Face Cream with Kojic Acid",
     handle: "dark-spot-face-cream-with-kojic-acid",
     url: "/products/dark-spot-face-cream-with-kojic-acid",
-    variantId: VARIANT_IDS.products["Dark Spot Face Cream with Kojic Acid"],
+    variantId: PRODUCT_DATA["Dark Spot Face Cream with Kojic Acid"].variantId,
+    image: PRODUCT_DATA["Dark Spot Face Cream with Kojic Acid"].image,
   },
   calmingOil: {
     title: "Calming Facial Oil",
     handle: "calming-facial-oil",
     url: "/products/calming-facial-oil",
-    variantId: VARIANT_IDS.products["Calming Facial Oil"],
+    variantId: PRODUCT_DATA["Calming Facial Oil"].variantId,
+    image: PRODUCT_DATA["Calming Facial Oil"].image,
   },
 };
 
