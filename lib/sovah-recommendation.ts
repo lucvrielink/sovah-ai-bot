@@ -1,16 +1,5 @@
-import fs from "fs";
-import path from "path";
-
 export type Lang = "nl" | "en";
-
-export type SkinType =
-  | "dry"
-  | "oily"
-  | "combination"
-  | "normal"
-  | "sensitive"
-  | "unknown";
-
+export type SkinType = "dry" | "oily" | "combination" | "normal" | "sensitive" | "unknown";
 export type Concern =
   | "dryness"
   | "breakouts"
@@ -19,365 +8,430 @@ export type Concern =
   | "dark_spots"
   | "antiage"
   | "unknown";
-
-export type Goal =
-  | "hydration"
-  | "calm"
-  | "glow"
-  | "even"
-  | "firm"
-  | "simple"
-  | "unknown";
-
+export type Goal = "hydration" | "calm" | "glow" | "even" | "firm" | "simple" | "unknown";
 export type RoutinePreference = "simple" | "balanced" | "results" | "unknown";
+export type SensitivityLevel = "high" | "medium" | "low" | "unknown";
 
 export type QuizAnswers = {
-  lang?: Lang;
-  skinType?: SkinType;
-  concern?: Concern;
-  sensitivityLevel?: "high" | "medium" | "low" | "unknown";
-  goal?: Goal;
-  routinePreference?: RoutinePreference;
+  lang: Lang;
+  skinType: SkinType;
+  concern: Concern;
+  sensitivityLevel: SensitivityLevel;
+  goal: Goal;
+  routinePreference: RoutinePreference;
 };
 
-export type Bundle = {
+type Bundle = {
   name: string;
+  handle: string;
   url: string;
-  description?: string;
-  products?: string[];
+  variantId: number;
+  description: string;
+  products: string[];
 };
 
-export type Product = {
+type Addon = {
   title: string;
   handle: string;
   url: string;
-  first_available_variant_id?: number;
-  source_tags?: string[];
-  short_copy_nl?: string;
-  short_copy_en?: string;
+  variantId: number;
 };
 
-type BundleCatalog = { bundles: Bundle[] };
-type ProductCatalog = { products: Product[] };
-
-export type QuizRecommendation = {
+type RecommendationResult = {
   lang: Lang;
   recommendedBundle: Bundle;
-  addon: Product | null;
+  addon: Addon | null;
   reasonShort: string;
   reasonLong: string;
   steps: string[];
 };
 
-const bundlesPath = path.join(process.cwd(), "data", "bundle_catalog.json");
-const productsPath = path.join(process.cwd(), "data", "product_catalog.json");
+const VARIANT_IDS = {
+  products: {
+    "Micellar Cleansing Water": 51851602854226,
+    "Hydrating Toner": 51881462956370,
+    "Hydrating Serum": 51886996390226,
+    "Double Hydration Boost Gel + HA": 51887105278290,
+    "Moisturising Day Cream": 51887248539986,
+    "Ceramide Barrier Night Cream": 51887297593682,
+    "Purifying Mousse": 51900553560402,
+    "Antioxidant Ginkgo Gel Booster": 51900617851218,
+    "Calming Facial Oil": 51900798566738,
+    "AHA Peeling Concentrate": 51900930589010,
+    "Caffeine Gel Booster": 51901220454738,
+    "Oil-Free Hydrating Gel": 51901284352338,
+    "Peptide Anti-Aging Serum": 51929446154578,
+    "Collagen Boost Serum": 51929475711314,
+    "Anti-Age Day Cream": 51929503367506,
+    "Natural Retinol Alternative Oil Serum": 51929571393874,
+    "Smoothing Eye Cream": 51929683329362,
+    "Vitamin C Serum": 51930475528530,
+    "Brightening Face&Body Exfoliator with Kojic Acid": 51930578714962,
+    "Dark Spot Face Cream with Kojic Acid": 51930733216082,
+    "All-In-One Facial Oil": 51930909180242,
+    "Sun Protection SPF50 Stick, no tint": 51952704848210,
+    "Acne Spot Care": 51984072966482,
+    "Niacinamide Gel Moisturiser": 51984073851218,
+  },
+  routines: {
+    "Dry & Dehydrated Skin Routine": 52332020433234,
+    "Sensitive & Reactive Skin Routine": 52332074074450,
+    "Clear & Balanced Skin Routine": 52332389204306,
+    "Combination Skin Balance Routine": 52332448809298,
+    "Glow & Radiance Routine": 52332474302802,
+    "Firm & Smooth Skin Routine": 52332494487890,
+    "Simple Daily Skincare Routine": 52332514246994,
+    "Normal & Balanced Skin Routine": 52435433292114,
+  },
+} as const;
 
-const bundleCatalog: BundleCatalog = JSON.parse(fs.readFileSync(bundlesPath, "utf8"));
-const productCatalog: ProductCatalog = JSON.parse(fs.readFileSync(productsPath, "utf8"));
+const BUNDLES: Record<string, Bundle> = {
+  dry: {
+    name: "Dry & Dehydrated Skin Routine",
+    handle: "dry-dehydrated-skin-routine",
+    url: "/products/dry-dehydrated-skin-routine",
+    variantId: VARIANT_IDS.routines["Dry & Dehydrated Skin Routine"],
+    description: "A hydration-focused routine for skin that feels dry, tight, or dehydrated.",
+    products: [
+      "Micellar Cleansing Water",
+      "Hydrating Toner",
+      "Hydrating Serum",
+      "Double Hydration Boost Gel + HA",
+      "Moisturising Day Cream",
+      "Ceramide Barrier Night Cream",
+    ],
+  },
+  sensitive: {
+    name: "Sensitive & Reactive Skin Routine",
+    handle: "sensitive-reactive-skin-routine",
+    url: "/products/sensitive-reactive-skin-routine",
+    variantId: VARIANT_IDS.routines["Sensitive & Reactive Skin Routine"],
+    description: "A gentle routine for skin that reacts easily and needs a calmer approach.",
+    products: [
+      "Micellar Cleansing Water",
+      "Hydrating Toner",
+      "Hydrating Serum",
+      "Moisturising Day Cream",
+      "Ceramide Barrier Night Cream",
+      "Calming Facial Oil",
+    ],
+  },
+  clear: {
+    name: "Clear & Balanced Skin Routine",
+    handle: "clear-balanced-skin-routine",
+    url: "/products/clear-balanced-skin-routine",
+    variantId: VARIANT_IDS.routines["Clear & Balanced Skin Routine"],
+    description: "A balancing routine for blemish-prone skin that wants clarity without overdoing it.",
+    products: [
+      "Purifying Mousse",
+      "Hydrating Toner",
+      "Niacinamide Gel Moisturiser",
+      "Oil-Free Hydrating Gel",
+    ],
+  },
+  combination: {
+    name: "Combination Skin Balance Routine",
+    handle: "combination-skin-balance-routine",
+    url: "/products/combination-skin-balance-routine",
+    variantId: VARIANT_IDS.routines["Combination Skin Balance Routine"],
+    description: "A routine for skin that needs balance between oilier and drier areas.",
+    products: [
+      "Purifying Mousse",
+      "Hydrating Toner",
+      "Hydrating Serum",
+      "Niacinamide Gel Moisturiser",
+      "Oil-Free Hydrating Gel",
+    ],
+  },
+  glow: {
+    name: "Glow & Radiance Routine",
+    handle: "glow-radiance-routine",
+    url: "/products/glow-radiance-routine",
+    variantId: VARIANT_IDS.routines["Glow & Radiance Routine"],
+    description: "A routine for dull skin that needs more radiance and a fresher-looking finish.",
+    products: [
+      "Micellar Cleansing Water",
+      "Hydrating Toner",
+      "Vitamin C Serum",
+      "Antioxidant Ginkgo Gel Booster",
+      "Moisturising Day Cream",
+    ],
+  },
+  firm: {
+    name: "Firm & Smooth Skin Routine",
+    handle: "firm-smooth-skin-routine",
+    url: "/products/firm-smooth-skin-routine",
+    variantId: VARIANT_IDS.routines["Firm & Smooth Skin Routine"],
+    description: "A more targeted routine focused on smoother- and firmer-looking skin.",
+    products: [
+      "Hydrating Toner",
+      "Peptide Anti-Aging Serum",
+      "Collagen Boost Serum",
+      "Anti-Age Day Cream",
+      "Natural Retinol Alternative Oil Serum",
+      "Smoothing Eye Cream",
+    ],
+  },
+  simple: {
+    name: "Simple Daily Skincare Routine",
+    handle: "simple-daily-skincare-routine",
+    url: "/products/simple-daily-skincare-routine",
+    variantId: VARIANT_IDS.routines["Simple Daily Skincare Routine"],
+    description: "A simple everyday routine that keeps things easy and effective.",
+    products: [
+      "Micellar Cleansing Water",
+      "Hydrating Toner",
+      "Moisturising Day Cream",
+    ],
+  },
+  normal: {
+    name: "Normal & Balanced Skin Routine",
+    handle: "normal-balanced-skin-routine",
+    url: "/products/normal-balanced-skin-routine",
+    variantId: VARIANT_IDS.routines["Normal & Balanced Skin Routine"],
+    description: "A balanced routine for skin that feels fairly stable and wants daily support.",
+    products: [
+      "Micellar Cleansing Water",
+      "Hydrating Toner",
+      "Hydrating Serum",
+      "Moisturising Day Cream",
+    ],
+  },
+};
 
-function tr(lang: Lang, nl: string, en: string): string {
-  return lang === "nl" ? nl : en;
-}
+const ADDONS: Record<string, Addon> = {
+  acne: {
+    title: "Acne Spot Care",
+    handle: "acne-spot-care",
+    url: "/products/acne-spot-care",
+    variantId: VARIANT_IDS.products["Acne Spot Care"],
+  },
+  aha: {
+    title: "AHA Peeling Concentrate",
+    handle: "aha-peeling-concentrate",
+    url: "/products/aha-peeling-concentrate",
+    variantId: VARIANT_IDS.products["AHA Peeling Concentrate"],
+  },
+  vitaminC: {
+    title: "Vitamin C Serum",
+    handle: "vitamin-c-serum",
+    url: "/products/vitamin-c-serum",
+    variantId: VARIANT_IDS.products["Vitamin C Serum"],
+  },
+  kojicExfoliator: {
+    title: "Brightening Face&Body Exfoliator with Kojic Acid",
+    handle: "brightening-face-body-exfoliator-with-kojic-acid",
+    url: "/products/brightening-face-body-exfoliator-with-kojic-acid",
+    variantId: VARIANT_IDS.products["Brightening Face&Body Exfoliator with Kojic Acid"],
+  },
+  kojicCream: {
+    title: "Dark Spot Face Cream with Kojic Acid",
+    handle: "dark-spot-face-cream-with-kojic-acid",
+    url: "/products/dark-spot-face-cream-with-kojic-acid",
+    variantId: VARIANT_IDS.products["Dark Spot Face Cream with Kojic Acid"],
+  },
+  calmingOil: {
+    title: "Calming Facial Oil",
+    handle: "calming-facial-oil",
+    url: "/products/calming-facial-oil",
+    variantId: VARIANT_IDS.products["Calming Facial Oil"],
+  },
+};
 
-function getBundleByName(name: string): Bundle {
-  const found = bundleCatalog.bundles.find((b) => b.name === name);
-  if (!found) {
-    throw new Error(`Bundle not found: ${name}`);
+function getLocalizedReasonShort(lang: Lang, bundle: Bundle): string {
+  if (lang === "nl") {
+    switch (bundle.name) {
+      case "Dry & Dehydrated Skin Routine":
+        return "Deze routine past het best bij een huid die vocht, comfort en herstel nodig heeft.";
+      case "Sensitive & Reactive Skin Routine":
+        return "Deze routine past het best bij een gevoelige huid die snel reageert en rust nodig heeft.";
+      case "Clear & Balanced Skin Routine":
+        return "Deze routine past het best bij een huid met acne, puistjes of onzuiverheden die in balans moet komen.";
+      case "Combination Skin Balance Routine":
+        return "Deze routine past het best bij een gecombineerde huid die balans zoekt tussen vettere en drogere zones.";
+      case "Glow & Radiance Routine":
+        return "Deze routine past het best bij een doffere huid die meer glow en frisheid kan gebruiken.";
+      case "Firm & Smooth Skin Routine":
+        return "Deze routine past het best bij een huid die meer focus wil op stevigheid en een gladdere uitstraling.";
+      case "Simple Daily Skincare Routine":
+        return "Deze routine past het best als je het graag simpel en duidelijk houdt.";
+      default:
+        return "Deze routine past het best bij een huid die vooral balans en dagelijkse ondersteuning nodig heeft.";
+    }
   }
-  return found;
+
+  switch (bundle.name) {
+    case "Dry & Dehydrated Skin Routine":
+      return "This routine is the best match for skin that needs hydration, comfort, and support.";
+    case "Sensitive & Reactive Skin Routine":
+      return "This routine is the best match for skin that reacts easily and needs a gentler approach.";
+    case "Clear & Balanced Skin Routine":
+      return "This routine is the best match for skin dealing with acne, breakouts, or clogged areas.";
+    case "Combination Skin Balance Routine":
+      return "This routine is the best match for skin that needs balance across oilier and drier areas.";
+    case "Glow & Radiance Routine":
+      return "This routine is the best match for skin that looks dull and could use more radiance.";
+    case "Firm & Smooth Skin Routine":
+      return "This routine is the best match for skin focused on smoother- and firmer-looking results.";
+    case "Simple Daily Skincare Routine":
+      return "This routine is the best match if you want to keep things simple and easy to maintain.";
+    default:
+      return "This routine is the best match for skin that mainly needs balance and daily support.";
+  }
 }
 
-function getProductByName(name: string): Product | null {
-  return productCatalog.products.find((p) => p.title === name) || null;
+function getLocalizedReasonLong(lang: Lang, bundle: Bundle, addon: Addon | null): string {
+  if (lang === "nl") {
+    return addon
+      ? `${bundle.name} sluit het best aan op je antwoorden. ${addon.title} is toegevoegd als extra stap waar dat logisch is.`
+      : `${bundle.name} sluit het best aan op je antwoorden en houdt je routine duidelijk en passend.`;
+  }
+
+  return addon
+    ? `${bundle.name} is the best fit for your answers. ${addon.title} is included as an extra step where it makes sense.`
+    : `${bundle.name} is the best fit for your answers and keeps your routine clear and relevant.`;
 }
 
-function pushScore(
-  scores: Record<string, number>,
-  bundleName: string,
-  value: number
-) {
-  scores[bundleName] = (scores[bundleName] || 0) + value;
-}
-
-function pickHighestScore(scores: Record<string, number>): string {
-  const entries = Object.entries(scores);
-  if (!entries.length) return "Simple Daily Skincare Routine";
-
-  entries.sort((a, b) => b[1] - a[1]);
-  return entries[0][0];
-}
-
-function buildReason(
-  lang: Lang,
-  answers: QuizAnswers,
-  bundleName: string,
-  addonName: string | null
-) {
-  const concernText = {
-    nl: {
-      dryness: "droogte en hydratatie",
-      breakouts: "puistjes of acne",
-      sensitivity: "gevoeligheid en roodheid",
-      glow: "een doffe huid en meer glow",
-      dark_spots: "een egalere huid",
-      antiage: "een gladdere en stevigere huid",
-      unknown: "je dagelijkse huidbalans",
-    },
-    en: {
-      dryness: "dryness and hydration",
-      breakouts: "breakouts or acne",
-      sensitivity: "sensitivity and redness",
-      glow: "dullness and more glow",
-      dark_spots: "a more even-looking complexion",
-      antiage: "smoother- and firmer-looking skin",
-      unknown: "your daily skin balance",
-    },
-  };
-
-  const goalText = {
-    nl: {
-      hydration: "meer hydratatie",
-      calm: "een rustigere huid",
-      glow: "meer glow",
-      even: "een egalere uitstraling",
-      firm: "een gladdere en stevigere uitstraling",
-      simple: "een simpele routine",
-      unknown: "een routine die goed past",
-    },
-    en: {
-      hydration: "more hydration",
-      calm: "calmer-looking skin",
-      glow: "more glow",
-      even: "a more even-looking complexion",
-      firm: "a smoother- and firmer-looking look",
-      simple: "a simple routine",
-      unknown: "a routine that fits well",
-    },
-  };
-
-  const short = tr(
-    lang,
-    `Deze routine past het best bij jouw antwoorden.`,
-    `This routine is the best match based on your answers.`
+function getLocalizedSteps(lang: Lang, bundle: Bundle, addon: Addon | null): string[] {
+  const cleanser = bundle.products.find((p) =>
+    ["Micellar Cleansing Water", "Purifying Mousse"].includes(p)
+  );
+  const toner = bundle.products.find((p) => p === "Hydrating Toner");
+  const dayCream = bundle.products.find((p) =>
+    ["Moisturising Day Cream", "Anti-Age Day Cream", "Oil-Free Hydrating Gel", "Niacinamide Gel Moisturiser"].includes(p)
+  );
+  const nightCream = bundle.products.find((p) => p === "Ceramide Barrier Night Cream");
+  const serums = bundle.products.filter((p) =>
+    ![cleanser, toner, dayCream, nightCream].includes(p as string)
   );
 
-  const long = tr(
-    lang,
-    `Op basis van je antwoorden lijkt jouw huid vooral behoefte te hebben aan ${concernText.nl[answers.concern || "unknown"]} en ${goalText.nl[answers.goal || "unknown"]}. Daarom past ${bundleName} hier het best bij.${addonName ? ` Als extra stap sluit ${addonName} daar logisch op aan.` : ""}`,
-    `Based on your answers, your skin seems to need help mainly with ${concernText.en[answers.concern || "unknown"]} and ${goalText.en[answers.goal || "unknown"]}. That is why ${bundleName} is the best fit here.${addonName ? ` As an extra step, ${addonName} complements it well.` : ""}`
-  );
+  if (lang === "nl") {
+    const steps: string[] = [];
 
-  return { short, long };
+    if (cleanser) steps.push(`Begin met ${cleanser} om je huid te reinigen.`);
+    if (toner) steps.push(`Gebruik daarna ${toner} als frisse voorbereidende stap.`);
+    if (serums.length) steps.push(`Breng daarna één of meer gerichte stappen aan, zoals ${serums.join(", ")}.`);
+    if (dayCream) steps.push(`Sluit overdag af met ${dayCream}.`);
+    if (nightCream) steps.push(`Gebruik in de avond ${nightCream} als voedende afsluiting.`);
+    if (addon) {
+      if (addon.title === "Acne Spot Care") {
+        steps.push(`Gebruik ${addon.title} alleen plaatselijk waar nodig.`);
+      } else if (addon.title === "AHA Peeling Concentrate") {
+        steps.push(`Gebruik ${addon.title} als extra stap in de avond en bouw rustig op.`);
+      } else {
+        steps.push(`Voeg ${addon.title} toe als extra stap waar dat past binnen je routine.`);
+      }
+    }
+
+    return steps;
+  }
+
+  const steps: string[] = [];
+
+  if (cleanser) steps.push(`Start with ${cleanser} to cleanse the skin.`);
+  if (toner) steps.push(`Follow with ${toner} as a fresh prep step.`);
+  if (serums.length) steps.push(`Then apply one or more targeted steps such as ${serums.join(", ")}.`);
+  if (dayCream) steps.push(`Finish with ${dayCream} during the day.`);
+  if (nightCream) steps.push(`Use ${nightCream} in the evening as a nourishing final step.`);
+  if (addon) {
+    if (addon.title === "Acne Spot Care") {
+      steps.push(`Use ${addon.title} only on targeted areas when needed.`);
+    } else if (addon.title === "AHA Peeling Concentrate") {
+      steps.push(`Use ${addon.title} as an extra evening step and build up gradually.`);
+    } else {
+      steps.push(`Add ${addon.title} as an extra step where it fits your routine.`);
+    }
+  }
+
+  return steps;
 }
 
-function buildSteps(lang: Lang, bundleName: string): string[] {
-  const genericNl = [
-    "Reinig je huid zacht.",
-    "Breng daarna je treatment of serum aan.",
-    "Sluit af met hydratatie en dagelijkse verzorging.",
-  ];
+function chooseBundle(answers: QuizAnswers): Bundle {
+  const { skinType, concern, goal, sensitivityLevel, routinePreference } = answers;
 
-  const genericEn = [
-    "Cleanse your skin gently.",
-    "Apply your treatment or serum next.",
-    "Finish with hydration and daily care.",
-  ];
+  if (routinePreference === "simple" || goal === "simple") {
+    return BUNDLES.simple;
+  }
 
-  const specific: Record<string, { nl: string[]; en: string[] }> = {
-    "Clear & Balanced Skin Routine": {
-      nl: [
-        "Reinig je huid zonder haar uit te drogen.",
-        "Gebruik producten die helpen om je huid in balans te houden.",
-        "Gebruik de extra stap lokaal waar nodig.",
-      ],
-      en: [
-        "Cleanse your skin without stripping it.",
-        "Use products that help keep your skin balanced.",
-        "Use the add-on locally where needed.",
-      ],
-    },
-    "Dry & Dehydrated Skin Routine": {
-      nl: [
-        "Begin met een milde reiniging.",
-        "Werk daarna in hydraterende lagen.",
-        "Sluit af met producten die comfort en voeding geven.",
-      ],
-      en: [
-        "Start with a gentle cleanse.",
-        "Layer hydration next.",
-        "Finish with products that give comfort and nourishment.",
-      ],
-    },
-    "Sensitive & Reactive Skin Routine": {
-      nl: [
-        "Houd je routine mild en rustig.",
-        "Kies voor comfort en hydratatie zonder onnodige drukte.",
-        "Bouw een stabiele dagelijkse basis op.",
-      ],
-      en: [
-        "Keep your routine gentle and calm.",
-        "Focus on comfort and hydration without unnecessary extra steps.",
-        "Build a stable daily base.",
-      ],
-    },
-  };
+  if (concern === "breakouts") {
+    if (skinType === "combination") return BUNDLES.combination;
+    return BUNDLES.clear;
+  }
 
-  const match = specific[bundleName];
-  if (match) return lang === "nl" ? match.nl : match.en;
-  return lang === "nl" ? genericNl : genericEn;
+  if (concern === "sensitivity" || skinType === "sensitive" || sensitivityLevel === "high") {
+    return BUNDLES.sensitive;
+  }
+
+  if (concern === "dryness" || skinType === "dry" || goal === "hydration") {
+    return BUNDLES.dry;
+  }
+
+  if (concern === "glow" || goal === "glow") {
+    return BUNDLES.glow;
+  }
+
+  if (concern === "dark_spots" || goal === "even") {
+    return BUNDLES.glow;
+  }
+
+  if (concern === "antiage" || goal === "firm") {
+    return BUNDLES.firm;
+  }
+
+  if (skinType === "combination" || skinType === "oily") {
+    return BUNDLES.combination;
+  }
+
+  if (skinType === "normal") {
+    return BUNDLES.normal;
+  }
+
+  return BUNDLES.normal;
 }
 
-function chooseAddon(
-  answers: QuizAnswers,
-  bundleName: string
-): string | null {
-  if (answers.concern === "breakouts") return "Acne Spot Care";
-  if (answers.concern === "glow" && answers.sensitivityLevel !== "high") {
-    return "AHA Peeling Concentrate";
-  }
-  if (answers.concern === "dryness" || answers.goal === "hydration") {
-    return "Double Hydration Boost Gel + HA";
-  }
-  if (answers.concern === "antiage" || answers.goal === "firm") {
-    return "Smoothing Eye Cream";
-  }
-  if (answers.concern === "dark_spots" || answers.goal === "even") {
-    return "Vitamin C Serum";
+function chooseAddon(answers: QuizAnswers, bundle: Bundle): Addon | null {
+  const { concern, sensitivityLevel, goal } = answers;
+
+  if (concern === "breakouts") {
+    return ADDONS.acne;
   }
 
-  if (bundleName === "Glow & Radiance Routine") return "Vitamin C Serum";
+  if (concern === "dark_spots") {
+    return sensitivityLevel === "high" ? ADDONS.kojicCream : ADDONS.kojicExfoliator;
+  }
+
+  if (goal === "even") {
+    return sensitivityLevel === "high" ? ADDONS.kojicCream : ADDONS.kojicExfoliator;
+  }
+
+  if (concern === "glow" && bundle.name !== "Glow & Radiance Routine") {
+    return ADDONS.vitaminC;
+  }
+
+  if (bundle.name === "Sensitive & Reactive Skin Routine" && sensitivityLevel !== "low") {
+    return ADDONS.calmingOil;
+  }
+
+  if (
+    (bundle.name === "Glow & Radiance Routine" || bundle.name === "Firm & Smooth Skin Routine") &&
+    sensitivityLevel === "low"
+  ) {
+    return ADDONS.aha;
+  }
+
   return null;
 }
 
-export function getQuizRecommendation(
-  input: QuizAnswers
-): QuizRecommendation {
-  const lang: Lang = input.lang === "nl" ? "nl" : "en";
-
-  const scores: Record<string, number> = {
-    "Dry & Dehydrated Skin Routine": 0,
-    "Combination Skin Balance Routine": 0,
-    "Simple Daily Skincare Routine": 0,
-    "Sensitive & Reactive Skin Routine": 0,
-    "Normal & Balanced Skin Routine": 0,
-    "Glow & Radiance Routine": 0,
-    "Firm & Smooth Skin Routine": 0,
-    "Clear & Balanced Skin Routine": 0,
-  };
-
-  switch (input.skinType) {
-    case "dry":
-      pushScore(scores, "Dry & Dehydrated Skin Routine", 4);
-      pushScore(scores, "Sensitive & Reactive Skin Routine", 1);
-      break;
-    case "oily":
-      pushScore(scores, "Clear & Balanced Skin Routine", 4);
-      pushScore(scores, "Combination Skin Balance Routine", 2);
-      break;
-    case "combination":
-      pushScore(scores, "Combination Skin Balance Routine", 4);
-      pushScore(scores, "Clear & Balanced Skin Routine", 1);
-      break;
-    case "sensitive":
-      pushScore(scores, "Sensitive & Reactive Skin Routine", 5);
-      pushScore(scores, "Dry & Dehydrated Skin Routine", 1);
-      break;
-    case "normal":
-      pushScore(scores, "Normal & Balanced Skin Routine", 4);
-      pushScore(scores, "Simple Daily Skincare Routine", 1);
-      break;
-    default:
-      pushScore(scores, "Simple Daily Skincare Routine", 1);
-      break;
-  }
-
-  switch (input.concern) {
-    case "dryness":
-      pushScore(scores, "Dry & Dehydrated Skin Routine", 5);
-      break;
-    case "breakouts":
-      pushScore(scores, "Clear & Balanced Skin Routine", 6);
-      if (input.sensitivityLevel === "high") {
-        pushScore(scores, "Sensitive & Reactive Skin Routine", 2);
-      }
-      break;
-    case "sensitivity":
-      pushScore(scores, "Sensitive & Reactive Skin Routine", 6);
-      break;
-    case "glow":
-      pushScore(scores, "Glow & Radiance Routine", 5);
-      break;
-    case "dark_spots":
-      pushScore(scores, "Glow & Radiance Routine", 4);
-      break;
-    case "antiage":
-      pushScore(scores, "Firm & Smooth Skin Routine", 6);
-      break;
-    default:
-      break;
-  }
-
-  switch (input.goal) {
-    case "hydration":
-      pushScore(scores, "Dry & Dehydrated Skin Routine", 4);
-      break;
-    case "calm":
-      pushScore(scores, "Sensitive & Reactive Skin Routine", 4);
-      break;
-    case "glow":
-      pushScore(scores, "Glow & Radiance Routine", 4);
-      break;
-    case "even":
-      pushScore(scores, "Glow & Radiance Routine", 3);
-      break;
-    case "firm":
-      pushScore(scores, "Firm & Smooth Skin Routine", 4);
-      break;
-    case "simple":
-      pushScore(scores, "Simple Daily Skincare Routine", 4);
-      break;
-    default:
-      break;
-  }
-
-  switch (input.routinePreference) {
-    case "simple":
-      pushScore(scores, "Simple Daily Skincare Routine", 4);
-      pushScore(scores, "Sensitive & Reactive Skin Routine", 1);
-      break;
-    case "balanced":
-      pushScore(scores, "Normal & Balanced Skin Routine", 2);
-      pushScore(scores, "Combination Skin Balance Routine", 2);
-      break;
-    case "results":
-      pushScore(scores, "Glow & Radiance Routine", 2);
-      pushScore(scores, "Firm & Smooth Skin Routine", 2);
-      pushScore(scores, "Clear & Balanced Skin Routine", 2);
-      break;
-    default:
-      break;
-  }
-
-  if (input.sensitivityLevel === "high") {
-    pushScore(scores, "Sensitive & Reactive Skin Routine", 3);
-    pushScore(scores, "Glow & Radiance Routine", -1);
-  }
-
-  const bundleName = pickHighestScore(scores);
-  const addonName = chooseAddon(input, bundleName);
-
-  const bundle = getBundleByName(bundleName);
-  const addon = addonName ? getProductByName(addonName) : null;
-
-  const reason = buildReason(lang, input, bundleName, addonName);
-  const steps = buildSteps(lang, bundleName);
+export function getQuizRecommendation(answers: QuizAnswers): RecommendationResult {
+  const recommendedBundle = chooseBundle(answers);
+  const addon = chooseAddon(answers, recommendedBundle);
 
   return {
-    lang,
-    recommendedBundle: bundle,
+    lang: answers.lang,
+    recommendedBundle,
     addon,
-    reasonShort: reason.short,
-    reasonLong: reason.long,
-    steps,
+    reasonShort: getLocalizedReasonShort(answers.lang, recommendedBundle),
+    reasonLong: getLocalizedReasonLong(answers.lang, recommendedBundle, addon),
+    steps: getLocalizedSteps(answers.lang, recommendedBundle, addon),
   };
 }
