@@ -2,28 +2,18 @@ import fs from "fs";
 import path from "path";
 import Anthropic from "@anthropic-ai/sdk";
 
-const ALLOWED_ORIGINS = new Set([
-  "https://sovahcare.com",
-  "https://www.sovahcare.com",
-]);
-
-function buildCorsHeaders(origin?: string | null) {
-  const allowedOrigin =
-    origin && ALLOWED_ORIGINS.has(origin) ? origin : "https://sovahcare.com";
-
+function buildCorsHeaders() {
   return {
-    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
-    Vary: "Origin",
   };
 }
 
-export async function OPTIONS(req: Request) {
-  const origin = req.headers.get("origin");
+export async function OPTIONS() {
   return new Response(null, {
     status: 204,
-    headers: buildCorsHeaders(origin),
+    headers: buildCorsHeaders(),
   });
 }
 
@@ -264,11 +254,13 @@ function detectConversationIntent(text: string): ConversationIntent {
     ])
   ) return "help";
 
-  if (hasExactWord(t, ["yes", "yeah", "yep", "sure", "okay", "ok", "oke", "alright", "ja", "jup", "jep"]))
+  if (hasExactWord(t, ["yes", "yeah", "yep", "sure", "okay", "ok", "oke", "alright", "ja", "jup", "jep"])) {
     return "yes";
+  }
 
-  if (hasExactWord(t, ["no", "nope", "nah", "nee"]))
+  if (hasExactWord(t, ["no", "nope", "nah", "nee"])) {
     return "no";
+  }
 
   if (
     hasAny(t, [
@@ -412,6 +404,7 @@ function findProductFromLooseIntent(text: string): Product | undefined {
       return getProductByName(productName);
     }
   }
+
   return undefined;
 }
 
@@ -743,8 +736,7 @@ Core rules:
 }
 
 export async function POST(req: Request) {
-  const origin = req.headers.get("origin");
-  const corsHeaders = buildCorsHeaders(origin);
+  const corsHeaders = buildCorsHeaders();
 
   try {
     const body = await req.json();
@@ -950,6 +942,7 @@ export async function POST(req: Request) {
     );
   } catch (e: unknown) {
     console.error("SOVAH /api/chat error:", e);
+
     return new Response(
       JSON.stringify({
         reply: "Sorry, something went wrong. Try again later.",
