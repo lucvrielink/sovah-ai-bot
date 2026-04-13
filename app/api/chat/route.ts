@@ -103,12 +103,13 @@ function detectLanguage(text: string): Lang {
     "gevoelige", "welke", "wat", "past", "bij", "mij", "puistjes",
     "onzuiverheden", "stralend", "hydratatie", "dagcreme", "dagcrème",
     "nachtcreme", "nachtcrème", "routine", "gezicht", "hulp", "advies",
+    "waarom", "geen", "bedoel",
   ];
 
   const englishSignals = [
     "my", "skin", "dry", "oily", "sensitive", "which", "what", "routine",
     "fits", "best", "glow", "breakouts", "hydration", "cleanser", "serum",
-    "help", "advice", "radiance", "moisture",
+    "help", "advice", "radiance", "moisture", "why", "don't", "mean",
   ];
 
   const nlCount = dutchSignals.filter((w) => t.includes(w)).length;
@@ -119,6 +120,52 @@ function detectLanguage(text: string): Lang {
 
 function tr(lang: Lang, nl: string, en: string): string {
   return lang === "nl" ? nl : en;
+}
+
+function extractUserMessages(history: string[]): string[] {
+  return history
+    .filter((item) => typeof item === "string")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .filter((item) => item.toLowerCase().startsWith("user:"))
+    .map((item) => item.replace(/^user:\s*/i, "").trim());
+}
+
+function detectNoAcne(text: string): boolean {
+  const t = normalize(text);
+
+  return hasAny(t, [
+    "i dont have acne",
+    "i don't have acne",
+    "i do not have acne",
+    "no acne",
+    "not acne prone",
+    "i dont get breakouts",
+    "i don't get breakouts",
+    "i dont have breakouts",
+    "i don't have breakouts",
+    "i dont have blemishes",
+    "i don't have blemishes",
+    "ik heb geen acne",
+    "ik heb geen puistjes",
+    "ik heb geen onzuiverheden",
+    "geen acne",
+    "geen puistjes",
+    "geen onzuiverheden",
+    "ik heb daar geen last van",
+  ]);
+}
+
+function detectWhyQuestion(text: string): boolean {
+  const t = normalize(text);
+  return hasAny(t, [
+    "why",
+    "why that",
+    "why acne spot care",
+    "waarom",
+    "waarom die",
+    "waarom acne spot care",
+  ]);
 }
 
 // ─── Detection ──────────────────────────────────────────────────────────────
@@ -362,6 +409,8 @@ function buildConversationReply(intent: ConversationIntent, lang: Lang): string 
   return null;
 }
 
+// ─── Catalog Helpers ────────────────────────────────────────────────────────
+
 function getBundleByName(name: string): Bundle | undefined {
   return bundleCatalog.bundles.find((b) => b.name === name);
 }
@@ -426,6 +475,8 @@ function detectSuitabilityRequest(text: string): boolean {
   ]);
 }
 
+// ─── Bundle / product logic ─────────────────────────────────────────────────
+
 function pickBundle(skinType: SkinType | null, goal: Goal | null): Bundle | undefined {
   if (!goal) return undefined;
 
@@ -456,6 +507,8 @@ function pickAddon(skinType: SkinType | null, goal: Goal | null): string | null 
   if (goal === "glow" && skinType !== "sensitive") return "AHA Peeling Concentrate";
   return null;
 }
+
+// ─── Description maps ───────────────────────────────────────────────────────
 
 function shortBundleDescription(bundleName: string, lang: Lang): string {
   const mapNl: Record<string, string> = {
@@ -561,6 +614,8 @@ function shortProductDescription(productName: string, lang: Lang): string {
     : mapEn[productName] || "A product from the current SOVAH range.";
 }
 
+// ─── Reply builders ─────────────────────────────────────────────────────────
+
 function buildBundleReply(bundle: Bundle, addonName: string | null, lang: Lang): string {
   const parts: string[] = [];
   parts.push(`**${bundle.name}**`);
@@ -649,6 +704,8 @@ function inferBestBundleForProduct(productTitle: string): Bundle | undefined {
   return bundleName ? getBundleByName(bundleName) : undefined;
 }
 
+// ─── Claude AI fallback ─────────────────────────────────────────────────────
+
 async function callClaudeFallback(
   message: string,
   history: string[],
@@ -673,6 +730,15 @@ async function callClaudeFallback(
     const productList = productCatalog.products.map((p) => p.title).join(", ");
     const bundleList = bundleCatalog.bundles.map((b) => b.name).join(", ");
 
+    const messages = [
+      {
+        role: "user" as const,
+        content: history.length
+          ? `Previous customer context:\n${history.join("\n")}\n\nCurrent customer message:\n${message}`
+          : message,
+      },
+    ];
+
     const systemPrompt = `You are the SOVAH skincare assistant for sovahcare.com.
 
 Your job is to help customers find the right SOVAH routine or product based only on the available SOVAH catalog.
@@ -680,30 +746,17 @@ Your job is to help customers find the right SOVAH routine or product based only
 Available bundles: ${bundleList}
 Available products: ${productList}
 
-Core rules:
-- Always reply in the same language as the customer. If the customer writes in Dutch, reply in Dutch. If the customer writes in English, reply in English.
+Rules:
+- Always reply in the same language as the customer.
 - Keep replies short, clear, and practical.
-- Only recommend bundles and products that exist in the provided SOVAH catalog.
+- Only recommend bundles and products from the provided catalog.
 - Never invent products, ingredients, claims, or routines.
-- Never mention suppliers, internal systems, or technical limitations.
 - Never give medical advice.
-- If the customer’s request is unclear, ask at most 1 or 2 short clarifying questions.
-- Prefer recommending 1 best-fit routine first. Add at most 1 relevant add-on if useful.
-- If the customer mentions a specific product, explain what it is briefly and only suggest a routine if it clearly fits.
-- If the customer asks for comparison, explain the difference simply and ask for skin type and goal if needed.
-- If the customer asks where to find a product or routine, point them to the correct product or routine URL.
-- Tone: premium, warm, concise, practical, human.
-- Keep most responses within 2 to 5 lines.
-- Never give medical advice.`;
-
-    const messages = [
-      {
-        role: "user" as const,
-        content: history.length
-          ? `Previous conversation context:\n${history.join("\n")}\n\nCurrent customer message:\n${message}`
-          : message,
-      },
-    ];
+- If unclear, ask at most 1 short clarifying question.
+- Prefer 1 best-fit routine first and at most 1 add-on.
+- If the customer says they do not have acne or breakouts, do not recommend Acne Spot Care or breakout-focused routines unless they ask for them again.
+- If the customer asks why something was recommended, explain briefly and correct the recommendation if needed.
+- Tone: premium, warm, concise, practical.`;
 
     const response = await client.messages.create({
       model: "claude-sonnet-4-20250514",
@@ -735,6 +788,8 @@ Core rules:
   }
 }
 
+// ─── Main handler ───────────────────────────────────────────────────────────
+
 export async function POST(req: Request) {
   const corsHeaders = buildCorsHeaders();
 
@@ -754,9 +809,10 @@ export async function POST(req: Request) {
       );
     }
 
-    const fullHistory = [...history, message].slice(-10);
-    const combined = fullHistory.join(" \n ");
-    const lang = detectLanguage(combined);
+    const userHistory = extractUserMessages(history);
+    const userTimeline = [...userHistory, message].slice(-10);
+    const combinedUserText = userTimeline.join(" \n ");
+    const lang = detectLanguage(combinedUserText || message);
 
     const conversationIntent = detectConversationIntent(message);
     const conversationReply = buildConversationReply(conversationIntent, lang);
@@ -767,12 +823,47 @@ export async function POST(req: Request) {
       );
     }
 
-    const wantsRoutine = fullHistory.some((m) => detectRoutineRequest(m));
-    const skinType = detectSkinType(combined);
-    const goal = detectGoal(combined);
+    // Hard stop for "I don't have acne"
+    if (detectNoAcne(message)) {
+      return new Response(
+        JSON.stringify({
+          reply: tr(
+            lang,
+            "Snap ik. Dan is Acne Spot Care geen logische match. Wat is wél je belangrijkste doel: hydratatie, glow, anti-age of een simpele routine?",
+            "Got it. Then Acne Spot Care is not the right match. What is your main goal instead: hydration, glow, anti-age, or a simple routine?"
+          ),
+          actions: [],
+        }),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
 
-    const mentionedProducts = findMentionedProducts(combined);
-    const mentionedBundles = findMentionedBundles(combined);
+    // "Why did you recommend that?" after acne-related suggestion
+    if (detectWhyQuestion(message)) {
+      const recentUserText = normalize(combinedUserText);
+      const mentionsAcne = hasAny(recentUserText, ["acne", "breakout", "breakouts", "puistjes", "onzuiverheden"]);
+
+      if (mentionsAcne || hasAny(normalize(message), ["acne spot care", "spot care"])) {
+        return new Response(
+          JSON.stringify({
+            reply: tr(
+              lang,
+              "Dat werd waarschijnlijk gekoppeld aan onzuiverheden of acne. Als jij daar geen last van hebt, dan hoort Acne Spot Care er niet bij. Vertel me je huidtype en je echte doel, dan geef ik een betere match.",
+              "That was probably linked to acne or breakouts. If you do not deal with that, then Acne Spot Care should not be part of the recommendation. Tell me your skin type and real goal, and I'll give you a better match."
+            ),
+            actions: [],
+          }),
+          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+    }
+
+    const wantsRoutine = userTimeline.some((m) => detectRoutineRequest(m));
+    const skinType = detectSkinType(combinedUserText);
+    const goal = detectGoal(combinedUserText);
+
+    const mentionedProducts = findMentionedProducts(message);
+    const mentionedBundles = findMentionedBundles(message);
     const looseProduct = findProductFromLooseIntent(message);
 
     if (detectCompareRequest(message)) {
@@ -922,7 +1013,9 @@ export async function POST(req: Request) {
     }
 
     const bundle = pickBundle(skinType, goal);
-    const addon = pickAddon(skinType, goal);
+    const addon = detectNoAcne(combinedUserText) && pickAddon(skinType, goal) === "Acne Spot Care"
+      ? null
+      : pickAddon(skinType, goal);
 
     if (bundle) {
       return new Response(
@@ -934,7 +1027,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const claudeOut = await callClaudeFallback(message, history, lang);
+    const claudeOut = await callClaudeFallback(message, userTimeline, lang);
 
     return new Response(
       JSON.stringify(claudeOut),
