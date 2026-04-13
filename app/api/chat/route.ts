@@ -2,15 +2,29 @@ import fs from "fs";
 import path from "path";
 import Anthropic from "@anthropic-ai/sdk";
 
-// CORS
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "https://sovahcare.com",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+const ALLOWED_ORIGINS = new Set([
+  "https://sovahcare.com",
+  "https://www.sovahcare.com",
+]);
 
-export async function OPTIONS() {
-  return new Response(null, { status: 204, headers: corsHeaders });
+function buildCorsHeaders(origin?: string | null) {
+  const allowedOrigin =
+    origin && ALLOWED_ORIGINS.has(origin) ? origin : "https://sovahcare.com";
+
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    Vary: "Origin",
+  };
+}
+
+export async function OPTIONS(req: Request) {
+  const origin = req.headers.get("origin");
+  return new Response(null, {
+    status: 204,
+    headers: buildCorsHeaders(origin),
+  });
 }
 
 // Load catalogs
@@ -356,8 +370,6 @@ function buildConversationReply(intent: ConversationIntent, lang: Lang): string 
   return null;
 }
 
-// ─── Catalog Helpers ────────────────────────────────────────────────────────
-
 function getBundleByName(name: string): Bundle | undefined {
   return bundleCatalog.bundles.find((b) => b.name === name);
 }
@@ -421,8 +433,6 @@ function detectSuitabilityRequest(text: string): boolean {
   ]);
 }
 
-// ─── Bundle / product logic ─────────────────────────────────────────────────
-
 function pickBundle(skinType: SkinType | null, goal: Goal | null): Bundle | undefined {
   if (!goal) return undefined;
 
@@ -453,8 +463,6 @@ function pickAddon(skinType: SkinType | null, goal: Goal | null): string | null 
   if (goal === "glow" && skinType !== "sensitive") return "AHA Peeling Concentrate";
   return null;
 }
-
-// ─── Description maps ───────────────────────────────────────────────────────
 
 function shortBundleDescription(bundleName: string, lang: Lang): string {
   const mapNl: Record<string, string> = {
@@ -560,8 +568,6 @@ function shortProductDescription(productName: string, lang: Lang): string {
     : mapEn[productName] || "A product from the current SOVAH range.";
 }
 
-// ─── Reply builders ─────────────────────────────────────────────────────────
-
 function buildBundleReply(bundle: Bundle, addonName: string | null, lang: Lang): string {
   const parts: string[] = [];
   parts.push(`**${bundle.name}**`);
@@ -650,8 +656,6 @@ function inferBestBundleForProduct(productTitle: string): Bundle | undefined {
   return bundleName ? getBundleByName(bundleName) : undefined;
 }
 
-// ─── Claude AI fallback ─────────────────────────────────────────────────────
-
 async function callClaudeFallback(
   message: string,
   history: string[],
@@ -738,9 +742,10 @@ Core rules:
   }
 }
 
-// ─── Main handler ───────────────────────────────────────────────────────────
-
 export async function POST(req: Request) {
+  const origin = req.headers.get("origin");
+  const corsHeaders = buildCorsHeaders(origin);
+
   try {
     const body = await req.json();
     const message: string | undefined = body?.message;
@@ -761,7 +766,6 @@ export async function POST(req: Request) {
     const combined = fullHistory.join(" \n ");
     const lang = detectLanguage(combined);
 
-    // 1. Conversation intent
     const conversationIntent = detectConversationIntent(message);
     const conversationReply = buildConversationReply(conversationIntent, lang);
     if (conversationReply) {
@@ -779,7 +783,6 @@ export async function POST(req: Request) {
     const mentionedBundles = findMentionedBundles(combined);
     const looseProduct = findProductFromLooseIntent(message);
 
-    // 2. Compare request
     if (detectCompareRequest(message)) {
       const compareItems = [...mentionedBundles, ...mentionedProducts].slice(0, 2);
       if (compareItems.length === 2) {
@@ -790,7 +793,6 @@ export async function POST(req: Request) {
       }
     }
 
-    // 3. Suitability request
     if (detectSuitabilityRequest(message) && mentionedProducts.length === 1) {
       const product = mentionedProducts[0];
 
@@ -806,7 +808,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 4. "Where can I find X?"
     if (
       looseProduct &&
       (normalize(message).includes("where") ||
@@ -825,7 +826,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 5. Loose product mention without goal/skin context
     if (looseProduct && !wantsRoutine && !skinType && !goal) {
       return new Response(
         JSON.stringify({
@@ -836,7 +836,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 6. Single product with optional bundle suggestion
     if (mentionedProducts.length === 1 && !wantsRoutine && !goal && !skinType) {
       const product = mentionedProducts[0];
       const bundle = inferBestBundleForProduct(product.title);
@@ -863,7 +862,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 7. Single bundle mention
     if (mentionedBundles.length === 1 && !goal && !skinType && !wantsRoutine) {
       const bundle = mentionedBundles[0];
       return new Response(
@@ -875,7 +873,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 8. Routine flow — ask skin type
     if (wantsRoutine && !skinType) {
       return new Response(
         JSON.stringify({
@@ -890,7 +887,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 9. Routine flow — ask goal
     if (wantsRoutine && skinType && !goal) {
       return new Response(
         JSON.stringify({
@@ -905,7 +901,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 10. Breakouts need skin type
     if (goal === "breakouts" && !skinType) {
       return new Response(
         JSON.stringify({
@@ -920,7 +915,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 11. Skin type given, ask goal
     if (!wantsRoutine && detectSkinType(message) && !goal) {
       return new Response(
         JSON.stringify({
@@ -935,7 +929,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 12. Match bundle
     const bundle = pickBundle(skinType, goal);
     const addon = pickAddon(skinType, goal);
 
@@ -949,7 +942,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 13. Claude fallback
     const claudeOut = await callClaudeFallback(message, history, lang);
 
     return new Response(
