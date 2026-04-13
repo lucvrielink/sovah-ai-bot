@@ -37,6 +37,7 @@ type Addon = {
   url: string;
   variantId: number;
   image: string;
+  description: string;
 };
 
 type RecommendationResult = {
@@ -311,6 +312,7 @@ const ADDONS: Record<string, Addon> = {
     url: "/products/acne-spot-care",
     variantId: PRODUCT_DATA["Acne Spot Care"].variantId,
     image: PRODUCT_DATA["Acne Spot Care"].image,
+    description: "Een gerichte extra stap voor puistjes, onzuiverheden en verstopte zones.",
   },
   aha: {
     title: "AHA Peeling Concentrate",
@@ -318,6 +320,7 @@ const ADDONS: Record<string, Addon> = {
     url: "/products/aha-peeling-concentrate",
     variantId: PRODUCT_DATA["AHA Peeling Concentrate"].variantId,
     image: PRODUCT_DATA["AHA Peeling Concentrate"].image,
+    description: "Een extra avondstap voor een gladdere huid en een verfijndere textuur.",
   },
   vitaminC: {
     title: "Vitamin C Serum",
@@ -325,6 +328,7 @@ const ADDONS: Record<string, Addon> = {
     url: "/products/vitamin-c-serum",
     variantId: PRODUCT_DATA["Vitamin C Serum"].variantId,
     image: PRODUCT_DATA["Vitamin C Serum"].image,
+    description: "Een verhelderende extra stap voor meer glow en een frissere uitstraling.",
   },
   kojicExfoliator: {
     title: "Brightening Face&Body Exfoliator with Kojic Acid",
@@ -332,6 +336,7 @@ const ADDONS: Record<string, Addon> = {
     url: "/products/brightening-face-body-exfoliator-with-kojic-acid",
     variantId: PRODUCT_DATA["Brightening Face&Body Exfoliator with Kojic Acid"].variantId,
     image: PRODUCT_DATA["Brightening Face&Body Exfoliator with Kojic Acid"].image,
+    description: "Een extra stap om de huid gladder, frisser en egaler te laten ogen.",
   },
   kojicCream: {
     title: "Dark Spot Face Cream with Kojic Acid",
@@ -339,6 +344,7 @@ const ADDONS: Record<string, Addon> = {
     url: "/products/dark-spot-face-cream-with-kojic-acid",
     variantId: PRODUCT_DATA["Dark Spot Face Cream with Kojic Acid"].variantId,
     image: PRODUCT_DATA["Dark Spot Face Cream with Kojic Acid"].image,
+    description: "Een gerichte extra stap voor een egalere en stralendere uitstraling.",
   },
   calmingOil: {
     title: "Calming Facial Oil",
@@ -346,6 +352,7 @@ const ADDONS: Record<string, Addon> = {
     url: "/products/calming-facial-oil",
     variantId: PRODUCT_DATA["Calming Facial Oil"].variantId,
     image: PRODUCT_DATA["Calming Facial Oil"].image,
+    description: "Een voedende extra stap wanneer je huid meer comfort en zachtheid nodig heeft.",
   },
 };
 
