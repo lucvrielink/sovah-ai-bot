@@ -67,7 +67,9 @@ function isRoutinePreference(value: unknown): value is RoutinePreference {
   return ["simple", "balanced", "results", "unknown"].includes(String(value));
 }
 
-function isSensitivityLevel(value: unknown): value is QuizAnswers["sensitivityLevel"] {
+function isSensitivityLevel(
+  value: unknown
+): value is QuizAnswers["sensitivityLevel"] {
   return ["high", "medium", "low", "unknown"].includes(String(value));
 }
 
@@ -100,6 +102,8 @@ export async function POST(req: Request) {
           recommendedBundle: {
             name: result.recommendedBundle.name,
             url: result.recommendedBundle.url,
+            handle: result.recommendedBundle.handle || null,
+            variantId: result.recommendedBundle.variantId || null,
             description: result.recommendedBundle.description || "",
             products: result.recommendedBundle.products || [],
           },
@@ -107,7 +111,8 @@ export async function POST(req: Request) {
             ? {
                 title: result.addon.title,
                 url: result.addon.url,
-                handle: result.addon.handle,
+                handle: result.addon.handle || null,
+                variantId: result.addon.variantId || null,
               }
             : null,
           reasonShort: result.reasonShort,
