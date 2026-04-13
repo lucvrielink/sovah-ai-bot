@@ -101,7 +101,7 @@ function detectLanguage(text: string): Lang {
   const dutchSignals = [
     "ik", "mijn", "huid", "droog", "droge", "vette", "vet", "gevoelig",
     "gevoelige", "welke", "wat", "past", "bij", "mij", "puistjes",
-    "onzuiverheden", "stralend", "hydratatie", "dagcreme", "dagcrème",
+    "acne", "stralend", "hydratatie", "dagcreme", "dagcrème",
     "nachtcreme", "nachtcrème", "routine", "gezicht", "hulp", "advies",
     "waarom", "geen", "bedoel",
   ];
@@ -148,10 +148,8 @@ function detectNoAcne(text: string): boolean {
     "i don't have blemishes",
     "ik heb geen acne",
     "ik heb geen puistjes",
-    "ik heb geen onzuiverheden",
     "geen acne",
     "geen puistjes",
-    "geen onzuiverheden",
     "ik heb daar geen last van",
   ]);
 }
@@ -222,8 +220,8 @@ function detectGoal(text: string): Goal | null {
     hasAny(t, [
       "breakout", "breakouts", "brakouts", "acne", "blemish", "blemishes",
       "spots", "pimples", "blackheads", "clogged pores",
-      "puistjes", "puistje", "mee-eters", "mee eters", "verstopte poriën",
-      "verstopte pories", "onzuiverheden", "vette huid acne",
+      "puistjes", "puistje", "mee-eters", "mee eters",
+      "acne gevoelige huid", "last van puistjes",
     ])
   ) return "breakouts";
 
@@ -231,8 +229,8 @@ function detectGoal(text: string): Goal | null {
     hasAny(t, [
       "glow", "glowy", "radiance", "radiant", "dull", "bright",
       "brighter", "uneven", "texture", "pores", "fresh look", "more glow",
-      "straling", "stralend", "stralende huid", "doffe huid", "dof",
-      "egaler", "egale teint", "teint", "frisser",
+      "straling", "stralend", "doffe huid", "dof",
+      "egaler", "egale teint", "frisser", "meer glow",
     ])
   ) return "glow";
 
@@ -248,7 +246,7 @@ function detectGoal(text: string): Goal | null {
     hasAny(t, [
       "anti age", "anti-age", "antiage", "anti aging", "anti-aging",
       "ageing", "aging", "fine lines", "firmness", "wrinkles", "smoothness",
-      "anti-aging", "anti aging", "rimpels", "rimpel", "fijne lijntjes",
+      "rimpels", "rimpel", "fijne lijntjes",
       "ouder wordende huid", "stevigheid", "verouderende",
     ])
   ) return "antiage";
@@ -258,7 +256,7 @@ function detectGoal(text: string): Goal | null {
       "simple", "minimal", "easy routine", "no fuss", "no-fuss",
       "basic routine", "easy",
       "simpel", "eenvoudig", "minimaal", "makkelijke routine",
-      "geen gedoe", "basiszorg", "basisroutine",
+      "geen gedoe", "basisroutine",
     ])
   ) return "simple";
 
@@ -337,39 +335,39 @@ function buildConversationReply(intent: ConversationIntent, lang: Lang): string 
   if (intent === "greeting") {
     return tr(
       lang,
-      "Hallo! Ik ben de SOVAH skincare assistant. Vertel me je huidtype of huiddoel en ik help je de juiste routine te vinden.",
-      "Hello! I'm the SOVAH skincare assistant. Tell me your skin type or skin goal and I'll help you find the right routine."
+      "Hi! Ik ben de SOVAH skincare assistant. Vertel me wat voor huid je hebt of waar je hulp bij wilt, dan denk ik met je mee.",
+      "Hello! I'm the SOVAH skincare assistant. Tell me your skin type or what you'd like help with, and I'll help you find the right match."
     );
   }
 
   if (intent === "thanks") {
     return tr(
       lang,
-      "Graag gedaan — veel succes met je skincare routine!",
-      "You're welcome — good luck with your skincare routine!"
+      "Graag gedaan!",
+      "You're welcome!"
     );
   }
 
   if (intent === "bye") {
     return tr(
       lang,
-      "Tot snel! Zorg goed voor je huid 🌿",
-      "Goodbye! Take care of your skin 🌿"
+      "Tot snel 🌿",
+      "Goodbye! 🌿"
     );
   }
 
   if (intent === "help") {
     return tr(
       lang,
-      "Ik kan je helpen met het vinden van de juiste routine, producten vergelijken of een match maken op basis van je huidtype en doel. Vertel me iets over je huid.",
-      "I can help you find the right routine, compare products, or match your skin type and goal. Tell me a bit about your skin."
+      "Ik kan je helpen met het kiezen van een routine, producten uitleggen of meedenken op basis van jouw huid en doel. Vertel maar waar je naar op zoek bent.",
+      "I can help you choose a routine, explain products, or match your skin and goal. Just tell me what you're looking for."
     );
   }
 
   if (intent === "yes") {
     return tr(
       lang,
-      "Top. Wat is je huidtype: droog, vet, combinatie, normaal of gevoelig?",
+      "Top. Wat voor huid heb je: droog, vet, combinatie, normaal of gevoelig?",
       "Great. What's your skin type: dry, oily, combination, normal, or sensitive?"
     );
   }
@@ -377,32 +375,32 @@ function buildConversationReply(intent: ConversationIntent, lang: Lang): string 
   if (intent === "no") {
     return tr(
       lang,
-      "Geen probleem. Stuur maar wat je zoekt en ik help je verder.",
-      "No problem. Send me what you're looking for and I'll help you."
+      "Geen probleem. Vertel maar waar je hulp bij wilt.",
+      "No problem. Just tell me what you'd like help with."
     );
   }
 
   if (intent === "confused") {
     return tr(
       lang,
-      "Geen probleem. Begin met je huidtype: droog, vet, combinatie, normaal of gevoelig.",
-      "That's okay. Start with your skin type: dry, oily, combination, normal, or sensitive."
+      "Geen stress. Begin gewoon met je huidtype: droog, vet, combinatie, normaal of gevoelig.",
+      "No worries. Start with your skin type: dry, oily, combination, normal, or sensitive."
     );
   }
 
   if (intent === "unclear") {
     return tr(
       lang,
-      "Ik weet nog niet helemaal wat je bedoelt. Wat is je huidtype en wat is je belangrijkste doel?",
-      "I'm not fully sure what you mean yet. What's your skin type, and what's your main goal?"
+      "Ik snap nog niet helemaal wat je bedoelt. Wat voor huid heb je, en waar wil je vooral hulp bij?",
+      "I'm not fully sure what you mean yet. What's your skin type, and what would you like help with most?"
     );
   }
 
   if (intent === "human_chat") {
     return tr(
       lang,
-      "Ja, ik ben er. Ik ben de SOVAH skincare assistant. Vertel me over je huid en ik help je de juiste routine te vinden.",
-      "Yes, I'm here. I'm the SOVAH skincare assistant. Tell me about your skin and I'll help you find the right routine."
+      "Ja hoor, ik ben er. Vertel me wat voor huid je hebt of waar je naar zoekt, dan help ik je verder.",
+      "Yes, I'm here. Tell me about your skin or what you're looking for, and I'll help you from there."
     );
   }
 
@@ -512,25 +510,25 @@ function pickAddon(skinType: SkinType | null, goal: Goal | null): string | null 
 
 function shortBundleDescription(bundleName: string, lang: Lang): string {
   const mapNl: Record<string, string> = {
-    "Dry & Dehydrated Skin Routine": "Het beste voor een droge of vochtarme huid die comfort en hydratatie nodig heeft.",
-    "Combination Skin Balance Routine": "Het beste voor een gecombineerde huid die balans nodig heeft zonder zwaar aan te voelen.",
-    "Simple Daily Skincare Routine": "Het beste voor een makkelijke dagelijkse routine zonder onnodige stappen.",
-    "Sensitive & Reactive Skin Routine": "Het beste voor een gevoelige of reactieve huid die een milde routine nodig heeft.",
-    "Normal & Balanced Skin Routine": "Het beste voor een normale huid die een simpele gebalanceerde routine wil.",
-    "Glow & Radiance Routine": "Het beste voor een doffe of ongelijk ogende huid die meer glow wil.",
-    "Firm & Smooth Skin Routine": "Het beste bij eerste tekenen van huidveroudering, gladheid en stevigheid.",
-    "Clear & Balanced Skin Routine": "Het beste voor een vette of onzuivere huid die een frisse lichte routine nodig heeft.",
+    "Dry & Dehydrated Skin Routine": "Past goed bij een droge of vochtarme huid die wat extra comfort en hydratatie nodig heeft.",
+    "Combination Skin Balance Routine": "Past goed bij een combinatiehuid die in balans moet blijven zonder zwaar aan te voelen.",
+    "Simple Daily Skincare Routine": "Fijn als je gewoon een makkelijke dagelijkse routine wilt zonder te veel stappen.",
+    "Sensitive & Reactive Skin Routine": "Past goed bij een gevoelige huid die behoefte heeft aan een rustige, milde routine.",
+    "Normal & Balanced Skin Routine": "Een fijne match voor een normale huid die gewoon goed in balans is.",
+    "Glow & Radiance Routine": "Past goed als je huid wat dof oogt en je meer glow wilt.",
+    "Firm & Smooth Skin Routine": "Past goed als je huid wat gladder en steviger mag aanvoelen.",
+    "Clear & Balanced Skin Routine": "Past goed bij een vettere huid of als je snel last hebt van puistjes.",
   };
 
   const mapEn: Record<string, string> = {
-    "Dry & Dehydrated Skin Routine": "Best for dry or dehydrated skin that needs comfort and hydration.",
-    "Combination Skin Balance Routine": "Best for combination skin that needs balance without feeling heavy.",
-    "Simple Daily Skincare Routine": "Best for an easy everyday routine with no unnecessary steps.",
-    "Sensitive & Reactive Skin Routine": "Best for sensitive or reactive skin that needs a gentle routine.",
-    "Normal & Balanced Skin Routine": "Best for normal skin that wants a simple balanced routine.",
-    "Glow & Radiance Routine": "Best for dull or uneven-looking skin that wants more glow.",
-    "Firm & Smooth Skin Routine": "Best for early signs of aging, smoothness, and firmness.",
-    "Clear & Balanced Skin Routine": "Best for oily or blemish-prone skin that needs a fresh lightweight routine.",
+    "Dry & Dehydrated Skin Routine": "A good fit for dry or dehydrated skin that needs extra comfort and hydration.",
+    "Combination Skin Balance Routine": "A good fit for combination skin that needs balance without feeling heavy.",
+    "Simple Daily Skincare Routine": "Great if you want an easy daily routine without too many steps.",
+    "Sensitive & Reactive Skin Routine": "A good fit for sensitive skin that needs a calm, gentle routine.",
+    "Normal & Balanced Skin Routine": "A nice match for normal skin that already feels balanced.",
+    "Glow & Radiance Routine": "A good fit if your skin looks a bit dull and you want more glow.",
+    "Firm & Smooth Skin Routine": "A good fit if you want your skin to feel smoother and firmer.",
+    "Clear & Balanced Skin Routine": "A good fit for oilier skin or if you often deal with acne or breakouts.",
   };
 
   return lang === "nl"
@@ -540,15 +538,15 @@ function shortBundleDescription(bundleName: string, lang: Lang): string {
 
 function shortAddonDescription(addonName: string, lang: Lang): string {
   const mapNl: Record<string, string> = {
-    "AHA Peeling Concentrate": "Een goede extra stap bij textuur of een doffe huid.",
-    "Acne Spot Care": "Een goede extra stap voor zichtbare onzuiverheden.",
-    "Smoothing Eye Cream": "Een goede extra stap voor de huid rond de ogen.",
+    "AHA Peeling Concentrate": "Een fijne extra stap als je huid wat dof is of niet helemaal glad aanvoelt.",
+    "Acne Spot Care": "Een handige extra stap als je plaatselijk last hebt van acne of puistjes.",
+    "Smoothing Eye Cream": "Een fijne extra stap voor de huid rond je ogen.",
   };
 
   const mapEn: Record<string, string> = {
-    "AHA Peeling Concentrate": "A good add-on for texture or dullness.",
-    "Acne Spot Care": "A good add-on for visible blemishes.",
-    "Smoothing Eye Cream": "A good add-on for the eye area.",
+    "AHA Peeling Concentrate": "A nice add-on if your skin feels a bit dull or uneven.",
+    "Acne Spot Care": "A helpful add-on if you deal with acne or breakouts in specific areas.",
+    "Smoothing Eye Cream": "A nice add-on for the skin around your eyes.",
   };
 
   return lang === "nl" ? mapNl[addonName] || "" : mapEn[addonName] || "";
@@ -556,56 +554,56 @@ function shortAddonDescription(addonName: string, lang: Lang): string {
 
 function shortProductDescription(productName: string, lang: Lang): string {
   const mapNl: Record<string, string> = {
-    "Micellar Cleansing Water": "Een milde reiniger voor dagelijks gebruik.",
-    "Hydrating Toner": "Een hydraterende toner voor comfort en balans.",
+    "Micellar Cleansing Water": "Een milde reiniger voor elke dag.",
+    "Hydrating Toner": "Een hydraterende toner die je huid fris en comfortabel laat aanvoelen.",
     "Hydrating Serum": "Een licht serum voor extra hydratatie.",
     "Double Hydration Boost Gel + HA": "Een hydraterende gel voor een comfortabeler huidgevoel.",
     "Moisturising Day Cream": "Een dagcrème voor dagelijkse hydratatie en comfort.",
-    "Ceramide Barrier Night Cream": "Een rijke nachtcrème voor comfort en ondersteuning van de huidbarrière.",
+    "Ceramide Barrier Night Cream": "Een rijkere nachtcrème die je huid helpt comfortabel aan te voelen.",
     "Purifying Mousse": "Een schuimende reiniger met een fris en licht gevoel.",
-    "Antioxidant Ginkgo Gel Booster": "Een lichte booster voor hydratatie en een frissere uitstraling.",
+    "Antioxidant Ginkgo Gel Booster": "Een lichte booster voor extra hydratatie en een frisse uitstraling.",
     "Calming Facial Oil": "Een kalmerende gezichtsolie voor comfort en zachtheid.",
-    "AHA Peeling Concentrate": "Een exfoliërende extra stap voor textuur of een doffe huid.",
+    "AHA Peeling Concentrate": "Een extra stap voor als je huid wat dof is of niet helemaal glad aanvoelt.",
     "Caffeine Gel Booster": "Een lichte booster voor een frissere uitstraling.",
     "Oil-Free Hydrating Gel": "Een olievrije gel voor lichte dagelijkse hydratatie.",
-    "Peptide Anti-Aging Serum": "Een serum voor een gladder ogende huid.",
-    "Collagen Boost Serum": "Een serum gericht op stevigheid en comfort.",
-    "Anti-Age Day Cream": "Een dagcrème met focus op de eerste tekenen van huidveroudering.",
-    "Natural Retinol Alternative Oil Serum": "Een milde olie-serum stap voor een anti-age routine.",
-    "Smoothing Eye Cream": "Een oogcrème voor de huid rond de ogen.",
+    "Peptide Anti-Aging Serum": "Een serum voor een gladdere uitstraling.",
+    "Collagen Boost Serum": "Een serum dat past bij een routine voor meer stevigheid en comfort.",
+    "Anti-Age Day Cream": "Een dagcrème voor een routine gericht op een gladdere huid.",
+    "Natural Retinol Alternative Oil Serum": "Een milde olie-serum stap voor een routine die wat meer focus heeft op huidveroudering.",
+    "Smoothing Eye Cream": "Een oogcrème voor de huid rond je ogen.",
     "Vitamin C Serum": "Een serum voor een frissere en stralendere uitstraling.",
     "Brightening Face&Body Exfoliator with Kojic Acid": "Een exfoliator voor een gladdere en frissere look.",
-    "Dark Spot Face Cream with Kojic Acid": "Een crème voor een egaler ogende huid.",
+    "Dark Spot Face Cream with Kojic Acid": "Een crème voor een egalere uitstraling.",
     "All-In-One Facial Oil": "Een voedende gezichtsolie voor glow en comfort.",
     "Sun Protection SPF50 Stick, no tint": "Een SPF50 stick voor makkelijke dagelijkse bescherming.",
-    "Acne Spot Care": "Een gerichte spot treatment voor zichtbare onzuiverheden.",
+    "Acne Spot Care": "Een gerichte behandeling voor plekjes met acne of puistjes.",
     "Niacinamide Gel Moisturiser": "Een lichte gel moisturiser voor balans en comfort.",
   };
 
   const mapEn: Record<string, string> = {
     "Micellar Cleansing Water": "A gentle everyday cleanser.",
-    "Hydrating Toner": "A hydrating toner for comfort and balance.",
+    "Hydrating Toner": "A hydrating toner that leaves your skin feeling fresh and comfortable.",
     "Hydrating Serum": "A lightweight serum for extra hydration.",
     "Double Hydration Boost Gel + HA": "A hydrating gel for a more comfortable skin feel.",
     "Moisturising Day Cream": "A day cream for daily hydration and comfort.",
-    "Ceramide Barrier Night Cream": "A rich night cream for comfort and barrier support.",
+    "Ceramide Barrier Night Cream": "A richer night cream that helps your skin feel comfortable.",
     "Purifying Mousse": "A foaming cleanser with a fresh, lightweight feel.",
-    "Antioxidant Ginkgo Gel Booster": "A lightweight booster for hydration and a fresher look.",
+    "Antioxidant Ginkgo Gel Booster": "A lightweight booster for extra hydration and a fresher look.",
     "Calming Facial Oil": "A calming facial oil for comfort and softness.",
-    "AHA Peeling Concentrate": "An exfoliating add-on for texture or dullness.",
+    "AHA Peeling Concentrate": "A nice extra step if your skin feels dull or uneven.",
     "Caffeine Gel Booster": "A lightweight booster for a fresher-looking complexion.",
     "Oil-Free Hydrating Gel": "An oil-free gel for lightweight daily hydration.",
     "Peptide Anti-Aging Serum": "A serum for a smoother-looking complexion.",
-    "Collagen Boost Serum": "A serum focused on firmness and comfort.",
-    "Anti-Age Day Cream": "A day cream with an early anti-age focus.",
-    "Natural Retinol Alternative Oil Serum": "A gentle oil serum for an anti-age routine.",
-    "Smoothing Eye Cream": "An eye cream for the eye area.",
+    "Collagen Boost Serum": "A serum that fits well in a routine focused on firmness and comfort.",
+    "Anti-Age Day Cream": "A day cream for a routine focused on smoother-looking skin.",
+    "Natural Retinol Alternative Oil Serum": "A gentle oil serum for a routine with more anti-age focus.",
+    "Smoothing Eye Cream": "An eye cream for the skin around your eyes.",
     "Vitamin C Serum": "A serum for a fresher and more radiant-looking complexion.",
     "Brightening Face&Body Exfoliator with Kojic Acid": "An exfoliator for a smoother and fresher look.",
     "Dark Spot Face Cream with Kojic Acid": "A cream for a more even-looking complexion.",
     "All-In-One Facial Oil": "A nourishing facial oil for glow and comfort.",
     "Sun Protection SPF50 Stick, no tint": "An SPF50 stick for easy daily protection.",
-    "Acne Spot Care": "A targeted spot treatment for visible blemishes.",
+    "Acne Spot Care": "A targeted treatment for areas with acne or breakouts.",
     "Niacinamide Gel Moisturiser": "A lightweight gel moisturiser for balance and comfort.",
   };
 
@@ -624,7 +622,7 @@ function buildBundleReply(bundle: Bundle, addonName: string | null, lang: Lang):
   if (bundle.products?.length) {
     parts.push(
       lang === "nl"
-        ? `Inbegrepen producten:\n${bundle.products.map((p) => `- ${p}`).join("\n")}`
+        ? `Wat erin zit:\n${bundle.products.map((p) => `- ${p}`).join("\n")}`
         : `Included products:\n${bundle.products.map((p) => `- ${p}`).join("\n")}`
     );
   }
@@ -632,7 +630,7 @@ function buildBundleReply(bundle: Bundle, addonName: string | null, lang: Lang):
   if (addonName) {
     parts.push(
       lang === "nl"
-        ? `Extra aanrader\n**${addonName}**\n${shortAddonDescription(addonName, lang)}`
+        ? `Extra tip\n**${addonName}**\n${shortAddonDescription(addonName, lang)}`
         : `Add-on\n**${addonName}**\n${shortAddonDescription(addonName, lang)}`
     );
   }
@@ -649,7 +647,7 @@ function buildCompareReply(items: (Bundle | Product)[], lang: Lang): string {
   const secondName = "name" in items[1] ? items[1].name : items[1].title;
 
   return lang === "nl"
-    ? `**${firstName}** vs **${secondName}**\n\nVertel me je huidtype en belangrijkste doel, dan zeg ik welke beter past.`
+    ? `**${firstName}** vs **${secondName}**\n\nVertel me wat voor huid je hebt en waar je hulp bij wilt, dan zeg ik welke beter past.`
     : `**${firstName}** vs **${secondName}**\n\nTell me your skin type and main goal, and I'll tell you which one fits better.`;
 }
 
@@ -717,7 +715,7 @@ async function callClaudeFallback(
     return {
       reply: tr(
         lang,
-        "Ik weet niet helemaal zeker wat je bedoelt. Vertel me je huidtype en je belangrijkste doel, dan help ik je verder.",
+        "Ik weet nog niet helemaal wat je bedoelt. Vertel me wat voor huid je hebt en waar je hulp bij wilt, dan help ik je verder.",
         "I'm not fully sure what you mean. Tell me your skin type and main goal, and I'll help from there."
       ),
       actions: [],
@@ -749,6 +747,9 @@ Available products: ${productList}
 Rules:
 - Always reply in the same language as the customer.
 - Keep replies short, clear, and practical.
+- In Dutch, do not sound like a direct translation from English. Use natural, simple Dutch that real webshop customers understand right away.
+- Prefer words like "puistjes", "acne", "droge huid", "meer glow", "fijne lijntjes", "makkelijke routine".
+- Avoid stiff Dutch phrasing like "primaire huiddoelstelling", "onzuiverheden" as default wording, or overly literal translations.
 - Only recommend bundles and products from the provided catalog.
 - Never invent products, ingredients, claims, or routines.
 - Never give medical advice.
@@ -770,8 +771,8 @@ Rules:
         ? response.content[0].text
         : tr(
             lang,
-            "Vertel me je huidtype en je belangrijkste doel, dan help ik je de juiste routine te vinden.",
-            "Tell me your skin type and main goal, and I'll help you find the right routine."
+            "Vertel me wat voor huid je hebt en waar je hulp bij wilt, dan help ik je de juiste match te vinden.",
+            "Tell me your skin type and main goal, and I'll help you find the right match."
           );
 
     return { reply: text, actions: [] };
@@ -780,8 +781,8 @@ Rules:
     return {
       reply: tr(
         lang,
-        "Vertel me je huidtype en je belangrijkste doel, dan help ik je de juiste routine te vinden.",
-        "Tell me your skin type and main goal, and I'll help you find the right routine."
+        "Vertel me wat voor huid je hebt en waar je hulp bij wilt, dan help ik je de juiste match te vinden.",
+        "Tell me your skin type and main goal, and I'll help you find the right match."
       ),
       actions: [],
     };
@@ -823,14 +824,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // Hard stop for "I don't have acne"
     if (detectNoAcne(message)) {
       return new Response(
         JSON.stringify({
           reply: tr(
             lang,
-            "Snap ik. Dan is Acne Spot Care geen logische match. Wat is wél je belangrijkste doel: hydratatie, glow, anti-age of een simpele routine?",
-            "Got it. Then Acne Spot Care is not the right match. What is your main goal instead: hydration, glow, anti-age, or a simple routine?"
+            "Snap ik. Dan is Acne Spot Care geen logische match. Waar wil je wél hulp bij: droge huid, meer glow, fijne lijntjes of gewoon een makkelijke routine?",
+            "Got it. Then Acne Spot Care is not the right match. What would you like help with instead: hydration, glow, anti-age, or a simple routine?"
           ),
           actions: [],
         }),
@@ -838,18 +838,17 @@ export async function POST(req: Request) {
       );
     }
 
-    // "Why did you recommend that?" after acne-related suggestion
     if (detectWhyQuestion(message)) {
       const recentUserText = normalize(combinedUserText);
-      const mentionsAcne = hasAny(recentUserText, ["acne", "breakout", "breakouts", "puistjes", "onzuiverheden"]);
+      const mentionsAcne = hasAny(recentUserText, ["acne", "breakout", "breakouts", "puistjes"]);
 
       if (mentionsAcne || hasAny(normalize(message), ["acne spot care", "spot care"])) {
         return new Response(
           JSON.stringify({
             reply: tr(
               lang,
-              "Dat werd waarschijnlijk gekoppeld aan onzuiverheden of acne. Als jij daar geen last van hebt, dan hoort Acne Spot Care er niet bij. Vertel me je huidtype en je echte doel, dan geef ik een betere match.",
-              "That was probably linked to acne or breakouts. If you do not deal with that, then Acne Spot Care should not be part of the recommendation. Tell me your skin type and real goal, and I'll give you a better match."
+              "Die aanbeveling werd waarschijnlijk gekoppeld aan acne of puistjes. Als jij daar geen last van hebt, dan hoort Acne Spot Care er niet bij. Vertel me wat voor huid je hebt en waar je wél hulp bij wilt, dan geef ik een betere match.",
+              "That recommendation was probably linked to acne or breakouts. If that is not your concern, then Acne Spot Care should not be part of it. Tell me your skin type and what you'd actually like help with, and I'll give you a better match."
             ),
             actions: [],
           }),
@@ -883,7 +882,7 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply:
             lang === "nl"
-              ? `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nVertel me je huidtype en doel, dan zeg ik of dit goed past.`
+              ? `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nVertel me wat voor huid je hebt en waar je hulp bij wilt, dan zeg ik of dit goed past.`
               : `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nTell me your skin type and goal, and I'll tell you if it fits.`,
           actions: buildActionsForProduct(product, lang),
         }),
@@ -901,7 +900,7 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply:
             lang === "nl"
-              ? `**${looseProduct.title}**\n\nJe vindt dit hier.`
+              ? `**${looseProduct.title}**\n\nJe vindt het hier.`
               : `**${looseProduct.title}**\n\nYou can find it here.`,
           actions: buildActionsForProduct(looseProduct, lang),
         }),
@@ -927,8 +926,8 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: bundle
             ? lang === "nl"
-              ? `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nAls je de volledige routine wilt, dan is **${bundle.name}** de beste match.`
-              : `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nIf you want the fuller routine, **${bundle.name}** is the closest match.`
+              ? `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nAls je liever naar een complete routine kijkt, dan past **${bundle.name}** hier het best bij.`
+              : `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nIf you'd rather look at a full routine, **${bundle.name}** is the closest match.`
             : buildProductReply(product, lang),
           actions: bundle
             ? [
@@ -961,7 +960,7 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: tr(
             lang,
-            "Wat is je huidtype: droog, vet, combinatie, normaal of gevoelig?",
+            "Wat voor huid heb je: droog, vet, combinatie, normaal of gevoelig?",
             "What's your skin type: dry, oily, combination, normal, or sensitive?"
           ),
           actions: [],
@@ -975,8 +974,8 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: tr(
             lang,
-            "Wat is je belangrijkste doel: hydratatie, glow, anti-age, onzuiverheden of een simpele routine?",
-            "What's your main goal: hydration, glow, anti-age, breakouts, or a simple routine?"
+            "Waar wil je vooral hulp bij: droge huid, meer glow, acne of puistjes, fijne lijntjes of gewoon een makkelijke routine?",
+            "What's your main goal: hydration, glow, acne or breakouts, anti-age, or a simple routine?"
           ),
           actions: [],
         }),
@@ -989,7 +988,7 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: tr(
             lang,
-            "Wat is je huidtype: vet, combinatie, droog, normaal of gevoelig?",
+            "Wat voor huid heb je: vet, combinatie, droog, normaal of gevoelig?",
             "What's your skin type: oily, combination, dry, normal, or sensitive?"
           ),
           actions: [],
@@ -1003,8 +1002,8 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: tr(
             lang,
-            "Wat is je belangrijkste doel: hydratatie, glow, anti-age, onzuiverheden of een simpele routine?",
-            "What's your main goal: hydration, glow, anti-age, breakouts, or a simple routine?"
+            "Waar wil je vooral hulp bij: droge huid, meer glow, acne of puistjes, fijne lijntjes of gewoon een makkelijke routine?",
+            "What's your main goal: hydration, glow, acne or breakouts, anti-age, or a simple routine?"
           ),
           actions: [],
         }),
