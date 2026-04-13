@@ -104,6 +104,7 @@ export async function POST(req: Request) {
             url: result.recommendedBundle.url,
             handle: result.recommendedBundle.handle || null,
             variantId: result.recommendedBundle.variantId || null,
+            image: result.recommendedBundle.image || null,
             description: result.recommendedBundle.description || "",
             products: result.recommendedBundle.products || [],
           },
@@ -113,6 +114,7 @@ export async function POST(req: Request) {
                 url: result.addon.url,
                 handle: result.addon.handle || null,
                 variantId: result.addon.variantId || null,
+                image: result.addon.image || null,
               }
             : null,
           reasonShort: result.reasonShort,
