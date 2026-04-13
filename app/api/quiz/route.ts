@@ -115,6 +115,7 @@ export async function POST(req: Request) {
                 handle: result.addon.handle || null,
                 variantId: result.addon.variantId || null,
                 image: result.addon.image || null,
+                description: result.addon.description || "",
               }
             : null,
           reasonShort: result.reasonShort,
