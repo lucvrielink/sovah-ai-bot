@@ -249,7 +249,6 @@ const BUNDLES: Record<string, Bundle> = {
       "Micellar Cleansing Water",
       "Hydrating Toner",
       "Hydrating Serum",
-      "Double Hydration Boost Gel + HA",
       "Moisturising Day Cream",
       "Ceramide Barrier Night Cream",
     ],
@@ -263,12 +262,10 @@ const BUNDLES: Record<string, Bundle> = {
     description:
       "A gentle routine for skin that reacts easily and needs a calmer approach.",
     products: [
-      "Micellar Cleansing Water",
       "Hydrating Toner",
       "Hydrating Serum",
-      "Moisturising Day Cream",
-      "Ceramide Barrier Night Cream",
       "Calming Facial Oil",
+      "Ceramide Barrier Night Cream",
     ],
   },
   clear: {
@@ -281,9 +278,9 @@ const BUNDLES: Record<string, Bundle> = {
       "A balancing routine for blemish-prone skin that wants clarity without overdoing it.",
     products: [
       "Purifying Mousse",
-      "Hydrating Toner",
       "Niacinamide Gel Moisturiser",
       "Oil-Free Hydrating Gel",
+      "Sun Protection SPF50 Stick no tint",
     ],
   },
   combination: {
@@ -297,9 +294,8 @@ const BUNDLES: Record<string, Bundle> = {
     products: [
       "Purifying Mousse",
       "Hydrating Toner",
-      "Hydrating Serum",
       "Niacinamide Gel Moisturiser",
-      "Oil-Free Hydrating Gel",
+      "Sun Protection SPF50 Stick no tint",
     ],
   },
   glow: {
@@ -312,10 +308,10 @@ const BUNDLES: Record<string, Bundle> = {
       "A routine for dull skin that needs more radiance and a fresher-looking finish.",
     products: [
       "Micellar Cleansing Water",
-      "Hydrating Toner",
       "Vitamin C Serum",
       "Antioxidant Ginkgo Gel Booster",
       "Moisturising Day Cream",
+      "Sun Protection SPF50 Stick no tint",
     ],
   },
   firm: {
@@ -327,12 +323,11 @@ const BUNDLES: Record<string, Bundle> = {
     description:
       "A more targeted routine focused on smoother- and firmer-looking skin.",
     products: [
-      "Hydrating Toner",
-      "Peptide Anti-Aging Serum",
+      "Micellar Cleansing Water",
       "Collagen Boost Serum",
       "Anti-Age Day Cream",
-      "Natural Retinol Alternative Oil Serum",
-      "Smoothing Eye Cream",
+      "Peptide Anti-Aging Serum",
+      "Ceramide Barrier Night Cream",
     ],
   },
   simple: {
@@ -344,8 +339,9 @@ const BUNDLES: Record<string, Bundle> = {
     description: "A simple everyday routine that keeps things easy and effective.",
     products: [
       "Micellar Cleansing Water",
-      "Hydrating Toner",
       "Moisturising Day Cream",
+      "Ceramide Barrier Night Cream",
+      "Sun Protection SPF50 Stick no tint",
     ],
   },
   normal: {
@@ -359,8 +355,8 @@ const BUNDLES: Record<string, Bundle> = {
     products: [
       "Micellar Cleansing Water",
       "Hydrating Toner",
-      "Hydrating Serum",
-      "Moisturising Day Cream",
+      "Niacinamide Gel Moisturiser",
+      "Sun Protection SPF50 Stick no tint",
     ],
   },
 };
@@ -496,6 +492,7 @@ function getLocalizedSteps(
       "Anti-Age Day Cream",
       "Oil-Free Hydrating Gel",
       "Niacinamide Gel Moisturiser",
+      "Sun Protection SPF50 Stick no tint",
     ].includes(p)
   );
   const nightCream = bundle.products.find(
