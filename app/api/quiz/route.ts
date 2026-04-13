@@ -7,7 +7,7 @@ import {
   type QuizAnswers,
   type RoutinePreference,
   type SkinType,
-} from "@/lib/sovah-recommendation";
+} from "../../../lib/sovah-recommendation";
 
 function buildCorsHeaders() {
   return {
