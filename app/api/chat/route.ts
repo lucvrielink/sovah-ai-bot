@@ -66,6 +66,8 @@ type ConversationIntent =
   | "human_chat"
   | null;
 
+const QUIZ_URL = "https://sovahcare.com/pages/find-your-routine";
+
 const bundleCatalog: BundleCatalog = JSON.parse(BUNDLES_JSON);
 const productCatalog: ProductCatalog = JSON.parse(PRODUCTS_JSON);
 
@@ -164,6 +166,38 @@ function detectWhyQuestion(text: string): boolean {
     "waarom die",
     "waarom acne spot care",
   ]);
+}
+
+function detectQuizRequest(text: string): boolean {
+  const t = normalize(text);
+  return hasAny(t, [
+    "quiz",
+    "skincare quiz",
+    "skin quiz",
+    "huid quiz",
+    "huidquiz",
+    "start quiz",
+    "start de quiz",
+    "do the quiz",
+    "take the quiz",
+  ]);
+}
+
+function buildQuizRedirectReply(lang: Lang): { reply: string; actions: ChatAction[] } {
+  return {
+    reply: tr(
+      lang,
+      "Voor routine-advies sturen we je nu door naar onze skincare quiz.\n\nDaar begeleiden we je stap voor stap naar de beste match voor jouw huid.",
+      "For routine advice, we now guide you to our skincare quiz.\n\nThere we guide you step by step to the best match for your skin."
+    ),
+    actions: [
+      {
+        type: "OPEN_URL",
+        label: tr(lang, "Start de quiz", "Start quiz"),
+        url: QUIZ_URL,
+      },
+    ],
+  };
 }
 
 // ─── Detection ──────────────────────────────────────────────────────────────
@@ -359,16 +393,16 @@ function buildConversationReply(intent: ConversationIntent, lang: Lang): string 
   if (intent === "help") {
     return tr(
       lang,
-      "Ik kan je helpen met het kiezen van een routine, producten uitleggen of meedenken op basis van jouw huid en doel. Vertel maar waar je naar op zoek bent.",
-      "I can help you choose a routine, explain products, or match your skin and goal. Just tell me what you're looking for."
+      "Ik kan je helpen met producten uitleggen of meedenken op basis van jouw huid en doel. Voor routine-advies sturen we je door naar de quiz.",
+      "I can help explain products or think along based on your skin and goal. For routine advice, we guide you to the quiz."
     );
   }
 
   if (intent === "yes") {
     return tr(
       lang,
-      "Top. Wat voor huid heb je: droog, vet, combinatie, normaal of gevoelig?",
-      "Great. What's your skin type: dry, oily, combination, normal, or sensitive?"
+      "Top. Vertel me wat voor huid je hebt of waar je hulp bij wilt.",
+      "Great. Tell me your skin type or what you'd like help with."
     );
   }
 
@@ -383,24 +417,24 @@ function buildConversationReply(intent: ConversationIntent, lang: Lang): string 
   if (intent === "confused") {
     return tr(
       lang,
-      "Geen stress. Begin gewoon met je huidtype: droog, vet, combinatie, normaal of gevoelig.",
-      "No worries. Start with your skin type: dry, oily, combination, normal, or sensitive."
+      "Geen stress. Vertel me gewoon wat voor huid je hebt of welk product je bekijkt.",
+      "No worries. Just tell me your skin type or which product you're looking at."
     );
   }
 
   if (intent === "unclear") {
     return tr(
       lang,
-      "Ik snap nog niet helemaal wat je bedoelt. Wat voor huid heb je, en waar wil je vooral hulp bij?",
-      "I'm not fully sure what you mean yet. What's your skin type, and what would you like help with most?"
+      "Ik snap nog niet helemaal wat je bedoelt. Gaat het om een product of wil je hulp met je huid?",
+      "I'm not fully sure what you mean yet. Is it about a product or do you want help with your skin?"
     );
   }
 
   if (intent === "human_chat") {
     return tr(
       lang,
-      "Ja hoor, ik ben er. Vertel me wat voor huid je hebt of waar je naar zoekt, dan help ik je verder.",
-      "Yes, I'm here. Tell me about your skin or what you're looking for, and I'll help you from there."
+      "Ja hoor, ik ben er. Vertel me waar je hulp bij wilt, dan help ik je verder.",
+      "Yes, I'm here. Tell me what you'd like help with, and I'll help from there."
     );
   }
 
@@ -739,7 +773,12 @@ async function callClaudeFallback(
 
     const systemPrompt = `You are the SOVAH skincare assistant for sovahcare.com.
 
-Your job is to help customers find the right SOVAH routine or product based only on the available SOVAH catalog.
+Your job is to help customers find the right SOVAH product based only on the available SOVAH catalog.
+
+Important:
+- For routine advice, routine selection, or "which routine fits me best" questions, do not answer with a routine recommendation inside the chat. Instead, direct the customer to the skincare quiz.
+- The quiz URL is: ${QUIZ_URL}
+- When redirecting to the quiz, keep the message short, warm, and clear.
 
 Available bundles: ${bundleList}
 Available products: ${productList}
@@ -754,7 +793,7 @@ Rules:
 - Never invent products, ingredients, claims, or routines.
 - Never give medical advice.
 - If unclear, ask at most 1 short clarifying question.
-- Prefer 1 best-fit routine first and at most 1 add-on.
+- Prefer product guidance in chat. Routine advice goes to the quiz.
 - If the customer says they do not have acne or breakouts, do not recommend Acne Spot Care or breakout-focused routines unless they ask for them again.
 - If the customer asks why something was recommended, explain briefly and correct the recommendation if needed.
 - Tone: premium, warm, concise, practical.`;
@@ -824,13 +863,21 @@ export async function POST(req: Request) {
       );
     }
 
+    if (detectQuizRequest(message)) {
+      const quizOut = buildQuizRedirectReply(lang);
+      return new Response(
+        JSON.stringify(quizOut),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
     if (detectNoAcne(message)) {
       return new Response(
         JSON.stringify({
           reply: tr(
             lang,
-            "Snap ik. Dan is Acne Spot Care geen logische match. Waar wil je wél hulp bij: droge huid, meer glow, fijne lijntjes of gewoon een makkelijke routine?",
-            "Got it. Then Acne Spot Care is not the right match. What would you like help with instead: hydration, glow, anti-age, or a simple routine?"
+            "Snap ik. Dan is Acne Spot Care geen logische match. Waar wil je wél hulp bij: droge huid, meer glow, fijne lijntjes of gewoon een productadvies?",
+            "Got it. Then Acne Spot Care is not the right match. What would you like help with instead: hydration, glow, anti-age, or product advice?"
           ),
           actions: [],
         }),
@@ -858,6 +905,15 @@ export async function POST(req: Request) {
     }
 
     const wantsRoutine = userTimeline.some((m) => detectRoutineRequest(m));
+
+    if (wantsRoutine) {
+      const quizOut = buildQuizRedirectReply(lang);
+      return new Response(
+        JSON.stringify(quizOut),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
     const skinType = detectSkinType(combinedUserText);
     const goal = detectGoal(combinedUserText);
 
@@ -908,7 +964,7 @@ export async function POST(req: Request) {
       );
     }
 
-    if (looseProduct && !wantsRoutine && !skinType && !goal) {
+    if (looseProduct && !skinType && !goal) {
       return new Response(
         JSON.stringify({
           reply: buildProductReply(looseProduct, lang),
@@ -918,7 +974,7 @@ export async function POST(req: Request) {
       );
     }
 
-    if (mentionedProducts.length === 1 && !wantsRoutine && !goal && !skinType) {
+    if (mentionedProducts.length === 1 && !goal && !skinType) {
       const product = mentionedProducts[0];
       const bundle = inferBestBundleForProduct(product.title);
 
@@ -926,16 +982,16 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: bundle
             ? lang === "nl"
-              ? `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nAls je liever naar een complete routine kijkt, dan past **${bundle.name}** hier het best bij.`
-              : `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nIf you'd rather look at a full routine, **${bundle.name}** is the closest match.`
+              ? `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nAls je liever naar een complete routine kijkt, dan helpt onze quiz je sneller naar de beste match.`
+              : `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nIf you'd rather look at a full routine, our quiz will guide you to the best match faster.`
             : buildProductReply(product, lang),
           actions: bundle
             ? [
                 ...buildActionsForProduct(product, lang),
                 {
                   type: "OPEN_URL" as const,
-                  label: lang === "nl" ? "Bekijk routine" : "View routine",
-                  url: bundle.url,
+                  label: lang === "nl" ? "Start de quiz" : "Start quiz",
+                  url: QUIZ_URL,
                 },
               ].slice(0, 2)
             : buildActionsForProduct(product, lang),
@@ -944,7 +1000,7 @@ export async function POST(req: Request) {
       );
     }
 
-    if (mentionedBundles.length === 1 && !goal && !skinType && !wantsRoutine) {
+    if (mentionedBundles.length === 1 && !goal && !skinType) {
       const bundle = mentionedBundles[0];
       return new Response(
         JSON.stringify({
@@ -955,55 +1011,13 @@ export async function POST(req: Request) {
       );
     }
 
-    if (wantsRoutine && !skinType) {
-      return new Response(
-        JSON.stringify({
-          reply: tr(
-            lang,
-            "Wat voor huid heb je: droog, vet, combinatie, normaal of gevoelig?",
-            "What's your skin type: dry, oily, combination, normal, or sensitive?"
-          ),
-          actions: [],
-        }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
-    }
-
-    if (wantsRoutine && skinType && !goal) {
-      return new Response(
-        JSON.stringify({
-          reply: tr(
-            lang,
-            "Waar wil je vooral hulp bij: droge huid, meer glow, acne of puistjes, fijne lijntjes of gewoon een makkelijke routine?",
-            "What's your main goal: hydration, glow, acne or breakouts, anti-age, or a simple routine?"
-          ),
-          actions: [],
-        }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
-    }
-
-    if (goal === "breakouts" && !skinType) {
-      return new Response(
-        JSON.stringify({
-          reply: tr(
-            lang,
-            "Wat voor huid heb je: vet, combinatie, droog, normaal of gevoelig?",
-            "What's your skin type: oily, combination, dry, normal, or sensitive?"
-          ),
-          actions: [],
-        }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
-    }
-
     if (!wantsRoutine && detectSkinType(message) && !goal) {
       return new Response(
         JSON.stringify({
           reply: tr(
             lang,
-            "Waar wil je vooral hulp bij: droge huid, meer glow, acne of puistjes, fijne lijntjes of gewoon een makkelijke routine?",
-            "What's your main goal: hydration, glow, acne or breakouts, anti-age, or a simple routine?"
+            "Waar wil je vooral hulp bij: droge huid, meer glow, acne of puistjes, fijne lijntjes of een specifiek product?",
+            "What's your main goal: hydration, glow, acne or breakouts, anti-age, or a specific product?"
           ),
           actions: [],
         }),
