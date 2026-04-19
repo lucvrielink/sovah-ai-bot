@@ -17,7 +17,6 @@ export async function OPTIONS() {
   });
 }
 
-// Load catalogs
 const bundlesPath = path.join(process.cwd(), "data", "bundle_catalog.json");
 const productsPath = path.join(process.cwd(), "data", "product_catalog.json");
 
@@ -71,8 +70,6 @@ const QUIZ_URL = "https://sovahcare.com/pages/find-your-routine";
 const bundleCatalog: BundleCatalog = JSON.parse(BUNDLES_JSON);
 const productCatalog: ProductCatalog = JSON.parse(PRODUCTS_JSON);
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
-
 function normalize(text: string): string {
   return (text || "")
     .toLowerCase()
@@ -97,27 +94,42 @@ function hasExactWord(text: string, words: string[]): boolean {
   });
 }
 
-function detectLanguage(text: string): Lang {
-  const t = normalize(text);
+function countMatches(text: string, words: string[]): number {
+  return words.reduce((acc, word) => acc + (text.includes(word) ? 1 : 0), 0);
+}
+
+function detectLanguage(currentMessage: string, historyText = "", forcedLang?: string): Lang {
+  if (forcedLang === "nl" || forcedLang === "en") {
+    return forcedLang;
+  }
+
+  const current = normalize(currentMessage);
+  const history = normalize(historyText);
 
   const dutchSignals = [
     "ik", "mijn", "huid", "droog", "droge", "vette", "vet", "gevoelig",
     "gevoelige", "welke", "wat", "past", "bij", "mij", "puistjes",
     "acne", "stralend", "hydratatie", "dagcreme", "dagcrème",
     "nachtcreme", "nachtcrème", "routine", "gezicht", "hulp", "advies",
-    "waarom", "geen", "bedoel",
+    "waarom", "geen", "bedoel", "wil", "heb", "last van"
   ];
 
   const englishSignals = [
     "my", "skin", "dry", "oily", "sensitive", "which", "what", "routine",
     "fits", "best", "glow", "breakouts", "hydration", "cleanser", "serum",
     "help", "advice", "radiance", "moisture", "why", "don't", "mean",
+    "want", "have", "product"
   ];
 
-  const nlCount = dutchSignals.filter((w) => t.includes(w)).length;
-  const enCount = englishSignals.filter((w) => t.includes(w)).length;
+  const currentNl = countMatches(current, dutchSignals);
+  const currentEn = countMatches(current, englishSignals);
+  const historyNl = countMatches(history, dutchSignals);
+  const historyEn = countMatches(history, englishSignals);
 
-  return nlCount >= enCount ? "nl" : "en";
+  const nlScore = currentNl * 3 + historyNl;
+  const enScore = currentEn * 3 + historyEn;
+
+  return nlScore >= enScore ? "nl" : "en";
 }
 
 function tr(lang: Lang, nl: string, en: string): string {
@@ -133,6 +145,10 @@ function extractUserMessages(history: string[]): string[] {
     .map((item) => item.replace(/^user:\s*/i, "").trim());
 }
 
+function isShortMessage(text: string): boolean {
+  return normalize(text).split(" ").filter(Boolean).length <= 3;
+}
+
 function detectNoAcne(text: string): boolean {
   const t = normalize(text);
 
@@ -144,8 +160,6 @@ function detectNoAcne(text: string): boolean {
     "not acne prone",
     "i dont get breakouts",
     "i don't get breakouts",
-    "i dont have breakouts",
-    "i don't have breakouts",
     "i dont have blemishes",
     "i don't have blemishes",
     "ik heb geen acne",
@@ -183,12 +197,25 @@ function detectQuizRequest(text: string): boolean {
   ]);
 }
 
-function buildQuizRedirectReply(lang: Lang): { reply: string; actions: ChatAction[] } {
+function detectExplicitRoutineSelectionRequest(text: string): boolean {
+  const t = normalize(text);
+  return hasAny(t, [
+    "which routine fits me best",
+    "what routine fits me best",
+    "best routine for me",
+    "welke routine past bij mij",
+    "beste routine voor mij",
+    "wat past bij mijn huid",
+    "find my routine",
+  ]);
+}
+
+function buildQuizRedirectReply(lang: Lang): { reply: string; actions: ChatAction[]; lang: Lang } {
   return {
     reply: tr(
       lang,
-      "Voor routine-advies sturen we je nu door naar onze skincare quiz.\n\nDaar begeleiden we je stap voor stap naar de beste match voor jouw huid.",
-      "For routine advice, we now guide you to our skincare quiz.\n\nThere we guide you step by step to the best match for your skin."
+      "Voor uitgebreider routine-advies kun je ook onze skincare quiz gebruiken.\n\nDaar begeleiden we je stap voor stap naar de beste match voor jouw huid.",
+      "For more complete routine advice, you can also use our skincare quiz.\n\nThere we guide you step by step to the best match for your skin."
     ),
     actions: [
       {
@@ -197,10 +224,9 @@ function buildQuizRedirectReply(lang: Lang): { reply: string; actions: ChatActio
         url: QUIZ_URL,
       },
     ],
+    lang,
   };
 }
-
-// ─── Detection ──────────────────────────────────────────────────────────────
 
 function detectSkinType(text: string): SkinType | null {
   const t = normalize(text);
@@ -255,14 +281,14 @@ function detectGoal(text: string): Goal | null {
       "breakout", "breakouts", "brakouts", "acne", "blemish", "blemishes",
       "spots", "pimples", "blackheads", "clogged pores",
       "puistjes", "puistje", "mee-eters", "mee eters",
-      "acne gevoelige huid", "last van puistjes",
+      "last van puistjes",
     ])
   ) return "breakouts";
 
   if (
     hasAny(t, [
       "glow", "glowy", "radiance", "radiant", "dull", "bright",
-      "brighter", "uneven", "texture", "pores", "fresh look", "more glow",
+      "brighter", "uneven", "texture", "fresh look", "more glow",
       "straling", "stralend", "doffe huid", "dof",
       "egaler", "egale teint", "frisser", "meer glow",
     ])
@@ -297,19 +323,6 @@ function detectGoal(text: string): Goal | null {
   return null;
 }
 
-function detectRoutineRequest(text: string): boolean {
-  const t = normalize(text);
-  return hasAny(t, [
-    "which routine fits me best", "what routine fits me best",
-    "best routine for me", "which routine", "what routine",
-    "fits me best", "help me choose", "what do you recommend",
-    "recommend me a routine", "recommend a routine",
-    "welke routine past bij mij", "welke routine", "wat raad je aan",
-    "aanbevelen", "beste routine voor mij", "routine advies",
-    "wat past bij mijn huid",
-  ]);
-}
-
 function detectConversationIntent(text: string): ConversationIntent {
   const t = normalize(text);
 
@@ -328,8 +341,14 @@ function detectConversationIntent(text: string): ConversationIntent {
 
   if (
     hasAny(t, [
-      "help", "can you help me", "what can you do", "how can you help",
-      "wat kan je", "wat kun je", "kun je me helpen", "kan je me helpen",
+      "help",
+      "can you help me",
+      "what can you do",
+      "how can you help",
+      "wat kan je",
+      "wat kun je",
+      "kun je me helpen",
+      "kan je me helpen",
     ])
   ) return "help";
 
@@ -375,26 +394,18 @@ function buildConversationReply(intent: ConversationIntent, lang: Lang): string 
   }
 
   if (intent === "thanks") {
-    return tr(
-      lang,
-      "Graag gedaan!",
-      "You're welcome!"
-    );
+    return tr(lang, "Graag gedaan!", "You're welcome!");
   }
 
   if (intent === "bye") {
-    return tr(
-      lang,
-      "Tot snel 🌿",
-      "Goodbye! 🌿"
-    );
+    return tr(lang, "Tot snel 🌿", "Goodbye! 🌿");
   }
 
   if (intent === "help") {
     return tr(
       lang,
-      "Ik kan je helpen met producten uitleggen of meedenken op basis van jouw huid en doel. Voor routine-advies sturen we je door naar de quiz.",
-      "I can help explain products or think along based on your skin and goal. For routine advice, we guide you to the quiz."
+      "Ik kan je helpen met producten uitleggen, producten vergelijken en meedenken op basis van jouw huid en doel.",
+      "I can help explain products, compare products, and think along based on your skin and goal."
     );
   }
 
@@ -441,8 +452,6 @@ function buildConversationReply(intent: ConversationIntent, lang: Lang): string 
   return null;
 }
 
-// ─── Catalog Helpers ────────────────────────────────────────────────────────
-
 function getBundleByName(name: string): Bundle | undefined {
   return bundleCatalog.bundles.find((b) => b.name === name);
 }
@@ -471,7 +480,7 @@ function findProductFromLooseIntent(text: string): Product | undefined {
     "Hydrating Toner": ["hydrating toner", "toner"],
     "Purifying Mousse": ["purifying mousse", "mousse cleanser", "mousse"],
     "Smoothing Eye Cream": ["eye cream", "smoothing eye cream", "oogcreme", "oogcrème"],
-    "AHA Peeling Concentrate": ["aha", "aha peeling", "peeling concentrate"],
+    "AHA Peeling Concentrate": ["aha", "aha peeling", "aha peeling concentrate", "peeling"],
     "Niacinamide Gel Moisturiser": ["niacinamide", "niacinamide moisturiser", "gel moisturiser"],
     "Sun Protection SPF50 Stick, no tint": ["spf stick", "sun stick", "spf50 stick", "sun protection stick", "zonnebescherming"],
     "Micellar Cleansing Water": ["micellar", "micellar cleansing water", "reinigingswater"],
@@ -507,8 +516,6 @@ function detectSuitabilityRequest(text: string): boolean {
   ]);
 }
 
-// ─── Bundle / product logic ─────────────────────────────────────────────────
-
 function pickBundle(skinType: SkinType | null, goal: Goal | null): Bundle | undefined {
   if (!goal) return undefined;
 
@@ -540,18 +547,16 @@ function pickAddon(skinType: SkinType | null, goal: Goal | null): string | null 
   return null;
 }
 
-// ─── Description maps ───────────────────────────────────────────────────────
-
 function shortBundleDescription(bundleName: string, lang: Lang): string {
   const mapNl: Record<string, string> = {
     "Dry & Dehydrated Skin Routine": "Past goed bij een droge of vochtarme huid die wat extra comfort en hydratatie nodig heeft.",
     "Combination Skin Balance Routine": "Past goed bij een combinatiehuid die in balans moet blijven zonder zwaar aan te voelen.",
     "Simple Daily Skincare Routine": "Fijn als je gewoon een makkelijke dagelijkse routine wilt zonder te veel stappen.",
     "Sensitive & Reactive Skin Routine": "Past goed bij een gevoelige huid die behoefte heeft aan een rustige, milde routine.",
-    "Normal & Balanced Skin Routine": "Een fijne match voor een normale huid die gewoon goed in balans is.",
+    "Normal & Balanced Skin Routine": "Een fijne match voor een normale huid die goed in balans is.",
     "Glow & Radiance Routine": "Past goed als je huid wat dof oogt en je meer glow wilt.",
     "Firm & Smooth Skin Routine": "Past goed als je huid wat gladder en steviger mag aanvoelen.",
-    "Clear & Balanced Skin Routine": "Past goed bij een vettere huid of als je snel last hebt van puistjes.",
+    "Clear & Balanced Skin Routine": "Past goed bij een vettere huid of als je snel last hebt van acne of puistjes.",
   };
 
   const mapEn: Record<string, string> = {
@@ -603,7 +608,7 @@ function shortProductDescription(productName: string, lang: Lang): string {
     "Peptide Anti-Aging Serum": "Een serum voor een gladdere uitstraling.",
     "Collagen Boost Serum": "Een serum dat past bij een routine voor meer stevigheid en comfort.",
     "Anti-Age Day Cream": "Een dagcrème voor een routine gericht op een gladdere huid.",
-    "Natural Retinol Alternative Oil Serum": "Een milde olie-serum stap voor een routine die wat meer focus heeft op huidveroudering.",
+    "Natural Retinol Alternative Oil Serum": "Een milde olie-serum stap voor een routine met meer focus op huidveroudering.",
     "Smoothing Eye Cream": "Een oogcrème voor de huid rond je ogen.",
     "Vitamin C Serum": "Een serum voor een frissere en stralendere uitstraling.",
     "Brightening Face&Body Exfoliator with Kojic Acid": "Een exfoliator voor een gladdere en frissere look.",
@@ -645,8 +650,6 @@ function shortProductDescription(productName: string, lang: Lang): string {
     ? mapNl[productName] || "Een product uit het huidige SOVAH assortiment."
     : mapEn[productName] || "A product from the current SOVAH range.";
 }
-
-// ─── Reply builders ─────────────────────────────────────────────────────────
 
 function buildBundleReply(bundle: Bundle, addonName: string | null, lang: Lang): string {
   const parts: string[] = [];
@@ -736,13 +739,11 @@ function inferBestBundleForProduct(productTitle: string): Bundle | undefined {
   return bundleName ? getBundleByName(bundleName) : undefined;
 }
 
-// ─── Claude AI fallback ─────────────────────────────────────────────────────
-
 async function callClaudeFallback(
   message: string,
   history: string[],
   lang: Lang
-): Promise<{ reply: string; actions: ChatAction[] }> {
+): Promise<{ reply: string; actions: ChatAction[]; lang: Lang }> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!apiKey) {
@@ -753,6 +754,7 @@ async function callClaudeFallback(
         "I'm not fully sure what you mean. Tell me your skin type and main goal, and I'll help from there."
       ),
       actions: [],
+      lang,
     };
   }
 
@@ -773,34 +775,28 @@ async function callClaudeFallback(
 
     const systemPrompt = `You are the SOVAH skincare assistant for sovahcare.com.
 
-Your job is to help customers find the right SOVAH product based only on the available SOVAH catalog.
-
-Important:
-- For routine advice, routine selection, or "which routine fits me best" questions, do not answer with a routine recommendation inside the chat. Instead, direct the customer to the skincare quiz.
-- The quiz URL is: ${QUIZ_URL}
-- When redirecting to the quiz, keep the message short, warm, and clear.
+You may only use the provided bundle and product catalog as your source of truth.
+Do not use website content, scraped page content, or outside product information.
+Do not invent products, ingredients, claims, routines, skin results, or medical advice.
 
 Available bundles: ${bundleList}
 Available products: ${productList}
 
 Rules:
-- Always reply in the same language as the customer.
-- Keep replies short, clear, and practical.
-- In Dutch, do not sound like a direct translation from English. Use natural, simple Dutch that real webshop customers understand right away.
-- Prefer words like "puistjes", "acne", "droge huid", "meer glow", "fijne lijntjes", "makkelijke routine".
-- Avoid stiff Dutch phrasing like "primaire huiddoelstelling", "onzuiverheden" as default wording, or overly literal translations.
-- Only recommend bundles and products from the provided catalog.
-- Never invent products, ingredients, claims, or routines.
-- Never give medical advice.
-- If unclear, ask at most 1 short clarifying question.
-- Prefer product guidance in chat. Routine advice goes to the quiz.
-- If the customer says they do not have acne or breakouts, do not recommend Acne Spot Care or breakout-focused routines unless they ask for them again.
-- If the customer asks why something was recommended, explain briefly and correct the recommendation if needed.
-- Tone: premium, warm, concise, practical.`;
+- Always reply in the customer's language.
+- Keep replies practical, natural, and conversational.
+- In Dutch, use natural webshop Dutch, not stiff translated Dutch.
+- You may answer product questions, comparison questions, fit/suitability questions, and general skincare-routing questions.
+- You may recommend one best-fit bundle or one best-fit product when the user's need is clear.
+- For explicit full-routine selection requests, you may also mention the skincare quiz as an extra option, but do not force a quiz redirect for every skincare question.
+- If the customer says they do not have acne or breakouts, do not recommend Acne Spot Care unless they ask for it directly later.
+- If the customer asks why something was recommended, explain briefly and correct yourself if needed.
+- Ask at most one short clarifying question if needed.
+- Keep it premium, warm, concise, and useful.`;
 
     const response = await client.messages.create({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 300,
+      max_tokens: 400,
       system: systemPrompt,
       messages,
     });
@@ -814,7 +810,18 @@ Rules:
             "Tell me your skin type and main goal, and I'll help you find the right match."
           );
 
-    return { reply: text, actions: [] };
+    const mentionedProducts = findMentionedProducts(text);
+    const mentionedBundles = findMentionedBundles(text);
+
+    let actions: ChatAction[] = [];
+
+    if (mentionedBundles.length > 0) {
+      actions = buildActionsForBundle(mentionedBundles[0], null, lang);
+    } else if (mentionedProducts.length > 0) {
+      actions = buildActionsForProduct(mentionedProducts[0], lang);
+    }
+
+    return { reply: text, actions: actions.slice(0, 2), lang };
   } catch (err) {
     console.error("Claude API error:", err);
     return {
@@ -824,11 +831,10 @@ Rules:
         "Tell me your skin type and main goal, and I'll help you find the right match."
       ),
       actions: [],
+      lang,
     };
   }
 }
-
-// ─── Main handler ───────────────────────────────────────────────────────────
 
 export async function POST(req: Request) {
   const corsHeaders = buildCorsHeaders();
@@ -836,6 +842,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const message: string | undefined = body?.message;
+    const forcedLang: string | undefined = body?.lang;
     const historyRaw: unknown = body?.history;
 
     const history: string[] = Array.isArray(historyRaw)
@@ -844,23 +851,34 @@ export async function POST(req: Request) {
 
     if (!message) {
       return new Response(
-        JSON.stringify({ reply: "Missing message.", actions: [] }),
+        JSON.stringify({ reply: "Missing message.", actions: [], lang: "en" }),
         { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
     const userHistory = extractUserMessages(history);
-    const userTimeline = [...userHistory, message].slice(-10);
+    const userTimeline = [...userHistory, message].slice(-16);
     const combinedUserText = userTimeline.join(" \n ");
-    const lang = detectLanguage(combinedUserText || message);
+    const lang = detectLanguage(message, combinedUserText, forcedLang);
 
     const conversationIntent = detectConversationIntent(message);
-    const conversationReply = buildConversationReply(conversationIntent, lang);
-    if (conversationReply) {
-      return new Response(
-        JSON.stringify({ reply: conversationReply, actions: [] }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
+    const shouldUseConversationIntent =
+      isShortMessage(message) &&
+      !detectSkinType(combinedUserText) &&
+      !detectGoal(combinedUserText) &&
+      !findMentionedProducts(message).length &&
+      !findMentionedBundles(message).length &&
+      !detectCompareRequest(message) &&
+      !detectSuitabilityRequest(message);
+
+    if (shouldUseConversationIntent) {
+      const conversationReply = buildConversationReply(conversationIntent, lang);
+      if (conversationReply) {
+        return new Response(
+          JSON.stringify({ reply: conversationReply, actions: [], lang }),
+          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
     }
 
     if (detectQuizRequest(message)) {
@@ -880,6 +898,7 @@ export async function POST(req: Request) {
             "Got it. Then Acne Spot Care is not the right match. What would you like help with instead: hydration, glow, anti-age, or product advice?"
           ),
           actions: [],
+          lang,
         }),
         { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
@@ -898,15 +917,14 @@ export async function POST(req: Request) {
               "That recommendation was probably linked to acne or breakouts. If that is not your concern, then Acne Spot Care should not be part of it. Tell me your skin type and what you'd actually like help with, and I'll give you a better match."
             ),
             actions: [],
+            lang,
           }),
           { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
         );
       }
     }
 
-    const wantsRoutine = userTimeline.some((m) => detectRoutineRequest(m));
-
-    if (wantsRoutine) {
+    if (detectExplicitRoutineSelectionRequest(message)) {
       const quizOut = buildQuizRedirectReply(lang);
       return new Response(
         JSON.stringify(quizOut),
@@ -925,7 +943,7 @@ export async function POST(req: Request) {
       const compareItems = [...mentionedBundles, ...mentionedProducts].slice(0, 2);
       if (compareItems.length === 2) {
         return new Response(
-          JSON.stringify({ reply: buildCompareReply(compareItems, lang), actions: [] }),
+          JSON.stringify({ reply: buildCompareReply(compareItems, lang), actions: [], lang }),
           { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
         );
       }
@@ -941,6 +959,7 @@ export async function POST(req: Request) {
               ? `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nVertel me wat voor huid je hebt en waar je hulp bij wilt, dan zeg ik of dit goed past.`
               : `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nTell me your skin type and goal, and I'll tell you if it fits.`,
           actions: buildActionsForProduct(product, lang),
+          lang,
         }),
         { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
@@ -959,6 +978,7 @@ export async function POST(req: Request) {
               ? `**${looseProduct.title}**\n\nJe vindt het hier.`
               : `**${looseProduct.title}**\n\nYou can find it here.`,
           actions: buildActionsForProduct(looseProduct, lang),
+          lang,
         }),
         { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
@@ -969,6 +989,7 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: buildProductReply(looseProduct, lang),
           actions: buildActionsForProduct(looseProduct, lang),
+          lang,
         }),
         { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
@@ -982,8 +1003,8 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: bundle
             ? lang === "nl"
-              ? `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nAls je liever naar een complete routine kijkt, dan helpt onze quiz je sneller naar de beste match.`
-              : `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nIf you'd rather look at a full routine, our quiz will guide you to the best match faster.`
+              ? `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nAls je ook naar een complete routine wilt kijken, kun je daarnaast onze quiz gebruiken.`
+              : `**${product.title}**\n\n${shortProductDescription(product.title, lang)}\n\nIf you'd also like to look at a complete routine, you can use our quiz as well.`
             : buildProductReply(product, lang),
           actions: bundle
             ? [
@@ -995,6 +1016,7 @@ export async function POST(req: Request) {
                 },
               ].slice(0, 2)
             : buildActionsForProduct(product, lang),
+          lang,
         }),
         { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
@@ -1006,12 +1028,13 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: buildBundleReply(bundle, null, lang),
           actions: buildActionsForBundle(bundle, null, lang),
+          lang,
         }),
         { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
-    if (!wantsRoutine && detectSkinType(message) && !goal) {
+    if (detectSkinType(message) && !goal) {
       return new Response(
         JSON.stringify({
           reply: tr(
@@ -1020,6 +1043,7 @@ export async function POST(req: Request) {
             "What's your main goal: hydration, glow, acne or breakouts, anti-age, or a specific product?"
           ),
           actions: [],
+          lang,
         }),
         { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
@@ -1035,6 +1059,7 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: buildBundleReply(bundle, addon, lang),
           actions: buildActionsForBundle(bundle, addon, lang),
+          lang,
         }),
         { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
@@ -1053,6 +1078,7 @@ export async function POST(req: Request) {
       JSON.stringify({
         reply: "Sorry, something went wrong. Try again later.",
         actions: [],
+        lang: "en",
       }),
       { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
