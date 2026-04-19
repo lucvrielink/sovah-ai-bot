@@ -118,7 +118,54 @@ function tr(lang: Lang, nl: string, en: string): string {
 }
 
 function detectLanguage(currentMessage: string, historyText = "", forcedLang?: string): Lang {
-  if (forcedLang === "nl" || forcedLang === "en") return forcedLang;
+  if (forcedLang === "nl" || forcedLang === "en") {
+    const current = normalize(currentMessage);
+
+    const strongEnglishSignals = [
+      "nothing for acne",
+      "for acne",
+      "for dry skin",
+      "for older skin",
+      "how do i use",
+      "what pairs with",
+      "recommend",
+      "product",
+      "products",
+      "routine",
+      "breakouts",
+      "older skin",
+      "dry skin",
+      "sensitive skin",
+      "what about",
+      "not that one",
+      "nothing for"
+    ];
+
+    const strongDutchSignals = [
+      "niets voor acne",
+      "voor acne",
+      "voor droge huid",
+      "voor oudere huid",
+      "hoe gebruik ik",
+      "wat past bij",
+      "raad aan",
+      "product",
+      "producten",
+      "routine",
+      "puistjes",
+      "oudere huid",
+      "droge huid",
+      "gevoelige huid",
+      "wat dan",
+      "niet die"
+    ];
+
+    const currentEnStrong = strongEnglishSignals.some((w) => current.includes(w));
+    const currentNlStrong = strongDutchSignals.some((w) => current.includes(w));
+
+    if (currentEnStrong && !currentNlStrong) return "en";
+    if (currentNlStrong && !currentEnStrong) return "nl";
+  }
 
   const current = normalize(currentMessage);
   const history = normalize(historyText);
@@ -127,18 +174,31 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
     "ik", "mijn", "huid", "droog", "droge", "vette", "vet", "gevoelig",
     "welke", "wat", "past", "bij", "mij", "puistjes", "acne", "routine",
     "product", "producten", "hoe gebruik", "wanneer gebruik", "oudere huid",
-    "fijne lijntjes", "rimpels", "geen routine", "paar producten", "deze", "die", "dit"
+    "fijne lijntjes", "rimpels", "geen routine", "paar producten", "deze", "die", "dit",
+    "droge huid", "gevoelige huid"
   ];
 
   const englishSignals = [
     "my", "skin", "dry", "oily", "sensitive", "which", "what", "routine",
     "product", "products", "how do i use", "when do i use", "older skin",
-    "fine lines", "wrinkles", "not a full routine", "few products", "this", "that"
+    "fine lines", "wrinkles", "not a full routine", "few products", "this", "that",
+    "dry skin", "sensitive skin", "breakouts"
   ];
 
-  const nlScore = countMatches(current, dutchSignals) * 3 + countMatches(history, dutchSignals);
-  const enScore = countMatches(current, englishSignals) * 3 + countMatches(history, englishSignals);
+  const currentNl = countMatches(current, dutchSignals);
+  const currentEn = countMatches(current, englishSignals);
+  const historyNl = countMatches(history, dutchSignals);
+  const historyEn = countMatches(history, englishSignals);
 
+  // current message much heavier than history
+  const nlScore = currentNl * 5 + historyNl;
+  const enScore = currentEn * 5 + historyEn;
+
+  if (currentEn > 0 && currentNl === 0) return "en";
+  if (currentNl > 0 && currentEn === 0) return "nl";
+
+  return nlScore >= enScore ? "nl" : "en";
+}
   return nlScore >= enScore ? "nl" : "en";
 }
 
