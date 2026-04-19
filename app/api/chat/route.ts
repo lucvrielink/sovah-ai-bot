@@ -150,7 +150,8 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
     "waarom", "geen", "bedoel", "wil", "heb", "last van", "meer glow",
     "doffe huid", "normale huid", "welk product", "wat raad je aan",
     "hoe gebruik", "hoe moet ik", "wanneer gebruik", "hoe vaak", "combineren",
-    "aanraden", "paar producten", "geen routine"
+    "aanraden", "paar producten", "geen routine", "oudere huid",
+    "fijne lijntjes", "rimpels", "gevoelige huid", "puistjes", "droge huid"
   ];
 
   const englishSignals = [
@@ -159,7 +160,8 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
     "help", "advice", "radiance", "moisture", "why", "don't", "mean",
     "want", "have", "product", "dull skin", "fine lines", "recommend",
     "how do i use", "when do i use", "how often", "can i combine", "combine",
-    "few products", "not a full routine", "only products"
+    "few products", "not a full routine", "only products", "older skin",
+    "wrinkles", "sensitive skin", "dry skin"
   ];
 
   const currentNl = countMatches(current, dutchSignals);
@@ -455,7 +457,7 @@ function detectDrySignal(text: string): boolean {
 function detectGlowSignal(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "glow", "radiance", "dull", "stralend", "doffe huid", "dof", "meer glow"
+    "glow", "radiance", "dull", "stralend", "doffe huid", "dof", "meer glow", "frissere huid", "frissere uitstraling"
   ]);
 }
 
@@ -469,7 +471,7 @@ function detectBreakoutSignal(text: string): boolean {
 function detectSensitiveSignal(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "sensitive", "gevoelig", "reactive", "reactief", "irritated", "geïrriteerd", "geirriteerd"
+    "sensitive", "gevoelig", "reactive", "reactief", "irritated", "geïrriteerd", "geirriteerd", "redness", "roodheid"
   ]);
 }
 
@@ -477,7 +479,8 @@ function detectAntiAgeSignal(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
     "anti age", "anti-age", "anti aging", "anti-aging", "fine lines",
-    "wrinkles", "rimpels", "fijne lijntjes", "firmness", "stevigheid"
+    "wrinkles", "rimpels", "fijne lijntjes", "firmness", "stevigheid",
+    "older skin", "oudere huid", "verouderende huid"
   ]);
 }
 
@@ -525,6 +528,10 @@ function detectProductRecommendationRequest(text: string): boolean {
     "welke crème raad je aan",
     "ik wil een product voor",
     "ik wil producten voor",
+    "ik wil 1 2 producten voor",
+    "ik wil 1-2 producten voor",
+    "1 2 producten voor",
+    "1-2 producten voor",
     "welk product past bij",
     "welke producten passen bij",
     "recommend a product",
@@ -534,7 +541,28 @@ function detectProductRecommendationRequest(text: string): boolean {
     "what product do you recommend",
     "which product do you recommend",
     "what products do you recommend",
-    "which products do you recommend"
+    "which products do you recommend",
+    "i want products for",
+    "i want 1 2 products for",
+    "i want 1-2 products for",
+    "1 2 products for",
+    "1-2 products for",
+    "ik wil 1 2 producten voor droge huid",
+    "ik wil 1-2 producten voor droge huid",
+    "ik wil 1 2 producten voor puistjes",
+    "ik wil 1-2 producten voor puistjes",
+    "ik wil 1 2 producten voor oudere huid",
+    "ik wil 1-2 producten voor oudere huid",
+    "ik wil 1 2 producten voor glow",
+    "ik wil 1-2 producten voor glow",
+    "i want 1 2 products for dry skin",
+    "i want 1-2 products for dry skin",
+    "i want 1 2 products for breakouts",
+    "i want 1-2 products for breakouts",
+    "i want 1 2 products for older skin",
+    "i want 1-2 products for older skin",
+    "i want 1 2 products for glow",
+    "i want 1-2 products for glow"
   ]);
 }
 
@@ -549,7 +577,7 @@ function detectSkinSignals(text: string): string[] {
   if (hasAny(t, ["normal", "normaal", "normale huid", "balanced", "gebalanceerd"])) found.add("normal");
   if (hasAny(t, ["glow", "doffe huid", "dof", "radiance", "stralend", "meer glow", "dull"])) found.add("glow");
   if (hasAny(t, ["acne", "puistjes", "breakouts", "blemishes", "spots", "onzuiverheden", "mee eters", "mee-eters"])) found.add("breakouts");
-  if (hasAny(t, ["anti age", "anti-age", "anti aging", "anti-aging", "fine lines", "wrinkles", "rimpels", "fijne lijntjes", "firmness", "stevigheid"])) found.add("antiage");
+  if (hasAny(t, ["anti age", "anti-age", "anti aging", "anti-aging", "fine lines", "wrinkles", "rimpels", "fijne lijntjes", "firmness", "stevigheid", "older skin", "oudere huid"])) found.add("antiage");
   if (hasAny(t, ["simple", "simpel", "easy routine", "geen gedoe", "makkelijke routine"])) found.add("simple");
 
   return Array.from(found);
