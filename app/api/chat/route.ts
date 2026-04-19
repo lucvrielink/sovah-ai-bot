@@ -34,6 +34,7 @@ const BUNDLES_JSON = fs.readFileSync(bundlesPath, "utf8");
 const PRODUCTS_JSON = fs.readFileSync(productsPath, "utf8");
 
 type Lang = "nl" | "en";
+type SkinType = "dry" | "oily" | "combination" | "sensitive" | "normal" | null;
 
 type Bundle = {
   name: string;
@@ -118,85 +119,60 @@ function tr(lang: Lang, nl: string, en: string): string {
 }
 
 function detectLanguage(currentMessage: string, historyText = "", forcedLang?: string): Lang {
-  const current = normalize(currentMessage);
-
-  const strongEnglishSignals = [
-    "nothing for acne",
-    "nothing for breakouts",
-    "something for acne",
-    "something for breakouts",
-    "for acne",
-    "for breakouts",
-    "for dry skin",
-    "for older skin",
-    "for sensitive skin",
-    "how do i use",
-    "what pairs with",
-    "recommend",
-    "product",
-    "products",
-    "routine",
-    "breakouts",
-    "older skin",
-    "dry skin",
-    "sensitive skin",
-    "what about",
-    "not that one",
-    "nothing for",
-    "this one",
-    "that one"
-  ];
-
-  const strongDutchSignals = [
-    "niets voor acne",
-    "niets voor puistjes",
-    "iets voor acne",
-    "iets voor puistjes",
-    "voor acne",
-    "voor puistjes",
-    "voor droge huid",
-    "voor oudere huid",
-    "voor gevoelige huid",
-    "hoe gebruik ik",
-    "wat past bij",
-    "raad aan",
-    "product",
-    "producten",
-    "routine",
-    "puistjes",
-    "oudere huid",
-    "droge huid",
-    "gevoelige huid",
-    "wat dan",
-    "niet die",
-    "deze",
-    "die",
-    "dit"
-  ];
-
-  const currentEnStrong = strongEnglishSignals.some((w) => current.includes(w));
-  const currentNlStrong = strongDutchSignals.some((w) => current.includes(w));
-
-  if (currentEnStrong && !currentNlStrong) return "en";
-  if (currentNlStrong && !currentEnStrong) return "nl";
-
   if (forcedLang === "nl" || forcedLang === "en") {
-    const currentEnglishWords = [
-      "nothing", "breakouts", "older skin", "dry skin", "sensitive skin",
-      "how do i use", "what pairs", "recommend", "products"
-    ];
-    const currentDutchWords = [
-      "puistjes", "oudere huid", "droge huid", "gevoelige huid",
-      "hoe gebruik ik", "wat past", "raad", "producten"
+    const current = normalize(currentMessage);
+
+    const strongEnglishSignals = [
+      "nothing for acne",
+      "for acne",
+      "for dry skin",
+      "for older skin",
+      "how do i use",
+      "what pairs with",
+      "recommend",
+      "product",
+      "products",
+      "routine",
+      "breakouts",
+      "older skin",
+      "dry skin",
+      "sensitive skin",
+      "what about",
+      "not that one",
+      "nothing for",
+      "those",
+      "them"
     ];
 
-    const currentEn = countMatches(current, currentEnglishWords);
-    const currentNl = countMatches(current, currentDutchWords);
+    const strongDutchSignals = [
+      "niets voor acne",
+      "voor acne",
+      "voor droge huid",
+      "voor oudere huid",
+      "hoe gebruik ik",
+      "wat past bij",
+      "raad aan",
+      "product",
+      "producten",
+      "routine",
+      "puistjes",
+      "oudere huid",
+      "droge huid",
+      "gevoelige huid",
+      "wat dan",
+      "niet die",
+      "deze",
+      "die"
+    ];
 
-    if (currentEn > currentNl && currentEn > 0) return "en";
-    if (currentNl > currentEn && currentNl > 0) return "nl";
+    const currentEnStrong = strongEnglishSignals.some((w) => current.includes(w));
+    const currentNlStrong = strongDutchSignals.some((w) => current.includes(w));
+
+    if (currentEnStrong && !currentNlStrong) return "en";
+    if (currentNlStrong && !currentEnStrong) return "nl";
   }
 
+  const current = normalize(currentMessage);
   const history = normalize(historyText);
 
   const dutchSignals = [
@@ -204,14 +180,14 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
     "welke", "wat", "past", "bij", "mij", "puistjes", "acne", "routine",
     "product", "producten", "hoe gebruik", "wanneer gebruik", "oudere huid",
     "fijne lijntjes", "rimpels", "geen routine", "paar producten", "deze", "die", "dit",
-    "droge huid", "gevoelige huid"
+    "droge huid", "gevoelige huid", "voor puistjes"
   ];
 
   const englishSignals = [
     "my", "skin", "dry", "oily", "sensitive", "which", "what", "routine",
     "product", "products", "how do i use", "when do i use", "older skin",
     "fine lines", "wrinkles", "not a full routine", "few products", "this", "that",
-    "dry skin", "sensitive skin", "breakouts"
+    "dry skin", "sensitive skin", "breakouts", "those", "them"
   ];
 
   const currentNl = countMatches(current, dutchSignals);
@@ -239,6 +215,10 @@ function extractUserMessages(history: string[]): string[] {
 
 function getProductByName(name: string): Product | undefined {
   return productCatalog.products.find((p) => p.title === name);
+}
+
+function getBundleByName(name: string): Bundle | undefined {
+  return bundleCatalog.bundles.find((b) => b.name === name);
 }
 
 function findMentionedProducts(text: string): Product[] {
@@ -341,7 +321,7 @@ function sortProductsByRoutineOrder(products: Product[]): Product[] {
   return [...products].sort((a, b) => inferOrderIndex(a) - inferOrderIndex(b));
 }
 
-// ───────────────── signals ─────────────────
+// ───────────────── skin signals ─────────────────
 
 function detectDrySignal(text: string): boolean {
   const t = normalize(text);
@@ -370,6 +350,32 @@ function detectAntiAgeSignal(text: string): boolean {
     "fine lines", "wrinkles", "rimpels", "fijne lijntjes",
     "firmness", "stevigheid", "older skin", "oudere huid", "verouderende huid"
   ]);
+}
+
+function detectSkinType(text: string): SkinType {
+  const t = normalize(text);
+
+  if (hasAny(t, ["combination", "combi", "combo skin", "combinatie", "combinatiehuid", "t-zone", "t zone"])) {
+    return "combination";
+  }
+
+  if (hasAny(t, ["sensitive", "gevoelig", "reactive", "reactief", "irritated", "geïrriteerd", "geirriteerd"])) {
+    return "sensitive";
+  }
+
+  if (hasAny(t, ["oily", "oilly", "greasy", "shiny", "vette huid", "vet", "glimmend"])) {
+    return "oily";
+  }
+
+  if (hasAny(t, ["dry", "dehydrated", "droog", "droge huid", "uitgedroogd", "vochttekort"])) {
+    return "dry";
+  }
+
+  if (hasAny(t, ["normal", "balanced skin", "normaal", "normale huid", "gebalanceerd"])) {
+    return "normal";
+  }
+
+  return null;
 }
 
 // ───────────────── intents ─────────────────
@@ -419,6 +425,21 @@ function detectSuitabilityRequest(text: string): boolean {
     "can i use", "would this work for", "is this okay for",
     "geschikt voor", "kan ik gebruiken", "is dit goed voor",
     "werkt dit voor", "past dit bij"
+  ]);
+}
+
+function detectPluralReference(text: string): boolean {
+  const t = normalize(text);
+  return hasAny(t, [
+    "those",
+    "them",
+    "these",
+    "die",
+    "deze",
+    "allebei",
+    "beide",
+    "beiden",
+    "both"
   ]);
 }
 
@@ -668,10 +689,10 @@ function getRecentMentionedProducts(history: string[]): Product[] {
       }
     }
 
-    if (recent.length >= 3) break;
+    if (recent.length >= 4) break;
   }
 
-  return recent.slice(0, 3);
+  return recent.slice(0, 4);
 }
 
 function buildClarifyProductReply(products: Product[], lang: Lang): string {
@@ -683,45 +704,70 @@ function buildClarifyProductReply(products: Product[], lang: Lang): string {
   );
 }
 
-// ───────────────── recommendation helpers ─────────────────
+// ───────────────── recommendations ─────────────────
 
 function recommendProductsFromText(text: string): Product[] {
   const picks: Product[] = [];
+  const skinType = detectSkinType(text);
 
   const add = (title: string) => {
     const p = getProductByName(title);
     if (p && !picks.find((x) => x.title === p.title)) picks.push(p);
   };
 
+  if (detectBreakoutSignal(text)) {
+    add("Acne Spot Care");
+
+    if (skinType === "dry") {
+      add("Moisturising Day Cream");
+    } else if (skinType === "sensitive" || skinType === "normal") {
+      add("Niacinamide Gel Moisturiser");
+    } else {
+      add("Oil-Free Hydrating Gel");
+    }
+
+    return picks.slice(0, 2);
+  }
+
   if (detectDrySignal(text)) {
     add("Hydrating Serum");
     add("Moisturising Day Cream");
-  }
-
-  if (detectGlowSignal(text)) {
-    add("Vitamin C Serum");
-    add("Antioxidant Ginkgo Gel Booster");
-  }
-
-  if (detectBreakoutSignal(text)) {
-    add("Acne Spot Care");
-    add("Niacinamide Gel Moisturiser");
+    return picks.slice(0, 2);
   }
 
   if (detectSensitiveSignal(text)) {
     add("Calming Facial Oil");
     add("Ceramide Barrier Night Cream");
+    return picks.slice(0, 2);
   }
 
   if (detectAntiAgeSignal(text)) {
     add("Peptide Anti-Aging Serum");
     add("Anti-Age Day Cream");
+    return picks.slice(0, 2);
+  }
+
+  if (detectGlowSignal(text)) {
+    add("Vitamin C Serum");
+    add("Antioxidant Ginkgo Gel Booster");
+    return picks.slice(0, 2);
   }
 
   return picks.slice(0, 2);
 }
 
-// ───────────────── reply builders ─────────────────
+// ───────────────── replies ─────────────────
+
+function getSafeShortCopy(product: Product, lang: Lang): string {
+  const copy = lang === "nl" ? product.short_copy_nl : product.short_copy_en;
+  if (copy && copy.trim()) return copy;
+
+  return tr(
+    lang,
+    "Een product uit het huidige SOVAH assortiment.",
+    "A product from the current SOVAH range."
+  );
+}
 
 function buildActionsForProduct(product: Product, lang: Lang): ChatAction[] {
   return [{
@@ -756,9 +802,7 @@ function buildQuizRedirectReply(lang: Lang) {
 }
 
 function buildProductReply(product: Product, lang: Lang): string {
-  return `**${product.title}**\n\n${lang === "nl"
-    ? product.short_copy_nl || "Een product uit het huidige SOVAH assortiment."
-    : product.short_copy_en || "A product from the current SOVAH range."}`;
+  return `**${product.title}**\n\n${getSafeShortCopy(product, lang)}`;
 }
 
 function buildProductUsageReply(product: Product, lang: Lang): string {
@@ -785,6 +829,33 @@ function buildProductUsageReply(product: Product, lang: Lang): string {
   }
 
   return parts.join("\n\n");
+}
+
+function buildMultiProductUsageReply(products: Product[], lang: Lang): string {
+  const unique = products
+    .filter((p, idx, arr) => arr.findIndex((x) => x.title === p.title) === idx)
+    .slice(0, 2);
+
+  const intro = tr(
+    lang,
+    "Voor deze producten zou ik het zo gebruiken:",
+    "For these products, I would use them like this:"
+  );
+
+  const blocks = unique.map((p) => {
+    const usage = lang === "nl" ? p.usage_nl : p.usage_en;
+    const whenToUse = lang === "nl" ? p.when_to_use_nl : p.when_to_use_en;
+    const step = lang === "nl" ? p.routine_step_nl : p.routine_step_en;
+
+    const lines = [`**${p.title}**`];
+    if (usage) lines.push(usage);
+    if (whenToUse) lines.push(lang === "nl" ? `Wanneer: ${whenToUse}` : `When: ${whenToUse}`);
+    if (step) lines.push(lang === "nl" ? `Stap: ${step}` : `Step: ${step}`);
+
+    return lines.join("\n");
+  });
+
+  return [intro, ...blocks].join("\n\n");
 }
 
 function buildBundleUsageReply(bundle: Bundle, lang: Lang): string {
@@ -924,7 +995,7 @@ function buildProductRecommendationReply(products: Product[], lang: Lang): strin
     "If you'd rather not go for a full routine, I’d keep it to these:"
   );
 
-  const lines = products.map((p) => `**${p.title}**\n${lang === "nl" ? p.short_copy_nl || "" : p.short_copy_en || ""}`);
+  const lines = products.map((p) => `**${p.title}**\n${getSafeShortCopy(p, lang)}`);
 
   return `${intro}\n\n${lines.join("\n\n")}`;
 }
@@ -1071,7 +1142,34 @@ export async function POST(req: Request) {
       );
     }
 
-    // 2. ambiguous reference handling
+    // 2. plural reference like "how do i use those"
+    if (detectPluralReference(message) && recentProducts.length >= 2) {
+      if (detectUsageRequest(message)) {
+        const chosen = recentProducts.slice(0, 2);
+        return new Response(
+          JSON.stringify({
+            reply: buildMultiProductUsageReply(chosen, lang),
+            actions: chosen.flatMap((p) => buildActionsForProduct(p, lang)).slice(0, 2),
+            lang,
+          }),
+          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+
+      if (detectCombinationRequest(message)) {
+        const chosen = recentProducts.slice(0, 2);
+        return new Response(
+          JSON.stringify({
+            reply: buildDynamicCombinationReply(chosen[0], chosen[1], lang),
+            actions: chosen.flatMap((p) => buildActionsForProduct(p, lang)).slice(0, 2),
+            lang,
+          }),
+          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+    }
+
+    // 3. ambiguous single reference handling
     if (
       detectAmbiguousReference(message) ||
       ((detectUsageRequest(message) || detectCombinationRequest(message) || detectWhereRequest(message) || detectSuitabilityRequest(message)) &&
@@ -1128,7 +1226,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 3. usage bundle
+    // 4. usage bundle
     if (detectUsageRequest(message)) {
       const bundle = mentionedBundles[0] || findBundleFromLooseIntent(message);
       if (bundle) {
@@ -1143,7 +1241,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 4. usage product
+    // 5. usage product
     if (detectUsageRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1156,7 +1254,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 5. combinations
+    // 6. combinations
     if (detectCombinationRequest(message)) {
       const explicitProducts = mentionedProducts.length ? mentionedProducts : looseProduct ? [looseProduct] : [];
 
@@ -1183,7 +1281,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 6. compare
+    // 7. compare
     if (detectCompareRequest(message)) {
       const compareItems = [...mentionedBundles, ...mentionedProducts].slice(0, 2);
       if (compareItems.length === 2) {
@@ -1202,7 +1300,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 7. where
+    // 8. where
     if (detectWhereRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1215,15 +1313,15 @@ export async function POST(req: Request) {
       );
     }
 
-    // 8. suitability
+    // 9. suitability
     if (detectSuitabilityRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
         JSON.stringify({
           reply: tr(
             lang,
-            `**${product.title}**\n\n${product.short_copy_nl || ""}\n\nVertel me wat voor huid je hebt en wat je doel is, dan zeg ik of dit goed past.`,
-            `**${product.title}**\n\n${product.short_copy_en || ""}\n\nTell me your skin type and goal, and I’ll tell you if it fits.`
+            `**${product.title}**\n\n${getSafeShortCopy(product, lang)}\n\nVertel me wat voor huid je hebt en wat je doel is, dan zeg ik of dit goed past.`,
+            `**${product.title}**\n\n${getSafeShortCopy(product, lang)}\n\nTell me your skin type and goal, and I’ll tell you if it fits.`
           ),
           actions: buildActionsForProduct(product, lang),
           lang,
@@ -1232,7 +1330,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 9. routine to quiz
+    // 10. routine to quiz
     if (shouldRedirectToQuiz(message, combinedUserText)) {
       const quizOut = buildQuizRedirectReply(lang);
       return new Response(
@@ -1241,7 +1339,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 10. specific product
+    // 11. specific product
     if (mentionedProducts.length === 1 || looseProduct) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1254,7 +1352,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 11. specific bundle
+    // 12. specific bundle
     if (mentionedBundles.length === 1) {
       const bundle = mentionedBundles[0];
       return new Response(
