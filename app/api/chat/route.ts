@@ -118,56 +118,85 @@ function tr(lang: Lang, nl: string, en: string): string {
 }
 
 function detectLanguage(currentMessage: string, historyText = "", forcedLang?: string): Lang {
+  const current = normalize(currentMessage);
+
+  const strongEnglishSignals = [
+    "nothing for acne",
+    "nothing for breakouts",
+    "something for acne",
+    "something for breakouts",
+    "for acne",
+    "for breakouts",
+    "for dry skin",
+    "for older skin",
+    "for sensitive skin",
+    "how do i use",
+    "what pairs with",
+    "recommend",
+    "product",
+    "products",
+    "routine",
+    "breakouts",
+    "older skin",
+    "dry skin",
+    "sensitive skin",
+    "what about",
+    "not that one",
+    "nothing for",
+    "this one",
+    "that one"
+  ];
+
+  const strongDutchSignals = [
+    "niets voor acne",
+    "niets voor puistjes",
+    "iets voor acne",
+    "iets voor puistjes",
+    "voor acne",
+    "voor puistjes",
+    "voor droge huid",
+    "voor oudere huid",
+    "voor gevoelige huid",
+    "hoe gebruik ik",
+    "wat past bij",
+    "raad aan",
+    "product",
+    "producten",
+    "routine",
+    "puistjes",
+    "oudere huid",
+    "droge huid",
+    "gevoelige huid",
+    "wat dan",
+    "niet die",
+    "deze",
+    "die",
+    "dit"
+  ];
+
+  const currentEnStrong = strongEnglishSignals.some((w) => current.includes(w));
+  const currentNlStrong = strongDutchSignals.some((w) => current.includes(w));
+
+  if (currentEnStrong && !currentNlStrong) return "en";
+  if (currentNlStrong && !currentEnStrong) return "nl";
+
   if (forcedLang === "nl" || forcedLang === "en") {
-    const current = normalize(currentMessage);
-
-    const strongEnglishSignals = [
-      "nothing for acne",
-      "for acne",
-      "for dry skin",
-      "for older skin",
-      "how do i use",
-      "what pairs with",
-      "recommend",
-      "product",
-      "products",
-      "routine",
-      "breakouts",
-      "older skin",
-      "dry skin",
-      "sensitive skin",
-      "what about",
-      "not that one",
-      "nothing for"
+    const currentEnglishWords = [
+      "nothing", "breakouts", "older skin", "dry skin", "sensitive skin",
+      "how do i use", "what pairs", "recommend", "products"
+    ];
+    const currentDutchWords = [
+      "puistjes", "oudere huid", "droge huid", "gevoelige huid",
+      "hoe gebruik ik", "wat past", "raad", "producten"
     ];
 
-    const strongDutchSignals = [
-      "niets voor acne",
-      "voor acne",
-      "voor droge huid",
-      "voor oudere huid",
-      "hoe gebruik ik",
-      "wat past bij",
-      "raad aan",
-      "product",
-      "producten",
-      "routine",
-      "puistjes",
-      "oudere huid",
-      "droge huid",
-      "gevoelige huid",
-      "wat dan",
-      "niet die"
-    ];
+    const currentEn = countMatches(current, currentEnglishWords);
+    const currentNl = countMatches(current, currentDutchWords);
 
-    const currentEnStrong = strongEnglishSignals.some((w) => current.includes(w));
-    const currentNlStrong = strongDutchSignals.some((w) => current.includes(w));
-
-    if (currentEnStrong && !currentNlStrong) return "en";
-    if (currentNlStrong && !currentEnStrong) return "nl";
+    if (currentEn > currentNl && currentEn > 0) return "en";
+    if (currentNl > currentEn && currentNl > 0) return "nl";
   }
 
-  const current = normalize(currentMessage);
   const history = normalize(historyText);
 
   const dutchSignals = [
@@ -190,15 +219,12 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
   const historyNl = countMatches(history, dutchSignals);
   const historyEn = countMatches(history, englishSignals);
 
-  // current message much heavier than history
   const nlScore = currentNl * 5 + historyNl;
   const enScore = currentEn * 5 + historyEn;
 
   if (currentEn > 0 && currentNl === 0) return "en";
   if (currentNl > 0 && currentEn === 0) return "nl";
 
-  return nlScore >= enScore ? "nl" : "en";
-}
   return nlScore >= enScore ? "nl" : "en";
 }
 
@@ -213,10 +239,6 @@ function extractUserMessages(history: string[]): string[] {
 
 function getProductByName(name: string): Product | undefined {
   return productCatalog.products.find((p) => p.title === name);
-}
-
-function getBundleByName(name: string): Bundle | undefined {
-  return bundleCatalog.bundles.find((b) => b.name === name);
 }
 
 function findMentionedProducts(text: string): Product[] {
@@ -319,11 +341,6 @@ function sortProductsByRoutineOrder(products: Product[]): Product[] {
   return [...products].sort((a, b) => inferOrderIndex(a) - inferOrderIndex(b));
 }
 
-function buildStepLabel(product: Product, lang: Lang): string {
-  const step = lang === "nl" ? product.routine_step_nl : product.routine_step_en;
-  return step || product.title;
-}
-
 // ───────────────── signals ─────────────────
 
 function detectDrySignal(text: string): boolean {
@@ -416,7 +433,6 @@ function detectAmbiguousReference(text: string): boolean {
     "kan ik dit combineren",
     "waar gebruik ik die",
     "waar gebruik ik dit",
-    "hoe gebruik i die",
     "how do i use this",
     "how do i use that",
     "what pairs with this",
@@ -493,7 +509,15 @@ function detectProductRecommendationRequest(text: string): boolean {
     "dry skin",
     "droge huid",
     "breakouts",
-    "puistjes"
+    "puistjes",
+    "nothing for acne",
+    "nothing for breakouts",
+    "something for acne",
+    "something for breakouts",
+    "iets voor acne",
+    "iets voor puistjes",
+    "niets voor acne",
+    "niets voor puistjes"
   ]);
 }
 
@@ -800,7 +824,7 @@ function buildDynamicCombinationReply(a: Product, b: Product, lang: Lang): strin
   const secondTime = inferUseTime(second);
 
   const notes: string[] = [];
-  let title = `**${a.title} + ${b.title}**`;
+  const title = `**${a.title} + ${b.title}**`;
 
   const bothActive =
     [a.title, b.title].includes("AHA Peeling Concentrate") &&
@@ -1048,7 +1072,13 @@ export async function POST(req: Request) {
     }
 
     // 2. ambiguous reference handling
-    if (detectAmbiguousReference(message) || ((detectUsageRequest(message) || detectCombinationRequest(message) || detectWhereRequest(message) || detectSuitabilityRequest(message)) && !mentionedProducts.length && !looseProduct && !mentionedBundles.length)) {
+    if (
+      detectAmbiguousReference(message) ||
+      ((detectUsageRequest(message) || detectCombinationRequest(message) || detectWhereRequest(message) || detectSuitabilityRequest(message)) &&
+        !mentionedProducts.length &&
+        !looseProduct &&
+        !mentionedBundles.length)
+    ) {
       if (recentProducts.length === 1) {
         const resolved = recentProducts[0];
 
