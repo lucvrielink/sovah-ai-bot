@@ -127,13 +127,13 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
     "ik", "mijn", "huid", "droog", "droge", "vette", "vet", "gevoelig",
     "welke", "wat", "past", "bij", "mij", "puistjes", "acne", "routine",
     "product", "producten", "hoe gebruik", "wanneer gebruik", "oudere huid",
-    "fijne lijntjes", "rimpels", "geen routine", "paar producten"
+    "fijne lijntjes", "rimpels", "geen routine", "paar producten", "deze", "die", "dit"
   ];
 
   const englishSignals = [
     "my", "skin", "dry", "oily", "sensitive", "which", "what", "routine",
     "product", "products", "how do i use", "when do i use", "older skin",
-    "fine lines", "wrinkles", "not a full routine", "few products"
+    "fine lines", "wrinkles", "not a full routine", "few products", "this", "that"
   ];
 
   const nlScore = countMatches(current, dutchSignals) * 3 + countMatches(history, dutchSignals);
@@ -186,14 +186,14 @@ function findProductFromLooseIntent(text: string): Product | undefined {
     "Smoothing Eye Cream": ["eye cream", "smoothing eye cream", "oogcreme", "oogcrème"],
     "AHA Peeling Concentrate": ["aha", "aha peeling", "aha peeling concentrate", "peeling"],
     "Niacinamide Gel Moisturiser": ["niacinamide", "niacinamide moisturiser", "gel moisturiser", "gel moisturizer"],
-    "Sun Protection SPF50 Stick, no tint": ["spf stick", "sun stick", "spf50 stick", "sun protection stick", "spf"],
+    "Sun Protection SPF50 Stick, no tint": ["spf stick", "sun stick", "spf50 stick", "sun protection stick", "spf", "sun protection"],
     "Micellar Cleansing Water": ["micellar", "micellar cleansing water"],
     "Calming Facial Oil": ["calming oil", "facial oil", "calming facial oil"],
     "Moisturising Day Cream": ["day cream", "moisturising day cream", "dagcrème", "dagcreme"],
     "Ceramide Barrier Night Cream": ["night cream", "ceramide cream", "nachtcrème", "nachtcreme"],
     "Collagen Boost Serum": ["collagen serum", "collagen boost"],
     "Anti-Age Day Cream": ["anti age day cream", "anti-aging day cream", "anti-age day cream"],
-    "Natural Retinol Alternative Oil Serum": ["retinol alternative", "natural retinol"],
+    "Natural Retinol Alternative Oil Serum": ["retinol alternative", "natural retinol", "retinol oil serum"],
     "Antioxidant Ginkgo Gel Booster": ["ginkgo booster", "ginkgo gel booster"],
     "Oil-Free Hydrating Gel": ["oil free gel", "oil-free gel", "hydrating gel"],
     "All-In-One Facial Oil": ["all in one oil", "all-in-one oil"],
@@ -208,6 +208,60 @@ function findProductFromLooseIntent(text: string): Product | undefined {
   }
 
   return undefined;
+}
+
+// ───────────────── product/meta inference ─────────────────
+
+type ProductType = "cleanser" | "toner" | "serum" | "gel" | "cream" | "oil" | "spf" | "spot" | "exfoliant" | "other";
+type UseTime = "morning" | "evening" | "both";
+
+function inferProductType(product: Product): ProductType {
+  const t = normalize(product.title);
+
+  if (t.includes("spf") || t.includes("sun protection")) return "spf";
+  if (t.includes("cleansing water") || t.includes("mousse")) return "cleanser";
+  if (t.includes("toner")) return "toner";
+  if (t.includes("peeling") || t.includes("exfoliator")) return "exfoliant";
+  if (t.includes("spot care")) return "spot";
+  if (t.includes("oil")) return "oil";
+  if (t.includes("cream")) return "cream";
+  if (t.includes("gel")) return "gel";
+  if (t.includes("serum") || t.includes("booster")) return "serum";
+
+  return "other";
+}
+
+function inferUseTime(product: Product): UseTime {
+  const t = normalize(product.title + " " + (product.when_to_use_en || "") + " " + (product.when_to_use_nl || ""));
+
+  if (t.includes("night") || t.includes("avond") || t.includes("evening")) return "evening";
+  if (t.includes("day cream") || t.includes("ochtend") || t.includes("morning") || t.includes("spf")) return "morning";
+  return "both";
+}
+
+function inferOrderIndex(product: Product): number {
+  const type = inferProductType(product);
+  switch (type) {
+    case "cleanser": return 1;
+    case "toner": return 2;
+    case "spot": return 3;
+    case "exfoliant": return 3;
+    case "serum": return 4;
+    case "gel": return 5;
+    case "cream": return 6;
+    case "oil": return 7;
+    case "spf": return 8;
+    default: return 5;
+  }
+}
+
+function sortProductsByRoutineOrder(products: Product[]): Product[] {
+  return [...products].sort((a, b) => inferOrderIndex(a) - inferOrderIndex(b));
+}
+
+function buildStepLabel(product: Product, lang: Lang): string {
+  const step = lang === "nl" ? product.routine_step_nl : product.routine_step_en;
+  return step || product.title;
 }
 
 // ───────────────── signals ─────────────────
@@ -241,7 +295,7 @@ function detectAntiAgeSignal(text: string): boolean {
   ]);
 }
 
-// ───────────────── intent detection ─────────────────
+// ───────────────── intents ─────────────────
 
 function detectUsageRequest(text: string): boolean {
   const t = normalize(text);
@@ -291,9 +345,31 @@ function detectSuitabilityRequest(text: string): boolean {
   ]);
 }
 
+function detectAmbiguousReference(text: string): boolean {
+  const t = normalize(text);
+  return hasAny(t, [
+    "hoe gebruik ik die",
+    "hoe gebruik ik dit",
+    "hoe gebruik ik deze",
+    "wat past hierbij",
+    "kan ik deze combineren",
+    "kan ik dit combineren",
+    "waar gebruik ik die",
+    "waar gebruik ik dit",
+    "hoe gebruik i die",
+    "how do i use this",
+    "how do i use that",
+    "what pairs with this",
+    "what goes with this",
+    "can i combine this",
+    "where do i use this",
+    "this one",
+    "that one"
+  ]);
+}
+
 function detectProductOnlyPreference(text: string): boolean {
   const t = normalize(text);
-
   return hasAny(t, [
     "maar ik wil maar een paar producten",
     "ik wil maar een paar producten",
@@ -320,7 +396,6 @@ function detectProductOnlyPreference(text: string): boolean {
 
 function detectProductRecommendationRequest(text: string): boolean {
   const t = normalize(text);
-
   return hasAny(t, [
     "raad een product aan",
     "raad producten aan",
@@ -364,7 +439,6 @@ function detectProductRecommendationRequest(text: string): boolean {
 
 function detectRoutineHelpRequest(text: string): boolean {
   const t = normalize(text);
-
   return hasAny(t, [
     "which routine fits me best",
     "what routine fits me best",
@@ -441,7 +515,6 @@ function detectCorrectionMessage(text: string): boolean {
 function isSpecificProductQuestion(message: string): boolean {
   const mentionedProducts = findMentionedProducts(message);
   const looseProduct = findProductFromLooseIntent(message);
-
   if (!(mentionedProducts.length === 1 || looseProduct)) return false;
   if (detectProductRecommendationRequest(message)) return false;
   if (detectUsageRequest(message)) return false;
@@ -490,6 +563,40 @@ function shouldRedirectToQuiz(message: string, combinedUserText: string): boolea
   }
 
   return false;
+}
+
+// ───────────────── history resolving ─────────────────
+
+function getRecentMentionedProducts(history: string[]): Product[] {
+  const recent: Product[] = [];
+  const seen = new Set<string>();
+
+  for (let i = history.length - 1; i >= 0; i--) {
+    const msg = history[i];
+    const explicit = findMentionedProducts(msg);
+    const loose = findProductFromLooseIntent(msg);
+    const candidates = loose ? [...explicit, loose] : explicit;
+
+    for (const p of candidates) {
+      if (!seen.has(p.title)) {
+        recent.push(p);
+        seen.add(p.title);
+      }
+    }
+
+    if (recent.length >= 3) break;
+  }
+
+  return recent.slice(0, 3);
+}
+
+function buildClarifyProductReply(products: Product[], lang: Lang): string {
+  const picks = products.slice(0, 2).map((p) => `**${p.title}**`).join(tr(lang, " of ", " or "));
+  return tr(
+    lang,
+    `Bedoel je ${picks}?`,
+    `Do you mean ${picks}?`
+  );
 }
 
 // ───────────────── recommendation helpers ─────────────────
@@ -625,24 +732,90 @@ function buildBundleUsageReply(bundle: Bundle, lang: Lang): string {
   return parts.join("\n\n");
 }
 
-function buildProductCombinationReply(product: Product, partner: Product | null, lang: Lang): string {
-  if (partner) {
-    const notes = [
-      lang === "nl" ? product.pairing_note_nl : product.pairing_note_en,
-      lang === "nl" ? partner.pairing_note_nl : partner.pairing_note_en,
-    ].filter(Boolean);
+function buildDynamicCombinationReply(a: Product, b: Product, lang: Lang): string {
+  const [first, second] = sortProductsByRoutineOrder([a, b]);
+  const firstType = inferProductType(first);
+  const secondType = inferProductType(second);
+  const firstTime = inferUseTime(first);
+  const secondTime = inferUseTime(second);
 
-    return [
-      `**${product.title} + ${partner.title}**`,
+  const notes: string[] = [];
+  let title = `**${a.title} + ${b.title}**`;
+
+  const bothActive =
+    [a.title, b.title].includes("AHA Peeling Concentrate") &&
+    ([a.title, b.title].includes("Vitamin C Serum") || [a.title, b.title].includes("Natural Retinol Alternative Oil Serum"));
+
+  const exfoliantWithSpot =
+    [a.title, b.title].includes("AHA Peeling Concentrate") &&
+    [a.title, b.title].includes("Acne Spot Care");
+
+  if (bothActive) {
+    notes.push(
       tr(
         lang,
-        "Dit kan een logische combinatie zijn, afhankelijk van je huid en de rest van je routine.",
-        "This can be a logical combination, depending on your skin and the rest of your routine."
-      ),
-      ...notes,
-    ].join("\n\n");
+        "Deze combinatie kan te actief zijn in dezelfde routine. Gebruik ze liever niet direct na elkaar in één routine, maar wissel ze af.",
+        "This combination can be too active in the same routine. It is better not to use them back to back in one routine, but to alternate them."
+      )
+    );
+  } else if (exfoliantWithSpot) {
+    notes.push(
+      tr(
+        lang,
+        "Deze combinatie kan voor sommige huiden wat te actief zijn. Bouw dit rustig op en gebruik het liever niet te agressief samen.",
+        "This combination can be a bit too active for some skin types. Build it in slowly and avoid using it too aggressively together."
+      )
+    );
+  } else {
+    notes.push(
+      tr(
+        lang,
+        "Dit kan een logische combinatie zijn binnen één routine, afhankelijk van je huid en hoe gevoelig die reageert.",
+        "This can be a logical combination within one routine, depending on your skin and how sensitive it is."
+      )
+    );
   }
 
+  if (!bothActive) {
+    if (firstType === "spf" || secondType === "spf") {
+      const spfProduct = firstType === "spf" ? first : second;
+      const otherProduct = spfProduct.title === first.title ? second : first;
+      notes.push(
+        tr(
+          lang,
+          `Gebruik eerst **${otherProduct.title}** en breng **${spfProduct.title}** als laatste stap in de ochtend aan.`,
+          `Use **${otherProduct.title}** first and apply **${spfProduct.title}** as the final step in the morning.`
+        )
+      );
+    } else {
+      notes.push(
+        tr(
+          lang,
+          `Gebruik eerst **${first.title}** en daarna **${second.title}**.`,
+          `Use **${first.title}** first and then **${second.title}**.`
+        )
+      );
+    }
+  }
+
+  if (firstTime === "morning" && secondTime === "morning") {
+    notes.push(tr(lang, "Deze combinatie past het best in de ochtend.", "This combination fits best in the morning."));
+  } else if (firstTime === "evening" && secondTime === "evening") {
+    notes.push(tr(lang, "Deze combinatie past het best in de avond.", "This combination fits best in the evening."));
+  } else if (bothActive) {
+    notes.push(tr(lang, "Gebruik overdag altijd SPF als je met actievere producten werkt.", "Always use SPF during the day when using more active products."));
+  }
+
+  const pairNoteA = lang === "nl" ? a.pairing_note_nl : a.pairing_note_en;
+  const pairNoteB = lang === "nl" ? b.pairing_note_nl : b.pairing_note_en;
+
+  if (pairNoteA) notes.push(pairNoteA);
+  if (pairNoteB && pairNoteB !== pairNoteA) notes.push(pairNoteB);
+
+  return [title, ...notes].join("\n\n");
+}
+
+function buildSingleProductPairingReply(product: Product, lang: Lang): string {
   const list = product.pairs_well_with?.length
     ? `${tr(lang, "Producten die hier goed bij passen:", "Products that pair well with this:")}\n${product.pairs_well_with.map((p) => `- ${p}`).join("\n")}`
     : tr(lang, "Ik heb hier nog geen pairing-lijst voor.", "I don't have a pairing list for this yet.");
@@ -789,6 +962,7 @@ export async function POST(req: Request) {
     const mentionedProducts = findMentionedProducts(message);
     const mentionedBundles = findMentionedBundles(message);
     const looseProduct = findProductFromLooseIntent(message);
+    const recentProducts = getRecentMentionedProducts(userTimeline);
 
     // 1. product recommendation hard override
     if (
@@ -813,7 +987,58 @@ export async function POST(req: Request) {
       );
     }
 
-    // 2. usage bundle
+    // 2. ambiguous reference handling
+    if (detectAmbiguousReference(message) || ((detectUsageRequest(message) || detectCombinationRequest(message) || detectWhereRequest(message) || detectSuitabilityRequest(message)) && !mentionedProducts.length && !looseProduct && !mentionedBundles.length)) {
+      if (recentProducts.length === 1) {
+        const resolved = recentProducts[0];
+
+        if (detectUsageRequest(message)) {
+          return new Response(
+            JSON.stringify({
+              reply: buildProductUsageReply(resolved, lang),
+              actions: buildActionsForProduct(resolved, lang),
+              lang,
+            }),
+            { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          );
+        }
+
+        if (detectCombinationRequest(message)) {
+          return new Response(
+            JSON.stringify({
+              reply: buildSingleProductPairingReply(resolved, lang),
+              actions: buildActionsForProduct(resolved, lang),
+              lang,
+            }),
+            { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          );
+        }
+
+        if (detectWhereRequest(message)) {
+          return new Response(
+            JSON.stringify({
+              reply: tr(lang, `**${resolved.title}**\n\nJe vindt het hier.`, `**${resolved.title}**\n\nYou can find it here.`),
+              actions: buildActionsForProduct(resolved, lang),
+              lang,
+            }),
+            { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          );
+        }
+      }
+
+      if (recentProducts.length >= 2) {
+        return new Response(
+          JSON.stringify({
+            reply: buildClarifyProductReply(recentProducts, lang),
+            actions: recentProducts.slice(0, 2).flatMap((p) => buildActionsForProduct(p, lang)),
+            lang,
+          }),
+          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+    }
+
+    // 3. usage bundle
     if (detectUsageRequest(message)) {
       const bundle = mentionedBundles[0] || findBundleFromLooseIntent(message);
       if (bundle) {
@@ -828,7 +1053,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 3. usage product
+    // 4. usage product
     if (detectUsageRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -841,26 +1066,26 @@ export async function POST(req: Request) {
       );
     }
 
-    // 4. combinations
+    // 5. combinations
     if (detectCombinationRequest(message)) {
-      const products = mentionedProducts.length ? mentionedProducts : looseProduct ? [looseProduct] : [];
+      const explicitProducts = mentionedProducts.length ? mentionedProducts : looseProduct ? [looseProduct] : [];
 
-      if (products.length >= 2) {
+      if (explicitProducts.length >= 2) {
         return new Response(
           JSON.stringify({
-            reply: buildProductCombinationReply(products[0], products[1], lang),
-            actions: [buildActionsForProduct(products[0], lang)[0], buildActionsForProduct(products[1], lang)[0]].slice(0, 2),
+            reply: buildDynamicCombinationReply(explicitProducts[0], explicitProducts[1], lang),
+            actions: [buildActionsForProduct(explicitProducts[0], lang)[0], buildActionsForProduct(explicitProducts[1], lang)[0]].slice(0, 2),
             lang,
           }),
           { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
         );
       }
 
-      if (products.length === 1) {
+      if (explicitProducts.length === 1) {
         return new Response(
           JSON.stringify({
-            reply: buildProductCombinationReply(products[0], null, lang),
-            actions: buildActionsForProduct(products[0], lang),
+            reply: buildSingleProductPairingReply(explicitProducts[0], lang),
+            actions: buildActionsForProduct(explicitProducts[0], lang),
             lang,
           }),
           { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
@@ -868,7 +1093,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 5. compare
+    // 6. compare
     if (detectCompareRequest(message)) {
       const compareItems = [...mentionedBundles, ...mentionedProducts].slice(0, 2);
       if (compareItems.length === 2) {
@@ -887,7 +1112,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 6. where
+    // 7. where
     if (detectWhereRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -900,7 +1125,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 7. suitability
+    // 8. suitability
     if (detectSuitabilityRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -917,7 +1142,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 8. routine to quiz
+    // 9. routine to quiz
     if (shouldRedirectToQuiz(message, combinedUserText)) {
       const quizOut = buildQuizRedirectReply(lang);
       return new Response(
@@ -926,7 +1151,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 9. specific product
+    // 10. specific product
     if (mentionedProducts.length === 1 || looseProduct) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -939,7 +1164,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 10. specific bundle
+    // 11. specific bundle
     if (mentionedBundles.length === 1) {
       const bundle = mentionedBundles[0];
       return new Response(
