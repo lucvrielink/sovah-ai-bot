@@ -1,96 +1,330 @@
 {
+  "generated_from": "SOVAH site bundle usage/combo layer for chatbot",
   "bundles": [
     {
       "name": "Dry & Dehydrated Skin Routine",
       "url": "https://sovahcare.com/products/dry-dehydrated-skin-routine",
-      "description": "Best for dry or dehydrated skin that needs comfort and hydration.",
-      "products": [
-        "Micellar Cleansing Water",
-        "Hydrating Toner",
-        "Hydrating Serum",
-        "Moisturising Day Cream",
-        "Ceramide Barrier Night Cream"
-      ]
+      "how_to_use_nl": {
+        "morning": [
+          "Reinig met Micellar Cleansing Water.",
+          "Breng Hydrating Toner aan op licht vochtige huid.",
+          "Breng Hydrating Serum aan.",
+          "Sluit af met Moisturising Day Cream.",
+          "Gebruik overdag sunscreen."
+        ],
+        "evening": [
+          "Reinig met Micellar Cleansing Water.",
+          "Breng Hydrating Toner aan.",
+          "Breng Hydrating Serum aan of Double Hydration Boost Gel + HA als extra hydratatie nodig is.",
+          "Sluit af met Ceramide Barrier Night Cream."
+        ]
+      },
+      "how_to_use_en": {
+        "morning": [
+          "Cleanse with Micellar Cleansing Water.",
+          "Apply Hydrating Toner to lightly damp skin.",
+          "Apply Hydrating Serum.",
+          "Finish with Moisturising Day Cream.",
+          "Use sunscreen during the day."
+        ],
+        "evening": [
+          "Cleanse with Micellar Cleansing Water.",
+          "Apply Hydrating Toner.",
+          "Apply Hydrating Serum or Double Hydration Boost Gel + HA if extra hydration is needed.",
+          "Finish with Ceramide Barrier Night Cream."
+        ]
+      },
+      "best_combined_with": [
+        "Double Hydration Boost Gel + HA",
+        "Sun Protection SPF50 Stick, no tint"
+      ],
+      "combination_note_nl": "Sterke routine als de huid trekkerig of vochtarm aanvoelt. Extra gel of dagelijkse SPF sluit hier logisch op aan.",
+      "combination_note_en": "A strong routine when skin feels tight or dehydrated. The extra gel or daily SPF fits naturally with it.",
+      "patch_test_nl": "Test elk product eerst op een klein stukje huid en wacht 24 uur.",
+      "patch_test_en": "Patch test each product on a small area first and wait 24 hours.",
+      "caution_nl": "Introduceer nieuwe producten geleidelijk en stop bij irritatie of ongemak.",
+      "caution_en": "Introduce new products gradually and stop if irritation or discomfort occurs."
     },
     {
       "name": "Combination Skin Balance Routine",
       "url": "https://sovahcare.com/products/combination-skin-balance-routine",
-      "description": "Best for combination skin that needs balance without feeling heavy.",
-      "products": [
-        "Purifying Mousse",
-        "Hydrating Toner",
-        "Niacinamide Gel Moisturiser",
-        "Sun Protection SPF50 Stick, no tint"
-      ]
+      "how_to_use_nl": {
+        "morning": [
+          "Reinig met Purifying Mousse.",
+          "Breng Hydrating Toner aan.",
+          "Breng Niacinamide Gel Moisturiser aan.",
+          "Sluit af met Sun Protection SPF50 Stick."
+        ],
+        "evening": [
+          "Reinig met Purifying Mousse.",
+          "Breng Hydrating Toner aan.",
+          "Breng Niacinamide Gel Moisturiser aan.",
+          "Gebruik Oil-Free Hydrating Gel op vettere zones als dat nodig is."
+        ]
+      },
+      "how_to_use_en": {
+        "morning": [
+          "Cleanse with Purifying Mousse.",
+          "Apply Hydrating Toner.",
+          "Apply Niacinamide Gel Moisturiser.",
+          "Finish with Sun Protection SPF50 Stick."
+        ],
+        "evening": [
+          "Cleanse with Purifying Mousse.",
+          "Apply Hydrating Toner.",
+          "Apply Niacinamide Gel Moisturiser.",
+          "Use Oil-Free Hydrating Gel on oil-prone areas if needed."
+        ]
+      },
+      "best_combined_with": [
+        "Double Hydration Boost Gel + HA",
+        "AHA Peeling Concentrate"
+      ],
+      "combination_note_nl": "Handige basis voor combinatiehuid. Je kunt drogere zones aanvullen met extra hydratatie en 1–2 keer per week een exfoliërende stap toevoegen.",
+      "combination_note_en": "A useful base for combination skin. You can add extra hydration to drier areas and an exfoliating step 1–2 times per week.",
+      "patch_test_nl": "Patch test nieuwe producten eerst 24 uur.",
+      "patch_test_en": "Patch test new products for 24 hours first.",
+      "caution_nl": "Bouw nieuwe stappen rustig op, vooral als je huid snel reageert.",
+      "caution_en": "Build new steps in slowly, especially if your skin reacts easily."
     },
     {
       "name": "Simple Daily Skincare Routine",
       "url": "https://sovahcare.com/products/simple-daily-skincare-routine",
-      "description": "Best for an easy everyday routine with no unnecessary steps.",
-      "products": [
-        "Micellar Cleansing Water",
-        "Moisturising Day Cream",
-        "Ceramide Barrier Night Cream",
-        "Sun Protection SPF50 Stick, no tint"
-      ]
+      "how_to_use_nl": {
+        "morning": [
+          "Reinig met Micellar Cleansing Water.",
+          "Breng Moisturising Day Cream aan.",
+          "Sluit af met Sun Protection SPF50 Stick."
+        ],
+        "evening": [
+          "Reinig met Micellar Cleansing Water.",
+          "Breng Ceramide Barrier Night Cream aan."
+        ]
+      },
+      "how_to_use_en": {
+        "morning": [
+          "Cleanse with Micellar Cleansing Water.",
+          "Apply Moisturising Day Cream.",
+          "Finish with Sun Protection SPF50 Stick."
+        ],
+        "evening": [
+          "Cleanse with Micellar Cleansing Water.",
+          "Apply Ceramide Barrier Night Cream."
+        ]
+      },
+      "best_combined_with": [
+        "Hydrating Toner",
+        "Smoothing Eye Cream"
+      ],
+      "combination_note_nl": "Goede instaproutine. Voeg toner toe voor extra hydratatie of eye cream als je de routine iets completer wilt maken.",
+      "combination_note_en": "A good starter routine. Add toner for extra hydration or eye cream if you want to make it slightly more complete.",
+      "patch_test_nl": "Patch test eerst 24 uur.",
+      "patch_test_en": "Patch test first for 24 hours.",
+      "caution_nl": "Stop bij irritatie of ongemak.",
+      "caution_en": "Stop if irritation or discomfort occurs."
     },
     {
       "name": "Sensitive & Reactive Skin Routine",
       "url": "https://sovahcare.com/products/sensitive-reactive-skin-routine",
-      "description": "Best for sensitive or reactive skin that needs a gentle routine.",
-      "products": [
-        "Micellar Cleansing Water",
-        "Hydrating Toner",
-        "Hydrating Serum",
-        "Calming Facial Oil",
-        "Ceramide Barrier Night Cream"
-      ]
+      "how_to_use_nl": {
+        "morning": [
+          "Reinig zacht met Micellar Cleansing Water.",
+          "Breng Hydrating Toner aan op vochtige huid.",
+          "Breng Hydrating Serum aan.",
+          "Sluit af met een geschikte sunscreen."
+        ],
+        "evening": [
+          "Reinig met Micellar Cleansing Water.",
+          "Breng Hydrating Toner aan.",
+          "Breng Hydrating Serum aan.",
+          "Gebruik een paar druppels Calming Facial Oil.",
+          "Sluit af met Ceramide Barrier Night Cream."
+        ]
+      },
+      "how_to_use_en": {
+        "morning": [
+          "Gently cleanse with Micellar Cleansing Water.",
+          "Apply Hydrating Toner to damp skin.",
+          "Apply Hydrating Serum.",
+          "Finish with a suitable sunscreen."
+        ],
+        "evening": [
+          "Cleanse with Micellar Cleansing Water.",
+          "Apply Hydrating Toner.",
+          "Apply Hydrating Serum.",
+          "Use a few drops of Calming Facial Oil.",
+          "Finish with Ceramide Barrier Night Cream."
+        ]
+      },
+      "best_combined_with": [
+        "Sun Protection SPF50 Stick, no tint"
+      ],
+      "combination_note_nl": "Houd deze routine rustig en voeg liever geen extra exfoliërende of sterke treatments toe zonder goede reden.",
+      "combination_note_en": "Keep this routine calm and avoid adding exfoliating or stronger treatment steps without a good reason.",
+      "patch_test_nl": "Patch test eerst 24 uur, vooral bij gevoelige huid.",
+      "patch_test_en": "Patch test first for 24 hours, especially with sensitive skin.",
+      "caution_nl": "Introduceer nieuwe producten langzaam en stop bij roodheid of irritatie.",
+      "caution_en": "Introduce new products slowly and stop if redness or irritation appears."
     },
     {
       "name": "Normal & Balanced Skin Routine",
       "url": "https://sovahcare.com/products/normal-balanced-skin-routine",
-      "description": "Best for normal skin that wants a simple balanced routine.",
-      "products": [
-        "Micellar Cleansing Water",
-        "Hydrating Toner",
-        "Niacinamide Gel Moisturiser",
-        "Sun Protection SPF50 Stick, no tint"
-      ]
+      "how_to_use_nl": {
+        "morning": [
+          "Reinig met Micellar Cleansing Water.",
+          "Breng Hydrating Toner aan.",
+          "Breng Niacinamide Gel Moisturiser aan.",
+          "Sluit af met Sun Protection SPF50 Stick."
+        ],
+        "evening": [
+          "Reinig met Micellar Cleansing Water.",
+          "Breng Hydrating Toner aan.",
+          "Breng Niacinamide Gel Moisturiser aan."
+        ]
+      },
+      "how_to_use_en": {
+        "morning": [
+          "Cleanse with Micellar Cleansing Water.",
+          "Apply Hydrating Toner.",
+          "Apply Niacinamide Gel Moisturiser.",
+          "Finish with Sun Protection SPF50 Stick."
+        ],
+        "evening": [
+          "Cleanse with Micellar Cleansing Water.",
+          "Apply Hydrating Toner.",
+          "Apply Niacinamide Gel Moisturiser."
+        ]
+      },
+      "best_combined_with": [
+        "Antioxidant Ginkgo Gel Booster",
+        "Smoothing Eye Cream"
+      ],
+      "combination_note_nl": "Makkelijke dagelijkse basis die je licht kunt uitbreiden met een booster of eye cream.",
+      "combination_note_en": "An easy daily base that you can lightly expand with a booster or eye cream.",
+      "patch_test_nl": "Patch test eerst 24 uur.",
+      "patch_test_en": "Patch test first for 24 hours.",
+      "caution_nl": "Stop bij irritatie of ongemak.",
+      "caution_en": "Stop if irritation or discomfort occurs."
     },
     {
       "name": "Glow & Radiance Routine",
       "url": "https://sovahcare.com/products/glow-radiance-routine",
-      "description": "Best for dull or uneven-looking skin that wants more glow.",
-      "products": [
-        "Micellar Cleansing Water",
-        "Vitamin C Serum",
-        "Antioxidant Ginkgo Gel Booster",
-        "Moisturising Day Cream",
-        "Sun Protection SPF50 Stick, no tint"
-      ]
+      "how_to_use_nl": {
+        "morning": [
+          "Reinig met Micellar Cleansing Water.",
+          "Breng Vitamin C Serum aan.",
+          "Breng Antioxidant Ginkgo Gel Booster aan.",
+          "Sluit af met Moisturising Day Cream.",
+          "Breng Sun Protection SPF50 Stick aan."
+        ],
+        "evening": [
+          "Reinig met Micellar Cleansing Water.",
+          "Breng Hydrating Serum aan als extra vocht nodig is.",
+          "Sluit af met Ceramide Barrier Night Cream als de huid droog aanvoelt."
+        ]
+      },
+      "how_to_use_en": {
+        "morning": [
+          "Cleanse with Micellar Cleansing Water.",
+          "Apply Vitamin C Serum.",
+          "Apply Antioxidant Ginkgo Gel Booster.",
+          "Finish with Moisturising Day Cream.",
+          "Apply Sun Protection SPF50 Stick."
+        ],
+        "evening": [
+          "Cleanse with Micellar Cleansing Water.",
+          "Apply Hydrating Serum if extra moisture is needed.",
+          "Finish with Ceramide Barrier Night Cream if the skin feels dry."
+        ]
+      },
+      "best_combined_with": [
+        "Brightening Face&Body Exfoliator with Kojic Acid",
+        "Dark Spot Face Cream with Kojic Acid"
+      ],
+      "combination_note_nl": "Goede routine voor doffe of ongelijk ogende huid. Je kunt 1–2 keer per week een brightening extra stap toevoegen.",
+      "combination_note_en": "A good routine for dull or uneven-looking skin. You can add an extra brightening step 1–2 times per week.",
+      "patch_test_nl": "Patch test eerst 24 uur.",
+      "patch_test_en": "Patch test first for 24 hours.",
+      "caution_nl": "Voeg brightening of antioxidant producten rustig toe en gebruik overdag SPF.",
+      "caution_en": "Add brightening or antioxidant products gradually and wear SPF during the day."
     },
     {
       "name": "Firm & Smooth Skin Routine",
       "url": "https://sovahcare.com/products/firm-smooth-skin-routine",
-      "description": "Best for early signs of aging, smoothness, and firmness.",
-      "products": [
-        "Micellar Cleansing Water",
-        "Collagen Boost Serum",
-        "Anti-Age Day Cream",
-        "Peptide Anti-Aging Serum",
-        "Ceramide Barrier Night Cream"
-      ]
+      "how_to_use_nl": {
+        "morning": [
+          "Reinig met Micellar Cleansing Water.",
+          "Breng Collagen Boost Serum aan.",
+          "Breng Anti-Age Day Cream aan.",
+          "Sluit af met Sun Protection SPF50 Stick."
+        ],
+        "evening": [
+          "Reinig met Micellar Cleansing Water.",
+          "Breng Peptide Anti-Aging Serum aan.",
+          "Sluit af met Ceramide Barrier Night Cream."
+        ]
+      },
+      "how_to_use_en": {
+        "morning": [
+          "Cleanse with Micellar Cleansing Water.",
+          "Apply Collagen Boost Serum.",
+          "Apply Anti-Age Day Cream.",
+          "Finish with Sun Protection SPF50 Stick."
+        ],
+        "evening": [
+          "Cleanse with Micellar Cleansing Water.",
+          "Apply Peptide Anti-Aging Serum.",
+          "Finish with Ceramide Barrier Night Cream."
+        ]
+      },
+      "best_combined_with": [
+        "Natural Retinol Alternative Oil Serum",
+        "Smoothing Eye Cream"
+      ],
+      "combination_note_nl": "Sterke anti-age basis die je in de avond kunt uitbreiden met een extra oil-serum of oogverzorging.",
+      "combination_note_en": "A strong anti-age base that you can extend in the evening with an oil serum or eye care.",
+      "patch_test_nl": "Patch test eerst 24 uur.",
+      "patch_test_en": "Patch test first for 24 hours.",
+      "caution_nl": "Introduceer anti-age producten geleidelijk en gebruik overdag SPF.",
+      "caution_en": "Introduce anti-age products gradually and use SPF during the day."
     },
     {
       "name": "Clear & Balanced Skin Routine",
       "url": "https://sovahcare.com/products/clear-balanced-skin-routine",
-      "description": "Best for oily or blemish-prone skin that needs a fresh lightweight routine.",
-      "products": [
-        "Purifying Mousse",
-        "Niacinamide Gel Moisturiser",
-        "Oil-Free Hydrating Gel",
-        "Sun Protection SPF50 Stick, no tint"
-      ]
+      "how_to_use_nl": {
+        "morning": [
+          "Reinig met Purifying Mousse.",
+          "Breng Niacinamide Gel Moisturiser aan.",
+          "Sluit af met Sun Protection SPF50 Stick."
+        ],
+        "evening": [
+          "Reinig met Purifying Mousse.",
+          "Breng Niacinamide Gel Moisturiser aan.",
+          "Gebruik Oil-Free Hydrating Gel als extra hydratatie nodig is."
+        ]
+      },
+      "how_to_use_en": {
+        "morning": [
+          "Cleanse with Purifying Mousse.",
+          "Apply Niacinamide Gel Moisturiser.",
+          "Finish with Sun Protection SPF50 Stick."
+        ],
+        "evening": [
+          "Cleanse with Purifying Mousse.",
+          "Apply Niacinamide Gel Moisturiser.",
+          "Use Oil-Free Hydrating Gel if extra hydration is needed."
+        ]
+      },
+      "best_combined_with": [
+        "Acne Spot Care",
+        "AHA Peeling Concentrate"
+      ],
+      "combination_note_nl": "Sterke routine voor vettere of onrustige huid. Voeg gericht spot care toe of 1–2 keer per week een exfoliërende stap.",
+      "combination_note_en": "A strong routine for oilier or breakout-prone skin. Add targeted spot care or an exfoliating step 1–2 times per week.",
+      "patch_test_nl": "Patch test eerst 24 uur.",
+      "patch_test_en": "Patch test first for 24 hours.",
+      "caution_nl": "Bouw actieve stappen rustig op, vooral bij gevoeligheid of droogte.",
+      "caution_en": "Build active steps in gradually, especially if you are prone to sensitivity or dryness."
     }
   ]
 }
