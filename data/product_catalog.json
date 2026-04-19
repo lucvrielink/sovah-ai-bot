@@ -1,293 +1,484 @@
 {
-  "generated_from": "Simplified for SOVAH chatbot",
+  "generated_from": "SOVAH site usage/combo layer for chatbot",
   "products": [
     {
       "title": "Micellar Cleansing Water",
       "handle": "micellar-cleansing-water",
       "url": "https://sovahcare.com/products/micellar-cleansing-water",
-      "first_available_variant_id": 51851602854226,
-      "source_tags": [
-        "All skin types",
-        "Cleanser"
+      "usage_nl": "Breng aan op een wattenschijfje en veeg zacht over gezicht, ogen en lippen om make-up, vuil en onzuiverheden te verwijderen. Herhaal tot het wattenschijfje schoon blijft.",
+      "usage_en": "Saturate a cotton pad and gently sweep over the face, eyes, and lips to remove makeup, dirt, and impurities. Repeat until the cotton pad comes away clean.",
+      "when_to_use_nl": "Gebruik 's ochtends om de huid op te frissen en 's avonds als eerste stap van je reiniging. Afspoelen is niet nodig.",
+      "when_to_use_en": "Use in the morning to refresh the skin and in the evening as the first step of your cleansing routine. Rinsing is not required.",
+      "routine_step_nl": "Eerste stap",
+      "routine_step_en": "First step",
+      "pairs_well_with": [
+        "Hydrating Toner",
+        "Hydrating Serum",
+        "Vitamin C Serum",
+        "Ceramide Barrier Night Cream"
       ],
-      "short_copy_nl": "Zachte reiniger voor dagelijks gebruik.",
-      "short_copy_en": "A gentle everyday cleanser for all skin types."
+      "pairing_note_nl": "Een logische basisreiniger voor bijna elke routine. Gebruik daarna een toner, serum of crème.",
+      "pairing_note_en": "A logical base cleanser for almost any routine. Follow with a toner, serum, or cream.",
+      "pairing_source": "inferred_from_site_routines"
     },
     {
       "title": "Hydrating Toner",
       "handle": "hydrating-toner",
       "url": "https://sovahcare.com/products/hydrating-toner",
-      "first_available_variant_id": 51881462956370,
-      "source_tags": [
-        "Dry skin",
-        "Hydration"
+      "usage_nl": "Breng een kleine hoeveelheid aan op een schone huid, op een wattenschijfje of in je handen, en veeg of dep zacht over gezicht en hals tot het is opgenomen.",
+      "usage_en": "Apply a small amount to clean skin, on a cotton pad or into your hands, and gently sweep or pat over the face and neck until absorbed.",
+      "when_to_use_nl": "Gebruik direct na het reinigen, 's ochtends en/of 's avonds, om de huid in balans te brengen en voor te bereiden op serums en crèmes.",
+      "when_to_use_en": "Use immediately after cleansing, morning and/or evening, to rebalance the skin and prepare it for serums and moisturizers.",
+      "routine_step_nl": "Na reinigen",
+      "routine_step_en": "After cleansing",
+      "pairs_well_with": [
+        "Hydrating Serum",
+        "Double Hydration Boost Gel + HA",
+        "Niacinamide Gel Moisturiser",
+        "Sun Protection SPF50 Stick, no tint"
       ],
-      "short_copy_nl": "Hydraterende toner voor comfort en balans.",
-      "short_copy_en": "A hydrating toner for comfort and balance."
+      "pairing_note_nl": "Werkt goed als hydraterende tussenstap voor serum, gel of moisturiser.",
+      "pairing_note_en": "Works well as a hydrating prep step before a serum, gel, or moisturizer.",
+      "pairing_source": "site_and_routines"
     },
     {
       "title": "Hydrating Serum",
       "handle": "hydrating-serum",
       "url": "https://sovahcare.com/products/hydrating-serum",
-      "first_available_variant_id": 51886996390226,
-      "source_tags": [
-        "All skin types",
-        "Hydration"
+      "usage_nl": "Breng 1–2 pompjes aan op een schone, getonerde huid en masseer zacht in op gezicht en hals.",
+      "usage_en": "Apply 1–2 pumps to clean, toned skin and gently massage into the face and neck.",
+      "when_to_use_nl": "Gebruik 's ochtends en/of 's avonds vóór je moisturiser om hydratatie vast te houden.",
+      "when_to_use_en": "Use morning and/or evening before your moisturizer to lock in hydration.",
+      "routine_step_nl": "Na toner, vóór crème",
+      "routine_step_en": "After toner, before cream",
+      "pairs_well_with": [
+        "Hydrating Toner",
+        "Moisturising Day Cream",
+        "Ceramide Barrier Night Cream",
+        "Double Hydration Boost Gel + HA"
       ],
-      "short_copy_nl": "Licht serum voor extra hydratatie.",
-      "short_copy_en": "A lightweight serum for extra hydration."
+      "pairing_note_nl": "Sterke combinatie als je extra hydratatie en comfort wilt.",
+      "pairing_note_en": "A strong combination when you want extra hydration and comfort.",
+      "pairing_source": "site_and_routines"
     },
     {
       "title": "Double Hydration Boost Gel + HA",
       "handle": "double-hydration-boost-gel-ha",
       "url": "https://sovahcare.com/products/double-hydration-boost-gel-ha",
-      "first_available_variant_id": 51887105278290,
-      "source_tags": [
-        "Hydration",
-        "Barrier support"
+      "usage_nl": "Breng 1–2 pompjes aan op een schone, getonerde huid en masseer zacht in op gezicht en hals tot het is opgenomen.",
+      "usage_en": "Apply 1–2 pumps to clean, toned skin and gently massage into the face and neck until absorbed.",
+      "when_to_use_nl": "Gebruik 's ochtends en/of 's avonds vóór je moisturiser voor een extra hydratatieboost.",
+      "when_to_use_en": "Use morning and/or evening before your moisturizer for an extra hydration boost.",
+      "routine_step_nl": "Na toner/serum, vóór crème",
+      "routine_step_en": "After toner/serum, before cream",
+      "pairs_well_with": [
+        "Hydrating Toner",
+        "Hydrating Serum",
+        "Moisturising Day Cream",
+        "Ceramide Barrier Night Cream",
+        "All-In-One Facial Oil"
       ],
-      "short_copy_nl": "Hydraterende gel voor een comfortabel huidgevoel.",
-      "short_copy_en": "A hydrating gel for a more comfortable skin feel."
+      "pairing_note_nl": "Past goed in een drogere routine als extra hydratatiestap.",
+      "pairing_note_en": "Fits well into a drier-skin routine as an extra hydration step.",
+      "pairing_source": "site"
     },
     {
       "title": "Moisturising Day Cream",
       "handle": "moisturising-day-cream",
       "url": "https://sovahcare.com/products/moisturising-day-cream",
-      "first_available_variant_id": 51887248539986,
-      "source_tags": [
-        "All skin types",
-        "Moisturiser"
+      "usage_nl": "Breng een kleine hoeveelheid aan op een schone, droge huid en masseer zacht in op gezicht en hals.",
+      "usage_en": "Apply a small amount to clean, dry skin and gently massage into the face and neck.",
+      "when_to_use_nl": "Gebruik 's ochtends als laatste verzorgingsstap vóór SPF.",
+      "when_to_use_en": "Use in the morning as the final care step before SPF.",
+      "routine_step_nl": "Laatste stap vóór SPF",
+      "routine_step_en": "Final step before SPF",
+      "pairs_well_with": [
+        "Hydrating Serum",
+        "Hydrating Toner",
+        "Sun Protection SPF50 Stick, no tint",
+        "Antioxidant Ginkgo Gel Booster"
       ],
-      "short_copy_nl": "Dagcrème voor dagelijkse hydratatie en comfort.",
-      "short_copy_en": "A day cream for daily hydration and comfort."
+      "pairing_note_nl": "Werkt goed bovenop hydraterende serums en onder SPF.",
+      "pairing_note_en": "Works well on top of hydrating serums and under SPF.",
+      "pairing_source": "site_and_routines"
     },
     {
       "title": "Ceramide Barrier Night Cream",
       "handle": "ceramide-barrier-night-cream",
       "url": "https://sovahcare.com/products/ceramide-barrier-night-cream",
-      "first_available_variant_id": 51887297593682,
-      "source_tags": [
-        "Barrier support",
-        "Night cream"
+      "usage_nl": "Breng een kleine hoeveelheid aan op een schone, droge huid en masseer zacht in op gezicht en hals.",
+      "usage_en": "Apply a small amount to clean, dry skin and gently massage into the face and neck.",
+      "when_to_use_nl": "Gebruik 's avonds als laatste stap van je routine.",
+      "when_to_use_en": "Use in the evening as the final step of your routine.",
+      "routine_step_nl": "Laatste avondstap",
+      "routine_step_en": "Final evening step",
+      "pairs_well_with": [
+        "Hydrating Serum",
+        "Calming Facial Oil",
+        "Peptide Anti-Aging Serum",
+        "Double Hydration Boost Gel + HA"
       ],
-      "short_copy_nl": "Rijke nachtcrème voor comfort en herstel.",
-      "short_copy_en": "A rich night cream for comfort and barrier support."
+      "pairing_note_nl": "Sterke afsluiter om hydratatie en comfort vast te houden in de avond.",
+      "pairing_note_en": "A strong finishing step to lock in hydration and comfort at night.",
+      "pairing_source": "site_and_routines"
     },
     {
       "title": "Purifying Mousse",
       "handle": "purifying-mousse",
       "url": "https://sovahcare.com/products/purifying-mousse",
-      "first_available_variant_id": 51900553560402,
-      "source_tags": [
-        "Blemishes",
-        "Cleanser"
+      "usage_nl": "Breng een kleine hoeveelheid aan op een vochtige huid, masseer in tot een lichte schuimlaag ontstaat en spoel af met lauw water.",
+      "usage_en": "Apply a small amount to damp skin, massage until it forms a light lather, and rinse with lukewarm water.",
+      "when_to_use_nl": "Gebruik 's ochtends en/of 's avonds als eerste stap van je routine.",
+      "when_to_use_en": "Use morning and/or evening as the first step of your routine.",
+      "routine_step_nl": "Eerste stap",
+      "routine_step_en": "First step",
+      "pairs_well_with": [
+        "Hydrating Toner",
+        "Niacinamide Gel Moisturiser",
+        "Brightening Face&Body Exfoliator with Kojic Acid",
+        "Sun Protection SPF50 Stick, no tint"
       ],
-      "short_copy_nl": "Schuimende reiniger voor een frisse, lichte finish.",
-      "short_copy_en": "A foaming cleanser for a fresh, lightweight feel."
+      "pairing_note_nl": "Goede reinigingsbasis voor een lichtere routine bij vettere of onrustige huid.",
+      "pairing_note_en": "A good cleansing base for a lighter routine for oilier or breakout-prone skin.",
+      "pairing_source": "site"
     },
     {
       "title": "Antioxidant Ginkgo Gel Booster",
       "handle": "antioxidant-ginkgo-gel-booster",
       "url": "https://sovahcare.com/products/antioxidant-ginkgo-gel-booster",
-      "first_available_variant_id": 51900617851218,
-      "source_tags": [
-        "Glow",
-        "Hydration"
+      "usage_nl": "Breng 1–2 pompjes aan op een schone, droge huid en masseer zacht in op gezicht en hals. Je kunt het ook door je moisturiser mengen.",
+      "usage_en": "Apply 1–2 pumps to clean, dry skin and gently massage into the face and neck. You can also mix it into your moisturizer.",
+      "when_to_use_nl": "Gebruik 's ochtends en/of 's avonds vóór je moisturiser of gezichtsolie.",
+      "when_to_use_en": "Use morning and/or evening before your moisturizer or facial oil.",
+      "routine_step_nl": "Voor crème of olie",
+      "routine_step_en": "Before cream or oil",
+      "pairs_well_with": [
+        "Vitamin C Serum",
+        "Moisturising Day Cream",
+        "All-In-One Facial Oil",
+        "Calming Facial Oil"
       ],
-      "short_copy_nl": "Lichte booster voor hydratatie en een frissere uitstraling.",
-      "short_copy_en": "A lightweight booster for hydration and a fresher look."
+      "pairing_note_nl": "Fijne booster als je glow en extra comfort wilt zonder zware stap.",
+      "pairing_note_en": "A nice booster when you want glow and extra comfort without a heavy step.",
+      "pairing_source": "site_and_routines"
     },
     {
       "title": "Calming Facial Oil",
       "handle": "calming-facial-oil",
       "url": "https://sovahcare.com/products/calming-facial-oil",
-      "first_available_variant_id": 51900798566738,
-      "source_tags": [
-        "Sensitive skin",
-        "Comfort"
+      "usage_nl": "Breng 1–3 druppels aan op een schone, droge huid en masseer zacht in op gezicht en hals.",
+      "usage_en": "Apply 1–3 drops to clean, dry skin and gently massage into the face and neck.",
+      "when_to_use_nl": "Gebruik 's ochtends en/of 's avonds als laatste stap van je routine.",
+      "when_to_use_en": "Use morning and/or evening as the final step of your routine.",
+      "routine_step_nl": "Laatste stap",
+      "routine_step_en": "Final step",
+      "pairs_well_with": [
+        "Hydrating Toner",
+        "Antioxidant Ginkgo Gel Booster",
+        "Ceramide Barrier Night Cream",
+        "Moisturising Day Cream"
       ],
-      "short_copy_nl": "Kalmerende olie voor comfort en zachtheid.",
-      "short_copy_en": "A calming facial oil for comfort and softness."
+      "pairing_note_nl": "Past goed bij gevoelige of droge huid als afsluitende comfortstap.",
+      "pairing_note_en": "Pairs well with sensitive or dry-skin routines as a final comfort step.",
+      "pairing_source": "site"
     },
     {
       "title": "AHA Peeling Concentrate",
       "handle": "aha-peeling-concentrate",
       "url": "https://sovahcare.com/products/aha-peeling-concentrate",
-      "first_available_variant_id": 51900930589010,
-      "source_tags": [
-        "Texture",
-        "Glow"
+      "usage_nl": "Breng 1 pompje aan op een schone, droge huid in de avond, vermijd oogcontour en lippen, en laat het zitten gedurende de nacht.",
+      "usage_en": "Apply 1 pump to clean, dry skin at night, avoid the eye area and lips, and leave it on overnight.",
+      "when_to_use_nl": "Start met 1–2 keer per week in de avond en bouw alleen op als je huid het goed verdraagt. Gebruik daarna een milde hydraterende stap.",
+      "when_to_use_en": "Start with 1–2 times per week at night and only increase if your skin tolerates it well. Follow with a gentle hydrating step.",
+      "routine_step_nl": "Avondbehandeling na reinigen",
+      "routine_step_en": "Night treatment after cleansing",
+      "pairs_well_with": [
+        "Hydrating Serum",
+        "Ceramide Barrier Night Cream",
+        "Purifying Mousse"
       ],
-      "short_copy_nl": "Exfoliërend concentraat voor dofheid of textuur.",
-      "short_copy_en": "An exfoliating concentrate for dullness or texture."
+      "pairing_note_nl": "Gebruik het liever samen met hydraterende of kalmerende stappen. Niet te agressief combineren.",
+      "pairing_note_en": "Best paired with hydrating or calming steps. Avoid overly aggressive combinations.",
+      "pairing_source": "site_and_conservative_inference"
     },
     {
       "title": "Caffeine Gel Booster",
       "handle": "caffeine-gel-booster",
       "url": "https://sovahcare.com/products/caffeine-gel-booster",
-      "first_available_variant_id": 51901220454738,
-      "source_tags": [
-        "Hydration",
-        "Fresh look"
+      "usage_nl": "Breng 1 pompje aan op een schone huid vóór je moisturiser en masseer zacht in op gezicht en onder de ogen.",
+      "usage_en": "Apply 1 pump to clean skin before moisturizer and gently massage into the face and under-eye area.",
+      "when_to_use_nl": "Gebruik 's ochtends en/of 's avonds voor een frissere, meer wakkere look.",
+      "when_to_use_en": "Use morning and/or evening for a fresher, more awake-looking complexion.",
+      "routine_step_nl": "Voor moisturiser",
+      "routine_step_en": "Before moisturizer",
+      "pairs_well_with": [
+        "Moisturising Day Cream",
+        "Smoothing Eye Cream",
+        "Hydrating Toner"
       ],
-      "short_copy_nl": "Lichte booster voor een frisse uitstraling.",
-      "short_copy_en": "A lightweight booster for a fresher-looking complexion."
+      "pairing_note_nl": "Logische combinatie als je een lichtere booster wilt met extra comfort eroverheen.",
+      "pairing_note_en": "A logical pairing if you want a lightweight booster followed by extra comfort.",
+      "pairing_source": "site_and_conservative_inference"
     },
     {
       "title": "Oil-Free Hydrating Gel",
       "handle": "oil-free-hydrating-gel",
       "url": "https://sovahcare.com/products/oil-free-hydrating-gel",
-      "first_available_variant_id": 51901284352338,
-      "source_tags": [
-        "Oily skin",
-        "Hydration"
+      "usage_nl": "Breng 1–2 pompjes aan op een schone, droge huid en masseer zacht in op gezicht en hals.",
+      "usage_en": "Apply 1–2 pumps to clean, dry skin and gently massage into the face and neck.",
+      "when_to_use_nl": "Gebruik 's ochtends en/of 's avonds als laatste hydraterende stap of vóór SPF in je ochtendroutine.",
+      "when_to_use_en": "Use morning and/or evening as your final moisturizing step or before SPF in your daytime routine.",
+      "routine_step_nl": "Laatste hydraterende stap",
+      "routine_step_en": "Final hydrating step",
+      "pairs_well_with": [
+        "Purifying Mousse",
+        "Niacinamide Gel Moisturiser",
+        "Acne Spot Care",
+        "Sun Protection SPF50 Stick, no tint"
       ],
-      "short_copy_nl": "Olievrije gel voor lichte dagelijkse hydratatie.",
-      "short_copy_en": "An oil-free gel for lightweight daily hydration."
+      "pairing_note_nl": "Past goed in een lichtere routine voor vettere of combinatiehuid.",
+      "pairing_note_en": "Works well in a lighter routine for oily or combination skin.",
+      "pairing_source": "site_and_routines"
     },
     {
       "title": "Peptide Anti-Aging Serum",
       "handle": "peptide-anti-aging-serum",
       "url": "https://sovahcare.com/products/peptide-anti-aging-serum",
-      "first_available_variant_id": 51929446154578,
-      "source_tags": [
-        "Anti-age",
-        "Serum"
+      "usage_nl": "Breng 2 pompjes aan op een schone, droge huid en masseer zacht in op gezicht en hals.",
+      "usage_en": "Apply 2 pumps to clean, dry skin and gently massage into the face and neck.",
+      "when_to_use_nl": "Gebruik 's ochtends of 's avonds als eerste stap na reinigen en toner.",
+      "when_to_use_en": "Use morning or evening as the first step after cleansing and toner.",
+      "routine_step_nl": "Eerste serumstap",
+      "routine_step_en": "First serum step",
+      "pairs_well_with": [
+        "Ceramide Barrier Night Cream",
+        "Smoothing Eye Cream",
+        "Sun Protection SPF50 Stick, no tint"
       ],
-      "short_copy_nl": "Serum voor een gladdere en verzorgde uitstraling.",
-      "short_copy_en": "A serum for a smoother-looking complexion."
+      "pairing_note_nl": "Sterke combinatie in een anti-age routine met afsluitende barrièrecrème of oogverzorging.",
+      "pairing_note_en": "A strong pairing in an anti-age routine with a barrier cream or eye care.",
+      "pairing_source": "site_and_bundle"
     },
     {
       "title": "Collagen Boost Serum",
       "handle": "collagen-boost-serum",
       "url": "https://sovahcare.com/products/collagen-boost-serum",
-      "first_available_variant_id": 51929475711314,
-      "source_tags": [
-        "Anti-age",
-        "Firmness"
+      "usage_nl": "Breng 2–3 druppels aan op een schone, droge huid en masseer zacht in op gezicht en hals.",
+      "usage_en": "Apply 2–3 drops to clean, dry skin and gently massage into the face and neck.",
+      "when_to_use_nl": "Gebruik 's ochtends of 's avonds vóór je moisturiser.",
+      "when_to_use_en": "Use morning or evening before your moisturizer.",
+      "routine_step_nl": "Voor crème",
+      "routine_step_en": "Before cream",
+      "pairs_well_with": [
+        "Anti-Age Day Cream",
+        "Ceramide Barrier Night Cream",
+        "Sun Protection SPF50 Stick, no tint"
       ],
-      "short_copy_nl": "Serum gericht op stevigheid en comfort.",
-      "short_copy_en": "A serum focused on firmness and comfort."
+      "pairing_note_nl": "Logische combinatie als je meer focus wilt op stevigheid en comfort.",
+      "pairing_note_en": "A logical pairing if you want more focus on firmness and comfort.",
+      "pairing_source": "site_and_bundle"
     },
     {
       "title": "Anti-Age Day Cream",
       "handle": "anti-age-day-cream",
       "url": "https://sovahcare.com/products/anti-age-day-cream",
-      "first_available_variant_id": 51929503367506,
-      "source_tags": [
-        "Anti-age",
-        "Day cream"
+      "usage_nl": "Breng een kleine hoeveelheid aan op een schone, droge huid in de ochtend en masseer zacht in op gezicht en hals.",
+      "usage_en": "Apply a small amount to clean, dry skin in the morning and gently massage into the face and neck.",
+      "when_to_use_nl": "Gebruik als laatste stap van je ochtendroutine. Voeg SPF toe bij blootstelling aan zon.",
+      "when_to_use_en": "Use as the final step in your morning routine. Add SPF when exposed to sunlight.",
+      "routine_step_nl": "Laatste ochtendstap vóór SPF",
+      "routine_step_en": "Final morning step before SPF",
+      "pairs_well_with": [
+        "Collagen Boost Serum",
+        "Sun Protection SPF50 Stick, no tint",
+        "Smoothing Eye Cream"
       ],
-      "short_copy_nl": "Dagcrème voor dagelijkse verzorging bij eerste lijntjes.",
-      "short_copy_en": "A day cream for daily care with an early anti-age focus."
+      "pairing_note_nl": "Past goed bovenop een anti-age serum en onder SPF.",
+      "pairing_note_en": "Works well on top of an anti-age serum and under SPF.",
+      "pairing_source": "site_and_bundle"
     },
     {
       "title": "Natural Retinol Alternative Oil Serum",
       "handle": "natural-retinol-alternative-oil-serum",
       "url": "https://sovahcare.com/products/natural-retinol-alternative-oil-serum",
-      "first_available_variant_id": 51929571393874,
-      "source_tags": [
-        "Anti-age",
-        "Glow"
+      "usage_nl": "Breng 2–3 druppels aan op een schone, droge huid in de avond, vermijd de oogcontour, en masseer zacht in.",
+      "usage_en": "Apply 2–3 drops to clean, dry skin in the evening, avoid the eye area, and gently massage in.",
+      "when_to_use_nl": "Start 2–3 keer per week in de avond en bouw op als je huid het goed verdraagt. Gebruik overdag altijd SPF.",
+      "when_to_use_en": "Start 2–3 times per week in the evening and build up if your skin tolerates it well. Always use SPF during the day.",
+      "routine_step_nl": "Avondolie-serum",
+      "routine_step_en": "Evening oil-serum step",
+      "pairs_well_with": [
+        "Ceramide Barrier Night Cream",
+        "Smoothing Eye Cream",
+        "Firm & Smooth Skin Routine"
       ],
-      "short_copy_nl": "Mild olie-serum binnen een anti-age routine.",
-      "short_copy_en": "A gentle oil serum for an anti-age routine."
+      "pairing_note_nl": "Fijne extra avondstap binnen een anti-age routine.",
+      "pairing_note_en": "A nice extra evening step within an anti-age routine.",
+      "pairing_source": "site_and_bundle"
     },
     {
       "title": "Smoothing Eye Cream",
       "handle": "smoothing-eye-cream",
       "url": "https://sovahcare.com/products/smoothing-eye-cream",
-      "first_available_variant_id": 51929683329362,
-      "source_tags": [
-        "Eye area",
-        "Anti-age"
+      "usage_nl": "Breng een kleine hoeveelheid aan onder de ogen met je ringvinger en dep zacht langs het bot rondom de ogen.",
+      "usage_en": "Apply a small amount to the under-eye area with your ring finger and gently pat along the orbital bone.",
+      "when_to_use_nl": "Gebruik 's ochtends en 's avonds als onderdeel van je routine. Vermijd direct contact met de ogen.",
+      "when_to_use_en": "Use morning and evening as part of your routine. Avoid direct contact with the eyes.",
+      "routine_step_nl": "Oogstap",
+      "routine_step_en": "Eye-care step",
+      "pairs_well_with": [
+        "Anti-Age Day Cream",
+        "Peptide Anti-Aging Serum",
+        "Firm & Smooth Skin Routine",
+        "Simple Daily Skincare Routine"
       ],
-      "short_copy_nl": "Oogcrème voor een gladdere oogcontour.",
-      "short_copy_en": "An eye cream for a smoother-looking eye area."
+      "pairing_note_nl": "Goede extra stap als je je routine rond de ogen wilt aanvullen.",
+      "pairing_note_en": "A good extra step if you want to extend your routine to the eye area.",
+      "pairing_source": "site_and_bundles"
     },
     {
       "title": "Vitamin C Serum",
       "handle": "vitamin-c-serum",
       "url": "https://sovahcare.com/products/vitamin-c-serum",
-      "first_available_variant_id": 51930475528530,
-      "source_tags": [
-        "Glow",
-        "Uneven-looking skin"
+      "usage_nl": "Breng een kleine hoeveelheid aan op een schone, droge huid en masseer zacht in op gezicht en hals.",
+      "usage_en": "Apply a small amount to clean, dry skin and gently massage into the face and neck.",
+      "when_to_use_nl": "Gebruik bij voorkeur in de ochtend vóór je moisturiser en SPF voor een frissere, stralendere uitstraling.",
+      "when_to_use_en": "Preferably use in the morning before your moisturizer and SPF for a fresher, more radiant look.",
+      "routine_step_nl": "Ochtendserum",
+      "routine_step_en": "Morning serum",
+      "pairs_well_with": [
+        "Antioxidant Ginkgo Gel Booster",
+        "Moisturising Day Cream",
+        "Sun Protection SPF50 Stick, no tint",
+        "Dark Spot Face Cream with Kojic Acid"
       ],
-      "short_copy_nl": "Serum voor een frissere en stralendere uitstraling.",
-      "short_copy_en": "A serum for a fresher and more radiant-looking complexion."
+      "pairing_note_nl": "Sterke glow-combinatie met een lichte booster of een brightening routine.",
+      "pairing_note_en": "A strong glow pairing with a lightweight booster or a brightening routine.",
+      "pairing_source": "site_and_bundle"
     },
     {
       "title": "Brightening Face&Body Exfoliator with Kojic Acid",
       "handle": "brightening-face-body-exfoliator-with-kojic-acid",
       "url": "https://sovahcare.com/products/brightening-face-body-exfoliator-with-kojic-acid",
-      "first_available_variant_id": 51930578714962,
-      "source_tags": [
-        "Exfoliator",
-        "Glow"
+      "usage_nl": "Gebruik op een schone huid om dode huidcellen te helpen verwijderen en de huid gladder te laten aanvoelen.",
+      "usage_en": "Use on clean skin to help remove dead skin cells and leave the skin feeling smoother.",
+      "when_to_use_nl": "Gebruik 1–2 keer per week. Voeg overdag altijd SPF toe. Niet op dezelfde dag als sterke exfolianten of retinol-achtige producten.",
+      "when_to_use_en": "Use 1–2 times per week. Always add SPF during the day. Do not use on the same day as strong exfoliants or retinol-like products.",
+      "routine_step_nl": "Exfoliatiestap",
+      "routine_step_en": "Exfoliation step",
+      "pairs_well_with": [
+        "Purifying Mousse",
+        "Hydrating Toner",
+        "Dark Spot Face Cream with Kojic Acid",
+        "All-In-One Facial Oil",
+        "Sun Protection SPF50 Stick, no tint"
       ],
-      "short_copy_nl": "Exfoliator voor een gladdere en frissere look.",
-      "short_copy_en": "An exfoliator for a smoother and fresher look."
+      "pairing_note_nl": "Werkt logisch samen met hydraterende en brightening stappen, plus dagelijkse SPF.",
+      "pairing_note_en": "Pairs logically with hydrating and brightening steps, plus daily SPF.",
+      "pairing_source": "site"
     },
     {
       "title": "Dark Spot Face Cream with Kojic Acid",
       "handle": "dark-spot-face-cream-with-kojic-acid",
       "url": "https://sovahcare.com/products/dark-spot-face-cream-with-kojic-acid",
-      "first_available_variant_id": 51930733216082,
-      "source_tags": [
-        "Uneven-looking skin",
-        "Cream"
+      "usage_nl": "Breng een kleine hoeveelheid aan op een schone, droge huid en masseer zacht in op gezicht en hals.",
+      "usage_en": "Apply a small amount to clean, dry skin and gently massage into the face and neck.",
+      "when_to_use_nl": "Gebruik 's ochtends en 's avonds binnen je routine. Voeg overdag altijd SPF toe.",
+      "when_to_use_en": "Use morning and evening within your routine. Always add SPF during the day.",
+      "routine_step_nl": "Crèmestap",
+      "routine_step_en": "Cream step",
+      "pairs_well_with": [
+        "Purifying Mousse",
+        "Vitamin C Serum",
+        "Brightening Face&Body Exfoliator with Kojic Acid",
+        "All-In-One Facial Oil",
+        "Sun Protection SPF50 Stick, no tint"
       ],
-      "short_copy_nl": "Crème voor een egaler ogende huid.",
-      "short_copy_en": "A cream for a more even-looking complexion."
+      "pairing_note_nl": "Sterke pairing voor een routine met focus op gladdere en egalere uitstraling.",
+      "pairing_note_en": "A strong pairing for a routine focused on a smoother, more even-looking complexion.",
+      "pairing_source": "site"
     },
     {
       "title": "All-In-One Facial Oil",
       "handle": "all-in-one-facial-oil",
       "url": "https://sovahcare.com/products/all-in-one-facial-oil",
-      "first_available_variant_id": 51930909180242,
-      "source_tags": [
-        "Dry skin",
-        "Glow"
+      "usage_nl": "Breng 2–3 druppels aan op een schone huid en masseer zacht in op gezicht en hals. Je kunt ook een druppel mengen met moisturiser of foundation.",
+      "usage_en": "Apply 2–3 drops to clean skin and gently massage into the face and neck. You can also mix a drop into moisturizer or foundation.",
+      "when_to_use_nl": "Gebruik 's ochtends en/of 's avonds als laatste stap om vocht in te sluiten en glow toe te voegen.",
+      "when_to_use_en": "Use morning and/or evening as the final step to lock in moisture and add glow.",
+      "routine_step_nl": "Laatste olielaag",
+      "routine_step_en": "Final oil layer",
+      "pairs_well_with": [
+        "Double Hydration Boost Gel + HA",
+        "Dark Spot Face Cream with Kojic Acid",
+        "Brightening Face&Body Exfoliator with Kojic Acid",
+        "Antioxidant Ginkgo Gel Booster"
       ],
-      "short_copy_nl": "Voedende olie voor glans en comfort.",
-      "short_copy_en": "A nourishing facial oil for glow and comfort."
+      "pairing_note_nl": "Goede afsluiter voor extra voeding, comfort en glow.",
+      "pairing_note_en": "A good finishing step for extra nourishment, comfort, and glow.",
+      "pairing_source": "site_and_conservative_inference"
     },
     {
       "title": "Sun Protection SPF50 Stick, no tint",
       "handle": "sun-protection-spf50-stick-no-tint",
       "url": "https://sovahcare.com/products/sun-protection-spf50-stick-no-tint",
-      "first_available_variant_id": 51952704848210,
-      "source_tags": [
-        "Sun protection",
-        "All skin types"
+      "usage_nl": "Breng royaal aan op een schone, droge huid als laatste stap van je ochtendroutine, minimaal 15 minuten vóór zonblootstelling. Herhaal elke 2 uur of vaker bij zwemmen, zweten of afdrogen.",
+      "usage_en": "Apply generously to clean, dry skin as the final step of your morning routine, at least 15 minutes before sun exposure. Reapply every 2 hours, or more often if swimming, sweating, or towel drying.",
+      "when_to_use_nl": "Elke ochtend en overdag opnieuw aanbrengen wanneer nodig.",
+      "when_to_use_en": "Every morning and reapply during the day when needed.",
+      "routine_step_nl": "Laatste ochtendstap",
+      "routine_step_en": "Final morning step",
+      "pairs_well_with": [
+        "Hydrating Toner",
+        "Dark Spot Face Cream with Kojic Acid",
+        "All-In-One Facial Oil",
+        "Moisturising Day Cream",
+        "Anti-Age Day Cream"
       ],
-      "short_copy_nl": "SPF50 stick voor makkelijke dagelijkse bescherming.",
-      "short_copy_en": "An SPF50 stick for easy daily protection."
+      "pairing_note_nl": "Belangrijke afsluiter voor routines met actieve of brightening producten.",
+      "pairing_note_en": "An important finishing step for routines with active or brightening products.",
+      "pairing_source": "site"
     },
     {
       "title": "Acne Spot Care",
       "handle": "acne-spot-care",
       "url": "https://sovahcare.com/products/acne-spot-care",
-      "first_available_variant_id": 51984072966482,
-      "source_tags": [
-        "Breakouts",
-        "Targeted care"
+      "usage_nl": "Breng een kleine hoeveelheid direct aan op een schone, droge huid, gericht op actieve puistjes of onrustige zones, en dep in tot het is opgenomen.",
+      "usage_en": "Apply a small amount directly to clean, dry skin, focusing on active blemishes or breakout-prone areas, and tap in until absorbed.",
+      "when_to_use_nl": "Gebruik 1 tot 2 keer per dag, afhankelijk van de gevoeligheid van je huid. Start bij reactieve huid met 1 keer per dag.",
+      "when_to_use_en": "Use once or twice daily depending on your skin sensitivity. For reactive skin, start with once daily.",
+      "routine_step_nl": "Gerichte treatmentstap",
+      "routine_step_en": "Targeted treatment step",
+      "pairs_well_with": [
+        "Purifying Mousse",
+        "Niacinamide Gel Moisturiser",
+        "Oil-Free Hydrating Gel",
+        "Sun Protection SPF50 Stick, no tint"
       ],
-      "short_copy_nl": "Gerichte spot care voor puistjes en onzuiverheden.",
-      "short_copy_en": "A targeted spot treatment for blemishes and breakouts."
+      "pairing_note_nl": "Sterke combinatie voor een lichte routine met gerichte behandeling en ondersteuning eromheen.",
+      "pairing_note_en": "A strong pairing for a lightweight routine with targeted treatment and support around it.",
+      "pairing_source": "site"
     },
     {
       "title": "Niacinamide Gel Moisturiser",
       "handle": "niacinamide-gel-moisturiser",
       "url": "https://sovahcare.com/products/niacinamide-gel-moisturiser",
-      "first_available_variant_id": 52613226496338,
-      "source_tags": [
-        "Balance",
-        "All skin types"
+      "usage_nl": "Breng gelijkmatig aan op een schone huid als lichte gelcrème voor balans en comfort.",
+      "usage_en": "Apply evenly to clean skin as a lightweight gel moisturizer for balance and comfort.",
+      "when_to_use_nl": "Gebruik 's ochtends en/of 's avonds na reinigen en toner. Past vooral goed in een lichte routine voor normale, combinatie- of vettere huid.",
+      "when_to_use_en": "Use morning and/or evening after cleansing and toner. It fits especially well in a lightweight routine for normal, combination, or oilier skin.",
+      "routine_step_nl": "Lichte moisturiserstap",
+      "routine_step_en": "Light moisturizer step",
+      "pairs_well_with": [
+        "Purifying Mousse",
+        "Hydrating Toner",
+        "Oil-Free Hydrating Gel",
+        "Acne Spot Care",
+        "Sun Protection SPF50 Stick, no tint"
       ],
-      "short_copy_nl": "Lichte gelcrème voor balans en comfort.",
-      "short_copy_en": "A lightweight gel moisturiser for balance and comfort."
+      "pairing_note_nl": "Logische basis voor routines die balans en een lichtere finish willen.",
+      "pairing_note_en": "A logical base for routines that want balance and a lighter finish.",
+      "pairing_source": "inferred_from_site_routines"
     }
   ]
 }
