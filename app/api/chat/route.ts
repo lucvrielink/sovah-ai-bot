@@ -215,6 +215,15 @@ function extractUserMessages(history: string[]): string[] {
     .map((item) => item.replace(/^user:\s*/i, "").trim());
 }
 
+function extractAssistantMessages(history: string[]): string[] {
+  return history
+    .filter((item) => typeof item === "string")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .filter((item) => item.toLowerCase().startsWith("assistant:"))
+    .map((item) => item.replace(/^assistant:\s*/i, "").trim());
+}
+
 function getProductByName(name: string): Product | undefined {
   return productCatalog.products.find((p) => p.title === name);
 }
@@ -425,7 +434,7 @@ function detectSuitabilityRequest(text: string): boolean {
 function detectPluralReference(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "those", "them", "these", "both", "allebei", "beide", "beiden"
+    "those", "them", "these", "both", "allebei", "beide", "beiden", "die", "deze"
   ]);
 }
 
@@ -665,12 +674,12 @@ function shouldRedirectToQuiz(message: string, combinedUserText: string): boolea
 
 // ───────────────── history helpers ─────────────────
 
-function getRecentMentionedProducts(history: string[]): Product[] {
+function getRecentMentionedProductsFromMessages(messages: string[]): Product[] {
   const recent: Product[] = [];
   const seen = new Set<string>();
 
-  for (let i = history.length - 1; i >= 0; i--) {
-    const msg = history[i];
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const msg = messages[i];
     const explicit = findMentionedProducts(msg);
     const loose = findProductFromLooseIntent(msg);
     const candidates = loose ? [...explicit, loose] : explicit;
@@ -682,15 +691,30 @@ function getRecentMentionedProducts(history: string[]): Product[] {
       }
     }
 
-    if (recent.length >= 4) break;
+    if (recent.length >= 6) break;
   }
 
-  return recent.slice(0, 4);
+  return recent.slice(0, 6);
 }
 
 function getLastRecommendedProducts(history: string[]): Product[] {
-  const recent = getRecentMentionedProducts(history);
-  return recent.slice(0, 2);
+  const assistantMessages = extractAssistantMessages(history);
+
+  for (let i = assistantMessages.length - 1; i >= 0; i--) {
+    const msg = assistantMessages[i];
+    const explicit = findMentionedProducts(msg);
+    const loose = findProductFromLooseIntent(msg);
+    const candidates = loose ? [...explicit, loose] : explicit;
+    const unique = candidates.filter(
+      (p, idx, arr) => arr.findIndex((x) => x.title === p.title) === idx
+    );
+
+    if (unique.length >= 2) {
+      return unique.slice(0, 2);
+    }
+  }
+
+  return getRecentMentionedProductsFromMessages(history).slice(0, 2);
 }
 
 function buildClarifyProductReply(products: Product[], lang: Lang): string {
@@ -722,7 +746,17 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
     "Peptide Anti-Aging Serum": "Een serum voor een gladdere en verzorgde uitstraling.",
     "Anti-Age Day Cream": "Een dagcrème voor dagelijkse verzorging bij eerste lijntjes.",
     "Collagen Boost Serum": "Een serum gericht op stevigheid en comfort.",
-    "AHA Peeling Concentrate": "Een exfoliërend concentraat voor dofheid of textuur."
+    "AHA Peeling Concentrate": "Een exfoliërend concentraat voor dofheid of textuur.",
+    "Hydrating Toner": "Een hydraterende toner voor extra comfort en balans.",
+    "Micellar Cleansing Water": "Een zachte reiniger om make-up en vuil te verwijderen.",
+    "Natural Retinol Alternative Oil Serum": "Een verzorgend olieserum voor een gladdere uitstraling.",
+    "Sun Protection SPF50 Stick, no tint": "Een SPF stick voor dagelijkse bescherming zonder tint.",
+    "All-In-One Facial Oil": "Een verzorgende olie voor extra comfort en zachtheid.",
+    "Dark Spot Face Cream with Kojic Acid": "Een verzorgende crème gericht op een egalere uitstraling.",
+    "Brightening Face&Body Exfoliator with Kojic Acid": "Een exfoliator voor een gladdere en frissere uitstraling.",
+    "Double Hydration Boost Gel + HA": "Een hydraterende gel voor extra comfort en een voller huidgevoel.",
+    "Collagen Boost Serum": "Een serum gericht op stevigheid en comfort.",
+    "Smoothing Eye Cream": "Een oogcrème voor een zachtere en verzorgde oogzone."
   };
 
   const en: Record<string, string> = {
@@ -740,12 +774,20 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
     "Peptide Anti-Aging Serum": "A serum for a smoother-looking complexion.",
     "Anti-Age Day Cream": "A day cream for daily care with an early anti-age focus.",
     "Collagen Boost Serum": "A serum focused on firmness and comfort.",
-    "AHA Peeling Concentrate": "An exfoliating concentrate for dullness or texture."
+    "AHA Peeling Concentrate": "An exfoliating concentrate for dullness or texture.",
+    "Micellar Cleansing Water": "A gentle cleanser to remove makeup and daily buildup.",
+    "Natural Retinol Alternative Oil Serum": "A nourishing oil serum for a smoother-looking complexion.",
+    "Sun Protection SPF50 Stick, no tint": "An SPF stick for daily protection without tint.",
+    "All-In-One Facial Oil": "A caring facial oil for extra comfort and softness.",
+    "Dark Spot Face Cream with Kojic Acid": "A care cream focused on a more even-looking complexion.",
+    "Brightening Face&Body Exfoliator with Kojic Acid": "An exfoliator for a smoother and fresher-looking finish.",
+    "Double Hydration Boost Gel + HA": "A hydrating gel for extra comfort and a plumper-looking feel.",
+    "Smoothing Eye Cream": "An eye cream for a softer and more cared-for eye area."
   };
 
   return lang === "nl"
-    ? nl[title] || "Een product uit het huidige SOVAH assortiment."
-    : en[title] || "A product from the current SOVAH range.";
+    ? nl[title] || "Een product dat kan passen binnen een verzorgingsroutine van SOVAH."
+    : en[title] || "A product that can fit well within a SOVAH skincare routine.";
 }
 
 function getSafeShortCopy(product: Product, lang: Lang): string {
@@ -1183,6 +1225,7 @@ export async function POST(req: Request) {
     }
 
     const userHistory = extractUserMessages(history);
+    const conversationTimeline = [...history, `User: ${message}`].slice(-30);
     const userTimeline = [...userHistory, message].slice(-18);
     const combinedUserText = userTimeline.join(" \n ");
     const lang = detectLanguage(message, combinedUserText, forcedLang);
@@ -1190,8 +1233,8 @@ export async function POST(req: Request) {
     const mentionedProducts = findMentionedProducts(message);
     const mentionedBundles = findMentionedBundles(message);
     const looseProduct = findProductFromLooseIntent(message);
-    const recentProducts = getRecentMentionedProducts(userTimeline);
-    const lastRecommendedProducts = getLastRecommendedProducts(userTimeline);
+    const recentProducts = getRecentMentionedProductsFromMessages(conversationTimeline);
+    const lastRecommendedProducts = getLastRecommendedProducts(conversationTimeline);
 
     // 1. product recommendation hard override
     if (
@@ -1356,6 +1399,17 @@ export async function POST(req: Request) {
           { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
         );
       }
+
+      if (lastRecommendedProducts.length >= 2) {
+        return new Response(
+          JSON.stringify({
+            reply: buildDynamicCombinationReply(lastRecommendedProducts[0], lastRecommendedProducts[1], lang),
+            actions: lastRecommendedProducts.flatMap((p) => buildActionsForProduct(p, lang)).slice(0, 2),
+            lang,
+          }),
+          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
     }
 
     // 7. compare
@@ -1446,7 +1500,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const claudeOut = await callClaudeFallback(message, userTimeline, lang);
+    const claudeOut = await callClaudeFallback(message, conversationTimeline, lang);
 
     return new Response(
       JSON.stringify(claudeOut),
