@@ -118,6 +118,16 @@ function tr(lang: Lang, nl: string, en: string): string {
   return lang === "nl" ? nl : en;
 }
 
+function dedupeProducts(products: Product[]): Product[] {
+  return products.filter(
+    (p, idx, arr) => arr.findIndex((x) => x.title === p.title) === idx
+  );
+}
+
+function getProductByName(name: string): Product | undefined {
+  return productCatalog.products.find((p) => p.title === name);
+}
+
 function detectLanguage(currentMessage: string, historyText = "", forcedLang?: string): Lang {
   if (forcedLang === "nl" || forcedLang === "en") {
     const current = normalize(currentMessage);
@@ -224,13 +234,190 @@ function extractAssistantMessages(history: string[]): string[] {
     .map((item) => item.replace(/^assistant:\s*/i, "").trim());
 }
 
-function getProductByName(name: string): Product | undefined {
-  return productCatalog.products.find((p) => p.title === name);
-}
+// ───────────────── product matching ─────────────────
+
+const PRODUCT_ALIASES: Record<string, string[]> = {
+  "Micellar Cleansing Water": [
+    "micellar cleansing water",
+    "micellar water",
+    "micellar cleanser",
+  ],
+  "Hydrating Toner": [
+    "hydrating toner",
+  ],
+  "Hydrating Serum": [
+    "hydrating serum",
+  ],
+  "Double Hydration Boost Gel + HA": [
+    "double hydration boost gel + ha",
+    "double hydration boost gel",
+    "boost gel + ha",
+    "hydration boost gel",
+  ],
+  "Moisturising Day Cream": [
+    "moisturising day cream",
+    "moisturizing day cream",
+    "day cream",
+    "dagcreme",
+    "dagcrème",
+  ],
+  "Ceramide Barrier Night Cream": [
+    "ceramide barrier night cream",
+    "ceramide night cream",
+    "barrier night cream",
+    "night cream",
+    "nachtcreme",
+    "nachtcrème",
+  ],
+  "Purifying Mousse": [
+    "purifying mousse",
+    "mousse cleanser",
+    "cleansing mousse",
+  ],
+  "Antioxidant Ginkgo Gel Booster": [
+    "antioxidant ginkgo gel booster",
+    "ginkgo gel booster",
+    "ginkgo booster",
+  ],
+  "Calming Facial Oil": [
+    "calming facial oil",
+    "calming oil",
+  ],
+  "AHA Peeling Concentrate": [
+    "aha peeling concentrate",
+    "aha peeling",
+    "aha concentrate",
+  ],
+  "Caffeine Gel Booster": [
+    "caffeine gel booster",
+    "caffeine booster",
+  ],
+  "Oil-Free Hydrating Gel": [
+    "oil-free hydrating gel",
+    "oil free hydrating gel",
+    "oil-free gel",
+    "oil free gel",
+  ],
+  "Peptide Anti-Aging Serum": [
+    "peptide anti-aging serum",
+    "peptide anti aging serum",
+    "peptide serum",
+  ],
+  "Collagen Boost Serum": [
+    "collagen boost serum",
+    "collagen serum",
+    "collagen boost",
+  ],
+  "Anti-Age Day Cream": [
+    "anti-age day cream",
+    "anti age day cream",
+    "anti-aging day cream",
+    "anti aging day cream",
+  ],
+  "Natural Retinol Alternative Oil Serum": [
+    "natural retinol alternative oil serum",
+    "retinol alternative oil serum",
+    "natural retinol alternative",
+    "retinol alternative",
+    "natural retinol",
+  ],
+  "Smoothing Eye Cream": [
+    "smoothing eye cream",
+    "eye cream",
+    "oogcreme",
+    "oogcrème",
+  ],
+  "Vitamin C Serum": [
+    "vitamin c serum",
+    "vitamin c",
+    "vit c serum",
+  ],
+  "Brightening Face&Body Exfoliator with Kojic Acid": [
+    "brightening face body exfoliator with kojic acid",
+    "brightening exfoliator with kojic acid",
+    "brightening exfoliator",
+    "kojic exfoliator",
+  ],
+  "Dark Spot Face Cream with Kojic Acid": [
+    "dark spot face cream with kojic acid",
+    "dark spot cream with kojic acid",
+    "dark spot cream",
+    "kojic acid cream",
+  ],
+  "All-In-One Facial Oil": [
+    "all-in-one facial oil",
+    "all in one facial oil",
+    "all-in-one oil",
+    "all in one oil",
+  ],
+  "Sun Protection SPF50 Stick, no tint": [
+    "sun protection spf50 stick no tint",
+    "sun protection spf50 stick",
+    "spf50 stick",
+    "spf stick",
+    "sun stick",
+    "sun protection stick",
+  ],
+  "Acne Spot Care": [
+    "acne spot care",
+    "acne spot",
+    "spot care",
+  ],
+  "Niacinamide Gel Moisturiser": [
+    "niacinamide gel moisturiser",
+    "niacinamide gel moisturizer",
+    "niacinamide moisturiser",
+    "niacinamide moisturizer",
+    "niacinamide gel",
+  ],
+};
 
 function findMentionedProducts(text: string): Product[] {
   const t = normalizeLoose(text);
-  return productCatalog.products.filter((p) => t.includes(normalizeLoose(p.title)));
+  const matches: Product[] = [];
+
+  for (const product of productCatalog.products) {
+    const titleLoose = normalizeLoose(product.title);
+    if (t.includes(titleLoose)) {
+      matches.push(product);
+    }
+  }
+
+  return dedupeProducts(matches);
+}
+
+function findProductsByStrongAlias(text: string): Product[] {
+  const t = normalizeLoose(text);
+  const matches: Product[] = [];
+
+  for (const [productName, aliases] of Object.entries(PRODUCT_ALIASES)) {
+    const product = getProductByName(productName);
+    if (!product) continue;
+
+    if (aliases.some((alias) => t.includes(normalizeLoose(alias)))) {
+      matches.push(product);
+    }
+  }
+
+  return dedupeProducts(matches);
+}
+
+function findProductFromLooseIntent(text: string): Product | undefined {
+  const exact = findMentionedProducts(text);
+  if (exact.length === 1) return exact[0];
+
+  const strongAlias = findProductsByStrongAlias(text);
+  if (strongAlias.length === 1) return strongAlias[0];
+
+  return undefined;
+}
+
+function resolveProductsFromMessage(text: string): Product[] {
+  const exact = findMentionedProducts(text);
+  if (exact.length > 0) return exact;
+
+  const aliasMatches = findProductsByStrongAlias(text);
+  return aliasMatches;
 }
 
 function findMentionedBundles(text: string): Bundle[] {
@@ -243,45 +430,20 @@ function findBundleFromLooseIntent(text: string): Bundle | undefined {
   return bundleCatalog.bundles.find((b) => t.includes(normalizeLoose(b.name)));
 }
 
-function findProductFromLooseIntent(text: string): Product | undefined {
-  const t = normalizeLoose(text);
-
-  const aliases: Record<string, string[]> = {
-    "Acne Spot Care": ["acne spot", "spot care", "acne spot care"],
-    "Vitamin C Serum": ["vitamin c", "vit c serum", "vitamin c serum"],
-    "Hydrating Serum": ["hydrating serum"],
-    "Hydrating Toner": ["hydrating toner", "toner"],
-    "Purifying Mousse": ["purifying mousse", "mousse cleanser", "mousse"],
-    "Smoothing Eye Cream": ["eye cream", "smoothing eye cream", "oogcreme", "oogcrème"],
-    "AHA Peeling Concentrate": ["aha", "aha peeling", "aha peeling concentrate", "peeling"],
-    "Niacinamide Gel Moisturiser": ["niacinamide", "niacinamide moisturiser", "gel moisturiser", "gel moisturizer"],
-    "Sun Protection SPF50 Stick, no tint": ["spf stick", "sun stick", "spf50 stick", "sun protection stick", "spf", "sun protection"],
-    "Micellar Cleansing Water": ["micellar", "micellar cleansing water"],
-    "Calming Facial Oil": ["calming oil", "facial oil", "calming facial oil"],
-    "Moisturising Day Cream": ["day cream", "moisturising day cream", "dagcrème", "dagcreme"],
-    "Ceramide Barrier Night Cream": ["night cream", "ceramide cream", "nachtcrème", "nachtcreme"],
-    "Collagen Boost Serum": ["collagen serum", "collagen boost"],
-    "Anti-Age Day Cream": ["anti age day cream", "anti-aging day cream", "anti-age day cream"],
-    "Natural Retinol Alternative Oil Serum": ["retinol alternative", "natural retinol", "retinol oil serum"],
-    "Antioxidant Ginkgo Gel Booster": ["ginkgo booster", "ginkgo gel booster"],
-    "Oil-Free Hydrating Gel": ["oil free gel", "oil-free gel", "hydrating gel"],
-    "All-In-One Facial Oil": ["all in one oil", "all-in-one oil"],
-    "Dark Spot Face Cream with Kojic Acid": ["dark spot cream", "kojic acid cream"],
-    "Brightening Face&Body Exfoliator with Kojic Acid": ["brightening exfoliator", "kojic exfoliator"],
-  };
-
-  for (const [productName, words] of Object.entries(aliases)) {
-    if (words.some((word) => t.includes(normalizeLoose(word)))) {
-      return getProductByName(productName);
-    }
-  }
-
-  return undefined;
-}
-
 // ───────────────── product/meta inference ─────────────────
 
-type ProductType = "cleanser" | "toner" | "serum" | "gel" | "cream" | "oil" | "spf" | "spot" | "exfoliant" | "other";
+type ProductType =
+  | "cleanser"
+  | "toner"
+  | "serum"
+  | "gel"
+  | "cream"
+  | "oil"
+  | "spf"
+  | "spot"
+  | "exfoliant"
+  | "other";
+
 type UseTime = "morning" | "evening" | "both";
 
 function inferProductType(product: Product): ProductType {
@@ -398,55 +560,111 @@ function detectSkinType(text: string): SkinType {
 function detectUsageRequest(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "how do i use", "how should i use", "when do i use", "how often",
-    "how many times", "how to use", "before or after", "step in routine",
-    "hoe gebruik ik", "hoe moet ik gebruiken", "wanneer gebruik ik",
-    "hoe vaak", "hoe moet ik dit gebruiken", "voor of na", "welke stap",
-    "in welke stap", "hoe gebruik je",
+    "how do i use",
+    "how should i use",
+    "when do i use",
+    "how often",
+    "how many times",
+    "how to use",
+    "before or after",
+    "step in routine",
+    "hoe gebruik ik",
+    "hoe moet ik gebruiken",
+    "wanneer gebruik ik",
+    "hoe vaak",
+    "hoe moet ik dit gebruiken",
+    "voor of na",
+    "welke stap",
+    "in welke stap",
+    "hoe gebruik je",
   ]);
 }
 
 function detectCombinationRequest(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "combine", "combined with", "can i combine", "can i use together",
-    "use together", "layer with", "works well with", "pair with",
-    "combineren", "combineer", "kan ik combineren", "samen met",
-    "past goed bij", "welke producten passen hierbij", "wat past hierbij",
-    "waarmee combineren", "welke combinatie",
+    "combine",
+    "combined with",
+    "can i combine",
+    "can i use together",
+    "use together",
+    "layer with",
+    "works well with",
+    "pair with",
+    "combineren",
+    "combineer",
+    "kan ik combineren",
+    "samen met",
+    "past goed bij",
+    "welke producten passen hierbij",
+    "wat past hierbij",
+    "waarmee combineren",
+    "welke combinatie",
   ]);
 }
 
 function detectCompareRequest(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "compare", "difference", "what is better", "which is better", "vs", "versus",
-    "vergelijk", "verschil", "wat is beter", "welke is beter",
+    "compare",
+    "difference",
+    "what is better",
+    "which is better",
+    "vs",
+    "versus",
+    "vergelijk",
+    "verschil",
+    "wat is beter",
+    "welke is beter",
   ]);
 }
 
 function detectWhereRequest(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "where", "where can i find", "find", "show me", "send me",
-    "waar", "waar vind", "vinden", "geef me de link", "stuur me",
+    "where",
+    "where can i find",
+    "find",
+    "show me",
+    "send me",
+    "waar",
+    "waar vind",
+    "vinden",
+    "geef me de link",
+    "stuur me",
   ]);
 }
 
 function detectSuitabilityRequest(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "is this good for", "is it good for", "good for", "suitable for",
-    "can i use", "would this work for", "is this okay for",
-    "geschikt voor", "kan ik gebruiken", "is dit goed voor",
-    "werkt dit voor", "past dit bij",
+    "is this good for",
+    "is it good for",
+    "good for",
+    "suitable for",
+    "can i use",
+    "would this work for",
+    "is this okay for",
+    "geschikt voor",
+    "kan ik gebruiken",
+    "is dit goed voor",
+    "werkt dit voor",
+    "past dit bij",
   ]);
 }
 
 function detectPluralReference(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "those", "them", "these", "both", "allebei", "beide", "beiden", "die", "deze",
+    "those",
+    "them",
+    "these",
+    "both",
+    "allebei",
+    "beide",
+    "beiden",
+    "die",
+    "deze",
   ]);
 }
 
@@ -631,7 +849,7 @@ function detectCorrectionMessage(text: string): boolean {
 }
 
 function isSpecificProductQuestion(message: string): boolean {
-  const mentionedProducts = findMentionedProducts(message);
+  const mentionedProducts = resolveProductsFromMessage(message);
   const looseProduct = findProductFromLooseIntent(message);
 
   if (!(mentionedProducts.length === 1 || looseProduct)) return false;
@@ -698,9 +916,7 @@ function getRecentMentionedProductsFromMessages(messages: string[]): Product[] {
 
   for (let i = messages.length - 1; i >= 0; i--) {
     const msg = messages[i];
-    const explicit = findMentionedProducts(msg);
-    const loose = findProductFromLooseIntent(msg);
-    const candidates = loose ? [...explicit, loose] : explicit;
+    const candidates = resolveProductsFromMessage(msg);
 
     for (const p of candidates) {
       if (!seen.has(p.title)) {
@@ -720,12 +936,7 @@ function getLastRecommendedProducts(history: string[]): Product[] {
 
   for (let i = assistantMessages.length - 1; i >= 0; i--) {
     const msg = assistantMessages[i];
-    const explicit = findMentionedProducts(msg);
-    const loose = findProductFromLooseIntent(msg);
-    const candidates = loose ? [...explicit, loose] : explicit;
-    const unique = candidates.filter(
-      (p, idx, arr) => arr.findIndex((x) => x.title === p.title) === idx
-    );
+    const unique = resolveProductsFromMessage(msg);
 
     if (unique.length >= 2) {
       return unique.slice(0, 2);
@@ -777,6 +988,7 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
     "Brightening Face&Body Exfoliator with Kojic Acid": "Een exfoliator voor een gladdere en frissere uitstraling.",
     "Double Hydration Boost Gel + HA": "Een hydraterende gel voor extra comfort en een voller huidgevoel.",
     "Smoothing Eye Cream": "Een oogcrème voor een zachtere en verzorgde oogzone.",
+    "Caffeine Gel Booster": "Een lichte gel booster voor een frissere en meer energieke uitstraling.",
   };
 
   const en: Record<string, string> = {
@@ -803,6 +1015,7 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
     "Brightening Face&Body Exfoliator with Kojic Acid": "An exfoliator for a smoother and fresher-looking finish.",
     "Double Hydration Boost Gel + HA": "A hydrating gel for extra comfort and a plumper-looking feel.",
     "Smoothing Eye Cream": "An eye cream for a softer and more cared-for eye area.",
+    "Caffeine Gel Booster": "A lightweight gel booster for a fresher and more energised look.",
   };
 
   return lang === "nl"
@@ -953,9 +1166,7 @@ function buildProductUsageReply(product: Product, lang: Lang): string {
 }
 
 function buildMultiProductUsageReply(products: Product[], lang: Lang): string {
-  const unique = products
-    .filter((p, idx, arr) => arr.findIndex((x) => x.title === p.title) === idx)
-    .slice(0, 2);
+  const unique = dedupeProducts(products).slice(0, 2);
 
   const intro = tr(
     lang,
@@ -1104,6 +1315,26 @@ function buildDynamicCombinationReply(a: Product, b: Product, lang: Lang): strin
   return [title, ...notes].join("\n\n");
 }
 
+function buildGroupCombinationReply(anchor: Product, others: Product[], lang: Lang): string {
+  const uniqueOthers = dedupeProducts(others)
+    .filter((p) => p.title !== anchor.title)
+    .slice(0, 2);
+
+  if (!uniqueOthers.length) {
+    return buildSingleProductPairingReply(anchor, lang);
+  }
+
+  const intro = tr(
+    lang,
+    `Met **${anchor.title}** zou ik dit zeggen:`,
+    `With **${anchor.title}**, I’d say this:`
+  );
+
+  const blocks = uniqueOthers.map((other) => buildDynamicCombinationReply(anchor, other, lang));
+
+  return [intro, ...blocks].join("\n\n");
+}
+
 function buildSingleProductPairingReply(product: Product, lang: Lang): string {
   const list = product.pairs_well_with?.length
     ? `${tr(lang, "Producten die hier goed bij passen:", "Products that pair well with this:")}\n${product.pairs_well_with.map((p) => `- ${p}`).join("\n")}`
@@ -1199,7 +1430,7 @@ Rules:
             "Tell me which product or routine you mean, and I’ll help from there."
           );
 
-    const mentionedProductsInReply = findMentionedProducts(text);
+    const mentionedProductsInReply = resolveProductsFromMessage(text);
     const mentionedBundlesInReply = findMentionedBundles(text);
 
     let actions: ChatAction[] = [];
@@ -1255,7 +1486,7 @@ export async function POST(req: Request) {
     const combinedUserText = userTimeline.join(" \n ");
     const lang = detectLanguage(message, combinedUserText, forcedLang);
 
-    const mentionedProducts = findMentionedProducts(message);
+    const mentionedProducts = resolveProductsFromMessage(message);
     const mentionedBundles = findMentionedBundles(message);
     const looseProduct = findProductFromLooseIntent(message);
     const recentProducts = getRecentMentionedProductsFromMessages(conversationTimeline);
@@ -1287,7 +1518,37 @@ export async function POST(req: Request) {
       );
     }
 
-    // 2. plural reference like "how do i use those" / "can i combine those"
+    // 2. plural reference + explicit product like "can i combine those with acne spot care"
+    if (
+      detectCombinationRequest(message) &&
+      detectPluralReference(message) &&
+      (mentionedProducts.length >= 1 || looseProduct) &&
+      lastRecommendedProducts.length >= 1
+    ) {
+      const explicit = dedupeProducts(
+        mentionedProducts.length ? mentionedProducts : looseProduct ? [looseProduct] : []
+      );
+      const anchor = explicit[0];
+      const previous = dedupeProducts(lastRecommendedProducts).filter((p) => p.title !== anchor.title);
+
+      if (anchor && previous.length) {
+        return new Response(
+          JSON.stringify({
+            reply: buildGroupCombinationReply(anchor, previous, lang),
+            actions: dedupeProducts([anchor, ...previous])
+              .flatMap((p) => buildActionsForProduct(p, lang))
+              .slice(0, 3),
+            lang,
+          }),
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          }
+        );
+      }
+    }
+
+    // 3. plural reference like "how do i use those" / "can i combine those"
     if (detectPluralReference(message) && lastRecommendedProducts.length >= 2) {
       const chosen = lastRecommendedProducts.slice(0, 2);
 
@@ -1320,7 +1581,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 3. ambiguous single reference handling
+    // 4. ambiguous single reference handling
     if (
       detectAmbiguousReference(message) ||
       ((detectUsageRequest(message) ||
@@ -1396,7 +1657,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 4. bundle usage
+    // 5. bundle usage
     if (detectUsageRequest(message)) {
       const bundle = mentionedBundles[0] || findBundleFromLooseIntent(message);
       if (bundle) {
@@ -1414,7 +1675,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 5. product usage
+    // 6. product usage
     if (detectUsageRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1430,13 +1691,11 @@ export async function POST(req: Request) {
       );
     }
 
-    // 6. combinations
+    // 7. combinations
     if (detectCombinationRequest(message)) {
-      const explicitProducts = mentionedProducts.length
-        ? mentionedProducts
-        : looseProduct
-        ? [looseProduct]
-        : [];
+      const explicitProducts = dedupeProducts(
+        mentionedProducts.length ? mentionedProducts : looseProduct ? [looseProduct] : []
+      );
 
       if (explicitProducts.length >= 2) {
         return new Response(
@@ -1484,7 +1743,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 7. compare
+    // 8. compare
     if (detectCompareRequest(message)) {
       const compareItems = [...mentionedBundles, ...mentionedProducts].slice(0, 2);
 
@@ -1507,7 +1766,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 8. where
+    // 9. where
     if (detectWhereRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1527,7 +1786,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 9. suitability
+    // 10. suitability
     if (detectSuitabilityRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1547,7 +1806,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 10. routine to quiz
+    // 11. routine to quiz
     if (shouldRedirectToQuiz(message, combinedUserText)) {
       const quizOut = buildQuizRedirectReply(lang);
       return new Response(JSON.stringify(quizOut), {
@@ -1556,7 +1815,7 @@ export async function POST(req: Request) {
       });
     }
 
-    // 11. specific product
+    // 12. specific product
     if (mentionedProducts.length === 1 || looseProduct) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1572,7 +1831,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 12. specific bundle
+    // 13. specific bundle
     if (mentionedBundles.length === 1) {
       const bundle = mentionedBundles[0];
       return new Response(
