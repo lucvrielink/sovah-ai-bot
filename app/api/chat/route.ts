@@ -257,17 +257,11 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
   "Moisturising Day Cream": [
     "moisturising day cream",
     "moisturizing day cream",
-    "day cream",
-    "dagcreme",
-    "dagcrème",
   ],
   "Ceramide Barrier Night Cream": [
     "ceramide barrier night cream",
     "ceramide night cream",
     "barrier night cream",
-    "night cream",
-    "nachtcreme",
-    "nachtcrème",
   ],
   "Purifying Mousse": [
     "purifying mousse",
@@ -357,6 +351,7 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "spf stick",
     "sun stick",
     "sun protection stick",
+    "spf",
   ],
   "Acne Spot Care": [
     "acne spot care",
@@ -371,6 +366,17 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "niacinamide gel",
   ],
 };
+
+const AMBIGUOUS_ALIAS_GROUPS: Array<{ aliases: string[]; productNames: string[] }> = [
+  {
+    aliases: ["day cream", "dagcreme", "dagcrème"],
+    productNames: ["Moisturising Day Cream", "Anti-Age Day Cream"],
+  },
+  {
+    aliases: ["night cream", "nachtcreme", "nachtcrème"],
+    productNames: ["Ceramide Barrier Night Cream"],
+  },
+];
 
 function findMentionedProducts(text: string): Product[] {
   const t = normalizeLoose(text);
@@ -396,6 +402,23 @@ function findProductsByStrongAlias(text: string): Product[] {
 
     if (aliases.some((alias) => t.includes(normalizeLoose(alias)))) {
       matches.push(product);
+    }
+  }
+
+  return dedupeProducts(matches);
+}
+
+function findAmbiguousAliasCandidates(text: string): Product[] {
+  const t = normalizeLoose(text);
+  const matches: Product[] = [];
+
+  for (const group of AMBIGUOUS_ALIAS_GROUPS) {
+    const hit = group.aliases.some((alias) => t.includes(normalizeLoose(alias)));
+    if (!hit) continue;
+
+    for (const productName of group.productNames) {
+      const product = getProductByName(productName);
+      if (product) matches.push(product);
     }
   }
 
@@ -506,30 +529,72 @@ function sortProductsByRoutineOrder(products: Product[]): Product[] {
 
 function detectDrySignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, ["dry", "dehydrated", "droog", "droge huid", "uitgedroogd", "vochttekort", "tight", "flaky"]);
+  return hasAny(t, [
+    "dry",
+    "dehydrated",
+    "droog",
+    "droge huid",
+    "uitgedroogd",
+    "vochttekort",
+    "tight",
+    "flaky",
+  ]);
 }
 
 function detectGlowSignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, ["glow", "radiance", "dull", "stralend", "doffe huid", "dof", "meer glow"]);
+  return hasAny(t, [
+    "glow",
+    "radiance",
+    "dull",
+    "stralend",
+    "doffe huid",
+    "dof",
+    "meer glow",
+  ]);
 }
 
 function detectBreakoutSignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, ["acne", "puistjes", "breakouts", "blemishes", "spots", "onzuiverheden"]);
+  return hasAny(t, [
+    "acne",
+    "puistjes",
+    "breakouts",
+    "blemishes",
+    "spots",
+    "onzuiverheden",
+  ]);
 }
 
 function detectSensitiveSignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, ["sensitive", "gevoelig", "reactive", "reactief", "irritated", "geïrriteerd", "geirriteerd"]);
+  return hasAny(t, [
+    "sensitive",
+    "gevoelig",
+    "reactive",
+    "reactief",
+    "irritated",
+    "geïrriteerd",
+    "geirriteerd",
+  ]);
 }
 
 function detectAntiAgeSignal(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "anti age", "anti-age", "anti aging", "anti-aging",
-    "fine lines", "wrinkles", "rimpels", "fijne lijntjes",
-    "firmness", "stevigheid", "older skin", "oudere huid", "verouderende huid",
+    "anti age",
+    "anti-age",
+    "anti aging",
+    "anti-aging",
+    "fine lines",
+    "wrinkles",
+    "rimpels",
+    "fijne lijntjes",
+    "firmness",
+    "stevigheid",
+    "older skin",
+    "oudere huid",
+    "verouderende huid",
   ]);
 }
 
@@ -959,6 +1024,19 @@ function buildClarifyProductReply(products: Product[], lang: Lang): string {
   );
 }
 
+function buildAmbiguousAliasReply(products: Product[], lang: Lang): string {
+  const picks = dedupeProducts(products)
+    .slice(0, 3)
+    .map((p) => `**${p.title}**`)
+    .join(tr(lang, " of ", " or "));
+
+  return tr(
+    lang,
+    `Welke bedoel je precies: ${picks}?`,
+    `Which one do you mean exactly: ${picks}?`
+  );
+}
+
 // ───────────────── smarter copy ─────────────────
 
 function getSmartFallbackCopy(product: Product, lang: Lang): string {
@@ -1085,11 +1163,11 @@ function recommendProductsFromText(text: string): Product[] {
 
 // ───────────────── replies ─────────────────
 
-function buildActionsForProduct(product: Product, lang: Lang): ChatAction[] {
+function buildActionsForProduct(product: Product): ChatAction[] {
   return [
     {
       type: "OPEN_URL",
-      label: tr(lang, "Bekijk product", "View product"),
+      label: product.title,
       url: product.url,
     },
   ];
@@ -1437,7 +1515,7 @@ Rules:
     if (mentionedBundlesInReply.length > 0) {
       actions = buildActionsForBundle(mentionedBundlesInReply[0], lang);
     } else if (mentionedProductsInReply.length > 0) {
-      actions = buildActionsForProduct(mentionedProductsInReply[0], lang);
+      actions = buildActionsForProduct(mentionedProductsInReply[0]);
     }
 
     return { reply: text, actions: actions.slice(0, 2), lang };
@@ -1481,18 +1559,76 @@ export async function POST(req: Request) {
     }
 
     const userHistory = extractUserMessages(history);
+    const assistantHistory = extractAssistantMessages(history);
     const conversationTimeline = [...history, `User: ${message}`].slice(-30);
     const userTimeline = [...userHistory, message].slice(-18);
     const combinedUserText = userTimeline.join(" \n ");
+    const allHistoryText = [...history, `User: ${message}`].join(" \n ");
     const lang = detectLanguage(message, combinedUserText, forcedLang);
 
     const mentionedProducts = resolveProductsFromMessage(message);
     const mentionedBundles = findMentionedBundles(message);
     const looseProduct = findProductFromLooseIntent(message);
+    const ambiguousCandidates = findAmbiguousAliasCandidates(message);
     const recentProducts = getRecentMentionedProductsFromMessages(conversationTimeline);
     const lastRecommendedProducts = getLastRecommendedProducts(conversationTimeline);
 
-    // 1. product recommendation hard override
+    const currentHasGoalSignal =
+      detectDrySignal(message) ||
+      detectGlowSignal(message) ||
+      detectBreakoutSignal(message) ||
+      detectSensitiveSignal(message) ||
+      detectAntiAgeSignal(message);
+
+    const contextSuggestsProductOnly =
+      detectProductOnlyPreference(allHistoryText) ||
+      detectProductRecommendationRequest(allHistoryText) ||
+      assistantHistory.some((m) =>
+        hasAny(normalize(m), [
+          "tell me your skin type",
+          "what you'd mainly like help with",
+          "what you'd like help with",
+          "vertel me even wat voor huid je hebt",
+          "waar je vooral hulp bij wilt",
+          "ik raad je liever 1 of 2 passende producten aan",
+        ])
+      );
+
+    // 0. ambiguous generic aliases like day cream / dagcrème
+    if (ambiguousCandidates.length >= 2 && mentionedProducts.length === 0) {
+      return new Response(
+        JSON.stringify({
+          reply: buildAmbiguousAliasReply(ambiguousCandidates, lang),
+          actions: ambiguousCandidates
+            .slice(0, 3)
+            .flatMap((p) => buildActionsForProduct(p)),
+          lang,
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // 1. contextual short reply after product request, e.g. "dry"
+    if (contextSuggestsProductOnly && currentHasGoalSignal) {
+      const picks = recommendProductsFromText(combinedUserText);
+
+      return new Response(
+        JSON.stringify({
+          reply: buildProductRecommendationReply(picks, lang),
+          actions: picks.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
+          lang,
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // 2. product recommendation hard override
     if (
       detectProductRecommendationRequest(message) ||
       detectProductOnlyPreference(message) ||
@@ -1508,7 +1644,7 @@ export async function POST(req: Request) {
       return new Response(
         JSON.stringify({
           reply: buildProductRecommendationReply(picks, lang),
-          actions: picks.flatMap((p) => buildActionsForProduct(p, lang)).slice(0, 2),
+          actions: picks.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
           lang,
         }),
         {
@@ -1518,7 +1654,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 2. plural reference + explicit product like "can i combine those with acne spot care"
+    // 3. plural reference + explicit product like "can i combine those with acne spot care"
     if (
       detectCombinationRequest(message) &&
       detectPluralReference(message) &&
@@ -1536,7 +1672,7 @@ export async function POST(req: Request) {
           JSON.stringify({
             reply: buildGroupCombinationReply(anchor, previous, lang),
             actions: dedupeProducts([anchor, ...previous])
-              .flatMap((p) => buildActionsForProduct(p, lang))
+              .flatMap((p) => buildActionsForProduct(p))
               .slice(0, 3),
             lang,
           }),
@@ -1548,7 +1684,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 3. plural reference like "how do i use those" / "can i combine those"
+    // 4. plural reference like "how do i use those" / "can i combine those"
     if (detectPluralReference(message) && lastRecommendedProducts.length >= 2) {
       const chosen = lastRecommendedProducts.slice(0, 2);
 
@@ -1556,7 +1692,7 @@ export async function POST(req: Request) {
         return new Response(
           JSON.stringify({
             reply: buildMultiProductUsageReply(chosen, lang),
-            actions: chosen.flatMap((p) => buildActionsForProduct(p, lang)).slice(0, 2),
+            actions: chosen.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
             lang,
           }),
           {
@@ -1570,7 +1706,7 @@ export async function POST(req: Request) {
         return new Response(
           JSON.stringify({
             reply: buildDynamicCombinationReply(chosen[0], chosen[1], lang),
-            actions: chosen.flatMap((p) => buildActionsForProduct(p, lang)).slice(0, 2),
+            actions: chosen.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
             lang,
           }),
           {
@@ -1581,7 +1717,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 4. ambiguous single reference handling
+    // 5. ambiguous single reference handling
     if (
       detectAmbiguousReference(message) ||
       ((detectUsageRequest(message) ||
@@ -1599,7 +1735,7 @@ export async function POST(req: Request) {
           return new Response(
             JSON.stringify({
               reply: buildProductUsageReply(resolved, lang),
-              actions: buildActionsForProduct(resolved, lang),
+              actions: buildActionsForProduct(resolved),
               lang,
             }),
             {
@@ -1613,7 +1749,7 @@ export async function POST(req: Request) {
           return new Response(
             JSON.stringify({
               reply: buildSingleProductPairingReply(resolved, lang),
-              actions: buildActionsForProduct(resolved, lang),
+              actions: buildActionsForProduct(resolved),
               lang,
             }),
             {
@@ -1631,7 +1767,7 @@ export async function POST(req: Request) {
                 `**${resolved.title}**\n\nJe vindt het hier.`,
                 `**${resolved.title}**\n\nYou can find it here.`
               ),
-              actions: buildActionsForProduct(resolved, lang),
+              actions: buildActionsForProduct(resolved),
               lang,
             }),
             {
@@ -1646,7 +1782,7 @@ export async function POST(req: Request) {
         return new Response(
           JSON.stringify({
             reply: buildClarifyProductReply(recentProducts, lang),
-            actions: recentProducts.slice(0, 2).flatMap((p) => buildActionsForProduct(p, lang)),
+            actions: recentProducts.slice(0, 2).flatMap((p) => buildActionsForProduct(p)),
             lang,
           }),
           {
@@ -1657,7 +1793,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 5. bundle usage
+    // 6. bundle usage
     if (detectUsageRequest(message)) {
       const bundle = mentionedBundles[0] || findBundleFromLooseIntent(message);
       if (bundle) {
@@ -1675,13 +1811,13 @@ export async function POST(req: Request) {
       }
     }
 
-    // 6. product usage
+    // 7. product usage
     if (detectUsageRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
         JSON.stringify({
           reply: buildProductUsageReply(product, lang),
-          actions: buildActionsForProduct(product, lang),
+          actions: buildActionsForProduct(product),
           lang,
         }),
         {
@@ -1691,7 +1827,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 7. combinations
+    // 8. combinations
     if (detectCombinationRequest(message)) {
       const explicitProducts = dedupeProducts(
         mentionedProducts.length ? mentionedProducts : looseProduct ? [looseProduct] : []
@@ -1702,8 +1838,8 @@ export async function POST(req: Request) {
           JSON.stringify({
             reply: buildDynamicCombinationReply(explicitProducts[0], explicitProducts[1], lang),
             actions: [
-              buildActionsForProduct(explicitProducts[0], lang)[0],
-              buildActionsForProduct(explicitProducts[1], lang)[0],
+              buildActionsForProduct(explicitProducts[0])[0],
+              buildActionsForProduct(explicitProducts[1])[0],
             ].slice(0, 2),
             lang,
           }),
@@ -1718,7 +1854,7 @@ export async function POST(req: Request) {
         return new Response(
           JSON.stringify({
             reply: buildSingleProductPairingReply(explicitProducts[0], lang),
-            actions: buildActionsForProduct(explicitProducts[0], lang),
+            actions: buildActionsForProduct(explicitProducts[0]),
             lang,
           }),
           {
@@ -1732,7 +1868,7 @@ export async function POST(req: Request) {
         return new Response(
           JSON.stringify({
             reply: buildDynamicCombinationReply(lastRecommendedProducts[0], lastRecommendedProducts[1], lang),
-            actions: lastRecommendedProducts.flatMap((p) => buildActionsForProduct(p, lang)).slice(0, 2),
+            actions: lastRecommendedProducts.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
             lang,
           }),
           {
@@ -1743,7 +1879,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 8. compare
+    // 9. compare
     if (detectCompareRequest(message)) {
       const compareItems = [...mentionedBundles, ...mentionedProducts].slice(0, 2);
 
@@ -1766,7 +1902,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 9. where
+    // 10. where
     if (detectWhereRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1776,7 +1912,7 @@ export async function POST(req: Request) {
             `**${product.title}**\n\nJe vindt het hier.`,
             `**${product.title}**\n\nYou can find it here.`
           ),
-          actions: buildActionsForProduct(product, lang),
+          actions: buildActionsForProduct(product),
           lang,
         }),
         {
@@ -1786,7 +1922,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 10. suitability
+    // 11. suitability
     if (detectSuitabilityRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1796,7 +1932,7 @@ export async function POST(req: Request) {
             `**${product.title}**\n\n${getSafeShortCopy(product, lang)}\n\nVertel me wat voor huid je hebt en wat je doel is, dan zeg ik of dit goed past.`,
             `**${product.title}**\n\n${getSafeShortCopy(product, lang)}\n\nTell me your skin type and goal, and I’ll tell you if it fits.`
           ),
-          actions: buildActionsForProduct(product, lang),
+          actions: buildActionsForProduct(product),
           lang,
         }),
         {
@@ -1806,7 +1942,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 11. routine to quiz
+    // 12. routine to quiz
     if (shouldRedirectToQuiz(message, combinedUserText)) {
       const quizOut = buildQuizRedirectReply(lang);
       return new Response(JSON.stringify(quizOut), {
@@ -1815,13 +1951,13 @@ export async function POST(req: Request) {
       });
     }
 
-    // 12. specific product
+    // 13. specific product
     if (mentionedProducts.length === 1 || looseProduct) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
         JSON.stringify({
           reply: buildProductReply(product, lang),
-          actions: buildActionsForProduct(product, lang),
+          actions: buildActionsForProduct(product),
           lang,
         }),
         {
@@ -1831,7 +1967,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 13. specific bundle
+    // 14. specific bundle
     if (mentionedBundles.length === 1) {
       const bundle = mentionedBundles[0];
       return new Response(
