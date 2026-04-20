@@ -148,6 +148,8 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
     "them",
     "this one",
     "that one",
+    "moisturising",
+    "anti age",
   ];
 
   const strongDutchSignals = [
@@ -167,6 +169,7 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
     "deze",
     "die",
     "dit product",
+    "hydraterend",
   ];
 
   const hasStrongEn = strongEnglishSignals.some((w) => current.includes(w));
@@ -234,72 +237,104 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "micellar cleansing water",
     "micellar water",
     "micellar cleanser",
+    "micellar",
+    "cleansing water",
   ],
   "Hydrating Toner": [
     "hydrating toner",
+    "hydrating",
+    "hydra toner",
+    "toner",
   ],
   "Hydrating Serum": [
     "hydrating serum",
+    "hydrating",
+    "hydra serum",
+    "hydra",
   ],
   "Double Hydration Boost Gel + HA": [
     "double hydration boost gel + ha",
     "double hydration boost gel",
     "boost gel + ha",
     "hydration boost gel",
+    "boost gel",
+    "ha gel",
   ],
   "Moisturising Day Cream": [
     "moisturising day cream",
     "moisturizing day cream",
+    "moisturising",
+    "moisturizing",
+    "moisture day cream",
+    "hydrating day cream",
   ],
   "Ceramide Barrier Night Cream": [
     "ceramide barrier night cream",
     "ceramide night cream",
     "barrier night cream",
+    "ceramide cream",
+    "ceramide",
+    "barrier cream",
   ],
   "Purifying Mousse": [
     "purifying mousse",
     "mousse cleanser",
     "cleansing mousse",
+    "mousse",
+    "purifying",
   ],
   "Antioxidant Ginkgo Gel Booster": [
     "antioxidant ginkgo gel booster",
     "ginkgo gel booster",
     "ginkgo booster",
+    "ginkgo",
   ],
   "Calming Facial Oil": [
     "calming facial oil",
     "calming oil",
+    "facial oil",
+    "calming",
   ],
   "AHA Peeling Concentrate": [
     "aha peeling concentrate",
     "aha peeling",
     "aha concentrate",
+    "aha",
+    "peeling",
   ],
   "Caffeine Gel Booster": [
     "caffeine gel booster",
     "caffeine booster",
+    "caffeine",
   ],
   "Oil-Free Hydrating Gel": [
     "oil-free hydrating gel",
     "oil free hydrating gel",
     "oil-free gel",
     "oil free gel",
+    "hydrating gel",
+    "oil free",
   ],
   "Peptide Anti-Aging Serum": [
     "peptide anti-aging serum",
     "peptide anti aging serum",
     "peptide serum",
+    "peptide",
   ],
   "Collagen Boost Serum": [
     "collagen boost serum",
     "collagen serum",
     "collagen boost",
+    "collagen",
   ],
   "Anti-Age Day Cream": [
     "anti-age day cream",
     "anti age day cream",
     "anti-aging day cream",
     "anti aging day cream",
+    "anti age",
+    "anti-aging",
+    "anti aging",
   ],
   "Natural Retinol Alternative Oil Serum": [
     "natural retinol alternative oil serum",
@@ -307,35 +342,43 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "natural retinol alternative",
     "retinol alternative",
     "natural retinol",
+    "retinol",
   ],
   "Smoothing Eye Cream": [
     "smoothing eye cream",
     "eye cream",
     "oogcreme",
     "oogcrème",
+    "eye",
   ],
   "Vitamin C Serum": [
     "vitamin c serum",
     "vitamin c",
     "vit c serum",
+    "vit c",
   ],
   "Brightening Face&Body Exfoliator with Kojic Acid": [
     "brightening face body exfoliator with kojic acid",
     "brightening exfoliator with kojic acid",
     "brightening exfoliator",
     "kojic exfoliator",
+    "body exfoliator",
+    "brightening",
   ],
   "Dark Spot Face Cream with Kojic Acid": [
     "dark spot face cream with kojic acid",
     "dark spot cream with kojic acid",
     "dark spot cream",
     "kojic acid cream",
+    "dark spot",
+    "kojic cream",
   ],
   "All-In-One Facial Oil": [
     "all-in-one facial oil",
     "all in one facial oil",
     "all-in-one oil",
     "all in one oil",
+    "all in one",
   ],
   "Sun Protection SPF50 Stick, no tint": [
     "sun protection spf50 stick no tint",
@@ -345,11 +388,16 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "sun stick",
     "sun protection stick",
     "spf",
+    "spf50",
+    "sun protection",
+    "sunscreen stick",
   ],
   "Acne Spot Care": [
     "acne spot care",
     "acne spot",
     "spot care",
+    "spot treatment",
+    "acne treatment",
   ],
   "Niacinamide Gel Moisturiser": [
     "niacinamide gel moisturiser",
@@ -357,6 +405,7 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "niacinamide moisturiser",
     "niacinamide moisturizer",
     "niacinamide gel",
+    "niacinamide",
   ],
 };
 
@@ -958,40 +1007,6 @@ function getLastRecommendedProducts(history: string[]): Product[] {
   return getRecentMentionedProductsFromMessages(history).slice(0, 2);
 }
 
-function buildClarifyProductReply(products: Product[], lang: Lang): string {
-  const picks = products
-    .slice(0, 2)
-    .map((p) => `**${p.title}**`)
-    .join(tr(lang, " of ", " or "));
-
-  return tr(
-    lang,
-    `Bedoel je ${picks}?`,
-    `Do you mean ${picks}?`
-  );
-}
-
-function buildAmbiguousAliasReply(products: Product[], lang: Lang, contextProduct?: Product): string {
-  const picks = dedupeProducts(products)
-    .slice(0, 3)
-    .map((p) => `**${p.title}**`)
-    .join(tr(lang, " of ", " or "));
-
-  if (contextProduct) {
-    return tr(
-      lang,
-      `Welke bedoel je precies bij **${contextProduct.title}**: ${picks}?`,
-      `Which one do you mean exactly with **${contextProduct.title}**: ${picks}?`
-    );
-  }
-
-  return tr(
-    lang,
-    `Welke bedoel je precies: ${picks}?`,
-    `Which one do you mean exactly: ${picks}?`
-  );
-}
-
 // ───────────────── smarter copy ─────────────────
 
 function getSmartFallbackCopy(product: Product, lang: Lang): string {
@@ -1561,9 +1576,7 @@ export async function POST(req: Request) {
       return new Response(
         JSON.stringify({
           reply: buildAmbiguousAliasReply(ambiguousCandidates, lang, contextProduct),
-          actions: ambiguousCandidates
-            .slice(0, 3)
-            .flatMap((p) => buildActionsForProduct(p)),
+          actions: [],
           lang,
         }),
         {
@@ -1716,7 +1729,7 @@ export async function POST(req: Request) {
         return new Response(
           JSON.stringify({
             reply: buildClarifyProductReply(recentProducts, lang),
-            actions: recentProducts.slice(0, 2).flatMap((p) => buildActionsForProduct(p)),
+            actions: [],
             lang,
           }),
           {
