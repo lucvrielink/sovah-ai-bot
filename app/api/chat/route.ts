@@ -129,70 +129,58 @@ function getProductByName(name: string): Product | undefined {
 }
 
 function detectLanguage(currentMessage: string, historyText = "", forcedLang?: string): Lang {
-  if (forcedLang === "nl" || forcedLang === "en") {
-    const current = normalize(currentMessage);
-
-    const strongEnglishSignals = [
-      "nothing for acne",
-      "for acne",
-      "for dry skin",
-      "for older skin",
-      "how do i use",
-      "what pairs with",
-      "recommend",
-      "product",
-      "products",
-      "routine",
-      "breakouts",
-      "older skin",
-      "dry skin",
-      "sensitive skin",
-      "what about",
-      "not that one",
-      "nothing for",
-      "those",
-      "them",
-      "can i combine those",
-    ];
-
-    const strongDutchSignals = [
-      "niets voor acne",
-      "voor acne",
-      "voor droge huid",
-      "voor oudere huid",
-      "hoe gebruik ik",
-      "wat past bij",
-      "raad aan",
-      "product",
-      "producten",
-      "routine",
-      "puistjes",
-      "oudere huid",
-      "droge huid",
-      "gevoelige huid",
-      "wat dan",
-      "niet die",
-      "deze",
-      "die",
-      "kan ik die combineren",
-    ];
-
-    const currentEnStrong = strongEnglishSignals.some((w) => current.includes(w));
-    const currentNlStrong = strongDutchSignals.some((w) => current.includes(w));
-
-    if (currentEnStrong && !currentNlStrong) return "en";
-    if (currentNlStrong && !currentEnStrong) return "nl";
-  }
-
   const current = normalize(currentMessage);
   const history = normalize(historyText);
+
+  const strongEnglishSignals = [
+    "can i combine",
+    "how do i use",
+    "which routine",
+    "i want",
+    "dry skin",
+    "breakouts",
+    "older skin",
+    "what do you recommend",
+    "can you recommend",
+    "day cream",
+    "night cream",
+    "those",
+    "them",
+    "this one",
+    "that one",
+  ];
+
+  const strongDutchSignals = [
+    "kan ik combineren",
+    "hoe gebruik ik",
+    "welke routine",
+    "ik wil",
+    "droge huid",
+    "puistjes",
+    "oudere huid",
+    "wat raad je aan",
+    "kan je aanraden",
+    "dagcrème",
+    "dagcreme",
+    "nachtcrème",
+    "nachtcreme",
+    "deze",
+    "die",
+    "dit product",
+  ];
+
+  const hasStrongEn = strongEnglishSignals.some((w) => current.includes(w));
+  const hasStrongNl = strongDutchSignals.some((w) => current.includes(w));
+
+  if (hasStrongEn && !hasStrongNl) return "en";
+  if (hasStrongNl && !hasStrongEn) return "nl";
 
   const dutchSignals = [
     "ik", "mijn", "huid", "droog", "droge", "vette", "vet", "gevoelig",
     "welke", "wat", "past", "bij", "mij", "puistjes", "acne", "routine",
     "product", "producten", "hoe gebruik", "wanneer gebruik", "oudere huid",
     "fijne lijntjes", "rimpels", "geen routine", "paar producten", "deze", "die", "dit",
-    "droge huid", "gevoelige huid", "voor puistjes",
+    "droge huid", "gevoelige huid", "voor puistjes", "dagcreme", "dagcrème",
   ];
 
   const englishSignals = [
@@ -200,6 +188,7 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
     "product", "products", "how do i use", "when do i use", "older skin",
     "fine lines", "wrinkles", "not a full routine", "few products", "this", "that",
     "dry skin", "sensitive skin", "breakouts", "those", "them", "both",
+    "day cream", "night cream",
   ];
 
   const currentNl = countMatches(current, dutchSignals);
@@ -207,13 +196,17 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
   const historyNl = countMatches(history, dutchSignals);
   const historyEn = countMatches(history, englishSignals);
 
-  const nlScore = currentNl * 5 + historyNl;
-  const enScore = currentEn * 5 + historyEn;
-
   if (currentEn > 0 && currentNl === 0) return "en";
   if (currentNl > 0 && currentEn === 0) return "nl";
 
-  return nlScore >= enScore ? "nl" : "en";
+  const nlScore = currentNl * 5 + historyNl;
+  const enScore = currentEn * 5 + historyEn;
+
+  if (nlScore > enScore) return "nl";
+  if (enScore > nlScore) return "en";
+
+  if (forcedLang === "nl" || forcedLang === "en") return forcedLang;
+  return "en";
 }
 
 function extractUserMessages(history: string[]): string[] {
@@ -372,10 +365,6 @@ const AMBIGUOUS_ALIAS_GROUPS: Array<{ aliases: string[]; productNames: string[] 
     aliases: ["day cream", "dagcreme", "dagcrème"],
     productNames: ["Moisturising Day Cream", "Anti-Age Day Cream"],
   },
-  {
-    aliases: ["night cream", "nachtcreme", "nachtcrème"],
-    productNames: ["Ceramide Barrier Night Cream"],
-  },
 ];
 
 function findMentionedProducts(text: string): Product[] {
@@ -529,72 +518,30 @@ function sortProductsByRoutineOrder(products: Product[]): Product[] {
 
 function detectDrySignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, [
-    "dry",
-    "dehydrated",
-    "droog",
-    "droge huid",
-    "uitgedroogd",
-    "vochttekort",
-    "tight",
-    "flaky",
-  ]);
+  return hasAny(t, ["dry", "dehydrated", "droog", "droge huid", "uitgedroogd", "vochttekort", "tight", "flaky"]);
 }
 
 function detectGlowSignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, [
-    "glow",
-    "radiance",
-    "dull",
-    "stralend",
-    "doffe huid",
-    "dof",
-    "meer glow",
-  ]);
+  return hasAny(t, ["glow", "radiance", "dull", "stralend", "doffe huid", "dof", "meer glow"]);
 }
 
 function detectBreakoutSignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, [
-    "acne",
-    "puistjes",
-    "breakouts",
-    "blemishes",
-    "spots",
-    "onzuiverheden",
-  ]);
+  return hasAny(t, ["acne", "puistjes", "breakouts", "blemishes", "spots", "onzuiverheden"]);
 }
 
 function detectSensitiveSignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, [
-    "sensitive",
-    "gevoelig",
-    "reactive",
-    "reactief",
-    "irritated",
-    "geïrriteerd",
-    "geirriteerd",
-  ]);
+  return hasAny(t, ["sensitive", "gevoelig", "reactive", "reactief", "irritated", "geïrriteerd", "geirriteerd"]);
 }
 
 function detectAntiAgeSignal(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "anti age",
-    "anti-age",
-    "anti aging",
-    "anti-aging",
-    "fine lines",
-    "wrinkles",
-    "rimpels",
-    "fijne lijntjes",
-    "firmness",
-    "stevigheid",
-    "older skin",
-    "oudere huid",
-    "verouderende huid",
+    "anti age", "anti-age", "anti aging", "anti-aging",
+    "fine lines", "wrinkles", "rimpels", "fijne lijntjes",
+    "firmness", "stevigheid", "older skin", "oudere huid", "verouderende huid",
   ]);
 }
 
@@ -1024,11 +971,19 @@ function buildClarifyProductReply(products: Product[], lang: Lang): string {
   );
 }
 
-function buildAmbiguousAliasReply(products: Product[], lang: Lang): string {
+function buildAmbiguousAliasReply(products: Product[], lang: Lang, contextProduct?: Product): string {
   const picks = dedupeProducts(products)
     .slice(0, 3)
     .map((p) => `**${p.title}**`)
     .join(tr(lang, " of ", " or "));
+
+  if (contextProduct) {
+    return tr(
+      lang,
+      `Welke bedoel je precies bij **${contextProduct.title}**: ${picks}?`,
+      `Which one do you mean exactly with **${contextProduct.title}**: ${picks}?`
+    );
+  }
 
   return tr(
     lang,
@@ -1573,6 +1528,10 @@ export async function POST(req: Request) {
     const recentProducts = getRecentMentionedProductsFromMessages(conversationTimeline);
     const lastRecommendedProducts = getLastRecommendedProducts(conversationTimeline);
 
+    const explicitProducts = dedupeProducts(
+      mentionedProducts.length ? mentionedProducts : looseProduct ? [looseProduct] : []
+    );
+
     const currentHasGoalSignal =
       detectDrySignal(message) ||
       detectGlowSignal(message) ||
@@ -1594,11 +1553,14 @@ export async function POST(req: Request) {
         ])
       );
 
-    // 0. ambiguous generic aliases like day cream / dagcrème
-    if (ambiguousCandidates.length >= 2 && mentionedProducts.length === 0) {
+    // 0. ambiguous generic aliases, also when combined with explicit product
+    if (ambiguousCandidates.length >= 2) {
+      const contextProduct =
+        explicitProducts.find((p) => !ambiguousCandidates.some((a) => a.title === p.title));
+
       return new Response(
         JSON.stringify({
-          reply: buildAmbiguousAliasReply(ambiguousCandidates, lang),
+          reply: buildAmbiguousAliasReply(ambiguousCandidates, lang, contextProduct),
           actions: ambiguousCandidates
             .slice(0, 3)
             .flatMap((p) => buildActionsForProduct(p)),
@@ -1611,60 +1573,14 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1. contextual short reply after product request, e.g. "dry"
-    if (contextSuggestsProductOnly && currentHasGoalSignal) {
-      const picks = recommendProductsFromText(combinedUserText);
-
-      return new Response(
-        JSON.stringify({
-          reply: buildProductRecommendationReply(picks, lang),
-          actions: picks.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
-          lang,
-        }),
-        {
-          status: 200,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
-      );
-    }
-
-    // 2. product recommendation hard override
-    if (
-      detectProductRecommendationRequest(message) ||
-      detectProductOnlyPreference(message) ||
-      (detectProductOnlyPreference(combinedUserText) &&
-        (detectDrySignal(combinedUserText) ||
-          detectGlowSignal(combinedUserText) ||
-          detectBreakoutSignal(combinedUserText) ||
-          detectSensitiveSignal(combinedUserText) ||
-          detectAntiAgeSignal(combinedUserText)))
-    ) {
-      const picks = recommendProductsFromText(combinedUserText);
-
-      return new Response(
-        JSON.stringify({
-          reply: buildProductRecommendationReply(picks, lang),
-          actions: picks.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
-          lang,
-        }),
-        {
-          status: 200,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
-      );
-    }
-
-    // 3. plural reference + explicit product like "can i combine those with acne spot care"
+    // 1. plural reference + explicit product like "can i combine those with acne spot care"
     if (
       detectCombinationRequest(message) &&
       detectPluralReference(message) &&
-      (mentionedProducts.length >= 1 || looseProduct) &&
+      explicitProducts.length >= 1 &&
       lastRecommendedProducts.length >= 1
     ) {
-      const explicit = dedupeProducts(
-        mentionedProducts.length ? mentionedProducts : looseProduct ? [looseProduct] : []
-      );
-      const anchor = explicit[0];
+      const anchor = explicitProducts[0];
       const previous = dedupeProducts(lastRecommendedProducts).filter((p) => p.title !== anchor.title);
 
       if (anchor && previous.length) {
@@ -1684,7 +1600,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 4. plural reference like "how do i use those" / "can i combine those"
+    // 2. plural reference like "how do i use those" / "can i combine those"
     if (detectPluralReference(message) && lastRecommendedProducts.length >= 2) {
       const chosen = lastRecommendedProducts.slice(0, 2);
 
@@ -1717,7 +1633,25 @@ export async function POST(req: Request) {
       }
     }
 
-    // 5. ambiguous single reference handling
+    // 3. direct combination with explicit products
+    if (detectCombinationRequest(message) && explicitProducts.length >= 2) {
+      return new Response(
+        JSON.stringify({
+          reply: buildDynamicCombinationReply(explicitProducts[0], explicitProducts[1], lang),
+          actions: [
+            buildActionsForProduct(explicitProducts[0])[0],
+            buildActionsForProduct(explicitProducts[1])[0],
+          ].slice(0, 2),
+          lang,
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // 4. ambiguous single reference handling
     if (
       detectAmbiguousReference(message) ||
       ((detectUsageRequest(message) ||
@@ -1793,7 +1727,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 6. bundle usage
+    // 5. bundle usage
     if (detectUsageRequest(message)) {
       const bundle = mentionedBundles[0] || findBundleFromLooseIntent(message);
       if (bundle) {
@@ -1811,7 +1745,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 7. product usage
+    // 6. product usage
     if (detectUsageRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1827,59 +1761,73 @@ export async function POST(req: Request) {
       );
     }
 
-    // 8. combinations
-    if (detectCombinationRequest(message)) {
-      const explicitProducts = dedupeProducts(
-        mentionedProducts.length ? mentionedProducts : looseProduct ? [looseProduct] : []
+    // 7. single explicit combination product
+    if (detectCombinationRequest(message) && explicitProducts.length === 1) {
+      return new Response(
+        JSON.stringify({
+          reply: buildSingleProductPairingReply(explicitProducts[0], lang),
+          actions: buildActionsForProduct(explicitProducts[0]),
+          lang,
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
       );
-
-      if (explicitProducts.length >= 2) {
-        return new Response(
-          JSON.stringify({
-            reply: buildDynamicCombinationReply(explicitProducts[0], explicitProducts[1], lang),
-            actions: [
-              buildActionsForProduct(explicitProducts[0])[0],
-              buildActionsForProduct(explicitProducts[1])[0],
-            ].slice(0, 2),
-            lang,
-          }),
-          {
-            status: 200,
-            headers: { "Content-Type": "application/json", ...corsHeaders },
-          }
-        );
-      }
-
-      if (explicitProducts.length === 1) {
-        return new Response(
-          JSON.stringify({
-            reply: buildSingleProductPairingReply(explicitProducts[0], lang),
-            actions: buildActionsForProduct(explicitProducts[0]),
-            lang,
-          }),
-          {
-            status: 200,
-            headers: { "Content-Type": "application/json", ...corsHeaders },
-          }
-        );
-      }
-
-      if (lastRecommendedProducts.length >= 2) {
-        return new Response(
-          JSON.stringify({
-            reply: buildDynamicCombinationReply(lastRecommendedProducts[0], lastRecommendedProducts[1], lang),
-            actions: lastRecommendedProducts.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
-            lang,
-          }),
-          {
-            status: 200,
-            headers: { "Content-Type": "application/json", ...corsHeaders },
-          }
-        );
-      }
     }
 
-    // 9. compare
+    // 8. contextual short reply after product request, only for really short follow-ups
+    if (
+      contextSuggestsProductOnly &&
+      currentHasGoalSignal &&
+      normalize(message).split(" ").length <= 3 &&
+      !detectCombinationRequest(message) &&
+      !detectUsageRequest(message) &&
+      !detectWhereRequest(message) &&
+      !detectSuitabilityRequest(message)
+    ) {
+      const picks = recommendProductsFromText(combinedUserText);
+
+      return new Response(
+        JSON.stringify({
+          reply: buildProductRecommendationReply(picks, lang),
+          actions: picks.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
+          lang,
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // 9. product recommendation hard override
+    if (
+      detectProductRecommendationRequest(message) ||
+      detectProductOnlyPreference(message) ||
+      (detectProductOnlyPreference(combinedUserText) &&
+        (detectDrySignal(combinedUserText) ||
+          detectGlowSignal(combinedUserText) ||
+          detectBreakoutSignal(combinedUserText) ||
+          detectSensitiveSignal(combinedUserText) ||
+          detectAntiAgeSignal(combinedUserText)))
+    ) {
+      const picks = recommendProductsFromText(combinedUserText);
+
+      return new Response(
+        JSON.stringify({
+          reply: buildProductRecommendationReply(picks, lang),
+          actions: picks.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
+          lang,
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // 10. compare
     if (detectCompareRequest(message)) {
       const compareItems = [...mentionedBundles, ...mentionedProducts].slice(0, 2);
 
@@ -1902,7 +1850,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 10. where
+    // 11. where
     if (detectWhereRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1922,7 +1870,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 11. suitability
+    // 12. suitability
     if (detectSuitabilityRequest(message) && (mentionedProducts.length === 1 || looseProduct)) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1942,7 +1890,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 12. routine to quiz
+    // 13. routine to quiz
     if (shouldRedirectToQuiz(message, combinedUserText)) {
       const quizOut = buildQuizRedirectReply(lang);
       return new Response(JSON.stringify(quizOut), {
@@ -1951,7 +1899,7 @@ export async function POST(req: Request) {
       });
     }
 
-    // 13. specific product
+    // 14. specific product
     if (mentionedProducts.length === 1 || looseProduct) {
       const product = mentionedProducts[0] || looseProduct!;
       return new Response(
@@ -1967,7 +1915,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 14. specific bundle
+    // 15. specific bundle
     if (mentionedBundles.length === 1) {
       const bundle = mentionedBundles[0];
       return new Response(
