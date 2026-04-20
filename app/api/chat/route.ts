@@ -142,7 +142,7 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
       "nothing for",
       "those",
       "them",
-      "can i combine those"
+      "can i combine those",
     ];
 
     const strongDutchSignals = [
@@ -164,7 +164,7 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
       "niet die",
       "deze",
       "die",
-      "kan ik die combineren"
+      "kan ik die combineren",
     ];
 
     const currentEnStrong = strongEnglishSignals.some((w) => current.includes(w));
@@ -182,14 +182,14 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
     "welke", "wat", "past", "bij", "mij", "puistjes", "acne", "routine",
     "product", "producten", "hoe gebruik", "wanneer gebruik", "oudere huid",
     "fijne lijntjes", "rimpels", "geen routine", "paar producten", "deze", "die", "dit",
-    "droge huid", "gevoelige huid", "voor puistjes"
+    "droge huid", "gevoelige huid", "voor puistjes",
   ];
 
   const englishSignals = [
     "my", "skin", "dry", "oily", "sensitive", "which", "what", "routine",
     "product", "products", "how do i use", "when do i use", "older skin",
     "fine lines", "wrinkles", "not a full routine", "few products", "this", "that",
-    "dry skin", "sensitive skin", "breakouts", "those", "them", "both"
+    "dry skin", "sensitive skin", "breakouts", "those", "them", "both",
   ];
 
   const currentNl = countMatches(current, dutchSignals);
@@ -267,7 +267,7 @@ function findProductFromLooseIntent(text: string): Product | undefined {
     "Oil-Free Hydrating Gel": ["oil free gel", "oil-free gel", "hydrating gel"],
     "All-In-One Facial Oil": ["all in one oil", "all-in-one oil"],
     "Dark Spot Face Cream with Kojic Acid": ["dark spot cream", "kojic acid cream"],
-    "Brightening Face&Body Exfoliator with Kojic Acid": ["brightening exfoliator", "kojic exfoliator"]
+    "Brightening Face&Body Exfoliator with Kojic Acid": ["brightening exfoliator", "kojic exfoliator"],
   };
 
   for (const [productName, words] of Object.entries(aliases)) {
@@ -301,7 +301,9 @@ function inferProductType(product: Product): ProductType {
 }
 
 function inferUseTime(product: Product): UseTime {
-  const t = normalize(product.title + " " + (product.when_to_use_en || "") + " " + (product.when_to_use_nl || ""));
+  const t = normalize(
+    product.title + " " + (product.when_to_use_en || "") + " " + (product.when_to_use_nl || "")
+  );
 
   if (t.includes("night") || t.includes("avond") || t.includes("evening")) return "evening";
   if (t.includes("day cream") || t.includes("ochtend") || t.includes("morning") || t.includes("spf")) return "morning";
@@ -311,16 +313,26 @@ function inferUseTime(product: Product): UseTime {
 function inferOrderIndex(product: Product): number {
   const type = inferProductType(product);
   switch (type) {
-    case "cleanser": return 1;
-    case "toner": return 2;
-    case "spot": return 3;
-    case "exfoliant": return 3;
-    case "serum": return 4;
-    case "gel": return 5;
-    case "cream": return 6;
-    case "oil": return 7;
-    case "spf": return 8;
-    default: return 5;
+    case "cleanser":
+      return 1;
+    case "toner":
+      return 2;
+    case "spot":
+      return 3;
+    case "exfoliant":
+      return 3;
+    case "serum":
+      return 4;
+    case "gel":
+      return 5;
+    case "cream":
+      return 6;
+    case "oil":
+      return 7;
+    case "spf":
+      return 8;
+    default:
+      return 5;
   }
 }
 
@@ -355,7 +367,7 @@ function detectAntiAgeSignal(text: string): boolean {
   return hasAny(t, [
     "anti age", "anti-age", "anti aging", "anti-aging",
     "fine lines", "wrinkles", "rimpels", "fijne lijntjes",
-    "firmness", "stevigheid", "older skin", "oudere huid", "verouderende huid"
+    "firmness", "stevigheid", "older skin", "oudere huid", "verouderende huid",
   ]);
 }
 
@@ -390,7 +402,7 @@ function detectUsageRequest(text: string): boolean {
     "how many times", "how to use", "before or after", "step in routine",
     "hoe gebruik ik", "hoe moet ik gebruiken", "wanneer gebruik ik",
     "hoe vaak", "hoe moet ik dit gebruiken", "voor of na", "welke stap",
-    "in welke stap", "hoe gebruik je"
+    "in welke stap", "hoe gebruik je",
   ]);
 }
 
@@ -401,7 +413,7 @@ function detectCombinationRequest(text: string): boolean {
     "use together", "layer with", "works well with", "pair with",
     "combineren", "combineer", "kan ik combineren", "samen met",
     "past goed bij", "welke producten passen hierbij", "wat past hierbij",
-    "waarmee combineren", "welke combinatie"
+    "waarmee combineren", "welke combinatie",
   ]);
 }
 
@@ -409,7 +421,7 @@ function detectCompareRequest(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
     "compare", "difference", "what is better", "which is better", "vs", "versus",
-    "vergelijk", "verschil", "wat is beter", "welke is beter"
+    "vergelijk", "verschil", "wat is beter", "welke is beter",
   ]);
 }
 
@@ -417,7 +429,7 @@ function detectWhereRequest(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
     "where", "where can i find", "find", "show me", "send me",
-    "waar", "waar vind", "vinden", "geef me de link", "stuur me"
+    "waar", "waar vind", "vinden", "geef me de link", "stuur me",
   ]);
 }
 
@@ -427,14 +439,14 @@ function detectSuitabilityRequest(text: string): boolean {
     "is this good for", "is it good for", "good for", "suitable for",
     "can i use", "would this work for", "is this okay for",
     "geschikt voor", "kan ik gebruiken", "is dit goed voor",
-    "werkt dit voor", "past dit bij"
+    "werkt dit voor", "past dit bij",
   ]);
 }
 
 function detectPluralReference(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "those", "them", "these", "both", "allebei", "beide", "beiden", "die", "deze"
+    "those", "them", "these", "both", "allebei", "beide", "beiden", "die", "deze",
   ]);
 }
 
@@ -456,7 +468,7 @@ function detectAmbiguousReference(text: string): boolean {
     "can i combine this",
     "where do i use this",
     "this one",
-    "that one"
+    "that one",
   ]);
 }
 
@@ -483,7 +495,7 @@ function detectProductOnlyPreference(text: string): boolean {
     "not a full routine",
     "just a product",
     "just products",
-    "only a few products"
+    "only a few products",
   ]);
 }
 
@@ -535,7 +547,7 @@ function detectProductRecommendationRequest(text: string): boolean {
     "iets voor acne",
     "iets voor puistjes",
     "niets voor acne",
-    "niets voor puistjes"
+    "niets voor puistjes",
   ]);
 }
 
@@ -560,7 +572,7 @@ function detectRoutineHelpRequest(text: string): boolean {
     "welke producten heb ik nodig",
     "routine voor mijn huid",
     "beste match voor mijn huid",
-    "ik weet niet wat ik nodig heb"
+    "ik weet niet wat ik nodig heb",
   ]);
 }
 
@@ -574,7 +586,7 @@ function detectNotKnowingSkinType(text: string): boolean {
     "ik weet niet welk huidtype ik heb",
     "i dont know my skin type",
     "i don't know my skin type",
-    "not sure what my skin type is"
+    "not sure what my skin type is",
   ]);
 }
 
@@ -596,7 +608,7 @@ function detectBroadSkinGoal(text: string): boolean {
     "i want smoother skin",
     "i want more glow",
     "i want less acne",
-    "i want less dryness"
+    "i want less dryness",
   ]);
 }
 
@@ -614,7 +626,7 @@ function detectCorrectionMessage(text: string): boolean {
     "that's not what i mean",
     "no i mean",
     "instead",
-    "rather"
+    "rather",
   ]);
 }
 
@@ -660,8 +672,14 @@ function shouldRedirectToQuiz(message: string, combinedUserText: string): boolea
   if (
     signalCount >= 1 &&
     hasAny(current, [
-      "wat raad je aan", "what do you recommend", "voor mijn huid",
-      "for my skin", "wat moet ik", "what should i", "wat past", "what fits"
+      "wat raad je aan",
+      "what do you recommend",
+      "voor mijn huid",
+      "for my skin",
+      "wat moet ik",
+      "what should i",
+      "wat past",
+      "what fits",
     ]) &&
     !detectProductRecommendationRequest(message) &&
     !detectProductOnlyPreference(message)
@@ -718,7 +736,11 @@ function getLastRecommendedProducts(history: string[]): Product[] {
 }
 
 function buildClarifyProductReply(products: Product[], lang: Lang): string {
-  const picks = products.slice(0, 2).map((p) => `**${p.title}**`).join(tr(lang, " of ", " or "));
+  const picks = products
+    .slice(0, 2)
+    .map((p) => `**${p.title}**`)
+    .join(tr(lang, " of ", " or "));
+
   return tr(
     lang,
     `Bedoel je ${picks}?`,
@@ -747,7 +769,6 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
     "Anti-Age Day Cream": "Een dagcrème voor dagelijkse verzorging bij eerste lijntjes.",
     "Collagen Boost Serum": "Een serum gericht op stevigheid en comfort.",
     "AHA Peeling Concentrate": "Een exfoliërend concentraat voor dofheid of textuur.",
-    "Hydrating Toner": "Een hydraterende toner voor extra comfort en balans.",
     "Micellar Cleansing Water": "Een zachte reiniger om make-up en vuil te verwijderen.",
     "Natural Retinol Alternative Oil Serum": "Een verzorgend olieserum voor een gladdere uitstraling.",
     "Sun Protection SPF50 Stick, no tint": "Een SPF stick voor dagelijkse bescherming zonder tint.",
@@ -755,8 +776,7 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
     "Dark Spot Face Cream with Kojic Acid": "Een verzorgende crème gericht op een egalere uitstraling.",
     "Brightening Face&Body Exfoliator with Kojic Acid": "Een exfoliator voor een gladdere en frissere uitstraling.",
     "Double Hydration Boost Gel + HA": "Een hydraterende gel voor extra comfort en een voller huidgevoel.",
-    "Collagen Boost Serum": "Een serum gericht op stevigheid en comfort.",
-    "Smoothing Eye Cream": "Een oogcrème voor een zachtere en verzorgde oogzone."
+    "Smoothing Eye Cream": "Een oogcrème voor een zachtere en verzorgde oogzone.",
   };
 
   const en: Record<string, string> = {
@@ -782,7 +802,7 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
     "Dark Spot Face Cream with Kojic Acid": "A care cream focused on a more even-looking complexion.",
     "Brightening Face&Body Exfoliator with Kojic Acid": "An exfoliator for a smoother and fresher-looking finish.",
     "Double Hydration Boost Gel + HA": "A hydrating gel for extra comfort and a plumper-looking feel.",
-    "Smoothing Eye Cream": "An eye cream for a softer and more cared-for eye area."
+    "Smoothing Eye Cream": "An eye cream for a softer and more cared-for eye area.",
   };
 
   return lang === "nl"
@@ -902,6 +922,7 @@ function buildProductUsageReply(product: Product, lang: Lang): string {
   const step = lang === "nl" ? product.routine_step_nl : product.routine_step_en;
 
   if (usage) parts.push(usage);
+
   if (whenToUse) {
     parts.push(
       lang === "nl"
@@ -909,6 +930,7 @@ function buildProductUsageReply(product: Product, lang: Lang): string {
         : `**When do you use it?**\n${whenToUse}`
     );
   }
+
   if (step) {
     parts.push(
       lang === "nl"
@@ -1177,14 +1199,14 @@ Rules:
             "Tell me which product or routine you mean, and I’ll help from there."
           );
 
-    const mentionedProducts = findMentionedProducts(text);
-    const mentionedBundles = findMentionedBundles(text);
+    const mentionedProductsInReply = findMentionedProducts(text);
+    const mentionedBundlesInReply = findMentionedBundles(text);
 
     let actions: ChatAction[] = [];
-    if (mentionedBundles.length > 0) {
-      actions = buildActionsForBundle(mentionedBundles[0], lang);
-    } else if (mentionedProducts.length > 0) {
-      actions = buildActionsForProduct(mentionedProducts[0], lang);
+    if (mentionedBundlesInReply.length > 0) {
+      actions = buildActionsForBundle(mentionedBundlesInReply[0], lang);
+    } else if (mentionedProductsInReply.length > 0) {
+      actions = buildActionsForProduct(mentionedProductsInReply[0], lang);
     }
 
     return { reply: text, actions: actions.slice(0, 2), lang };
@@ -1220,7 +1242,10 @@ export async function POST(req: Request) {
     if (!message) {
       return new Response(
         JSON.stringify({ reply: "Missing message.", actions: [], lang: "en" }),
-        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
       );
     }
 
@@ -1255,7 +1280,10 @@ export async function POST(req: Request) {
           actions: picks.flatMap((p) => buildActionsForProduct(p, lang)).slice(0, 2),
           lang,
         }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
       );
     }
 
@@ -1270,7 +1298,10 @@ export async function POST(req: Request) {
             actions: chosen.flatMap((p) => buildActionsForProduct(p, lang)).slice(0, 2),
             lang,
           }),
-          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          }
         );
       }
 
@@ -1281,7 +1312,10 @@ export async function POST(req: Request) {
             actions: chosen.flatMap((p) => buildActionsForProduct(p, lang)).slice(0, 2),
             lang,
           }),
-          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          }
         );
       }
     }
@@ -1307,7 +1341,10 @@ export async function POST(req: Request) {
               actions: buildActionsForProduct(resolved, lang),
               lang,
             }),
-            { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+            {
+              status: 200,
+              headers: { "Content-Type": "application/json", ...corsHeaders },
+            }
           );
         }
 
@@ -1318,18 +1355,28 @@ export async function POST(req: Request) {
               actions: buildActionsForProduct(resolved, lang),
               lang,
             }),
-            { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+            {
+              status: 200,
+              headers: { "Content-Type": "application/json", ...corsHeaders },
+            }
           );
         }
 
         if (detectWhereRequest(message)) {
           return new Response(
             JSON.stringify({
-              reply: tr(lang, `**${resolved.title}**\n\nJe vindt het hier.`, `**${resolved.title}**\n\nYou can find it here.`),
+              reply: tr(
+                lang,
+                `**${resolved.title}**\n\nJe vindt het hier.`,
+                `**${resolved.title}**\n\nYou can find it here.`
+              ),
               actions: buildActionsForProduct(resolved, lang),
               lang,
             }),
-            { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+            {
+              status: 200,
+              headers: { "Content-Type": "application/json", ...corsHeaders },
+            }
           );
         }
       }
@@ -1341,7 +1388,10 @@ export async function POST(req: Request) {
             actions: recentProducts.slice(0, 2).flatMap((p) => buildActionsForProduct(p, lang)),
             lang,
           }),
-          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          }
         );
       }
     }
@@ -1356,7 +1406,10 @@ export async function POST(req: Request) {
             actions: buildActionsForBundle(bundle, lang),
             lang,
           }),
-          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          }
         );
       }
     }
@@ -1370,22 +1423,35 @@ export async function POST(req: Request) {
           actions: buildActionsForProduct(product, lang),
           lang,
         }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
       );
     }
 
     // 6. combinations
     if (detectCombinationRequest(message)) {
-      const explicitProducts = mentionedProducts.length ? mentionedProducts : looseProduct ? [looseProduct] : [];
+      const explicitProducts = mentionedProducts.length
+        ? mentionedProducts
+        : looseProduct
+        ? [looseProduct]
+        : [];
 
       if (explicitProducts.length >= 2) {
         return new Response(
           JSON.stringify({
             reply: buildDynamicCombinationReply(explicitProducts[0], explicitProducts[1], lang),
-            actions: [buildActionsForProduct(explicitProducts[0], lang)[0], buildActionsForProduct(explicitProducts[1], lang)[0]].slice(0, 2),
+            actions: [
+              buildActionsForProduct(explicitProducts[0], lang)[0],
+              buildActionsForProduct(explicitProducts[1], lang)[0],
+            ].slice(0, 2),
             lang,
           }),
-          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          }
         );
       }
 
@@ -1396,7 +1462,10 @@ export async function POST(req: Request) {
             actions: buildActionsForProduct(explicitProducts[0], lang),
             lang,
           }),
-          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          }
         );
       }
 
@@ -1407,7 +1476,10 @@ export async function POST(req: Request) {
             actions: lastRecommendedProducts.flatMap((p) => buildActionsForProduct(p, lang)).slice(0, 2),
             lang,
           }),
-          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          }
         );
       }
     }
@@ -1415,6 +1487,7 @@ export async function POST(req: Request) {
     // 7. compare
     if (detectCompareRequest(message)) {
       const compareItems = [...mentionedBundles, ...mentionedProducts].slice(0, 2);
+
       if (compareItems.length === 2) {
         return new Response(
           JSON.stringify({
@@ -1426,7 +1499,10 @@ export async function POST(req: Request) {
             actions: [],
             lang,
           }),
-          { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          }
         );
       }
     }
@@ -1444,7 +1520,10 @@ export async function POST(req: Request) {
           actions: buildActionsForProduct(product, lang),
           lang,
         }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
       );
     }
 
@@ -1461,17 +1540,20 @@ export async function POST(req: Request) {
           actions: buildActionsForProduct(product, lang),
           lang,
         }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
       );
     }
 
     // 10. routine to quiz
     if (shouldRedirectToQuiz(message, combinedUserText)) {
       const quizOut = buildQuizRedirectReply(lang);
-      return new Response(
-        JSON.stringify(quizOut),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
+      return new Response(JSON.stringify(quizOut), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
     }
 
     // 11. specific product
@@ -1483,7 +1565,10 @@ export async function POST(req: Request) {
           actions: buildActionsForProduct(product, lang),
           lang,
         }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
       );
     }
 
@@ -1492,20 +1577,30 @@ export async function POST(req: Request) {
       const bundle = mentionedBundles[0];
       return new Response(
         JSON.stringify({
-          reply: `**${bundle.name}**\n\n${bundle.description || tr(lang, "Routine uit het huidige SOVAH assortiment.", "Routine from the current SOVAH range.")}`,
+          reply: `**${bundle.name}**\n\n${
+            bundle.description ||
+            tr(
+              lang,
+              "Routine uit het huidige SOVAH assortiment.",
+              "Routine from the current SOVAH range."
+            )
+          }`,
           actions: buildActionsForBundle(bundle, lang),
           lang,
         }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
       );
     }
 
     const claudeOut = await callClaudeFallback(message, conversationTimeline, lang);
 
-    return new Response(
-      JSON.stringify(claudeOut),
-      { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
-    );
+    return new Response(JSON.stringify(claudeOut), {
+      status: 200,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
   } catch (e: unknown) {
     console.error("SOVAH /api/chat error:", e);
 
@@ -1515,7 +1610,10 @@ export async function POST(req: Request) {
         actions: [],
         lang: "en",
       }),
-      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      }
     );
   }
 }
