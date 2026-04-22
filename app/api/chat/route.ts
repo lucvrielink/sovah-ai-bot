@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
 function buildCorsHeaders(origin?: string | null) {
   const allowedOrigins = [
@@ -86,10 +86,16 @@ type ChatAction = {
   url: string;
 };
 
+type ModelTier = "none" | "mini" | "full";
+
 const QUIZ_URL = "https://sovahcare.com/pages/find-your-routine";
 
 const bundleCatalog: BundleCatalog = JSON.parse(BUNDLES_JSON);
 const productCatalog: ProductCatalog = JSON.parse(PRODUCTS_JSON);
+
+const openai = process.env.OPENAI_API_KEY
+  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  : null;
 
 // ───────────────── helpers ─────────────────
 
@@ -119,16 +125,229 @@ function tr(lang: Lang, nl: string, en: string): string {
 }
 
 function dedupeProducts(products: Product[]): Product[] {
-  return products.filter(
-    (p, idx, arr) => arr.findIndex((x) => x.title === p.title) === idx
-  );
+  const seen = new Set<string>();
+  const out: Product[] = [];
+
+  for (const p of products) {
+    const key = canonicalizeProductName(p.title);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(p);
+  }
+
+  return out;
+}
+
+function dedupeActions(actions: ChatAction[]): ChatAction[] {
+  const seen = new Set<string>();
+  const out: ChatAction[] = [];
+
+  for (const action of actions) {
+    const key = `${action.type}::${action.url}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(action);
+  }
+
+  return out;
+}
+
+// ───────────────── aliases / canonicalization ─────────────────
+
+const PRODUCT_ALIASES: Record<string, string[]> = {
+  "Micellar Cleansing Water": [
+    "micellar cleansing water",
+    "micellar water",
+    "micellar cleanser",
+    "cleansing water",
+  ],
+  "Hydrating Toner": [
+    "hydrating toner",
+    "hydra toner",
+    "toner",
+  ],
+  "Hydrating Serum": [
+    "hydrating serum",
+    "hydra serum",
+  ],
+  "Double Hydration Boost Gel + HA": [
+    "double hydration boost gel + ha",
+    "double hydration boost gel",
+    "boost gel + ha",
+    "hydration boost gel",
+    "boost gel",
+    "ha gel",
+  ],
+  "Moisturising Day Cream": [
+    "moisturising day cream",
+    "moisturizing day cream",
+    "moisture day cream",
+    "hydrating day cream",
+    "day cream",
+    "dagcreme",
+    "dagcrème",
+  ],
+  "Ceramide Barrier Night Cream": [
+    "ceramide barrier night cream",
+    "ceramide night cream",
+    "barrier night cream",
+    "ceramide cream",
+    "barrier cream",
+    "night cream",
+    "nachtcreme",
+    "nachtcrème",
+  ],
+  "Purifying Mousse": [
+    "purifying mousse",
+    "mousse cleanser",
+    "cleansing mousse",
+    "mousse",
+  ],
+  "Antioxidant Ginkgo Gel Booster": [
+    "antioxidant ginkgo gel booster",
+    "ginkgo gel booster",
+    "ginkgo booster",
+  ],
+  "Calming Facial Oil": [
+    "calming facial oil",
+    "calming oil",
+  ],
+  "AHA Peeling Concentrate": [
+    "aha peeling concentrate",
+    "aha peeling",
+    "aha concentrate",
+  ],
+  "Caffeine Gel Booster": [
+    "caffeine gel booster",
+    "caffeine booster",
+  ],
+  "Oil-Free Hydrating Gel": [
+    "oil-free hydrating gel",
+    "oil free hydrating gel",
+    "oil-free gel",
+    "oil free gel",
+  ],
+  "Peptide Anti-Aging Serum": [
+    "peptide anti-aging serum",
+    "peptide anti aging serum",
+    "peptide serum",
+  ],
+  "Collagen Boost Serum": [
+    "collagen boost serum",
+    "collagen serum",
+    "collagen boost",
+  ],
+  "Anti-Age Day Cream": [
+    "anti-age day cream",
+    "anti age day cream",
+    "anti-aging day cream",
+    "anti aging day cream",
+  ],
+  "Natural Retinol Alternative Oil Serum": [
+    "natural retinol alternative oil serum",
+    "retinol alternative oil serum",
+    "natural retinol alternative",
+    "retinol alternative",
+  ],
+  "Smoothing Eye Cream": [
+    "smoothing eye cream",
+    "eye cream",
+    "oogcreme",
+    "oogcrème",
+  ],
+  "Vitamin C Serum": [
+    "vitamin c serum",
+    "vitamin c",
+    "vit c serum",
+    "vit c",
+  ],
+  "Brightening Face&Body Exfoliator with Kojic Acid": [
+    "brightening face body exfoliator with kojic acid",
+    "brightening exfoliator with kojic acid",
+    "brightening exfoliator",
+    "kojic exfoliator",
+  ],
+  "Dark Spot Face Cream with Kojic Acid": [
+    "dark spot face cream with kojic acid",
+    "dark spot cream with kojic acid",
+    "dark spot cream",
+    "kojic acid cream",
+  ],
+  "All-In-One Facial Oil": [
+    "all-in-one facial oil",
+    "all in one facial oil",
+    "all-in-one oil",
+    "all in one oil",
+  ],
+  "Sun Protection SPF50 Stick, no tint": [
+    "sun protection spf50 stick no tint",
+    "sun protection spf50 stick",
+    "sun protection stick",
+    "spf50 stick",
+    "spf stick",
+    "sun stick",
+    "sunscreen stick",
+    "sunscreen",
+    "spf",
+    "sun protection",
+  ],
+  "Acne Spot Care": [
+    "acne spot care",
+    "acne spot",
+    "spot care",
+    "spot treatment",
+    "acne treatment",
+  ],
+  "Niacinamide Gel Moisturiser": [
+    "niacinamide gel moisturiser",
+    "niacinamide gel moisturizer",
+    "niacinamide moisturiser",
+    "niacinamide moisturizer",
+    "niacinamide gel",
+  ],
+};
+
+const AMBIGUOUS_ALIAS_GROUPS: Array<{
+  aliases: string[];
+  productNames: string[];
+}> = [
+  {
+    aliases: ["day cream", "dagcreme", "dagcrème"],
+    productNames: ["Moisturising Day Cream", "Anti-Age Day Cream"],
+  },
+];
+
+const CANONICAL_PRODUCT_INDEX = new Map<string, Product>();
+
+for (const product of productCatalog.products) {
+  CANONICAL_PRODUCT_INDEX.set(normalizeLoose(product.title), product);
+}
+
+for (const [canonicalTitle, aliases] of Object.entries(PRODUCT_ALIASES)) {
+  const product = productCatalog.products.find((p) => p.title === canonicalTitle);
+  if (!product) continue;
+
+  CANONICAL_PRODUCT_INDEX.set(normalizeLoose(canonicalTitle), product);
+  for (const alias of aliases) {
+    CANONICAL_PRODUCT_INDEX.set(normalizeLoose(alias), product);
+  }
+}
+
+function canonicalizeProductName(name: string): string {
+  const key = normalizeLoose(name);
+  return CANONICAL_PRODUCT_INDEX.get(key)?.title || name;
 }
 
 function getProductByName(name: string): Product | undefined {
-  return productCatalog.products.find((p) => p.title === name);
+  const canonical = canonicalizeProductName(name);
+  return productCatalog.products.find((p) => p.title === canonical);
 }
 
-function detectLanguage(currentMessage: string, historyText = "", forcedLang?: string): Lang {
+function detectLanguage(
+  currentMessage: string,
+  historyText = "",
+  forcedLang?: string
+): Lang {
   const current = normalize(currentMessage);
   const history = normalize(historyText);
 
@@ -179,19 +398,69 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
   if (hasStrongNl && !hasStrongEn) return "nl";
 
   const dutchSignals = [
-    "ik", "mijn", "huid", "droog", "droge", "vette", "vet", "gevoelig",
-    "welke", "wat", "past", "bij", "mij", "puistjes", "acne", "routine",
-    "product", "producten", "hoe gebruik", "wanneer gebruik", "oudere huid",
-    "fijne lijntjes", "rimpels", "geen routine", "paar producten", "deze", "die", "dit",
-    "droge huid", "gevoelige huid", "voor puistjes", "dagcreme", "dagcrème",
+    "ik",
+    "mijn",
+    "huid",
+    "droog",
+    "droge",
+    "vette",
+    "vet",
+    "gevoelig",
+    "welke",
+    "wat",
+    "past",
+    "bij",
+    "mij",
+    "puistjes",
+    "acne",
+    "routine",
+    "product",
+    "producten",
+    "hoe gebruik",
+    "wanneer gebruik",
+    "oudere huid",
+    "fijne lijntjes",
+    "rimpels",
+    "geen routine",
+    "paar producten",
+    "deze",
+    "die",
+    "dit",
+    "droge huid",
+    "gevoelige huid",
+    "voor puistjes",
+    "dagcreme",
+    "dagcrème",
   ];
 
   const englishSignals = [
-    "my", "skin", "dry", "oily", "sensitive", "which", "what", "routine",
-    "product", "products", "how do i use", "when do i use", "older skin",
-    "fine lines", "wrinkles", "not a full routine", "few products", "this", "that",
-    "dry skin", "sensitive skin", "breakouts", "those", "them", "both",
-    "day cream", "night cream",
+    "my",
+    "skin",
+    "dry",
+    "oily",
+    "sensitive",
+    "which",
+    "what",
+    "routine",
+    "product",
+    "products",
+    "how do i use",
+    "when do i use",
+    "older skin",
+    "fine lines",
+    "wrinkles",
+    "not a full routine",
+    "few products",
+    "this",
+    "that",
+    "dry skin",
+    "sensitive skin",
+    "breakouts",
+    "those",
+    "them",
+    "both",
+    "day cream",
+    "night cream",
   ];
 
   const currentNl = countMatches(current, dutchSignals);
@@ -209,7 +478,7 @@ function detectLanguage(currentMessage: string, historyText = "", forcedLang?: s
   if (enScore > nlScore) return "en";
 
   if (forcedLang === "nl" || forcedLang === "en") return forcedLang;
-  return "en";
+  return "nl";
 }
 
 function extractUserMessages(history: string[]): string[] {
@@ -231,190 +500,6 @@ function extractAssistantMessages(history: string[]): string[] {
 }
 
 // ───────────────── product matching ─────────────────
-
-const PRODUCT_ALIASES: Record<string, string[]> = {
-  "Micellar Cleansing Water": [
-    "micellar cleansing water",
-    "micellar water",
-    "micellar cleanser",
-    "micellar",
-    "cleansing water",
-  ],
-  "Hydrating Toner": [
-    "hydrating toner",
-    "hydrating",
-    "hydra toner",
-    "toner",
-  ],
-  "Hydrating Serum": [
-    "hydrating serum",
-    "hydrating",
-    "hydra serum",
-    "hydra",
-  ],
-  "Double Hydration Boost Gel + HA": [
-    "double hydration boost gel + ha",
-    "double hydration boost gel",
-    "boost gel + ha",
-    "hydration boost gel",
-    "boost gel",
-    "ha gel",
-  ],
-  "Moisturising Day Cream": [
-    "moisturising day cream",
-    "moisturizing day cream",
-    "moisturising",
-    "moisturizing",
-    "moisture day cream",
-    "hydrating day cream",
-  ],
-  "Ceramide Barrier Night Cream": [
-    "ceramide barrier night cream",
-    "ceramide night cream",
-    "barrier night cream",
-    "ceramide cream",
-    "ceramide",
-    "barrier cream",
-  ],
-  "Purifying Mousse": [
-    "purifying mousse",
-    "mousse cleanser",
-    "cleansing mousse",
-    "mousse",
-    "purifying",
-  ],
-  "Antioxidant Ginkgo Gel Booster": [
-    "antioxidant ginkgo gel booster",
-    "ginkgo gel booster",
-    "ginkgo booster",
-    "ginkgo",
-  ],
-  "Calming Facial Oil": [
-    "calming facial oil",
-    "calming oil",
-    "facial oil",
-    "calming",
-  ],
-  "AHA Peeling Concentrate": [
-    "aha peeling concentrate",
-    "aha peeling",
-    "aha concentrate",
-    "aha",
-    "peeling",
-  ],
-  "Caffeine Gel Booster": [
-    "caffeine gel booster",
-    "caffeine booster",
-    "caffeine",
-  ],
-  "Oil-Free Hydrating Gel": [
-    "oil-free hydrating gel",
-    "oil free hydrating gel",
-    "oil-free gel",
-    "oil free gel",
-    "hydrating gel",
-    "oil free",
-  ],
-  "Peptide Anti-Aging Serum": [
-    "peptide anti-aging serum",
-    "peptide anti aging serum",
-    "peptide serum",
-    "peptide",
-  ],
-  "Collagen Boost Serum": [
-    "collagen boost serum",
-    "collagen serum",
-    "collagen boost",
-    "collagen",
-  ],
-  "Anti-Age Day Cream": [
-    "anti-age day cream",
-    "anti age day cream",
-    "anti-aging day cream",
-    "anti aging day cream",
-    "anti age",
-    "anti-aging",
-    "anti aging",
-  ],
-  "Natural Retinol Alternative Oil Serum": [
-    "natural retinol alternative oil serum",
-    "retinol alternative oil serum",
-    "natural retinol alternative",
-    "retinol alternative",
-    "natural retinol",
-    "retinol",
-  ],
-  "Smoothing Eye Cream": [
-    "smoothing eye cream",
-    "eye cream",
-    "oogcreme",
-    "oogcrème",
-    "eye",
-  ],
-  "Vitamin C Serum": [
-    "vitamin c serum",
-    "vitamin c",
-    "vit c serum",
-    "vit c",
-  ],
-  "Brightening Face&Body Exfoliator with Kojic Acid": [
-    "brightening face body exfoliator with kojic acid",
-    "brightening exfoliator with kojic acid",
-    "brightening exfoliator",
-    "kojic exfoliator",
-    "body exfoliator",
-    "brightening",
-  ],
-  "Dark Spot Face Cream with Kojic Acid": [
-    "dark spot face cream with kojic acid",
-    "dark spot cream with kojic acid",
-    "dark spot cream",
-    "kojic acid cream",
-    "dark spot",
-    "kojic cream",
-  ],
-  "All-In-One Facial Oil": [
-    "all-in-one facial oil",
-    "all in one facial oil",
-    "all-in-one oil",
-    "all in one oil",
-    "all in one",
-  ],
-  "Sun Protection SPF50 Stick, no tint": [
-    "sun protection spf50 stick no tint",
-    "sun protection spf50 stick",
-    "spf50 stick",
-    "spf stick",
-    "sun stick",
-    "sun protection stick",
-    "spf",
-    "spf50",
-    "sun protection",
-    "sunscreen stick",
-  ],
-  "Acne Spot Care": [
-    "acne spot care",
-    "acne spot",
-    "spot care",
-    "spot treatment",
-    "acne treatment",
-  ],
-  "Niacinamide Gel Moisturiser": [
-    "niacinamide gel moisturiser",
-    "niacinamide gel moisturizer",
-    "niacinamide moisturiser",
-    "niacinamide moisturizer",
-    "niacinamide gel",
-    "niacinamide",
-  ],
-};
-
-const AMBIGUOUS_ALIAS_GROUPS: Array<{ aliases: string[]; productNames: string[] }> = [
-  {
-    aliases: ["day cream", "dagcreme", "dagcrème"],
-    productNames: ["Moisturising Day Cream", "Anti-Age Day Cream"],
-  },
-];
 
 function findMentionedProducts(text: string): Product[] {
   const t = normalizeLoose(text);
@@ -525,11 +610,24 @@ function inferProductType(product: Product): ProductType {
 
 function inferUseTime(product: Product): UseTime {
   const t = normalize(
-    product.title + " " + (product.when_to_use_en || "") + " " + (product.when_to_use_nl || "")
+    product.title +
+      " " +
+      (product.when_to_use_en || "") +
+      " " +
+      (product.when_to_use_nl || "")
   );
 
-  if (t.includes("night") || t.includes("avond") || t.includes("evening")) return "evening";
-  if (t.includes("day cream") || t.includes("ochtend") || t.includes("morning") || t.includes("spf")) return "morning";
+  if (t.includes("night") || t.includes("avond") || t.includes("evening")) {
+    return "evening";
+  }
+  if (
+    t.includes("day cream") ||
+    t.includes("ochtend") ||
+    t.includes("morning") ||
+    t.includes("spf")
+  ) {
+    return "morning";
+  }
   return "both";
 }
 
@@ -567,49 +665,138 @@ function sortProductsByRoutineOrder(products: Product[]): Product[] {
 
 function detectDrySignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, ["dry", "dehydrated", "droog", "droge huid", "uitgedroogd", "vochttekort", "tight", "flaky"]);
+  return hasAny(t, [
+    "dry",
+    "dehydrated",
+    "droog",
+    "droge huid",
+    "uitgedroogd",
+    "vochttekort",
+    "tight",
+    "flaky",
+  ]);
 }
 
 function detectGlowSignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, ["glow", "radiance", "dull", "stralend", "doffe huid", "dof", "meer glow"]);
+  return hasAny(t, [
+    "glow",
+    "radiance",
+    "dull",
+    "stralend",
+    "doffe huid",
+    "dof",
+    "meer glow",
+  ]);
 }
 
 function detectBreakoutSignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, ["acne", "puistjes", "breakouts", "blemishes", "spots", "onzuiverheden"]);
+  return hasAny(t, [
+    "acne",
+    "puistjes",
+    "breakouts",
+    "blemishes",
+    "spots",
+    "onzuiverheden",
+  ]);
 }
 
 function detectSensitiveSignal(text: string): boolean {
   const t = normalize(text);
-  return hasAny(t, ["sensitive", "gevoelig", "reactive", "reactief", "irritated", "geïrriteerd", "geirriteerd"]);
+  return hasAny(t, [
+    "sensitive",
+    "gevoelig",
+    "reactive",
+    "reactief",
+    "irritated",
+    "geïrriteerd",
+    "geirriteerd",
+  ]);
 }
 
 function detectAntiAgeSignal(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
-    "anti age", "anti-age", "anti aging", "anti-aging",
-    "fine lines", "wrinkles", "rimpels", "fijne lijntjes",
-    "firmness", "stevigheid", "older skin", "oudere huid", "verouderende huid",
+    "anti age",
+    "anti-age",
+    "anti aging",
+    "anti-aging",
+    "fine lines",
+    "wrinkles",
+    "rimpels",
+    "fijne lijntjes",
+    "firmness",
+    "stevigheid",
+    "older skin",
+    "oudere huid",
+    "verouderende huid",
   ]);
 }
 
 function detectSkinType(text: string): SkinType {
   const t = normalize(text);
 
-  if (hasAny(t, ["combination", "combi", "combo skin", "combinatie", "combinatiehuid", "t-zone", "t zone"])) {
+  if (
+    hasAny(t, [
+      "combination",
+      "combi",
+      "combo skin",
+      "combinatie",
+      "combinatiehuid",
+      "t-zone",
+      "t zone",
+    ])
+  ) {
     return "combination";
   }
-  if (hasAny(t, ["sensitive", "gevoelig", "reactive", "reactief", "irritated", "geïrriteerd", "geirriteerd"])) {
+  if (
+    hasAny(t, [
+      "sensitive",
+      "gevoelig",
+      "reactive",
+      "reactief",
+      "irritated",
+      "geïrriteerd",
+      "geirriteerd",
+    ])
+  ) {
     return "sensitive";
   }
-  if (hasAny(t, ["oily", "oilly", "greasy", "shiny", "vette huid", "vet", "glimmend"])) {
+  if (
+    hasAny(t, [
+      "oily",
+      "oilly",
+      "greasy",
+      "shiny",
+      "vette huid",
+      "vet",
+      "glimmend",
+    ])
+  ) {
     return "oily";
   }
-  if (hasAny(t, ["dry", "dehydrated", "droog", "droge huid", "uitgedroogd", "vochttekort"])) {
+  if (
+    hasAny(t, [
+      "dry",
+      "dehydrated",
+      "droog",
+      "droge huid",
+      "uitgedroogd",
+      "vochttekort",
+    ])
+  ) {
     return "dry";
   }
-  if (hasAny(t, ["normal", "balanced skin", "normaal", "normale huid", "gebalanceerd"])) {
+  if (
+    hasAny(t, [
+      "normal",
+      "balanced skin",
+      "normaal",
+      "normale huid",
+      "gebalanceerd",
+    ])
+  ) {
     return "normal";
   }
 
@@ -685,7 +872,6 @@ function detectWhereRequest(text: string): boolean {
   return hasAny(t, [
     "where",
     "where can i find",
-    "find",
     "show me",
     "send me",
     "waar",
@@ -693,6 +879,8 @@ function detectWhereRequest(text: string): boolean {
     "vinden",
     "geef me de link",
     "stuur me",
+    "link naar",
+    "link for",
   ]);
 }
 
@@ -980,9 +1168,10 @@ function getRecentMentionedProductsFromMessages(messages: string[]): Product[] {
     const candidates = resolveProductsFromMessage(msg);
 
     for (const p of candidates) {
-      if (!seen.has(p.title)) {
+      const key = canonicalizeProductName(p.title);
+      if (!seen.has(key)) {
         recent.push(p);
-        seen.add(p.title);
+        seen.add(key);
       }
     }
 
@@ -1013,57 +1202,103 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
   const title = product.title;
 
   const nl: Record<string, string> = {
-    "Hydrating Serum": "Een licht serum voor extra hydratatie en een comfortabeler huidgevoel.",
-    "Moisturising Day Cream": "Een dagcrème voor dagelijkse hydratatie en comfort.",
-    "Acne Spot Care": "Gerichte spot care voor puistjes en onzuiverheden.",
-    "Niacinamide Gel Moisturiser": "Een lichte gel moisturiser voor balans en comfort.",
-    "Oil-Free Hydrating Gel": "Een olievrije gel voor lichte dagelijkse hydratatie.",
+    "Hydrating Serum":
+      "Een licht serum voor extra hydratatie en een comfortabeler huidgevoel.",
+    "Moisturising Day Cream":
+      "Een dagcrème voor dagelijkse hydratatie en comfort.",
+    "Acne Spot Care":
+      "Gerichte spot care voor puistjes en onzuiverheden.",
+    "Niacinamide Gel Moisturiser":
+      "Een lichte gel moisturiser voor balans en comfort.",
+    "Oil-Free Hydrating Gel":
+      "Een olievrije gel voor lichte dagelijkse hydratatie.",
     "Hydrating Toner": "Een hydraterende toner voor comfort en balans.",
-    "Vitamin C Serum": "Een serum voor een frissere en stralendere uitstraling.",
-    "Antioxidant Ginkgo Gel Booster": "Een lichte booster voor hydratatie en een frissere uitstraling.",
-    "Calming Facial Oil": "Een kalmerende olie voor comfort en zachtheid.",
-    "Ceramide Barrier Night Cream": "Een rijke nachtcrème voor comfort en support van de huidbarrière.",
-    "Purifying Mousse": "Een schuimende reiniger voor een frisse, lichte finish.",
-    "Peptide Anti-Aging Serum": "Een serum voor een gladdere en verzorgde uitstraling.",
-    "Anti-Age Day Cream": "Een dagcrème voor dagelijkse verzorging bij eerste lijntjes.",
-    "Collagen Boost Serum": "Een serum gericht op stevigheid en comfort.",
-    "AHA Peeling Concentrate": "Een exfoliërend concentraat voor dofheid of textuur.",
-    "Micellar Cleansing Water": "Een zachte reiniger om make-up en vuil te verwijderen.",
-    "Natural Retinol Alternative Oil Serum": "Een verzorgend olieserum voor een gladdere uitstraling.",
-    "Sun Protection SPF50 Stick, no tint": "Een SPF stick voor dagelijkse bescherming zonder tint.",
-    "All-In-One Facial Oil": "Een verzorgende olie voor extra comfort en zachtheid.",
-    "Dark Spot Face Cream with Kojic Acid": "Een verzorgende crème gericht op een egalere uitstraling.",
-    "Brightening Face&Body Exfoliator with Kojic Acid": "Een exfoliator voor een gladdere en frissere uitstraling.",
-    "Double Hydration Boost Gel + HA": "Een hydraterende gel voor extra comfort en een voller huidgevoel.",
-    "Smoothing Eye Cream": "Een oogcrème voor een zachtere en verzorgde oogzone.",
-    "Caffeine Gel Booster": "Een lichte gel booster voor een frissere en meer energieke uitstraling.",
+    "Vitamin C Serum":
+      "Een serum voor een frissere en stralendere uitstraling.",
+    "Antioxidant Ginkgo Gel Booster":
+      "Een lichte booster voor hydratatie en een frissere uitstraling.",
+    "Calming Facial Oil":
+      "Een kalmerende olie voor comfort en zachtheid.",
+    "Ceramide Barrier Night Cream":
+      "Een rijke nachtcrème voor comfort en support van de huidbarrière.",
+    "Purifying Mousse":
+      "Een schuimende reiniger voor een frisse, lichte finish.",
+    "Peptide Anti-Aging Serum":
+      "Een serum voor een gladdere en verzorgde uitstraling.",
+    "Anti-Age Day Cream":
+      "Een dagcrème voor dagelijkse verzorging bij eerste lijntjes.",
+    "Collagen Boost Serum":
+      "Een serum gericht op stevigheid en comfort.",
+    "AHA Peeling Concentrate":
+      "Een exfoliërend concentraat voor dofheid of textuur.",
+    "Micellar Cleansing Water":
+      "Een zachte reiniger om make-up en vuil te verwijderen.",
+    "Natural Retinol Alternative Oil Serum":
+      "Een verzorgend olieserum voor een gladdere uitstraling.",
+    "Sun Protection SPF50 Stick, no tint":
+      "Een SPF stick voor dagelijkse bescherming zonder tint.",
+    "All-In-One Facial Oil":
+      "Een verzorgende olie voor extra comfort en zachtheid.",
+    "Dark Spot Face Cream with Kojic Acid":
+      "Een verzorgende crème gericht op een egalere uitstraling.",
+    "Brightening Face&Body Exfoliator with Kojic Acid":
+      "Een exfoliator voor een gladdere en frissere uitstraling.",
+    "Double Hydration Boost Gel + HA":
+      "Een hydraterende gel voor extra comfort en een voller huidgevoel.",
+    "Smoothing Eye Cream":
+      "Een oogcrème voor een zachtere en verzorgde oogzone.",
+    "Caffeine Gel Booster":
+      "Een lichte gel booster voor een frissere en meer energieke uitstraling.",
   };
 
   const en: Record<string, string> = {
-    "Hydrating Serum": "A lightweight serum for extra hydration and a more comfortable skin feel.",
-    "Moisturising Day Cream": "A day cream for daily hydration and comfort.",
-    "Acne Spot Care": "A targeted spot treatment for blemishes and breakouts.",
-    "Niacinamide Gel Moisturiser": "A lightweight gel moisturiser for balance and comfort.",
-    "Oil-Free Hydrating Gel": "An oil-free gel for lightweight daily hydration.",
+    "Hydrating Serum":
+      "A lightweight serum for extra hydration and a more comfortable skin feel.",
+    "Moisturising Day Cream":
+      "A day cream for daily hydration and comfort.",
+    "Acne Spot Care":
+      "A targeted spot treatment for blemishes and breakouts.",
+    "Niacinamide Gel Moisturiser":
+      "A lightweight gel moisturiser for balance and comfort.",
+    "Oil-Free Hydrating Gel":
+      "An oil-free gel for lightweight daily hydration.",
     "Hydrating Toner": "A hydrating toner for comfort and balance.",
-    "Vitamin C Serum": "A serum for a fresher and more radiant-looking complexion.",
-    "Antioxidant Ginkgo Gel Booster": "A lightweight booster for hydration and a fresher look.",
-    "Calming Facial Oil": "A calming facial oil for comfort and softness.",
-    "Ceramide Barrier Night Cream": "A rich night cream for comfort and barrier support.",
-    "Purifying Mousse": "A foaming cleanser for a fresh, lightweight feel.",
-    "Peptide Anti-Aging Serum": "A serum for a smoother-looking complexion.",
-    "Anti-Age Day Cream": "A day cream for daily care with an early anti-age focus.",
-    "Collagen Boost Serum": "A serum focused on firmness and comfort.",
-    "AHA Peeling Concentrate": "An exfoliating concentrate for dullness or texture.",
-    "Micellar Cleansing Water": "A gentle cleanser to remove makeup and daily buildup.",
-    "Natural Retinol Alternative Oil Serum": "A nourishing oil serum for a smoother-looking complexion.",
-    "Sun Protection SPF50 Stick, no tint": "An SPF stick for daily protection without tint.",
-    "All-In-One Facial Oil": "A caring facial oil for extra comfort and softness.",
-    "Dark Spot Face Cream with Kojic Acid": "A care cream focused on a more even-looking complexion.",
-    "Brightening Face&Body Exfoliator with Kojic Acid": "An exfoliator for a smoother and fresher-looking finish.",
-    "Double Hydration Boost Gel + HA": "A hydrating gel for extra comfort and a plumper-looking feel.",
-    "Smoothing Eye Cream": "An eye cream for a softer and more cared-for eye area.",
-    "Caffeine Gel Booster": "A lightweight gel booster for a fresher and more energised look.",
+    "Vitamin C Serum":
+      "A serum for a fresher and more radiant-looking complexion.",
+    "Antioxidant Ginkgo Gel Booster":
+      "A lightweight booster for hydration and a fresher look.",
+    "Calming Facial Oil":
+      "A calming facial oil for comfort and softness.",
+    "Ceramide Barrier Night Cream":
+      "A rich night cream for comfort and barrier support.",
+    "Purifying Mousse":
+      "A foaming cleanser for a fresh, lightweight feel.",
+    "Peptide Anti-Aging Serum":
+      "A serum for a smoother-looking complexion.",
+    "Anti-Age Day Cream":
+      "A day cream for daily care with an early anti-age focus.",
+    "Collagen Boost Serum":
+      "A serum focused on firmness and comfort.",
+    "AHA Peeling Concentrate":
+      "An exfoliating concentrate for dullness or texture.",
+    "Micellar Cleansing Water":
+      "A gentle cleanser to remove makeup and daily buildup.",
+    "Natural Retinol Alternative Oil Serum":
+      "A nourishing oil serum for a smoother-looking complexion.",
+    "Sun Protection SPF50 Stick, no tint":
+      "An SPF stick for daily protection without tint.",
+    "All-In-One Facial Oil":
+      "A caring facial oil for extra comfort and softness.",
+    "Dark Spot Face Cream with Kojic Acid":
+      "A care cream focused on a more even-looking complexion.",
+    "Brightening Face&Body Exfoliator with Kojic Acid":
+      "An exfoliator for a smoother and fresher-looking finish.",
+    "Double Hydration Boost Gel + HA":
+      "A hydrating gel for extra comfort and a plumper-looking feel.",
+    "Smoothing Eye Cream":
+      "An eye cream for a softer and more cared-for eye area.",
+    "Caffeine Gel Booster":
+      "A lightweight gel booster for a fresher and more energised look.",
   };
 
   return lang === "nl"
@@ -1085,7 +1320,7 @@ function recommendProductsFromText(text: string): Product[] {
 
   const add = (title: string) => {
     const p = getProductByName(title);
-    if (p && !picks.find((x) => x.title === p.title)) {
+    if (p && !picks.find((x) => canonicalizeProductName(x.title) === canonicalizeProductName(p.title))) {
       picks.push(p);
     }
   };
@@ -1141,6 +1376,10 @@ function buildActionsForProduct(product: Product): ChatAction[] {
       url: product.url,
     },
   ];
+}
+
+function buildActionsForProducts(products: Product[]): ChatAction[] {
+  return dedupeActions(products.flatMap((p) => buildActionsForProduct(p))).slice(0, 3);
 }
 
 function buildActionsForBundle(bundle: Bundle, lang: Lang): ChatAction[] {
@@ -1317,7 +1556,7 @@ function buildDynamicCombinationReply(a: Product, b: Product, lang: Lang): strin
   if (!bothActive) {
     if (firstType === "spf" || inferProductType(second) === "spf") {
       const spfProduct = firstType === "spf" ? first : second;
-      const otherProduct = spfProduct.title === first.title ? second : first;
+      const otherProduct = canonicalizeProductName(spfProduct.title) === canonicalizeProductName(first.title) ? second : first;
       notes.push(
         tr(
           lang,
@@ -1365,7 +1604,7 @@ function buildDynamicCombinationReply(a: Product, b: Product, lang: Lang): strin
 
 function buildGroupCombinationReply(anchor: Product, others: Product[], lang: Lang): string {
   const uniqueOthers = dedupeProducts(others)
-    .filter((p) => p.title !== anchor.title)
+    .filter((p) => canonicalizeProductName(p.title) !== canonicalizeProductName(anchor.title))
     .slice(0, 2);
 
   if (!uniqueOthers.length) {
@@ -1385,7 +1624,7 @@ function buildGroupCombinationReply(anchor: Product, others: Product[], lang: La
 
 function buildSingleProductPairingReply(product: Product, lang: Lang): string {
   const list = product.pairs_well_with?.length
-    ? `${tr(lang, "Producten die hier goed bij passen:", "Products that pair well with this:")}\n${product.pairs_well_with.map((p) => `- ${p}`).join("\n")}`
+    ? `${tr(lang, "Producten die hier goed bij passen:", "Products that pair well with this:")}\n${product.pairs_well_with.map((p) => `- ${canonicalizeProductName(p)}`).join("\n")}`
     : tr(lang, "Ik heb hier nog geen pairing-lijst voor.", "I don't have a pairing list for this yet.");
 
   const note = lang === "nl" ? product.pairing_note_nl : product.pairing_note_en;
@@ -1413,16 +1652,170 @@ function buildProductRecommendationReply(products: Product[], lang: Lang): strin
   return `${intro}\n\n${lines.join("\n\n")}`;
 }
 
-// ───────────────── Claude fallback ─────────────────
+function buildClarifyProductReply(products: Product[], lang: Lang): string {
+  const unique = dedupeProducts(products).slice(0, 4);
+  const names = unique.map((p) => p.title);
 
-async function callClaudeFallback(
+  if (!names.length) {
+    return tr(
+      lang,
+      "Kun je iets preciezer zeggen welk product je bedoelt?",
+      "Can you be a bit more specific about which product you mean?"
+    );
+  }
+
+  return tr(
+    lang,
+    `Ik weet nog niet precies welk product je bedoelt. Bedoel je:\n- ${names.join("\n- ")}`,
+    `I’m not fully sure which product you mean yet. Do you mean:\n- ${names.join("\n- ")}`
+  );
+}
+
+function buildAmbiguousAliasReply(
+  ambiguousCandidates: Product[],
+  lang: Lang,
+  contextProduct?: Product
+): string {
+  const unique = dedupeProducts(ambiguousCandidates).slice(0, 4);
+  const names = unique.map((p) => p.title);
+
+  if (!names.length) {
+    return tr(
+      lang,
+      "Kun je iets preciezer zeggen welk product je bedoelt?",
+      "Can you be a bit more specific about which product you mean?"
+    );
+  }
+
+  if (contextProduct) {
+    return tr(
+      lang,
+      `Met **${contextProduct.title}** bedoel je waarschijnlijk één van deze day creams:\n- ${names.join("\n- ")}\n\nWelke bedoel je precies?`,
+      `With **${contextProduct.title}**, you probably mean one of these day creams:\n- ${names.join("\n- ")}\n\nWhich one do you mean exactly?`
+    );
+  }
+
+  return tr(
+    lang,
+    `Dat is nog net iets te algemeen. Bedoel je:\n- ${names.join("\n- ")}`,
+    `That’s still a bit too general. Do you mean:\n- ${names.join("\n- ")}`
+  );
+}
+
+// ───────────────── OpenAI fallback ─────────────────
+
+function decideModelTier(message: string, combinedUserText: string): ModelTier {
+  const current = normalize(message);
+  const combined = normalize(combinedUserText);
+
+  if (
+    detectUsageRequest(message) ||
+    detectCombinationRequest(message) ||
+    detectWhereRequest(message) ||
+    detectSuitabilityRequest(message)
+  ) {
+    return "none";
+  }
+
+  if (
+    detectRoutineHelpRequest(message) ||
+    detectNotKnowingSkinType(message) ||
+    shouldRedirectToQuiz(message, combinedUserText)
+  ) {
+    return "none";
+  }
+
+  const complexSignals =
+    [
+      detectDrySignal(combined),
+      detectGlowSignal(combined),
+      detectBreakoutSignal(combined),
+      detectSensitiveSignal(combined),
+      detectAntiAgeSignal(combined),
+    ].filter(Boolean).length >= 2;
+
+  if (
+    complexSignals ||
+    detectCompareRequest(message) ||
+    hasAny(current, [
+      "what do you recommend for my skin",
+      "wat raad je aan voor mijn huid",
+      "what fits me best",
+      "wat past het best",
+      "help me choose between",
+      "help me kiezen tussen",
+    ])
+  ) {
+    return "full";
+  }
+
+  return "mini";
+}
+
+function buildOpenAISystemPrompt(lang: Lang): string {
+  const productNames = productCatalog.products.map((p) => p.title).join(", ");
+  const bundleNames = bundleCatalog.bundles.map((b) => b.name).join(", ");
+
+  return `
+You are the SOVAH skincare assistant for sovahcare.com.
+
+LANGUAGE:
+- Reply in ${lang === "nl" ? "Dutch" : "English"} only.
+
+STRICT RULES:
+- Use only the provided product and bundle catalog as source of truth.
+- Never invent ingredients, usage steps, medical claims, diagnoses, or results.
+- Keep the reply concise, premium, natural, and practical.
+- Never mention suppliers or external brands.
+- If the user clearly wants only products, recommend 1 or 2 products maximum.
+- If the user wants a full routine or best routine match, tell them to use the skincare quiz.
+- If uncertain, ask at most one short clarifying question.
+- Do not output JSON.
+- Do not use emojis.
+- Keep the answer under 120 words unless the user explicitly asks for more detail.
+
+AVAILABLE BUNDLES:
+${bundleNames}
+
+AVAILABLE PRODUCTS:
+${productNames}
+
+QUIZ RULE:
+- For full routine matching, refer to the skincare quiz.
+`.trim();
+}
+
+function buildOpenAIUserPrompt(
   message: string,
   history: string[],
   lang: Lang
-): Promise<{ reply: string; actions: ChatAction[]; lang: Lang }> {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+): string {
+  const recentHistory = history.slice(-12).join("\n");
 
-  if (!apiKey) {
+  return `
+Conversation history:
+${recentHistory || "(none)"}
+
+Current customer message:
+${message}
+
+Useful bundle catalog:
+${BUNDLES_JSON}
+
+Useful product catalog:
+${PRODUCTS_JSON}
+
+Write the best answer now in ${lang === "nl" ? "Dutch" : "English"}.
+`.trim();
+}
+
+async function callOpenAIFallback(
+  message: string,
+  history: string[],
+  lang: Lang,
+  tier: ModelTier
+): Promise<{ reply: string; actions: ChatAction[]; lang: Lang }> {
+  if (!openai || tier === "none") {
     return {
       reply: tr(
         lang,
@@ -1434,49 +1827,45 @@ async function callClaudeFallback(
     };
   }
 
+  const model = tier === "full" ? "gpt-5.4" : "gpt-5.4-mini";
+  const maxOutputTokens = tier === "full" ? 260 : 180;
+  const reasoningEffort = tier === "full" ? "medium" : "minimal";
+
   try {
-    const client = new Anthropic({ apiKey });
-
-    const productList = productCatalog.products.map((p) => p.title).join(", ");
-    const bundleList = bundleCatalog.bundles.map((b) => b.name).join(", ");
-
-    const response = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 350,
-      system: `You are the SOVAH skincare assistant for sovahcare.com.
-
-Use only the provided bundle and product catalog as source of truth.
-Do not invent products, ingredients, medical claims, or unsupported benefits.
-
-Available bundles: ${bundleList}
-Available products: ${productList}
-
-Rules:
-- Reply in the customer's language.
-- Keep replies short, natural, practical, and premium.
-- If the user asks for 1 or 2 products, do not force the quiz.
-- If the user asks for the best routine or a complete routine match, use the quiz.
-- If the user asks how to use a product or bundle, answer directly using the catalog.
-- If the user asks what combines well with a product, answer directly using the catalog.
-- Ask at most one short clarifying question only if truly needed.`,
-      messages: [
+    const response = await openai.responses.create({
+      model,
+      input: [
+        {
+          role: "system",
+          content: buildOpenAISystemPrompt(lang),
+        },
         {
           role: "user",
-          content: history.length
-            ? `Previous customer context:\n${history.join("\n")}\n\nCurrent message:\n${message}`
-            : message,
+          content: buildOpenAIUserPrompt(message, history, lang),
         },
       ],
+      reasoning: {
+        effort: reasoningEffort as "minimal" | "medium",
+      },
+      text: {
+        verbosity: "low",
+      },
+      max_output_tokens: maxOutputTokens,
     });
 
-    const text =
-      response.content[0]?.type === "text"
-        ? response.content[0].text
-        : tr(
-            lang,
-            "Vertel me welk product of welke routine je bedoelt, dan help ik je verder.",
-            "Tell me which product or routine you mean, and I’ll help from there."
-          );
+    const text = (response.output_text || "").trim();
+
+    if (!text) {
+      return {
+        reply: tr(
+          lang,
+          "Vertel me welk product of welke routine je bedoelt, dan help ik je verder.",
+          "Tell me which product or routine you mean, and I’ll help from there."
+        ),
+        actions: [],
+        lang,
+      };
+    }
 
     const mentionedProductsInReply = resolveProductsFromMessage(text);
     const mentionedBundlesInReply = findMentionedBundles(text);
@@ -1485,11 +1874,13 @@ Rules:
     if (mentionedBundlesInReply.length > 0) {
       actions = buildActionsForBundle(mentionedBundlesInReply[0], lang);
     } else if (mentionedProductsInReply.length > 0) {
-      actions = buildActionsForProduct(mentionedProductsInReply[0]);
+      actions = buildActionsForProducts(mentionedProductsInReply);
     }
 
-    return { reply: text, actions: actions.slice(0, 2), lang };
-  } catch {
+    return { reply: text, actions: actions.slice(0, 3), lang };
+  } catch (error) {
+    console.error("OpenAI fallback error:", error);
+
     return {
       reply: tr(
         lang,
@@ -1571,7 +1962,7 @@ export async function POST(req: Request) {
     // 0. ambiguous generic aliases, also when combined with explicit product
     if (ambiguousCandidates.length >= 2) {
       const contextProduct =
-        explicitProducts.find((p) => !ambiguousCandidates.some((a) => a.title === p.title));
+        explicitProducts.find((p) => !ambiguousCandidates.some((a) => canonicalizeProductName(a.title) === canonicalizeProductName(p.title)));
 
       return new Response(
         JSON.stringify({
@@ -1594,15 +1985,15 @@ export async function POST(req: Request) {
       lastRecommendedProducts.length >= 1
     ) {
       const anchor = explicitProducts[0];
-      const previous = dedupeProducts(lastRecommendedProducts).filter((p) => p.title !== anchor.title);
+      const previous = dedupeProducts(lastRecommendedProducts).filter(
+        (p) => canonicalizeProductName(p.title) !== canonicalizeProductName(anchor.title)
+      );
 
       if (anchor && previous.length) {
         return new Response(
           JSON.stringify({
             reply: buildGroupCombinationReply(anchor, previous, lang),
-            actions: dedupeProducts([anchor, ...previous])
-              .flatMap((p) => buildActionsForProduct(p))
-              .slice(0, 3),
+            actions: buildActionsForProducts([anchor, ...previous]),
             lang,
           }),
           {
@@ -1621,7 +2012,7 @@ export async function POST(req: Request) {
         return new Response(
           JSON.stringify({
             reply: buildMultiProductUsageReply(chosen, lang),
-            actions: chosen.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
+            actions: buildActionsForProducts(chosen).slice(0, 2),
             lang,
           }),
           {
@@ -1635,7 +2026,7 @@ export async function POST(req: Request) {
         return new Response(
           JSON.stringify({
             reply: buildDynamicCombinationReply(chosen[0], chosen[1], lang),
-            actions: chosen.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
+            actions: buildActionsForProducts(chosen).slice(0, 2),
             lang,
           }),
           {
@@ -1651,10 +2042,7 @@ export async function POST(req: Request) {
       return new Response(
         JSON.stringify({
           reply: buildDynamicCombinationReply(explicitProducts[0], explicitProducts[1], lang),
-          actions: [
-            buildActionsForProduct(explicitProducts[0])[0],
-            buildActionsForProduct(explicitProducts[1])[0],
-          ].slice(0, 2),
+          actions: buildActionsForProducts([explicitProducts[0], explicitProducts[1]]).slice(0, 2),
           lang,
         }),
         {
@@ -1804,7 +2192,7 @@ export async function POST(req: Request) {
       return new Response(
         JSON.stringify({
           reply: buildProductRecommendationReply(picks, lang),
-          actions: picks.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
+          actions: buildActionsForProducts(picks).slice(0, 2),
           lang,
         }),
         {
@@ -1830,7 +2218,7 @@ export async function POST(req: Request) {
       return new Response(
         JSON.stringify({
           reply: buildProductRecommendationReply(picks, lang),
-          actions: picks.flatMap((p) => buildActionsForProduct(p)).slice(0, 2),
+          actions: buildActionsForProducts(picks).slice(0, 2),
           lang,
         }),
         {
@@ -1951,9 +2339,11 @@ export async function POST(req: Request) {
       );
     }
 
-    const claudeOut = await callClaudeFallback(message, conversationTimeline, lang);
+    // 16. OpenAI fallback with smart model routing
+    const tier = decideModelTier(message, combinedUserText);
+    const openAIOut = await callOpenAIFallback(message, conversationTimeline, lang, tier);
 
-    return new Response(JSON.stringify(claudeOut), {
+    return new Response(JSON.stringify(openAIOut), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
