@@ -1131,6 +1131,7 @@ function shouldRedirectToQuiz(message: string, combinedUserText: string): boolea
   if (detectCompareRequest(message)) return false;
   if (detectWhereRequest(message)) return false;
   if (detectSuitabilityRequest(message)) return false;
+  if (detectGenericAdviceRequest(message)) return false;
 
   if (detectRoutineHelpRequest(message)) return true;
   if (detectNotKnowingSkinType(message)) return true;
@@ -1664,27 +1665,36 @@ function buildAmbiguousAliasReply(
 }
 
 function buildGenericAdviceReply(message: string, lang: Lang): string {
-  const singleConcern =
-    [
-      detectDrySignal(message),
-      detectGlowSignal(message),
-      detectBreakoutSignal(message),
-      detectSensitiveSignal(message),
-      detectAntiAgeSignal(message),
-    ].filter(Boolean).length === 1;
+  const t = normalize(message);
 
-  if (singleConcern) {
+  if (hasAny(t, ["wat past bij mij", "what fits me"])) {
     return tr(
       lang,
-      "Ik kan je daar zeker mee helpen. Wil je liever 1–2 producten of meteen de beste routine-match?",
-      "I can definitely help with that. Would you prefer 1–2 products or the best full routine match?"
+      "Daar helpen we je het snelst mee via onze skincare quiz. In een paar korte vragen kijken we wat het best past bij jouw huid.",
+      "The quickest way to help with that is through our skincare quiz. In just a few short questions, we look at what fits your skin best."
+    );
+  }
+
+  if (hasAny(t, ["ik zoek iets goeds", "ik zoek iets", "i want something good"])) {
+    return tr(
+      lang,
+      "Als je nog niet precies weet wat je zoekt, is onze skincare quiz de beste start. Zo kom je sneller uit bij producten die echt bij jouw huid passen.",
+      "If you’re not completely sure what you’re looking for yet, our skincare quiz is the best place to start. That way you get to products that really fit your skin faster."
+    );
+  }
+
+  if (hasAny(t, ["wat raden jullie aan", "wat raad je aan", "what do you recommend"])) {
+    return tr(
+      lang,
+      "Dat hangt vooral af van je huid en waar je hulp bij wilt. Daarom is onze skincare quiz hier de beste volgende stap.",
+      "That mainly depends on your skin and what you want help with. That’s why our skincare quiz is the best next step here."
     );
   }
 
   return tr(
     lang,
-    "Ik help je graag, maar ik heb net iets meer richting nodig. Gaat het vooral om droogte, glow, puistjes, gevoeligheid of anti-age?",
-    "I’d be happy to help, but I need a bit more direction first. Is it mainly about dryness, glow, breakouts, sensitivity, or anti-age?"
+    "Voor een echt passende aanbeveling kun je het beste onze skincare quiz doen. Daarmee begeleiden we je stap voor stap naar de juiste match.",
+    "For a recommendation that really fits, the best next step is our skincare quiz. It guides you step by step to the right match."
   );
 }
 
@@ -2011,7 +2021,7 @@ export async function POST(req: Request) {
       });
     }
 
-    // 1. exact product must win over ambiguous alias logic
+    // 1. exact product wins over ambiguous alias logic
     if (!hasExactCanonicalProduct && ambiguousCandidates.length >= 2) {
       const contextProduct =
         explicitProducts.find((p) => !ambiguousCandidates.some((a) => canonicalizeProductName(a.title) === canonicalizeProductName(p.title)));
@@ -2050,7 +2060,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 3. plural reference + explicit product like "can i combine those with acne spot care"
+    // 3. plural reference + explicit product
     if (
       detectCombinationRequest(message) &&
       detectPluralReference(message) &&
@@ -2078,7 +2088,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 4. plural reference like "how do i use those" / "can i combine those"
+    // 4. plural reference like "how do i use those"
     if (detectPluralReference(message) && lastRecommendedProducts.length >= 2) {
       const chosen = lastRecommendedProducts.slice(0, 2);
 
@@ -2251,7 +2261,28 @@ export async function POST(req: Request) {
       );
     }
 
-    // 10. direct product recommendation from a single clear concern
+    // 10. generic advice request -> quiz
+    if (detectGenericAdviceRequest(message)) {
+      return new Response(
+        JSON.stringify({
+          reply: buildGenericAdviceReply(message, lang),
+          actions: [
+            {
+              type: "OPEN_URL",
+              label: tr(lang, "Start de quiz", "Start quiz"),
+              url: QUIZ_URL,
+            },
+          ],
+          lang,
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // 11. direct product recommendation from a single clear concern
     if (
       currentHasGoalSignal &&
       !detectRoutineHelpRequest(message) &&
@@ -2279,7 +2310,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 11. contextual short reply after product request
+    // 12. contextual short reply after product request
     if (
       contextSuggestsProductOnly &&
       currentHasGoalSignal &&
@@ -2304,7 +2335,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 12. product recommendation hard override
+    // 13. product recommendation hard override
     if (
       detectProductRecommendationRequest(message) ||
       detectProductOnlyPreference(message) ||
@@ -2321,21 +2352,6 @@ export async function POST(req: Request) {
         JSON.stringify({
           reply: buildProductRecommendationReply(picks, lang),
           actions: buildActionsForProducts(picks).slice(0, 2),
-          lang,
-        }),
-        {
-          status: 200,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
-      );
-    }
-
-    // 13. generic advice request
-    if (detectGenericAdviceRequest(message)) {
-      return new Response(
-        JSON.stringify({
-          reply: buildGenericAdviceReply(message, lang),
-          actions: [],
           lang,
         }),
         {
