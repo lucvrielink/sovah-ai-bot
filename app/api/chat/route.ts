@@ -34,7 +34,13 @@ const BUNDLES_JSON = fs.readFileSync(bundlesPath, "utf8");
 const PRODUCTS_JSON = fs.readFileSync(productsPath, "utf8");
 
 type Lang = "nl" | "en";
-type SkinType = "dry" | "oily" | "combination" | "sensitive" | "normal" | null;
+type SkinType =
+  | "dry"
+  | "oily"
+  | "combination"
+  | "sensitive"
+  | "normal"
+  | null;
 
 type Bundle = {
   name: string;
@@ -133,15 +139,8 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "micellar cleanser",
     "cleansing water",
   ],
-  "Hydrating Toner": [
-    "hydrating toner",
-    "hydra toner",
-    "toner",
-  ],
-  "Hydrating Serum": [
-    "hydrating serum",
-    "hydra serum",
-  ],
+  "Hydrating Toner": ["hydrating toner", "hydra toner", "toner"],
+  "Hydrating Serum": ["hydrating serum", "hydra serum"],
   "Double Hydration Boost Gel + HA": [
     "double hydration boost gel + ha",
     "double hydration boost gel",
@@ -180,20 +179,14 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "ginkgo gel booster",
     "ginkgo booster",
   ],
-  "Calming Facial Oil": [
-    "calming facial oil",
-    "calming oil",
-  ],
+  "Calming Facial Oil": ["calming facial oil", "calming oil"],
   "AHA Peeling Concentrate": [
     "aha peeling concentrate",
     "aha peeling",
     "aha",
     "aha concentrate",
   ],
-  "Caffeine Gel Booster": [
-    "caffeine gel booster",
-    "caffeine booster",
-  ],
+  "Caffeine Gel Booster": ["caffeine gel booster", "caffeine booster"],
   "Oil-Free Hydrating Gel": [
     "oil-free hydrating gel",
     "oil free hydrating gel",
@@ -222,18 +215,8 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "natural retinol alternative",
     "retinol alternative",
   ],
-  "Smoothing Eye Cream": [
-    "smoothing eye cream",
-    "eye cream",
-    "oogcreme",
-    "oogcrème",
-  ],
-  "Vitamin C Serum": [
-    "vitamin c serum",
-    "vitamin c",
-    "vit c serum",
-    "vit c",
-  ],
+  "Smoothing Eye Cream": ["smoothing eye cream", "eye cream", "oogcreme", "oogcrème"],
+  "Vitamin C Serum": ["vitamin c serum", "vitamin c", "vit c serum", "vit c"],
   "Brightening Face&Body Exfoliator with Kojic Acid": [
     "brightening face body exfoliator with kojic acid",
     "brightening exfoliator with kojic acid",
@@ -398,6 +381,13 @@ function detectLanguage(
     "anti age",
     "hello",
     "hi",
+    "what do i need",
+    "help me choose",
+    "skin concern",
+    "main concern",
+    "recommend for me",
+    "build my routine",
+    "target your concern",
   ];
 
   const strongDutchSignals = [
@@ -420,6 +410,12 @@ function detectLanguage(
     "hydraterend",
     "hallo",
     "hoi",
+    "wat heb ik nodig",
+    "help me kiezen",
+    "huidprobleem",
+    "mijn grootste huidprobleem",
+    "routine opbouwen",
+    "kies op huidprobleem",
   ];
 
   const hasStrongEn = strongEnglishSignals.some((w) => current.includes(w));
@@ -464,6 +460,11 @@ function detectLanguage(
     "dagcrème",
     "hallo",
     "hoi",
+    "wat heb ik nodig",
+    "help me kiezen",
+    "huidprobleem",
+    "kies op huidprobleem",
+    "routine opbouwen",
   ];
 
   const englishSignals = [
@@ -496,6 +497,11 @@ function detectLanguage(
     "night cream",
     "hello",
     "hi",
+    "what do i need",
+    "help me choose",
+    "skin concern",
+    "recommend for me",
+    "build my routine",
   ];
 
   const currentNl = countMatches(current, dutchSignals);
@@ -700,12 +706,20 @@ function detectDrySignal(text: string): boolean {
   return hasAny(t, [
     "dry",
     "dehydrated",
+    "dry skin",
+    "dehydrated skin",
+    "tight skin",
+    "tight",
+    "flaky",
+    "rough skin",
+    "lack of hydration",
     "droog",
     "droge huid",
     "uitgedroogd",
     "vochttekort",
-    "tight",
-    "flaky",
+    "trekkerig",
+    "schilfertjes",
+    "schilferig",
   ]);
 }
 
@@ -715,10 +729,16 @@ function detectGlowSignal(text: string): boolean {
     "glow",
     "radiance",
     "dull",
+    "dull skin",
+    "brighter skin",
+    "glowy skin",
+    "more glow",
     "stralend",
     "doffe huid",
     "dof",
     "meer glow",
+    "glowy",
+    "egale glow",
   ]);
 }
 
@@ -730,7 +750,12 @@ function detectBreakoutSignal(text: string): boolean {
     "breakouts",
     "blemishes",
     "spots",
+    "pimples",
+    "blackheads",
+    "clogged pores",
     "onzuiverheden",
+    "mee eters",
+    "mee-eters",
   ]);
 }
 
@@ -738,10 +763,15 @@ function detectSensitiveSignal(text: string): boolean {
   const t = normalize(text);
   return hasAny(t, [
     "sensitive",
-    "gevoelig",
+    "sensitive skin",
+    "reacts fast",
     "reactive",
-    "reactief",
+    "redness",
     "irritated",
+    "gevoelig",
+    "gevoelige huid",
+    "reactief",
+    "roodheid",
     "geïrriteerd",
     "geirriteerd",
   ]);
@@ -756,6 +786,8 @@ function detectAntiAgeSignal(text: string): boolean {
     "anti-aging",
     "fine lines",
     "wrinkles",
+    "aging",
+    "ageing",
     "rimpels",
     "fijne lijntjes",
     "firmness",
@@ -763,6 +795,42 @@ function detectAntiAgeSignal(text: string): boolean {
     "older skin",
     "oudere huid",
     "verouderende huid",
+    "first signs of aging",
+  ]);
+}
+
+function detectConcernIntent(text: string): boolean {
+  const t = normalize(text);
+
+  return hasAny(t, [
+    "skin concern",
+    "main concern",
+    "my concern",
+    "target your concern",
+    "concern",
+    "help based on my main skin concern",
+    "help based on my skin concern",
+    "i want help based on my main skin concern",
+    "i want help based on my skin concern",
+    "help with my skin",
+    "help me with my skin",
+    "i want help",
+    "i need help",
+    "what do i need",
+    "help me choose",
+    "recommend for me",
+    "my main issue",
+    "my skin problem",
+    "my skin issue",
+    "huidprobleem",
+    "mijn huidprobleem",
+    "mijn grootste huidprobleem",
+    "kies op huidprobleem",
+    "waar moet ik op letten",
+    "ik wil hulp",
+    "help me kiezen",
+    "wat heb ik nodig",
+    "ik weet niet wat ik nodig heb",
   ]);
 }
 
@@ -774,6 +842,7 @@ function detectSkinType(text: string): SkinType {
       "combination",
       "combi",
       "combo skin",
+      "combination skin",
       "combinatie",
       "combinatiehuid",
       "t-zone",
@@ -801,6 +870,7 @@ function detectSkinType(text: string): SkinType {
       "oilly",
       "greasy",
       "shiny",
+      "oilier skin",
       "vette huid",
       "vet",
       "glimmend",
@@ -1049,6 +1119,8 @@ function detectProductRecommendationRequest(text: string): boolean {
     "i want 1-2 products for",
     "1 2 products for",
     "1-2 products for",
+    "what do i need for",
+    "what products do i need for",
   ]);
 }
 
@@ -1063,7 +1135,8 @@ function detectRoutineHelpRequest(text: string): boolean {
     "what routine",
     "routine advice",
     "build me a routine",
-    "help me choose",
+    "build my routine",
+    "help me choose a routine",
     "recommend me a routine",
     "which routine fits my skin",
     "welke routine past bij mij",
@@ -1074,6 +1147,8 @@ function detectRoutineHelpRequest(text: string): boolean {
     "routine voor mijn huid",
     "beste match voor mijn huid",
     "ik weet niet wat ik nodig heb",
+    "routine opbouwen",
+    "find my routine",
   ]);
 }
 
@@ -1132,6 +1207,7 @@ function shouldRedirectToQuiz(message: string, combinedUserText: string): boolea
   if (detectWhereRequest(message)) return false;
   if (detectSuitabilityRequest(message)) return false;
   if (detectGenericAdviceRequest(message)) return false;
+  if (detectConcernIntent(message)) return false;
 
   if (detectRoutineHelpRequest(message)) return true;
   if (detectNotKnowingSkinType(message)) return true;
@@ -1377,6 +1453,18 @@ function buildQuizRedirectReply(lang: Lang) {
         url: QUIZ_URL,
       },
     ],
+    lang,
+  };
+}
+
+function buildConcernReply(lang: Lang) {
+  return {
+    reply: tr(
+      lang,
+      "Top. Waar heb je vooral last van?\n\n- Droge huid\n- Puistjes / acne\n- Gevoelige huid\n- Doffe huid / glow\n- Fijne lijntjes",
+      "Got it. What is your main concern?\n\n- Dry skin\n- Acne / breakouts\n- Sensitive skin\n- Dull skin / glow\n- Fine lines"
+    ),
+    actions: [],
     lang,
   };
 }
@@ -1706,7 +1794,13 @@ function recommendProductsFromText(text: string): Product[] {
 
   const add = (title: string) => {
     const p = getProductByName(title);
-    if (p && !picks.find((x) => canonicalizeProductName(x.title) === canonicalizeProductName(p.title))) {
+    if (
+      p &&
+      !picks.find(
+        (x) =>
+          canonicalizeProductName(x.title) === canonicalizeProductName(p.title)
+      )
+    ) {
       picks.push(p);
     }
   };
@@ -1762,7 +1856,8 @@ function decideModelTier(message: string, combinedUserText: string): ModelTier {
     detectUsageRequest(message) ||
     detectCombinationRequest(message) ||
     detectWhereRequest(message) ||
-    detectSuitabilityRequest(message)
+    detectSuitabilityRequest(message) ||
+    detectConcernIntent(message)
   ) {
     return "none";
   }
@@ -2021,10 +2116,34 @@ export async function POST(req: Request) {
       });
     }
 
+    // 0.5 concern intent
+    if (
+      detectConcernIntent(message) &&
+      !currentHasGoalSignal &&
+      !detectUsageRequest(message) &&
+      !detectCombinationRequest(message) &&
+      !detectWhereRequest(message) &&
+      !detectSuitabilityRequest(message) &&
+      !detectProductRecommendationRequest(message) &&
+      !detectRoutineHelpRequest(message)
+    ) {
+      return new Response(JSON.stringify(buildConcernReply(lang)), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
     // 1. exact product wins over ambiguous alias logic
     if (!hasExactCanonicalProduct && ambiguousCandidates.length >= 2) {
       const contextProduct =
-        explicitProducts.find((p) => !ambiguousCandidates.some((a) => canonicalizeProductName(a.title) === canonicalizeProductName(p.title)));
+        explicitProducts.find(
+          (p) =>
+            !ambiguousCandidates.some(
+              (a) =>
+                canonicalizeProductName(a.title) ===
+                canonicalizeProductName(p.title)
+            )
+        );
 
       return new Response(
         JSON.stringify({
@@ -2045,7 +2164,8 @@ export async function POST(req: Request) {
       detectRelativeOrderQuestion(message) &&
       explicitProducts.length >= 1 &&
       lastSingleContextProduct &&
-      canonicalizeProductName(lastSingleContextProduct.title) !== canonicalizeProductName(explicitProducts[0].title)
+      canonicalizeProductName(lastSingleContextProduct.title) !==
+        canonicalizeProductName(explicitProducts[0].title)
     ) {
       return new Response(
         JSON.stringify({
@@ -2069,11 +2189,14 @@ export async function POST(req: Request) {
     ) {
       const anchor = explicitProducts[0];
       const previous = dedupeProducts(lastRecommendedProducts).filter(
-        (p) => canonicalizeProductName(p.title) !== canonicalizeProductName(anchor.title)
+        (p) =>
+          canonicalizeProductName(p.title) !== canonicalizeProductName(anchor.title)
       );
 
       if (previous.length) {
-        const replyParts = previous.map((p) => buildDynamicCombinationReply(anchor, p, lang));
+        const replyParts = previous.map((p) =>
+          buildDynamicCombinationReply(anchor, p, lang)
+        );
         return new Response(
           JSON.stringify({
             reply: replyParts.join("\n\n"),
