@@ -1770,6 +1770,108 @@ function buildRoutineRecommendationReply(bundle: Bundle, lang: Lang, concern?: C
   return `**${bundle.name}**\n\n${intro}`;
 }
 
+
+function buildRoutineSizeQuestionReply(concern: Concern, lang: Lang): string {
+  return tr(
+    lang,
+    `Helder. Voor ${concernLabel(concern, lang)} kan ik twee kanten op:\n\n- **Kleine basisroutine**: weinig stappen, makkelijk starten\n- **Uitgebreide routine**: completer pakket met meer ondersteuning\n\nZoek je iets kleins of juist een uitgebreide routine?`,
+    `Got it. For ${concernLabel(concern, lang)}, I can go two ways:\n\n- **Small base routine**: fewer steps, easy to start\n- **Complete routine**: a fuller set with more support\n\nAre you looking for something small or a complete routine?`
+  );
+}
+
+function assistantAskedRoutineSizePreference(history: string[]): boolean {
+  const assistantMessages = extractAssistantMessages(history).slice(-4);
+  return assistantMessages.some((message) => {
+    const t = normalize(message);
+    return hasAny(t, [
+      "something small or a complete routine",
+      "small base routine",
+      "complete routine",
+      "zoek je iets kleins",
+      "uitgebreide routine",
+      "kleine basisroutine",
+      "twee kanten op",
+      "two ways",
+    ]);
+  });
+}
+
+function detectRoutineSizeAnswer(text: string): "simple" | "full" | null {
+  if (detectSimpleRoutinePreference(text)) return "simple";
+  if (detectFullRoutinePreference(text)) return "full";
+
+  const t = normalize(text);
+  if (hasAny(t, [
+    "small",
+    "smaller",
+    "basic",
+    "starter",
+    "short",
+    "easy",
+    "quick",
+    "klein",
+    "kleine",
+    "basis",
+    "simpel",
+    "simpele",
+    "kort",
+    "makkelijk",
+  ])) return "simple";
+
+  if (hasAny(t, [
+    "full",
+    "complete",
+    "advanced",
+    "bigger",
+    "more complete",
+    "alles",
+    "volledig",
+    "volledige",
+    "compleet",
+    "uitgebreid",
+    "uitgebreide",
+    "groot",
+    "grote",
+  ])) return "full";
+
+  return null;
+}
+
+function buildChosenRoutineFromSizeReply(
+  concern: Concern,
+  size: "simple" | "full",
+  lang: Lang,
+  includeSpfNote = false
+): { reply: string; actions: ChatAction[]; lang: Lang } | null {
+  const { full, simple, addOns } = getConcernBundles(concern);
+
+  if (size === "simple") {
+    const chosen = simple || full;
+    if (!chosen) return null;
+    const addOn = addOns[0];
+    const reply = addOn
+      ? buildSimplePlusAddOnReply(chosen, addOn, lang, concern)
+      : buildRoutineRecommendationReply(chosen, lang, concern, { includeProducts: true, includeSpfNote });
+
+    return {
+      reply,
+      actions: dedupeActions([
+        ...buildActionsForBundle(chosen, lang),
+        ...(addOn ? buildActionsForProduct(addOn) : []),
+      ]).slice(0, 3),
+      lang,
+    };
+  }
+
+  const chosen = full || simple;
+  if (!chosen) return null;
+  return {
+    reply: buildRoutineRecommendationReply(chosen, lang, concern, { includeProducts: true, includeSpfNote }),
+    actions: buildActionsForBundle(chosen, lang),
+    lang,
+  };
+}
+
 function concernLabel(concern: Concern, lang: Lang): string {
   const nl: Record<string, string> = {
     dry: "droge of vochtarme huid",
@@ -2794,6 +2896,66 @@ export async function POST(req: Request) {
           headers: { "Content-Type": "application/json", ...corsHeaders },
         }
       );
+    }
+
+    // C3. If the assistant just asked whether the customer wants a small or complete routine,
+    // use that answer for every skin type/concern.
+    const routineSizeAnswer = detectRoutineSizeAnswer(message);
+    if (
+      assistantAskedRoutineSizePreference(conversationTimeline) &&
+      routineSizeAnswer &&
+      !contextSuggestsProductOnly &&
+      !detectUsageRequest(message) &&
+      !detectCombinationRequest(message) &&
+      !detectWhereRequest(message) &&
+      !detectSuitabilityRequest(message) &&
+      !detectCompareRequest(message)
+    ) {
+      const concern = detectPrimaryConcern(combinedUserText);
+      const chosenRoutine = concern
+        ? buildChosenRoutineFromSizeReply(concern, routineSizeAnswer, lang, detectSPFQuestion(message))
+        : null;
+
+      if (chosenRoutine) {
+        return new Response(JSON.stringify(chosenRoutine), {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        });
+      }
+    }
+
+    // C4. Direct concern statements should not instantly push a routine.
+    // Ask whether the customer wants something small or complete first, unless they already said it.
+    if (
+      currentHasGoalSignal &&
+      !contextSuggestsProductOnly &&
+      !detectSimpleRoutinePreference(message) &&
+      !detectFullRoutinePreference(message) &&
+      !detectProductOnlyPreference(message) &&
+      !detectProductRecommendationRequest(message) &&
+      !detectRoutineHelpRequest(message) &&
+      !detectNotKnowingSkinType(message) &&
+      !detectUsageRequest(message) &&
+      !detectCombinationRequest(message) &&
+      !detectWhereRequest(message) &&
+      !detectSuitabilityRequest(message) &&
+      !detectCompareRequest(message) &&
+      !isSpecificProductQuestion(message)
+    ) {
+      const concern = detectPrimaryConcern(combinedUserText);
+      if (concern) {
+        return new Response(
+          JSON.stringify({
+            reply: buildRoutineSizeQuestionReply(concern, lang),
+            actions: [],
+            lang,
+          }),
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          }
+        );
+      }
     }
 
     // D. Sales routing: concern first, product second. Prevents acne => only Acne Spot Care.
