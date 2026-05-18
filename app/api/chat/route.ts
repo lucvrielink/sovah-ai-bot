@@ -489,7 +489,6 @@ function detectLanguage(
     "bij",
     "mij",
     "puistjes",
-    "acne",
     "routine",
     "product",
     "producten",
@@ -555,6 +554,11 @@ function detectLanguage(
     "what do i need",
     "help me choose",
     "skin concern",
+    "main concern",
+    "targeted concern",
+    "concern",
+    "got it",
+    "acne breakouts",
     "recommend for me",
     "build my routine",
   ];
@@ -1145,6 +1149,18 @@ function detectProductOnlyPreference(text: string): boolean {
     "just a product",
     "just products",
     "only a few products",
+    "one to two products",
+    "1 to 2 products",
+    "1-2 products",
+    "one or two products",
+    "can you recommend one to two products",
+    "can you recommend one or two products",
+    "not the full routine",
+    "and not the full routine",
+    "een tot twee producten",
+    "1 tot 2 producten",
+    "1-2 producten",
+    "een of twee producten",
   ]);
 }
 
@@ -1185,6 +1201,12 @@ function detectProductRecommendationRequest(text: string): boolean {
     "1-2 products for",
     "what do i need for",
     "what products do i need for",
+    "can you recommend one to two products",
+    "can you recommend one or two products",
+    "recommend one to two products",
+    "recommend one or two products",
+    "one to two products for",
+    "one or two products for",
   ]);
 }
 
@@ -2164,34 +2186,19 @@ function buildMultiProductUsageReply(products: Product[], lang: Lang): string {
 }
 
 function buildBundleUsageReply(bundle: Bundle, lang: Lang): string {
-  const how = lang === "nl" ? bundle.how_to_use_nl : bundle.how_to_use_en;
-  const patch = lang === "nl" ? bundle.patch_test_nl : bundle.patch_test_en;
-  const caution = lang === "nl" ? bundle.caution_nl : bundle.caution_en;
-
-  const parts: string[] = [`**${bundle.name}**`];
-
-  if (how?.morning?.length) {
-    parts.push(
-      lang === "nl"
-        ? `**Ochtend**\n${how.morning.map((step) => `- ${step}`).join("\n")}`
-        : `**Morning**\n${how.morning.map((step) => `- ${step}`).join("\n")}`
-    );
-  }
-
-  if (how?.evening?.length) {
-    parts.push(
-      lang === "nl"
-        ? `**Avond**\n${how.evening.map((step) => `- ${step}`).join("\n")}`
-        : `**Evening**\n${how.evening.map((step) => `- ${step}`).join("\n")}`
-    );
-  }
-
-  if (patch) parts.push(`**Patch test**\n${patch}`);
-  if (caution) {
-    parts.push(lang === "nl" ? `**Let op**\n${caution}` : `**Caution**\n${caution}`);
-  }
-
-  return parts.join("\n\n");
+  return [
+    `**${bundle.name}**`,
+    tr(
+      lang,
+      "Je kunt de volledige uitleg vinden op de productpagina van deze routine. Daar staat de sectie **Hoe te gebruiken** met de ochtend- en avondstappen.",
+      "You can find the full instructions on this routine product page. There is a **How to use** section with the morning and evening steps."
+    ),
+    tr(
+      lang,
+      "Klik op de knop hieronder om de routinepagina te openen.",
+      "Click the button below to open the routine page."
+    ),
+  ].join("\n\n");
 }
 
 function buildDynamicCombinationReply(a: Product, b: Product, lang: Lang): string {
@@ -2675,7 +2682,7 @@ export async function POST(req: Request) {
     const userTimeline = [...userHistory, message].slice(-18);
     const combinedUserText = userTimeline.join(" \n ");
     const allHistoryText = [...history, `User: ${message}`].join(" \n ");
-    const lang = detectLanguage(message, combinedUserText, forcedLang);
+    const lang = detectLanguage(message, allHistoryText, forcedLang);
 
     const mentionedProducts = resolveProductsFromMessage(message);
     const mentionedBundles = findMentionedBundles(message);
@@ -2762,6 +2769,33 @@ export async function POST(req: Request) {
       });
     }
 
+    // C2. Product-only context must beat routine sales routing.
+    // Example: user asks "Can you recommend 1-2 products, not a full routine?" and then says "dry skin".
+    // In that case we recommend products, not Dry Skin Routine.
+    if (
+      contextSuggestsProductOnly &&
+      currentHasGoalSignal &&
+      !detectRoutineHelpRequest(message) &&
+      !detectUsageRequest(message) &&
+      !detectCombinationRequest(message) &&
+      !detectWhereRequest(message) &&
+      !detectSuitabilityRequest(message) &&
+      !detectCompareRequest(message)
+    ) {
+      const picks = recommendProductsFromText(combinedUserText);
+      return new Response(
+        JSON.stringify({
+          reply: buildProductRecommendationReply(picks, lang),
+          actions: buildActionsForProducts(picks).slice(0, 2),
+          lang,
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
     // D. Sales routing: concern first, product second. Prevents acne => only Acne Spot Care.
     // This is only for direct concern statements like "I have acne", not for broad
     // "which routine do I need?" questions, because those should go to the quiz.
@@ -2769,6 +2803,9 @@ export async function POST(req: Request) {
     if (
       salesRoute &&
       currentHasGoalSignal &&
+      !contextSuggestsProductOnly &&
+      !detectProductOnlyPreference(message) &&
+      !detectProductRecommendationRequest(message) &&
       !detectRoutineHelpRequest(message) &&
       !detectNotKnowingSkinType(message) &&
       !detectUsageRequest(message) &&
