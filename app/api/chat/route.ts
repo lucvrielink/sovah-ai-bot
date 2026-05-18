@@ -399,7 +399,7 @@ function wantsRecommendation(text: string): boolean {
 }
 
 function wantsBundleContents(text: string): boolean {
-  return hasAny(text, ["what is in", "what products are in", "which products are in", "products inside", "contents", "included", "contains", "zit erin", "zit er in", "welke producten zitten", "wat zit er in", "wat zit erin", "inhoud", "producten in", "wat krijg ik", "welke producten krijg ik", "bundle products", "bundel producten"]);
+  return hasAny(text, ["what is in", "what product is in", "what product are in", "what products are in", "which product is in", "which products are in", "products inside", "contents", "included", "contains", "inside the routine", "in the routine", "zit erin", "zit er in", "welk product zit", "welke producten zitten", "wat zit er in", "wat zit erin", "inhoud", "producten in", "wat krijg ik", "welke producten krijg ik", "bundle products", "bundel producten"]);
 }
 
 function wantsUsage(text: string): boolean {
@@ -420,6 +420,44 @@ function wantsCombination(text: string): boolean {
 
 function asksAboutSpfInBundle(text: string): boolean {
   return hasAny(text, ["spf in bundle", "sunscreen in bundle", "is spf included", "does it include spf", "zit spf erin", "zit zonnebrand erin", "is sunscreen onderdeel", "is spf onderdeel", "zit zonbescherming erbij"]);
+}
+
+
+function isExplicitProductMention(text: string): boolean {
+  const t = loose(text);
+
+  return productCatalog.products.some((product) => {
+    const title = loose(product.title);
+    const handle = loose(product.handle.replace(/-/g, " "));
+
+    if (title && t.includes(title)) return true;
+    if (handle && t.includes(handle)) return true;
+
+    const safeAliases = (PRODUCT_EXTRA_ALIASES[product.title] || [])
+      .map((alias) => loose(alias))
+      .filter((alias) => alias.length >= 8)
+      .filter((alias) => !GOAL_SIGNALS.acne.map(loose).includes(alias))
+      .filter((alias) => !GOAL_SIGNALS.dry.map(loose).includes(alias))
+      .filter((alias) => !GOAL_SIGNALS.sensitive.map(loose).includes(alias))
+      .filter((alias) => !GOAL_SIGNALS.oily.map(loose).includes(alias))
+      .filter((alias) => !GOAL_SIGNALS.combination.map(loose).includes(alias))
+      .filter((alias) => !GOAL_SIGNALS.aging.map(loose).includes(alias))
+      .filter((alias) => !GOAL_SIGNALS.dull.map(loose).includes(alias));
+
+    return safeAliases.some((alias) => t.includes(alias));
+  });
+}
+
+function isGeneralSkinConcernStatement(text: string): boolean {
+  const t = loose(text);
+  if (primaryGoal(text) === "unknown") return false;
+  if (wantsBundleContents(text) || wantsUsage(text) || wantsCompare(text) || wantsCombination(text) || wantsLink(text)) return false;
+  if (isExplicitProductMention(text)) return false;
+
+  return hasAny(t, [
+    "i have", "i struggle with", "my skin is", "my face is", "i get", "i deal with", "having",
+    "ik heb", "ik heb last van", "mijn huid is", "me huid is", "mijn gezicht is", "last van", "heb vaak"
+  ]);
 }
 
 function detectGreeting(text: string): boolean {
@@ -660,18 +698,80 @@ function buildBundleUsageReply(bundle: Bundle, lang: Lang): BotResponse {
 function buildBundleRecommendReply(bundle: Bundle, lang: Lang): BotResponse {
   const products = getBundleProducts(bundle).map((p) => p.title).join(", ");
   const simple = loose(bundle.type || bundle.name).includes("simple");
+  const goal = bundleGoal(bundle);
+
+  const goalTextNl: Record<string, string> = {
+    dry: "droge of trekkerige huid",
+    sensitive: "gevoelige of snel reagerende huid",
+    oily: "vette of snel glimmende huid",
+    combination: "combinatiehuid",
+    normal: "normale huid",
+    acne: "acne, puistjes of onzuiverheden",
+    dull: "doffe of vermoeide huid",
+    aging: "fijne lijntjes of aging skin",
+    dark_spots: "pigmentvlekken of een ongelijk ogende huid",
+    unknown: "jouw huidvraag",
+  };
+
+  const goalTextEn: Record<string, string> = {
+    dry: "dry or tight-feeling skin",
+    sensitive: "sensitive or reactive skin",
+    oily: "oily or shiny skin",
+    combination: "combination skin",
+    normal: "normal skin",
+    acne: "acne, pimples or blemishes",
+    dull: "dull or tired-looking skin",
+    aging: "fine lines or aging skin",
+    dark_spots: "dark spots or uneven-looking skin",
+    unknown: "your skin concern",
+  };
 
   const intro = simple
-    ? tr(lang, `Ik zou **${bundle.name}** nemen als je het simpel wilt houden.`, `I’d choose **${bundle.name}** if you want to keep it simple.`)
-    : tr(lang, `Ik zou **${bundle.name}** nemen als je een complete routine wilt.`, `I’d choose **${bundle.name}** if you want a complete routine.`);
+    ? tr(
+        lang,
+        `Voor ${goalTextNl[goal]}, zou ik starten met **${bundle.name}**. Die blijft bewust simpel, zodat je huid niet meteen te veel producten krijgt.`,
+        `For ${goalTextEn[goal]}, I’d start with **${bundle.name}**. It stays intentionally simple, so your skin does not get too many products at once.`
+      )
+    : tr(
+        lang,
+        `Voor ${goalTextNl[goal]} past **${bundle.name}** het best als je een complete routine wilt.`,
+        `For ${goalTextEn[goal]}, **${bundle.name}** is the best fit if you want a complete routine.`
+      );
 
   const productLine = products
-    ? tr(lang, `Deze bundel bevat: ${products}.`, `This bundle includes: ${products}.`)
+    ? tr(lang, `In de bundel zitten: ${products}.`, `The bundle includes: ${products}.`)
     : "";
 
-  const spfLine = tr(lang, "SPF zit niet in de bundel en blijft een losse add-on.", "SPF is not included in the bundle and stays a separate add-on.");
+  const spfLine = tr(
+    lang,
+    "SPF zit niet in de bundel. Die blijft een losse add-on voor overdag.",
+    "SPF is not included in the bundle. It stays a separate daytime add-on."
+  );
 
   return response([intro, productLine, spfLine].filter(Boolean).join("\n\n"), buildActionsForBundle(bundle, lang), lang);
+}
+
+function buildAcneConcernReply(lang: Lang): BotResponse {
+  const simpleAcne = bundleCatalog.bundles.find((b) => loose(b.name) === "simple acne routine");
+  const fullAcne = bundleCatalog.bundles.find((b) => loose(b.name) === "acne routine");
+  const spotCare = getProductByName("Acne Spot Care");
+
+  const routineName = simpleAcne?.name || "Simple Acne Routine";
+  const spotName = spotCare?.title || "Acne Spot Care";
+
+  const reply = tr(
+    lang,
+    `Bij acne zou ik niet meteen alleen één spot product aanraden. Start liever met **${routineName}** als kleine basisroutine.\n\nDie helpt je huid eerst rustig reinigen en licht verzorgen. Voor actieve puistjes kun je **${spotName}** als gerichte extra stap gebruiken.\n\nWil je uitgebreider werken, dan is **${fullAcne?.name || "Acne Routine"}** logischer.`,
+    `For acne, I would not jump straight to only one spot product. I’d start with **${routineName}** as a small base routine.\n\nIt gives your skin a simple cleanse-and-moisturise base. For active pimples, you can add **${spotName}** as a targeted extra step.\n\nIf you want a more complete approach, **${fullAcne?.name || "Acne Routine"}** makes more sense.`
+  );
+
+  const actions = [
+    ...(simpleAcne ? buildActionsForBundle(simpleAcne, lang) : []),
+    ...(spotCare ? buildActionsForProduct(spotCare) : []),
+    ...(fullAcne ? buildActionsForBundle(fullAcne, lang) : []),
+  ];
+
+  return response(reply, actions, lang);
 }
 
 function buildProductInfoReply(product: Product, lang: Lang): BotResponse {
@@ -942,7 +1042,8 @@ export async function POST(req: Request) {
     }
 
     // 9. If the customer names one product and asks normally, explain that product.
-    if (!result && productHits.length === 1 && !wantsRecommendation(message)) {
+    // Do not let broad AI-detection turn "I have acne" into only Acne Spot Care.
+    if (!result && productHits.length === 1 && !wantsRecommendation(message) && isExplicitProductMention(message) && !isGeneralSkinConcernStatement(message)) {
       result = buildProductInfoReply(productHits[0], lang);
     }
 
@@ -951,7 +1052,12 @@ export async function POST(req: Request) {
       result = buildBundleContentsReply(bundleHits[0], lang);
     }
 
-    // 11. Routine recommendation.
+    // 11. General concern statements: route to routine first, not loose product info.
+    if (!result && isGeneralSkinConcernStatement(message) && primaryGoal(message) === "acne") {
+      result = buildAcneConcernReply(lang);
+    }
+
+    // 12. Routine recommendation.
     if (!result && (wantsRecommendation(message) || isSimpleRequest(message) || isFullRoutineRequest(message) || primaryGoal(combinedUserText) !== "unknown")) {
       const bundle = findBestBundleForText(combinedUserText);
       if (bundle) {
