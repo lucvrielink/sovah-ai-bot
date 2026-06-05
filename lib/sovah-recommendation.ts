@@ -83,6 +83,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796",
     price: "€24,95",
   },
+
   toner: {
     title: "Hydrating Toner",
     handle: "hydrating-toner",
@@ -92,6 +93,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Toner-fragrance-free-vegan.jpg?v=1775136707",
     price: "€24,95",
   },
+
   hydratingSerum: {
     title: "Hydrating Face Serum with Aloe & Hyaluronic Acid",
     handle: "hydrating-serum",
@@ -101,6 +103,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Serum-vegan-natural-certified.jpg?v=1775136609",
     price: "€34,95",
   },
+
   hydrationBoost: {
     title: "Hydration Boost Gel Moisturizer",
     handle: "double-hydration-boost-gel-ha",
@@ -110,6 +113,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Double-Hydration-Boost-Gel-HA-natural-certified.jpg?v=1775136519",
     price: "€34,95",
   },
+
   dayCream: {
     title: "Moisturising Day Face Cream with Hyaluronic Acid",
     handle: "moisturising-day-cream",
@@ -119,6 +123,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Moisturising-Day-Cream-hyaluronic-moisturizer.jpg?v=1775136917",
     price: "€39,95",
   },
+
   nightCream: {
     title: "Ceramide Barrier Night Cream for Dry & Normal Skin",
     handle: "ceramide-barrier-night-cream",
@@ -128,6 +133,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Ceramide-Barrier-Night-Cream-barrier-repair-moisturizer_54139ef5-7701-4007-afb4-adb7140f7dd7.jpg?v=1775136179",
     price: "€39,95",
   },
+
   purifyingMousse: {
     title: "Purifying Mousse",
     handle: "purifying-mousse",
@@ -137,6 +143,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Purifying-Mousse-gluten-free-nut-free-vegan-natural-certified.jpg?v=1775137464",
     price: "€34,95",
   },
+
   ginkgoBooster: {
     title: "Antioxidant Ginkgo Hydrating Gel Booster",
     handle: "antioxidant-ginkgo-gel-booster",
@@ -146,6 +153,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Antioxidant-Ginkgo-Gel-Booster-hydrating-gel-serum.jpg?v=1775135203",
     price: "€34,95",
   },
+
   calmingOil: {
     title: "Calming Facial Oil",
     handle: "calming-facial-oil",
@@ -155,6 +163,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Calming-Facial-Oil-nourishing-face-oil.jpg?v=1775135603",
     price: "€39,95",
   },
+
   aha: {
     title: "AHA Peeling Concentrate Exfoliating Face Serum",
     handle: "aha-peeling-concentrate",
@@ -164,6 +173,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-AHA-Peeling-Concentrate-exfoliating-face-serum.jpg?v=1775134637",
     price: "€34,95",
   },
+
   caffeine: {
     title: "Caffeine Hydrating Gel Booster for Face & Eyes",
     handle: "caffeine-gel-booster",
@@ -173,6 +183,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Caffeine-Gel-Booster-hydrating-gel-serum.jpg?v=1775135510",
     price: "€34,95",
   },
+
   oilFreeGel: {
     title: "Oil-Free Hydrating Gel Moisturizer",
     handle: "oil-free-hydrating-gel",
@@ -182,6 +193,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Oil-Free-Hydrating-Gel-vegan-natural-certified.jpg?v=1775137249",
     price: "€39,95",
   },
+
   peptide: {
     title: "Peptide Anti-Aging Serum",
     handle: "peptide-anti-aging-serum",
@@ -191,6 +203,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Peptide-Anti-Aging-Serum-vegan-natural-certified-gluten-free_b3d3c1a2-9748-4728-9c8d-31ef88dd41fc.jpg?v=1775137936",
     price: "€39,95",
   },
+
   collagen: {
     title: "Collagen Boost Serum",
     handle: "collagen-boost-serum",
@@ -200,6 +213,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Collagen-Boost-Serum-firming-hydrating-serum.jpg?v=1775136257",
     price: "€39,95",
   },
+
   antiAgeDayCream: {
     title: "Anti-Age Day Cream",
     handle: "anti-age-day-cream",
@@ -209,6 +223,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Anti-Age-Day-Cream-hyaluronic-acid-moisturizer.jpg?v=1775135005",
     price: "€39,95",
   },
+
   retinolAlternative: {
     title: "Natural Retinol Alternative Oil Serum",
     handle: "natural-retinol-alternative-oil-serum",
@@ -218,6 +233,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Natural-Retinol-Alternative-Oil-Serum-organic-certified.jpg?v=1775137069",
     price: "€39,95",
   },
+
   eyeCream: {
     title: "Smoothing Eye Cream",
     handle: "smoothing-eye-cream",
@@ -227,6 +243,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Smoothing-Eye-Cream-gluten-free-vegan-natural-certified.jpg?v=1775137579",
     price: "€34,95",
   },
+
   vitaminC: {
     title: "Vitamin C Serum",
     handle: "vitamin-c-serum",
@@ -236,6 +253,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Vitamin-C-Serum-vegan-gluten-free-natural-certified_6292763e-027a-4de1-850b-3953b8983743.jpg?v=1775134504",
     price: "€34,95",
   },
+
   kojicExfoliator: {
     title: "Brightening Face & Body Exfoliating Cleanser with Kojic Acid",
     handle: "brightening-face-body-exfoliator-with-kojic-acid",
@@ -245,6 +263,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Brightening-Face-and-Body-Exfoliator-Kojic-Acid.jpg?v=1775135392",
     price: "€34,95",
   },
+
   kojicCream: {
     title: "Dark Spot Face Cream with Kojic Acid",
     handle: "dark-spot-face-cream-with-kojic-acid",
@@ -254,6 +273,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Dark-Spot-Face-Cream-Kojic-Acid-vegan.jpg?v=1775136353",
     price: "€34,95",
   },
+
   allInOneOil: {
     title: "All-In-One Facial Oil",
     handle: "all-in-one-facial-oil",
@@ -263,6 +283,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-All-In-One-Facial-Oil-nourishing-face-oil.jpg?v=1775134905",
     price: "€34,95",
   },
+
   spf: {
     title: "Sun Protection SPF50 Stick, no tint",
     handle: "sun-protection-spf50-stick-no-tint",
@@ -272,6 +293,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Sun-Protection-SPF50-Stick-no-tint.jpg?v=1775137726",
     price: "€29,95",
   },
+
   acneSpot: {
     title: "Acne Spot Care",
     handle: "acne-spot-care",
@@ -281,6 +303,7 @@ const PRODUCTS = {
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Acne-Spot-Care-acne-treatment-blemish-care_718e95d2-b927-4adc-b551-15bebb4fce84.jpg?v=1775133667",
     price: "€34,95",
   },
+
   niacinamide: {
     title: "Niacinamide Gel Face Moisturiser",
     handle: "niacinamide-gel-moisturiser-1",
@@ -851,8 +874,31 @@ function getLocalizedSteps(
   bundle: Bundle,
   addon: Addon | null
 ): string[] {
+  const cleanserTitles: string[] = [
+    PRODUCTS.micellar.title,
+    PRODUCTS.purifyingMousse.title,
+  ];
+
+  const moisturizerTitles: string[] = [
+    PRODUCTS.dayCream.title,
+    PRODUCTS.oilFreeGel.title,
+    PRODUCTS.niacinamide.title,
+    PRODUCTS.antiAgeDayCream.title,
+  ];
+
+  const nonTreatmentTitles: string[] = [
+    PRODUCTS.micellar.title,
+    PRODUCTS.purifyingMousse.title,
+    PRODUCTS.toner.title,
+    PRODUCTS.dayCream.title,
+    PRODUCTS.nightCream.title,
+    PRODUCTS.oilFreeGel.title,
+    PRODUCTS.niacinamide.title,
+    PRODUCTS.antiAgeDayCream.title,
+  ];
+
   const cleanser = bundle.products.find((product) =>
-    [PRODUCTS.micellar.title, PRODUCTS.purifyingMousse.title].includes(product)
+    cleanserTitles.includes(product)
   );
 
   const toner = bundle.products.find(
@@ -860,26 +906,11 @@ function getLocalizedSteps(
   );
 
   const treatmentProducts = bundle.products.filter(
-    (product) =>
-      ![
-        PRODUCTS.micellar.title,
-        PRODUCTS.purifyingMousse.title,
-        PRODUCTS.toner.title,
-        PRODUCTS.dayCream.title,
-        PRODUCTS.nightCream.title,
-        PRODUCTS.oilFreeGel.title,
-        PRODUCTS.niacinamide.title,
-        PRODUCTS.antiAgeDayCream.title,
-      ].includes(product)
+    (product) => !nonTreatmentTitles.includes(product)
   );
 
   const moisturizer = bundle.products.find((product) =>
-    [
-      PRODUCTS.dayCream.title,
-      PRODUCTS.oilFreeGel.title,
-      PRODUCTS.niacinamide.title,
-      PRODUCTS.antiAgeDayCream.title,
-    ].includes(product)
+    moisturizerTitles.includes(product)
   );
 
   const nightCream = bundle.products.find(
@@ -889,8 +920,13 @@ function getLocalizedSteps(
   const steps: string[] = [];
 
   if (lang === "nl") {
-    if (cleanser) steps.push(`Begin met ${cleanser} om je huid te reinigen.`);
-    if (toner) steps.push(`Gebruik daarna ${toner} als voorbereidende stap.`);
+    if (cleanser) {
+      steps.push(`Begin met ${cleanser} om je huid te reinigen.`);
+    }
+
+    if (toner) {
+      steps.push(`Gebruik daarna ${toner} als voorbereidende stap.`);
+    }
 
     if (treatmentProducts.length > 0) {
       steps.push(
@@ -934,8 +970,13 @@ function getLocalizedSteps(
     return steps;
   }
 
-  if (cleanser) steps.push(`Start with ${cleanser} to cleanse the skin.`);
-  if (toner) steps.push(`Follow with ${toner} as a prep step.`);
+  if (cleanser) {
+    steps.push(`Start with ${cleanser} to cleanse the skin.`);
+  }
+
+  if (toner) {
+    steps.push(`Follow with ${toner} as a prep step.`);
+  }
 
   if (treatmentProducts.length > 0) {
     steps.push(
