@@ -24,103 +24,175 @@ export async function OPTIONS() {
   });
 }
 
-function isLang(value: unknown): value is Lang {
-  return value === "nl" || value === "en";
+const VALID_LANGS = ["nl", "en"] as const;
+
+const VALID_SKIN_TYPES = [
+  "dry",
+  "oily",
+  "combination",
+  "normal",
+  "sensitive",
+  "unknown",
+] as const;
+
+const VALID_CONCERNS = [
+  "dryness",
+  "breakouts",
+  "sensitivity",
+  "glow",
+  "dark_spots",
+  "antiage",
+  "unknown",
+] as const;
+
+const VALID_GOALS = [
+  "hydration",
+  "calm",
+  "glow",
+  "even",
+  "firm",
+  "simple",
+  "unknown",
+] as const;
+
+const VALID_ROUTINE_PREFERENCES = [
+  "simple",
+  "balanced",
+  "results",
+  "unknown",
+] as const;
+
+const VALID_SENSITIVITY_LEVELS = [
+  "high",
+  "medium",
+  "low",
+  "unknown",
+] as const;
+
+function isOneOf<T extends readonly string[]>(
+  value: unknown,
+  validValues: T
+): value is T[number] {
+  return typeof value === "string" && validValues.includes(value);
 }
 
-function isSkinType(value: unknown): value is SkinType {
-  return [
-    "dry",
-    "oily",
-    "combination",
-    "normal",
-    "sensitive",
-    "unknown",
-  ].includes(String(value));
+function normalizeQuizAnswers(body: unknown): QuizAnswers {
+  const data =
+    body && typeof body === "object"
+      ? (body as Record<string, unknown>)
+      : {};
+
+  return {
+    lang: isOneOf(data.lang, VALID_LANGS) ? (data.lang as Lang) : "en",
+
+    skinType: isOneOf(data.skinType, VALID_SKIN_TYPES)
+      ? (data.skinType as SkinType)
+      : "unknown",
+
+    concern: isOneOf(data.concern, VALID_CONCERNS)
+      ? (data.concern as Concern)
+      : "unknown",
+
+    sensitivityLevel: isOneOf(
+      data.sensitivityLevel,
+      VALID_SENSITIVITY_LEVELS
+    )
+      ? data.sensitivityLevel
+      : "unknown",
+
+    goal: isOneOf(data.goal, VALID_GOALS)
+      ? (data.goal as Goal)
+      : "unknown",
+
+    routinePreference: isOneOf(
+      data.routinePreference,
+      VALID_ROUTINE_PREFERENCES
+    )
+      ? (data.routinePreference as RoutinePreference)
+      : "unknown",
+  };
 }
 
-function isConcern(value: unknown): value is Concern {
-  return [
-    "dryness",
-    "breakouts",
-    "sensitivity",
-    "glow",
-    "dark_spots",
-    "antiage",
-    "unknown",
-  ].includes(String(value));
+function cleanRecommendedBundle(bundle: any) {
+  return {
+    name: bundle?.name || "",
+    url: bundle?.url || "",
+    handle: bundle?.handle || null,
+    variantId: bundle?.variantId ?? null,
+    image: bundle?.image || null,
+    price: bundle?.price || null,
+    description: bundle?.description || "",
+    products: Array.isArray(bundle?.products) ? bundle.products : [],
+  };
 }
 
-function isGoal(value: unknown): value is Goal {
-  return [
-    "hydration",
-    "calm",
-    "glow",
-    "even",
-    "firm",
-    "simple",
-    "unknown",
-  ].includes(String(value));
-}
+function cleanAddon(addon: any) {
+  if (!addon) return null;
 
-function isRoutinePreference(value: unknown): value is RoutinePreference {
-  return ["simple", "balanced", "results", "unknown"].includes(String(value));
-}
-
-function isSensitivityLevel(
-  value: unknown
-): value is QuizAnswers["sensitivityLevel"] {
-  return ["high", "medium", "low", "unknown"].includes(String(value));
+  return {
+    title: addon?.title || "",
+    url: addon?.url || "",
+    handle: addon?.handle || null,
+    variantId: addon?.variantId ?? null,
+    image: addon?.image || null,
+    price: addon?.price || null,
+    description: addon?.description || "",
+  };
 }
 
 export async function POST(req: Request) {
   const corsHeaders = buildCorsHeaders();
 
   try {
-    const body = await req.json();
+    let body: unknown;
 
-    const answers: QuizAnswers = {
-      lang: isLang(body?.lang) ? body.lang : "en",
-      skinType: isSkinType(body?.skinType) ? body.skinType : "unknown",
-      concern: isConcern(body?.concern) ? body.concern : "unknown",
-      sensitivityLevel: isSensitivityLevel(body?.sensitivityLevel)
-        ? body.sensitivityLevel
-        : "unknown",
-      goal: isGoal(body?.goal) ? body.goal : "unknown",
-      routinePreference: isRoutinePreference(body?.routinePreference)
-        ? body.routinePreference
-        : "unknown",
-    };
+    try {
+      body = await req.json();
+    } catch {
+      return new NextResponse(
+        JSON.stringify({
+          success: false,
+          error: "Invalid JSON body.",
+        }),
+        {
+          status: 400,
+          headers: {
+            "Content-Type": "application/json",
+            ...corsHeaders,
+          },
+        }
+      );
+    }
 
+    const answers = normalizeQuizAnswers(body);
     const result = getQuizRecommendation(answers);
+
+    if (!result || !result.recommendedBundle) {
+      return new NextResponse(
+        JSON.stringify({
+          success: false,
+          error: "No recommendation could be created.",
+        }),
+        {
+          status: 500,
+          headers: {
+            "Content-Type": "application/json",
+            ...corsHeaders,
+          },
+        }
+      );
+    }
 
     return new NextResponse(
       JSON.stringify({
         success: true,
         result: {
-          lang: result.lang,
-          recommendedBundle: {
-            name: result.recommendedBundle.name,
-            url: result.recommendedBundle.url,
-            handle: result.recommendedBundle.handle || null,
-            variantId: result.recommendedBundle.variantId || null,
-            image: result.recommendedBundle.image || null,
-            description: result.recommendedBundle.description || "",
-            products: result.recommendedBundle.products || [],
-          },
-          addon: result.addon
-            ? {
-                title: result.addon.title,
-                url: result.addon.url,
-                handle: result.addon.handle || null,
-                variantId: result.addon.variantId || null,
-                image: result.addon.image || null,
-                description: result.addon.description || "",
-              }
-            : null,
-          reasonShort: result.reasonShort,
-          reasonLong: result.reasonLong,
-          steps: result.steps,
+          lang: result.lang || answers.lang,
+          recommendedBundle: cleanRecommendedBundle(result.recommendedBundle),
+          addon: cleanAddon(result.addon),
+          reasonShort: result.reasonShort || "",
+          reasonLong: result.reasonLong || "",
+          steps: Array.isArray(result.steps) ? result.steps : [],
         },
       }),
       {
