@@ -47,7 +47,7 @@ type Bundle = {
   name: string;
   handle: string;
   url: string;
-  variantId: number | null;
+  variantId: number;
   image: string;
   price: string;
   description: string;
@@ -58,7 +58,7 @@ type Addon = {
   title: string;
   handle: string;
   url: string;
-  variantId: number | null;
+  variantId: number;
   image: string;
   price: string;
   description: string;
@@ -436,7 +436,7 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Simple Sensitive Skin Routine",
     handle: "simple-sensitive-skin-routine",
     url: "https://sovahcare.com/products/simple-sensitive-skin-routine",
-    variantId: null,
+    variantId: 53486257340754,
     image:
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-micellar-cleansing-water-niacinamide-gel-moisturiser-skincare-duo.png?v=1780324703",
     price: "€59,95",
@@ -449,7 +449,7 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Simple Oily Skin Routine",
     handle: "simple-oily-skin-routine",
     url: "https://sovahcare.com/products/simple-oily-skin-routine",
-    variantId: null,
+    variantId: 53486265729362,
     image:
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-purifying-mousse-oil-free-hydrating-gel-skincare-duo.png?v=1780324287",
     price: "€69,95",
@@ -462,7 +462,7 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Simple Combination Skin Routine",
     handle: "simple-combination-skin-routine",
     url: "https://sovahcare.com/products/simple-combination-skin-routine",
-    variantId: null,
+    variantId: 53486266450258,
     image:
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-purifying-mousse-oil-free-hydrating-gel-skincare-duo.png?v=1780324287",
     price: "€69,95",
@@ -475,7 +475,7 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Simple Aging Skin Routine",
     handle: "simple-aging-skin-routine",
     url: "https://sovahcare.com/products/simple-aging-skin-routine",
-    variantId: null,
+    variantId: 53486268186962,
     image:
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-micellar-cleansing-water-anti-age-day-cream-skincare-duo.png?v=1780324041",
     price: "€59,95",
@@ -488,7 +488,7 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Simple Acne Routine",
     handle: "simple-acne-routine",
     url: "https://sovahcare.com/products/simple-acne-routine",
-    variantId: null,
+    variantId: 53486280114514,
     image:
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-purifying-mousse-niacinamide-gel-moisturiser-skincare-duo.png?v=1780323659",
     price: "€69,95",
@@ -501,7 +501,7 @@ const BUNDLES: Record<string, Bundle> = {
     name: "Simple Dull Skin Routine",
     handle: "simple-dull-skin-routine",
     url: "https://sovahcare.com/products/simple-dull-skin-routine",
-    variantId: null,
+    variantId: 53486284505426,
     image:
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-micellar-cleansing-water-moisturising-day-cream-hydrating-skincare-duo.png?v=1780323397",
     price: "€59,95",
@@ -619,13 +619,15 @@ function wantsSimpleRoutine(answers: QuizAnswers): boolean {
 function chooseSimpleBundle(answers: QuizAnswers): Bundle {
   const { skinType, concern, goal, sensitivityLevel } = answers;
 
-  if (
-    concern === "breakouts" ||
-    skinType === "oily" ||
-    skinType === "combination"
-  ) {
-    if (concern === "breakouts") return BUNDLES.simpleAcne;
-    if (skinType === "combination") return BUNDLES.simpleCombination;
+  if (concern === "breakouts") {
+    return BUNDLES.simpleAcne;
+  }
+
+  if (skinType === "combination") {
+    return BUNDLES.simpleCombination;
+  }
+
+  if (skinType === "oily") {
     return BUNDLES.simpleOily;
   }
 
@@ -642,7 +644,12 @@ function chooseSimpleBundle(answers: QuizAnswers): Bundle {
     return BUNDLES.simpleAging;
   }
 
-  if (concern === "glow" || concern === "dark_spots" || goal === "glow" || goal === "even") {
+  if (
+    concern === "glow" ||
+    concern === "dark_spots" ||
+    goal === "glow" ||
+    goal === "even"
+  ) {
     return BUNDLES.simpleDull;
   }
 
@@ -673,7 +680,12 @@ function chooseFullBundle(answers: QuizAnswers): Bundle {
     return BUNDLES.aging;
   }
 
-  if (concern === "dark_spots" || concern === "glow" || goal === "even" || goal === "glow") {
+  if (
+    concern === "dark_spots" ||
+    concern === "glow" ||
+    goal === "even" ||
+    goal === "glow"
+  ) {
     return BUNDLES.dull;
   }
 
@@ -712,10 +724,7 @@ function chooseAddon(answers: QuizAnswers, bundle: Bundle): Addon | null {
     return ADDONS.acneSpot;
   }
 
-  if (
-    concern === "dark_spots" ||
-    goal === "even"
-  ) {
+  if (concern === "dark_spots" || goal === "even") {
     return sensitivityLevel === "high"
       ? ADDONS.kojicCream
       : ADDONS.kojicExfoliator;
@@ -744,10 +753,7 @@ function chooseAddon(answers: QuizAnswers, bundle: Bundle): Addon | null {
     return ADDONS.eyeCream;
   }
 
-  if (
-    bundle.name === "Dull Skin Routine" &&
-    sensitivityLevel === "low"
-  ) {
+  if (bundle.name === "Dull Skin Routine" && sensitivityLevel === "low") {
     return ADDONS.aha;
   }
 
@@ -904,16 +910,24 @@ function getLocalizedSteps(
 
     if (addon) {
       if (addon.title === PRODUCTS.acneSpot.title) {
-        steps.push(`Gebruik ${addon.title} alleen plaatselijk op puistjes of onzuivere zones.`);
+        steps.push(
+          `Gebruik ${addon.title} alleen plaatselijk op puistjes of onzuivere zones.`
+        );
       } else if (addon.title === PRODUCTS.aha.title) {
-        steps.push(`Gebruik ${addon.title} rustig in de avond en bouw langzaam op.`);
+        steps.push(
+          `Gebruik ${addon.title} rustig in de avond en bouw langzaam op.`
+        );
       } else if (
         addon.title === PRODUCTS.kojicCream.title ||
         addon.title === PRODUCTS.kojicExfoliator.title
       ) {
-        steps.push(`Gebruik ${addon.title} als extra stap voor een egalere uitstraling.`);
+        steps.push(
+          `Gebruik ${addon.title} als extra stap voor een egalere uitstraling.`
+        );
       } else {
-        steps.push(`Voeg ${addon.title} toe als extra stap waar je huid dat nodig heeft.`);
+        steps.push(
+          `Voeg ${addon.title} toe als extra stap waar je huid dat nodig heeft.`
+        );
       }
     }
 
@@ -939,14 +953,20 @@ function getLocalizedSteps(
 
   if (addon) {
     if (addon.title === PRODUCTS.acneSpot.title) {
-      steps.push(`Use ${addon.title} only on targeted pimples or blemish-prone areas.`);
+      steps.push(
+        `Use ${addon.title} only on targeted pimples or blemish-prone areas.`
+      );
     } else if (addon.title === PRODUCTS.aha.title) {
-      steps.push(`Use ${addon.title} carefully in the evening and build up slowly.`);
+      steps.push(
+        `Use ${addon.title} carefully in the evening and build up slowly.`
+      );
     } else if (
       addon.title === PRODUCTS.kojicCream.title ||
       addon.title === PRODUCTS.kojicExfoliator.title
     ) {
-      steps.push(`Use ${addon.title} as an extra step for a more even-looking complexion.`);
+      steps.push(
+        `Use ${addon.title} as an extra step for a more even-looking complexion.`
+      );
     } else {
       steps.push(`Add ${addon.title} as an extra step where your skin needs it.`);
     }
