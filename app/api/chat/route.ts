@@ -156,29 +156,78 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
   "Micellar Cleansing Water": [
     "micellar cleansing water",
     "micellar water",
+    "micellair water",
+    "micelair water",
     "micellar cleanser",
     "cleansing water",
+    "makeup remover",
+    "make-up remover",
+    "zachte reiniger",
+    "milde reiniger",
+    "reinigingswater",
   ],
-  "Hydrating Toner": ["hydrating toner", "hydra toner", "toner"],
-  "Hydrating Serum": ["hydrating serum", "hydra serum"],
-  "Double Hydration Boost Gel + HA": [
+
+  "Hydrating Toner": [
+    "hydrating toner",
+    "hydra toner",
+    "toner",
+    "face toner",
+    "hydraterende toner",
+    "vocht toner",
+    "gezichtstoner",
+    "tonic",
+  ],
+
+  "Hydrating Face Serum with Aloe & Hyaluronic Acid": [
+    "hydrating face serum with aloe hyaluronic acid",
+    "hydrating face serum",
+    "hydrating serum",
+    "hydra serum",
+    "hydration serum",
+    "hyaluronic acid serum",
+    "hyaluronic serum",
+    "aloe serum",
+    "hydraterend serum",
+    "vocht serum",
+    "serum droge huid",
+  ],
+
+  "Hydration Boost Gel Moisturizer": [
+    "hydration boost gel moisturizer",
+    "hydration boost gel moisturiser",
     "double hydration boost gel + ha",
     "double hydration boost gel",
     "boost gel + ha",
     "hydration boost gel",
     "boost gel",
     "ha gel",
+    "hyaluronic acid gel",
+    "hydraterende gel",
+    "hydratatie boost gel",
+    "vochtboost gel",
   ],
-  "Moisturising Day Cream": [
+
+  "Moisturising Day Face Cream with Hyaluronic Acid": [
+    "moisturising day face cream with hyaluronic acid",
+    "moisturising day face cream",
     "moisturising day cream",
     "moisturizing day cream",
     "moisture day cream",
     "hydrating day cream",
     "day cream",
+    "face cream",
+    "moisturizer",
+    "moisturiser",
     "dagcreme",
     "dagcrème",
+    "dag creme",
+    "dag crème",
+    "hydraterende creme",
+    "hydraterende crème",
   ],
-  "Ceramide Barrier Night Cream": [
+
+  "Ceramide Barrier Night Cream for Dry & Normal Skin": [
+    "ceramide barrier night cream for dry normal skin",
     "ceramide barrier night cream",
     "ceramide night cream",
     "barrier night cream",
@@ -187,7 +236,10 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "night cream",
     "nachtcreme",
     "nachtcrème",
+    "barriere creme",
+    "barrière crème",
   ],
+
   "Purifying Mousse": [
     "purifying mousse",
     "purifying mouse",
@@ -196,15 +248,36 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "mousse cleanser",
     "cleansing mousse",
     "face mousse",
+    "foam cleanser",
+    "foaming cleanser",
+    "schuimreiniger",
+    "reinigingsmousse",
     "mousse",
   ],
-  "Antioxidant Ginkgo Gel Booster": [
+
+  "Antioxidant Ginkgo Hydrating Gel Booster": [
+    "antioxidant ginkgo hydrating gel booster",
     "antioxidant ginkgo gel booster",
     "ginkgo gel booster",
     "ginkgo booster",
+    "ginko booster",
+    "antioxidant booster",
+    "glow booster",
+    "gel booster",
   ],
-  "Calming Facial Oil": ["calming facial oil", "calming oil"],
-  "AHA Peeling Concentrate": [
+
+  "Calming Facial Oil": [
+    "calming facial oil",
+    "calming oil",
+    "face oil sensitive",
+    "facial oil sensitive",
+    "gezichtsolie gevoelige huid",
+    "kalmerende olie",
+    "comfort oil",
+  ],
+
+  "AHA Peeling Concentrate Exfoliating Face Serum": [
+    "aha peeling concentrate exfoliating face serum",
     "aha peeling concentrate",
     "aha peeling",
     "aha",
@@ -215,67 +288,151 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "a h a",
     "chemical peeling",
     "peeling concentrate",
+    "exfoliating serum",
     "exfoliating acid",
     "exfoliant",
     "acid peel",
-    "aights",
-    "eights",
-    "eight acid",
+    "peeling serum",
+    "peeling concentraat",
+    "zuur peeling",
   ],
-  "Caffeine Gel Booster": ["caffeine gel booster", "caffeine booster"],
-  "Oil-Free Hydrating Gel": [
+
+  "Caffeine Hydrating Gel Booster for Face & Eyes": [
+    "caffeine hydrating gel booster for face eyes",
+    "caffeine gel booster",
+    "caffeine booster",
+    "caffeine gel",
+    "cafeine booster",
+    "cafeïne booster",
+    "under eye booster",
+    "eye booster",
+    "wallen",
+    "moe ogen",
+  ],
+
+  "Oil-Free Hydrating Gel Moisturizer": [
+    "oil-free hydrating gel moisturizer",
+    "oil free hydrating gel moisturizer",
+    "oil-free hydrating gel moisturiser",
+    "oil free hydrating gel moisturiser",
     "oil-free hydrating gel",
     "oil free hydrating gel",
     "oil-free gel",
     "oil free gel",
+    "oil free moisturizer",
+    "oil free moisturiser",
+    "olievrije gel",
+    "olie vrije gel",
+    "lichte gel",
   ],
+
   "Peptide Anti-Aging Serum": [
     "peptide anti-aging serum",
     "peptide anti aging serum",
     "peptide serum",
+    "peptiden serum",
+    "anti aging serum",
+    "anti-age serum",
+    "serum fijne lijntjes",
+    "firming serum",
   ],
+
   "Collagen Boost Serum": [
     "collagen boost serum",
     "collagen serum",
     "collagen boost",
+    "collageen serum",
+    "collageen boost",
+    "firming collagen serum",
   ],
+
   "Anti-Age Day Cream": [
     "anti-age day cream",
     "anti age day cream",
     "anti-aging day cream",
     "anti aging day cream",
+    "anti age dagcreme",
+    "anti age dagcrème",
+    "aging day cream",
+    "mature skin cream",
   ],
+
   "Natural Retinol Alternative Oil Serum": [
     "natural retinol alternative oil serum",
     "retinol alternative oil serum",
     "natural retinol alternative",
     "retinol alternative",
+    "retinol alternatief",
+    "retinol alternatief olie",
+    "natural retinol",
+    "anti age oil serum",
   ],
-  "Smoothing Eye Cream": ["smoothing eye cream", "eye cream", "oogcreme", "oogcrème"],
-  "Vitamin C Serum": ["vitamin c serum", "vitamin c", "vit c serum", "vit c"],
-  "Brightening Face&Body Exfoliator with Kojic Acid": [
+
+  "Smoothing Eye Cream": [
+    "smoothing eye cream",
+    "eye cream",
+    "under eye cream",
+    "oogcreme",
+    "oogcrème",
+    "oog verzorging",
+    "oogverzorging",
+    "eye care",
+  ],
+
+  "Vitamin C Serum": [
+    "vitamin c serum",
+    "vitamin c",
+    "vit c serum",
+    "vit c",
+    "vitamine c serum",
+    "vitamine c",
+    "brightening serum",
+    "glow serum",
+  ],
+
+  "Brightening Face & Body Exfoliating Cleanser with Kojic Acid": [
+    "brightening face body exfoliating cleanser with kojic acid",
     "brightening face body exfoliator with kojic acid",
     "brightening exfoliator with kojic acid",
+    "brightening exfoliating cleanser",
     "brightening exfoliator",
     "kojic exfoliator",
+    "kojic acid exfoliator",
+    "face body exfoliator",
+    "body exfoliator kojic",
   ],
+
   "Dark Spot Face Cream with Kojic Acid": [
     "dark spot face cream with kojic acid",
     "dark spot cream with kojic acid",
+    "dark spot face cream",
     "dark spot cream",
     "kojic acid cream",
+    "kojic cream",
+    "pigment cream",
+    "pigmentvlekken creme",
+    "pigmentvlekken crème",
+    "donkere plekjes creme",
   ],
+
   "All-In-One Facial Oil": [
     "all-in-one facial oil",
     "all in one facial oil",
     "all-in-one oil",
     "all in one oil",
+    "facial oil",
+    "face oil",
+    "gezichtsolie",
+    "multi use oil",
+    "glow oil",
   ],
+
   "Sun Protection SPF50 Stick, no tint": [
     "sun protection spf50 stick no tint",
     "sun protection spf50 stick",
     "sun protection stick",
     "spf50 stick",
+    "spf 50 stick",
     "spf stick",
     "sun stick",
     "sunscreen stick",
@@ -285,17 +442,40 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "zonnebrand",
     "zonnebrandcreme",
     "zonnebrandcrème",
+    "zonbescherming",
     "suncream",
     "sun screen",
   ],
+
   "Acne Spot Care": [
     "acne spot care",
     "acne spot",
     "spot care",
     "spot treatment",
     "acne treatment",
+    "acne cream",
+    "acne creme",
+    "acne crème",
+    "acne gel",
+    "pimple cream",
+    "pimple treatment",
+    "blemish cream",
+    "blemish treatment",
+    "puistjes creme",
+    "puistjes crème",
+    "puistjes gel",
+    "puistje creme",
+    "puistje crème",
+    "puistjes product",
+    "puisten creme",
+    "puisten crème",
+    "akne creme",
+    "aknee creme",
   ],
-  "Niacinamide Gel Moisturiser": [
+
+  "Niacinamide Gel Face Moisturiser": [
+    "niacinamide gel face moisturiser",
+    "niacinamide gel face moisturizer",
     "niacinamide gel moisturiser",
     "niacinamide gel moisturizer",
     "niacinamide moisturiser",
@@ -304,9 +484,12 @@ const PRODUCT_ALIASES: Record<string, string[]> = {
     "niacinamide",
     "niacimide",
     "niacinimide",
-    "niacinamide moisturizer",
     "niacinamide moisterizer",
     "niacimide moisturiser",
+    "niacinamide creme",
+    "niacinamide crème",
+    "gel moisturiser",
+    "gel moisturizer",
   ],
 };
 
@@ -316,7 +499,7 @@ const AMBIGUOUS_ALIAS_GROUPS: Array<{
 }> = [
   {
     aliases: ["day cream", "dagcreme", "dagcrème"],
-    productNames: ["Moisturising Day Cream", "Anti-Age Day Cream"],
+    productNames: ["Moisturising Day Face Cream with Hyaluronic Acid", "Anti-Age Day Cream"],
   },
 ];
 
@@ -1667,7 +1850,7 @@ function getConcernBundles(concern: Concern): { full?: Bundle; simple?: Bundle; 
   switch (concern) {
     case "acne":
       return {
-        full: byName("Acne Routine"),
+        full: byName("Acne Skin Routine"),
         simple: byName("Simple Acne Routine"),
         addOns: [product("Acne Spot Care")].filter(Boolean) as Product[],
       };
@@ -1675,7 +1858,7 @@ function getConcernBundles(concern: Concern): { full?: Bundle; simple?: Bundle; 
       return {
         full: byName("Dry Skin Routine"),
         simple: undefined,
-        addOns: [product("Double Hydration Boost Gel + HA"), product("All-In-One Facial Oil")].filter(Boolean) as Product[],
+        addOns: [product("Hydration Boost Gel Moisturizer"), product("All-In-One Facial Oil")].filter(Boolean) as Product[],
       };
     case "sensitive":
       return {
@@ -1693,7 +1876,7 @@ function getConcernBundles(concern: Concern): { full?: Bundle; simple?: Bundle; 
       return {
         full: byName("Dull Skin Routine"),
         simple: byName("Simple Dull Skin Routine"),
-        addOns: [product("Vitamin C Serum"), product("Antioxidant Ginkgo Gel Booster")].filter(Boolean) as Product[],
+        addOns: [product("Vitamin C Serum"), product("Antioxidant Ginkgo Hydrating Gel Booster")].filter(Boolean) as Product[],
       };
     case "combination":
       return {
@@ -1705,7 +1888,7 @@ function getConcernBundles(concern: Concern): { full?: Bundle; simple?: Bundle; 
       return {
         full: undefined,
         simple: byName("Simple Oily Skin Routine"),
-        addOns: [product("Niacinamide Gel Moisturiser"), product("Acne Spot Care")].filter(Boolean) as Product[],
+        addOns: [product("Niacinamide Gel Face Moisturiser"), product("Acne Spot Care")].filter(Boolean) as Product[],
       };
     case "normal":
       return {
@@ -2016,24 +2199,24 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
   const title = product.title;
 
   const nl: Record<string, string> = {
-    "Hydrating Serum":
+    "Hydrating Face Serum with Aloe & Hyaluronic Acid":
       "Een licht serum voor extra hydratatie en een comfortabeler huidgevoel.",
-    "Moisturising Day Cream":
+    "Moisturising Day Face Cream with Hyaluronic Acid":
       "Een dagcrème voor dagelijkse hydratatie en comfort.",
     "Acne Spot Care":
       "Gerichte spot care voor puistjes en onzuiverheden.",
-    "Niacinamide Gel Moisturiser":
+    "Niacinamide Gel Face Moisturiser":
       "Een lichte gel moisturiser voor balans en comfort.",
-    "Oil-Free Hydrating Gel":
+    "Oil-Free Hydrating Gel Moisturizer":
       "Een olievrije gel voor lichte dagelijkse hydratatie.",
     "Hydrating Toner": "Een hydraterende toner voor comfort en balans.",
     "Vitamin C Serum":
       "Een serum voor een frissere en stralendere uitstraling.",
-    "Antioxidant Ginkgo Gel Booster":
+    "Antioxidant Ginkgo Hydrating Gel Booster":
       "Een lichte booster voor hydratatie en een frissere uitstraling.",
     "Calming Facial Oil":
       "Een kalmerende olie voor comfort en zachtheid.",
-    "Ceramide Barrier Night Cream":
+    "Ceramide Barrier Night Cream for Dry & Normal Skin":
       "Een rijke nachtcrème voor comfort en support van de huidbarrière.",
     "Purifying Mousse":
       "Een schuimende reiniger voor een frisse, lichte finish.",
@@ -2043,7 +2226,7 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
       "Een dagcrème voor dagelijkse verzorging bij eerste lijntjes.",
     "Collagen Boost Serum":
       "Een serum gericht op stevigheid en comfort.",
-    "AHA Peeling Concentrate":
+    "AHA Peeling Concentrate Exfoliating Face Serum":
       "Een exfoliërend concentraat voor dofheid of textuur.",
     "Micellar Cleansing Water":
       "Een zachte reiniger om make-up en vuil te verwijderen.",
@@ -2055,35 +2238,35 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
       "Een verzorgende olie voor extra comfort en zachtheid.",
     "Dark Spot Face Cream with Kojic Acid":
       "Een verzorgende crème gericht op een egalere uitstraling.",
-    "Brightening Face&Body Exfoliator with Kojic Acid":
+    "Brightening Face & Body Exfoliating Cleanser with Kojic Acid":
       "Een exfoliator voor een gladdere en frissere uitstraling.",
-    "Double Hydration Boost Gel + HA":
+    "Hydration Boost Gel Moisturizer":
       "Een hydraterende gel voor extra comfort en een voller huidgevoel.",
     "Smoothing Eye Cream":
       "Een oogcrème voor een zachtere en verzorgde oogzone.",
-    "Caffeine Gel Booster":
+    "Caffeine Hydrating Gel Booster for Face & Eyes":
       "Een lichte gel booster voor een frissere uitstraling.",
   };
 
   const en: Record<string, string> = {
-    "Hydrating Serum":
+    "Hydrating Face Serum with Aloe & Hyaluronic Acid":
       "A lightweight serum for extra hydration and a more comfortable skin feel.",
-    "Moisturising Day Cream":
+    "Moisturising Day Face Cream with Hyaluronic Acid":
       "A day cream for daily hydration and comfort.",
     "Acne Spot Care":
       "A targeted spot treatment for blemishes and breakouts.",
-    "Niacinamide Gel Moisturiser":
+    "Niacinamide Gel Face Moisturiser":
       "A lightweight gel moisturiser for balance and comfort.",
-    "Oil-Free Hydrating Gel":
+    "Oil-Free Hydrating Gel Moisturizer":
       "An oil-free gel for lightweight daily hydration.",
     "Hydrating Toner": "A hydrating toner for comfort and balance.",
     "Vitamin C Serum":
       "A serum for a fresher and more radiant-looking complexion.",
-    "Antioxidant Ginkgo Gel Booster":
+    "Antioxidant Ginkgo Hydrating Gel Booster":
       "A lightweight booster for hydration and a fresher look.",
     "Calming Facial Oil":
       "A calming facial oil for comfort and softness.",
-    "Ceramide Barrier Night Cream":
+    "Ceramide Barrier Night Cream for Dry & Normal Skin":
       "A rich night cream for comfort and barrier support.",
     "Purifying Mousse":
       "A foaming cleanser for a fresh, lightweight feel.",
@@ -2093,7 +2276,7 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
       "A day cream for daily care with an early anti-age focus.",
     "Collagen Boost Serum":
       "A serum focused on firmness and comfort.",
-    "AHA Peeling Concentrate":
+    "AHA Peeling Concentrate Exfoliating Face Serum":
       "An exfoliating concentrate for dullness or texture.",
     "Micellar Cleansing Water":
       "A gentle cleanser to remove makeup and daily buildup.",
@@ -2105,13 +2288,13 @@ function getSmartFallbackCopy(product: Product, lang: Lang): string {
       "A caring facial oil for extra comfort and softness.",
     "Dark Spot Face Cream with Kojic Acid":
       "A care cream focused on a more even-looking complexion.",
-    "Brightening Face&Body Exfoliator with Kojic Acid":
+    "Brightening Face & Body Exfoliating Cleanser with Kojic Acid":
       "An exfoliator for a smoother and fresher-looking finish.",
-    "Double Hydration Boost Gel + HA":
+    "Hydration Boost Gel Moisturizer":
       "A hydrating gel for extra comfort and a plumper-looking feel.",
     "Smoothing Eye Cream":
       "An eye cream for a softer and more cared-for eye area.",
-    "Caffeine Gel Booster":
+    "Caffeine Hydrating Gel Booster for Face & Eyes":
       "A lightweight gel booster for a fresher look.",
   };
 
@@ -2315,12 +2498,12 @@ function buildDynamicCombinationReply(a: Product, b: Product, lang: Lang): strin
   const titles = [a.title, b.title];
 
   const bothActive =
-    titles.includes("AHA Peeling Concentrate") &&
+    titles.includes("AHA Peeling Concentrate Exfoliating Face Serum") &&
     (titles.includes("Vitamin C Serum") ||
       titles.includes("Natural Retinol Alternative Oil Serum"));
 
   const exfoliantWithSpot =
-    titles.includes("AHA Peeling Concentrate") &&
+    titles.includes("AHA Peeling Concentrate Exfoliating Face Serum") &&
     titles.includes("Acne Spot Care");
 
   if (bothActive) {
@@ -2519,25 +2702,25 @@ function recommendProductsFromText(text: string): Product[] {
     add("Acne Spot Care");
 
     if (skinType === "dry") {
-      add("Moisturising Day Cream");
+      add("Moisturising Day Face Cream with Hyaluronic Acid");
     } else if (skinType === "sensitive" || skinType === "normal") {
-      add("Niacinamide Gel Moisturiser");
+      add("Niacinamide Gel Face Moisturiser");
     } else {
-      add("Oil-Free Hydrating Gel");
+      add("Oil-Free Hydrating Gel Moisturizer");
     }
 
     return picks.slice(0, 2);
   }
 
   if (detectDrySignal(text)) {
-    add("Hydrating Serum");
-    add("Moisturising Day Cream");
+    add("Hydrating Face Serum with Aloe & Hyaluronic Acid");
+    add("Moisturising Day Face Cream with Hyaluronic Acid");
     return picks.slice(0, 2);
   }
 
   if (detectSensitiveSignal(text)) {
     add("Calming Facial Oil");
-    add("Ceramide Barrier Night Cream");
+    add("Ceramide Barrier Night Cream for Dry & Normal Skin");
     return picks.slice(0, 2);
   }
 
@@ -2549,7 +2732,7 @@ function recommendProductsFromText(text: string): Product[] {
 
   if (detectGlowSignal(text)) {
     add("Vitamin C Serum");
-    add("Antioxidant Ginkgo Gel Booster");
+    add("Antioxidant Ginkgo Hydrating Gel Booster");
     return picks.slice(0, 2);
   }
 
