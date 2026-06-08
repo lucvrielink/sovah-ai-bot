@@ -33,7 +33,7 @@ const productsPath = path.join(process.cwd(), "data", "product_catalog.json");
 const BUNDLES_JSON = fs.readFileSync(bundlesPath, "utf8");
 const PRODUCTS_JSON = fs.readFileSync(productsPath, "utf8");
 
-type Lang = "nl" | "en";
+type Lang = "nl" | "en" | "de";
 type SkinType =
   | "dry"
   | "oily"
@@ -158,8 +158,47 @@ function countMatches(text: string, words: string[]): number {
   return words.reduce((acc, word) => acc + (text.includes(word) ? 1 : 0), 0);
 }
 
-function tr(lang: Lang, nl: string, en: string): string {
-  return lang === "nl" ? nl : en;
+function translateKnownEnglishToGerman(text: string): string {
+  return text
+    .replace(/This bundle includes:/g, "Diese Routine enthält:")
+    .replace(/The bundle includes:/g, "Diese Routine enthält:")
+    .replace(/View routine/g, "Routine ansehen")
+    .replace(/Start quiz/g, "Quiz starten")
+    .replace(/Contact support/g, "Kontakt aufnehmen")
+    .replace(/Tell me your skin type or what you'd mainly like help with, and I’ll recommend 1 or 2 suitable products\./g, "Sag mir deinen Hauttyp oder wobei du Hilfe brauchst, dann empfehle ich dir 1–2 passende Produkte.")
+    .replace(/If you'd rather not go for a full routine, I’d keep it to these:/g, "Wenn du keine komplette Routine möchtest, würde ich es bei diesen Produkten halten:")
+    .replace(/For the best routine match, the best next step is our skincare quiz\./g, "Für die beste Routine-Empfehlung ist unser Skincare-Quiz der sinnvollste nächste Schritt.")
+    .replace(/There we guide you step by step to the right routine for your skin\./g, "Dort führen wir dich Schritt für Schritt zur passenden Routine für deine Haut.")
+    .replace(/Hi! I’d be happy to help you find the right SOVAH products or routine\./g, "Hi! Ich helfe dir gerne, die passenden SOVAH Produkte oder die richtige Routine zu finden.")
+    .replace(/Tell me your skin type or what you mainly want help with, like dryness, glow, breakouts, or sensitivity\./g, "Sag mir kurz deinen Hauttyp oder wobei du Hilfe brauchst, zum Beispiel Trockenheit, Glow, Pickel oder Empfindlichkeit.")
+    .replace(/I’m not fully sure what you mean yet\./g, "Ich bin noch nicht ganz sicher, was du meinst.")
+    .replace(/Tell me which product or routine you mean, and I’ll help from there\./g, "Sag mir, welches Produkt oder welche Routine du meinst, dann helfe ich dir weiter.")
+    .replace(/Tell me your skin type and goal, and I’ll tell you if it fits\./g, "Sag mir deinen Hauttyp und dein Ziel, dann sage ich dir, ob es passt.")
+    .replace(/You can find it here\./g, "Du findest es hier.")
+    .replace(/Use \*\*/g, "Verwende **")
+    .replace(/\*\* after \*\*/g, "** nach **")
+    .replace(/\*\* first and then \*\*/g, "** zuerst und danach **")
+    .replace(/This combination can be too active in the same routine\./g, "Diese Kombination kann in derselben Routine zu aktiv sein.")
+    .replace(/I would rather alternate them than use them directly together\./g, "Ich würde sie lieber abwechseln, statt direkt zusammen zu verwenden.")
+    .replace(/This can be a logical combination within one routine, depending on your skin\./g, "Das kann je nach Haut eine logische Kombination in einer Routine sein.")
+    .replace(/Always use SPF during the day when using more active products\./g, "Verwende tagsüber immer SPF, wenn du aktivere Produkte nutzt.")
+    .replace(/Products that pair well with this:/g, "Produkte, die gut dazu passen:")
+    .replace(/I don't have a pairing list for this yet\./g, "Dazu habe ich noch keine feste Kombinationsliste.")
+    .replace(/That’s still a bit too general\./g, "Das ist noch etwas zu allgemein.")
+    .replace(/Do you mean:/g, "Meinst du:")
+    .replace(/Which one do you mean exactly\?/g, "Welches meinst du genau?");
+}
+
+function tr(lang: Lang, nl: string, en: string, de?: string): string {
+  if (lang === "nl") return nl;
+  if (lang === "de") return de || translateKnownEnglishToGerman(en);
+  return en;
+}
+
+function languageName(lang: Lang): string {
+  if (lang === "nl") return "Dutch";
+  if (lang === "de") return "German";
+  return "English";
 }
 
 // ───────────────── aliases / canonicalization ─────────────────
@@ -681,11 +720,30 @@ function detectLanguage(
     "kies op huidprobleem",
   ];
 
+  const strongGermanSignals = [
+    "welche routine",
+    "ich habe",
+    "ich will",
+    "ich möchte",
+    "trockene haut",
+    "empfindliche haut",
+    "unreine haut",
+    "pickel",
+    "akne",
+    "was empfiehlst du",
+    "was brauche ich",
+    "hautproblem",
+    "routine aufbauen",
+    "produkt empfehlen",
+  ];
+
   const hasStrongEn = strongEnglishSignals.some((w) => current.includes(w));
   const hasStrongNl = strongDutchSignals.some((w) => current.includes(w));
+  const hasStrongDe = strongGermanSignals.some((w) => current.includes(w));
 
-  if (hasStrongEn && !hasStrongNl) return "en";
-  if (hasStrongNl && !hasStrongEn) return "nl";
+  if (hasStrongDe && !hasStrongEn && !hasStrongNl) return "de";
+  if (hasStrongEn && !hasStrongNl && !hasStrongDe) return "en";
+  if (hasStrongNl && !hasStrongEn && !hasStrongDe) return "nl";
 
   const dutchSignals = [
     "ik",
@@ -727,6 +785,33 @@ function detectLanguage(
     "huidprobleem",
     "kies op huidprobleem",
     "routine opbouwen",
+  ];
+
+  const germanSignals = [
+    "ich",
+    "meine",
+    "haut",
+    "trocken",
+    "trockene haut",
+    "ölig",
+    "fettige haut",
+    "empfindlich",
+    "welche",
+    "was",
+    "passt",
+    "pickel",
+    "akne",
+    "unreinheiten",
+    "routine",
+    "produkt",
+    "produkte",
+    "wie benutze",
+    "kombinieren",
+    "empfehlen",
+    "feine linien",
+    "fahle haut",
+    "glow",
+    "hautproblem",
   ];
 
   const englishSignals = [
@@ -778,19 +863,24 @@ function detectLanguage(
 
   const currentNl = countMatches(current, dutchSignals);
   const currentEn = countMatches(current, englishSignals);
+  const currentDe = countMatches(current, germanSignals);
   const historyNl = countMatches(history, dutchSignals);
   const historyEn = countMatches(history, englishSignals);
+  const historyDe = countMatches(history, germanSignals);
 
-  if (currentEn > 0 && currentNl === 0) return "en";
-  if (currentNl > 0 && currentEn === 0) return "nl";
+  if (currentDe > 0 && currentNl === 0 && currentEn === 0) return "de";
+  if (currentEn > 0 && currentNl === 0 && currentDe === 0) return "en";
+  if (currentNl > 0 && currentEn === 0 && currentDe === 0) return "nl";
 
   const nlScore = currentNl * 5 + historyNl;
   const enScore = currentEn * 5 + historyEn;
+  const deScore = currentDe * 5 + historyDe;
 
+  if (deScore > nlScore && deScore > enScore) return "de";
   if (nlScore > enScore) return "nl";
   if (enScore > nlScore) return "en";
 
-  if (forcedLang === "nl" || forcedLang === "en") return forcedLang;
+  if (forcedLang === "nl" || forcedLang === "en" || forcedLang === "de") return forcedLang;
   return "nl";
 }
 
@@ -1001,7 +1091,11 @@ function detectDrySignal(text: string): boolean {
     "trekkerig",
     "schilfertjes",
     "schilferig",
-  ]);
+  
+    "trockene haut",
+    "trocken",
+    "feuchtigkeitsarm",
+    "spannt",]);
 }
 
 function detectGlowSignal(text: string): boolean {
@@ -1020,7 +1114,11 @@ function detectGlowSignal(text: string): boolean {
     "meer glow",
     "glowy",
     "egale glow",
-  ]);
+  
+    "fahle haut",
+    "müde haut",
+    "mehr glow",
+    "strahlend",]);
 }
 
 function detectBreakoutSignal(text: string): boolean {
@@ -1037,7 +1135,11 @@ function detectBreakoutSignal(text: string): boolean {
     "onzuiverheden",
     "mee eters",
     "mee-eters",
-  ]);
+  
+    "pickel",
+    "akne",
+    "unreinheiten",
+    "mitesser",]);
 }
 
 function detectSensitiveSignal(text: string): boolean {
@@ -1055,7 +1157,11 @@ function detectSensitiveSignal(text: string): boolean {
     "roodheid",
     "geïrriteerd",
     "geirriteerd",
-  ]);
+  
+    "empfindlich",
+    "empfindliche haut",
+    "gereizt",
+    "rötung",]);
 }
 
 function detectAntiAgeSignal(text: string): boolean {
@@ -1077,7 +1183,12 @@ function detectAntiAgeSignal(text: string): boolean {
     "oudere huid",
     "verouderende huid",
     "first signs of aging",
-  ]);
+  
+    "falten",
+    "feine linien",
+    "aging",
+    "reife haut",
+    "straffheit",]);
 }
 
 function detectConcernIntent(text: string): boolean {
@@ -2135,9 +2246,19 @@ function concernLabel(concern: Concern, lang: Lang): string {
     oily: "oily skin",
     normal: "normal skin",
   };
+  const de: Record<string, string> = {
+    dry: "trockene oder feuchtigkeitsarme Haut",
+    acne: "Akne, Pickel oder Unreinheiten",
+    sensitive: "empfindliche Haut",
+    aging: "feine Linien oder Aging Skin",
+    dull: "fahle oder müde wirkende Haut",
+    combination: "Mischhaut",
+    oily: "ölige Haut",
+    normal: "normale Haut",
+  };
 
-  if (!concern) return lang === "nl" ? "jouw huid" : "your skin";
-  return lang === "nl" ? nl[concern] : en[concern];
+  if (!concern) return lang === "nl" ? "jouw huid" : lang === "de" ? "deine Haut" : "your skin";
+  return lang === "nl" ? nl[concern] : lang === "de" ? de[concern] : en[concern];
 }
 
 function buildSimplePlusAddOnReply(simpleBundle: Bundle, addOn: Product | undefined, lang: Lang, concern: Concern): string {
@@ -2423,7 +2544,7 @@ function buildActionsForBundle(bundle: Bundle, lang: Lang): ChatAction[] {
   return [
     {
       type: "ROUTINE_CARD",
-      label: tr(lang, "Bekijk routine", "View routine"),
+      label: tr(lang, "Bekijk routine", "View routine", "Routine ansehen"),
       title: bundle.name,
       url: bundle.url,
       image: bundle.image,
@@ -2454,7 +2575,7 @@ function buildQuizRedirectReply(lang: Lang) {
     actions: [
       {
         type: "OPEN_URL" as const,
-        label: tr(lang, "Start de quiz", "Start quiz"),
+        label: tr(lang, "Start de quiz", "Start quiz", "Quiz starten"),
         url: QUIZ_URL,
       },
     ],
@@ -2895,7 +3016,7 @@ function buildOpenAISystemPrompt(lang: Lang): string {
 You are the SOVAH skincare assistant for sovahcare.com.
 
 LANGUAGE:
-- Reply in ${lang === "nl" ? "Dutch" : "English"} only.
+- Reply in ${languageName(lang)} only.
 
 STRICT RULES:
 - Use only the provided product and bundle catalog as source of truth.
@@ -2946,7 +3067,7 @@ ${BUNDLES_JSON}
 Useful product catalog:
 ${PRODUCTS_JSON}
 
-Write the best answer now in ${lang === "nl" ? "Dutch" : "English"}.
+Write the best answer now in ${languageName(lang)}.
 `.trim();
 }
 
@@ -3596,7 +3717,7 @@ export async function POST(req: Request) {
           actions: [
             {
               type: "OPEN_URL",
-              label: tr(lang, "Start de quiz", "Start quiz"),
+              label: tr(lang, "Start de quiz", "Start quiz", "Quiz starten"),
               url: QUIZ_URL,
             },
           ],
