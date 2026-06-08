@@ -2955,8 +2955,10 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const message: string | undefined = body?.message;
-    const forcedLang: string | undefined = body?.lang;
+    const message: string =
+      typeof body?.message === "string" ? body.message : "";
+    const forcedLang: string | undefined =
+      typeof body?.lang === "string" ? body.lang : undefined;
     const historyRaw: unknown = body?.history;
 
     const history: string[] = Array.isArray(historyRaw)
