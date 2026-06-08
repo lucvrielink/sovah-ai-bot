@@ -525,6 +525,24 @@ function canonicalizeProductName(name: string): string {
   return CANONICAL_PRODUCT_INDEX.get(key)?.title || name;
 }
 
+function displayProductName(name: string): string {
+  const canonical = canonicalizeProductName(name);
+  const shortNames: Record<string, string> = {
+    "Hydrating Face Serum with Aloe & Hyaluronic Acid": "Hydrating Face Serum",
+    "Hydration Boost Gel Moisturizer": "Hydration Boost Gel",
+    "Moisturising Day Face Cream with Hyaluronic Acid": "Day Face Cream",
+    "Ceramide Barrier Night Cream for Dry & Normal Skin": "Ceramide Night Cream",
+    "Antioxidant Ginkgo Hydrating Gel Booster": "Antioxidant Ginkgo Booster",
+    "AHA Peeling Concentrate Exfoliating Face Serum": "AHA Peeling Concentrate",
+    "Caffeine Hydrating Gel Booster for Face & Eyes": "Caffeine Gel Booster",
+    "Oil-Free Hydrating Gel Moisturizer": "Oil-Free Hydrating Gel",
+    "Brightening Face & Body Exfoliating Cleanser with Kojic Acid": "Brightening Kojic Exfoliating Cleanser",
+    "Niacinamide Gel Face Moisturiser": "Niacinamide Gel Moisturiser",
+  };
+
+  return shortNames[canonical] || canonical;
+}
+
 function getProductByName(name: string): Product | undefined {
   const canonical = canonicalizeProductName(name);
   return productCatalog.products.find((p) => p.title === canonical);
@@ -1604,7 +1622,7 @@ function getBundleProductNames(bundle: Bundle): string[] {
     const key = normalizeLoose(canonical);
     if (seen.has(key)) continue;
     seen.add(key);
-    out.push(canonical);
+    out.push(displayProductName(canonical));
   }
 
   return out;
@@ -2151,6 +2169,19 @@ function buildSimplePlusAddOnReply(simpleBundle: Bundle, addOn: Product | undefi
   return parts.join("\n\n");
 }
 
+
+function buildRoutinePlusAddOnReply(bundle: Bundle, addOn: Product, lang: Lang, concern: Concern): string {
+  const base = buildRoutineRecommendationReply(bundle, lang, concern, { includeProducts: true });
+
+  const extra = tr(
+    lang,
+    `Omdat je ook acne of puistjes noemt, zou ik **${displayProductName(addOn.title)}** los toevoegen als gerichte stap voor actieve puistjes. De routine zelf helpt vooral met de huidbasis; deze extra stap pakt de puistjes gerichter aan.`,
+    `Because you also mention acne or pimples, I would add **${displayProductName(addOn.title)}** separately as a targeted step for active spots. The routine supports the skin base; this extra step targets pimples more directly.`
+  );
+
+  return `${base}\n\n${extra}`;
+}
+
 function buildSalesRouteReply(message: string, combinedUserText: string, lang: Lang): { reply: string; actions: ChatAction[]; lang: Lang } | null {
   const concern = detectPrimaryConcern(combinedUserText);
   if (!concern) return null;
@@ -2159,6 +2190,26 @@ function buildSalesRouteReply(message: string, combinedUserText: string, lang: L
   const wantsFull = detectFullRoutinePreference(message) || detectFullRoutinePreference(combinedUserText) || detectRoutineHelpRequest(message);
   const includeSpfNote = detectSPFQuestion(message);
   const { full, simple, addOns } = getConcernBundles(concern);
+
+  const messageHasAcneAndDry =
+    detectBreakoutSignal(message) &&
+    detectDrySignal(message);
+
+  if (messageHasAcneAndDry) {
+    const dryBundle = findBundleByName("Dry Skin Routine");
+    const acneSpot = getProductByName("Acne Spot Care");
+
+    if (dryBundle && acneSpot) {
+      return {
+        reply: buildRoutinePlusAddOnReply(dryBundle, acneSpot, lang, "dry"),
+        actions: dedupeActions([
+          ...buildActionsForBundle(dryBundle, lang),
+          ...buildActionsForProduct(acneSpot),
+        ]).slice(0, 3),
+        lang,
+      };
+    }
+  }
 
   // Acne is special: for a normal concern like "I have acne", do not jump straight to only Acne Spot Care.
   // Start with the Simple Acne Routine and use Acne Spot Care as add-on.
@@ -2638,14 +2689,14 @@ function buildProductRecommendationReply(products: Product[], lang: Lang): strin
     "If you'd rather not go for a full routine, I’d keep it to these:"
   );
 
-  const lines = products.map((p) => `**${p.title}**\n${getSafeShortCopy(p, lang)}`);
+  const lines = products.map((p) => `**${displayProductName(p.title)}**\n${getSafeShortCopy(p, lang)}`);
 
   return `${intro}\n\n${lines.join("\n\n")}`;
 }
 
 function buildClarifyProductReply(products: Product[], lang: Lang): string {
   const unique = dedupeProducts(products).slice(0, 4);
-  const names = unique.map((p) => p.title);
+  const names = unique.map((p) => displayProductName(p.title));
 
   return tr(
     lang,
@@ -2660,7 +2711,7 @@ function buildAmbiguousAliasReply(
   contextProduct?: Product
 ): string {
   const unique = dedupeProducts(ambiguousCandidates).slice(0, 4);
-  const names = unique.map((p) => p.title);
+  const names = unique.map((p) => displayProductName(p.title));
 
   if (contextProduct) {
     return tr(
@@ -3094,7 +3145,11 @@ export async function POST(req: Request) {
         detectProductOnlyPreference(message) ||
         (contextSuggestsProductOnly && !detectFullRoutinePreference(message));
 
-      if (wantsOnlyProducts && !detectRoutineHelpRequest(message)) {
+      const messageHasAcneAndDry =
+        detectBreakoutSignal(message) &&
+        detectDrySignal(message);
+
+      if (wantsOnlyProducts && !messageHasAcneAndDry && !detectRoutineHelpRequest(message)) {
         const picks = recommendProductsFromText(combinedUserText);
         return new Response(
           JSON.stringify({
