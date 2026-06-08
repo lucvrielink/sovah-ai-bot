@@ -45,13 +45,14 @@ type SkinType =
 type Bundle = {
   name: string;
   old_name?: string;
+  old_names?: string[];
   handle?: string;
   type?: string;
   target?: string;
   url: string;
   description?: string;
   products?: string[];
-  bundle_products?: string[];
+  bundle_products?: Array<string | { title?: string; name?: string; url?: string; image?: string }>;
   routing_priority?: number;
   quiz_route?: string[];
   quiz_route_misspellings?: string[];
@@ -1335,6 +1336,8 @@ function detectProductOnlyPreference(text: string): boolean {
     "one to two products",
     "1 to 2 products",
     "1-2 products",
+    "1 of 2 products",
+    "1 or 2 products",
     "one or two products",
     "can you recommend one to two products",
     "can you recommend one or two products",
@@ -1343,6 +1346,9 @@ function detectProductOnlyPreference(text: string): boolean {
     "een tot twee producten",
     "1 tot 2 producten",
     "1-2 producten",
+    "1 of 2 producten",
+    "1 of 2",
+    "1 of twee producten",
     "een of twee producten",
   ]);
 }
@@ -1367,6 +1373,7 @@ function detectProductRecommendationRequest(text: string): boolean {
     "ik wil 1-2 producten voor",
     "1 2 producten voor",
     "1-2 producten voor",
+    "1 of 2 producten voor",
     "welk product past bij",
     "welke producten passen bij",
     "recommend a product",
@@ -1382,6 +1389,7 @@ function detectProductRecommendationRequest(text: string): boolean {
     "i want 1-2 products for",
     "1 2 products for",
     "1-2 products for",
+    "1 of 2 products for",
     "what do i need for",
     "what products do i need for",
     "can you recommend one to two products",
@@ -1489,7 +1497,7 @@ function shouldRedirectToQuiz(message: string, combinedUserText: string): boolea
     detectAntiAgeSignal(combinedUserText),
   ].filter(Boolean).length;
 
-  if (signalCount >= 2) return true;
+  // If there is any clear concern, answer directly in chat instead of sending the customer away to the quiz.
 
   // If there is one clear concern, answer directly in chat instead of sending the customer away to the quiz.
   // Example: "what fits for acne?" should recommend Acne Skin Routine / Simple Acne Routine,
@@ -1514,7 +1522,7 @@ function shouldRedirectToQuiz(message: string, combinedUserText: string): boolea
     !detectProductRecommendationRequest(message) &&
     !detectProductOnlyPreference(message)
   ) {
-    return true;
+    return false;
   }
 
   return false;
@@ -1589,7 +1597,10 @@ function getBundleProductNames(bundle: Bundle): string[] {
   const out: string[] = [];
 
   for (const item of raw) {
-    const canonical = canonicalizeProductName(item);
+    const rawName = typeof item === "string" ? item : item?.title || item?.name || "";
+    if (!rawName) continue;
+
+    const canonical = canonicalizeProductName(rawName);
     const key = normalizeLoose(canonical);
     if (seen.has(key)) continue;
     seen.add(key);
@@ -1602,7 +1613,7 @@ function getBundleProductNames(bundle: Bundle): string[] {
 function findBundleByName(name: string): Bundle | undefined {
   const key = normalizeLoose(name);
   return bundleCatalog.bundles.find((bundle) => {
-    const names = [bundle.name, bundle.old_name, bundle.handle]
+    const names = [bundle.name, bundle.old_name, ...(bundle.old_names || []), bundle.handle]
       .filter(Boolean)
       .map((x) => normalizeLoose(String(x)));
     return names.includes(key);
@@ -1615,7 +1626,7 @@ function findBundleByExactOrAlias(text: string): Bundle | undefined {
   let best: { bundle: Bundle; score: number } | undefined;
 
   for (const bundle of bundleCatalog.bundles) {
-    const directNames = [bundle.name, bundle.old_name, bundle.handle]
+    const directNames = [bundle.name, bundle.old_name, ...(bundle.old_names || []), bundle.handle]
       .filter(Boolean)
       .map((x) => normalizeLoose(String(x)));
 
@@ -1627,9 +1638,12 @@ function findBundleByExactOrAlias(text: string): Bundle | undefined {
       else if (t.includes(name)) score += 70;
     }
 
+    const aiDetection = (bundle as Bundle & { ai_detection?: { quiz_route?: string[]; misspellings?: string[] } }).ai_detection;
     const routeSignals = [
       ...(bundle.quiz_route || []),
       ...(bundle.quiz_route_misspellings || []),
+      ...(aiDetection?.quiz_route || []),
+      ...(aiDetection?.misspellings || []),
     ];
 
     for (const signal of routeSignals) {
@@ -1814,6 +1828,10 @@ function detectSimpleRoutinePreference(text: string): boolean {
     "alleen 2 stappen",
     "twee stappen",
     "2 stappen",
+    "1 of 2",
+    "1 of 2 producten",
+    "1 of 2 products",
+    "1 or 2 products",
   ]);
 }
 
@@ -2002,6 +2020,8 @@ function detectRoutineSizeAnswer(text: string): "simple" | "full" | null {
     "short",
     "easy",
     "quick",
+    "1 of 2",
+    "1 or 2",
     "klein",
     "kleine",
     "basis",
@@ -3054,6 +3074,48 @@ export async function POST(req: Request) {
           headers: { "Content-Type": "application/json", ...corsHeaders },
         }
       );
+    }
+
+    // C0. Decisive concern routing.
+    // Clear concern messages like "ik heb acne", "mijn huid is dof" or "droge huid" should get a direct answer.
+    // Do not send these to the quiz and do not ask the same follow-up again.
+    if (
+      currentHasGoalSignal &&
+      !detectUsageRequest(message) &&
+      !detectCombinationRequest(message) &&
+      !detectWhereRequest(message) &&
+      !detectSuitabilityRequest(message) &&
+      !detectCompareRequest(message) &&
+      !isSpecificProductQuestion(message)
+    ) {
+      const explicitSmallAnswer = detectRoutineSizeAnswer(message) === "simple";
+      const wantsOnlyProducts =
+        explicitSmallAnswer ||
+        detectProductOnlyPreference(message) ||
+        (contextSuggestsProductOnly && !detectFullRoutinePreference(message));
+
+      if (wantsOnlyProducts && !detectRoutineHelpRequest(message)) {
+        const picks = recommendProductsFromText(combinedUserText);
+        return new Response(
+          JSON.stringify({
+            reply: buildProductRecommendationReply(picks, lang),
+            actions: buildActionsForProducts(picks).slice(0, 2),
+            lang,
+          }),
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          }
+        );
+      }
+
+      const directSalesRoute = buildSalesRouteReply(message, combinedUserText, lang);
+      if (directSalesRoute) {
+        return new Response(JSON.stringify(directSalesRoute), {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        });
+      }
     }
 
     // C. Quiz priority for broad routine-fit questions.
