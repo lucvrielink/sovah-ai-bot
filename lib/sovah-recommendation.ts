@@ -642,17 +642,9 @@ function wantsSimpleRoutine(answers: QuizAnswers): boolean {
 function chooseSimpleBundle(answers: QuizAnswers): Bundle {
   const { skinType, concern, goal, sensitivityLevel } = answers;
 
-  if (concern === "breakouts") {
-    return BUNDLES.simpleAcne;
-  }
-
-  if (skinType === "combination") {
-    return BUNDLES.simpleCombination;
-  }
-
-  if (skinType === "oily") {
-    return BUNDLES.simpleOily;
-  }
+  if (concern === "breakouts") return BUNDLES.simpleAcne;
+  if (skinType === "combination") return BUNDLES.simpleCombination;
+  if (skinType === "oily") return BUNDLES.simpleOily;
 
   if (
     concern === "sensitivity" ||
@@ -663,9 +655,7 @@ function chooseSimpleBundle(answers: QuizAnswers): Bundle {
     return BUNDLES.simpleSensitive;
   }
 
-  if (concern === "antiage" || goal === "firm") {
-    return BUNDLES.simpleAging;
-  }
+  if (concern === "antiage" || goal === "firm") return BUNDLES.simpleAging;
 
   if (
     concern === "glow" ||
@@ -682,9 +672,7 @@ function chooseSimpleBundle(answers: QuizAnswers): Bundle {
 function chooseFullBundle(answers: QuizAnswers): Bundle {
   const { skinType, concern, goal, sensitivityLevel } = answers;
 
-  if (concern === "breakouts") {
-    return BUNDLES.acne;
-  }
+  if (concern === "breakouts") return BUNDLES.acne;
 
   if (
     concern === "sensitivity" ||
@@ -699,9 +687,7 @@ function chooseFullBundle(answers: QuizAnswers): Bundle {
     return BUNDLES.dry;
   }
 
-  if (concern === "antiage" || goal === "firm") {
-    return BUNDLES.aging;
-  }
+  if (concern === "antiage" || goal === "firm") return BUNDLES.aging;
 
   if (
     concern === "dark_spots" ||
@@ -712,17 +698,9 @@ function chooseFullBundle(answers: QuizAnswers): Bundle {
     return BUNDLES.dull;
   }
 
-  if (skinType === "combination") {
-    return BUNDLES.combination;
-  }
-
-  if (skinType === "oily") {
-    return BUNDLES.acne;
-  }
-
-  if (skinType === "normal") {
-    return BUNDLES.normal;
-  }
+  if (skinType === "combination") return BUNDLES.combination;
+  if (skinType === "oily") return BUNDLES.acne;
+  if (skinType === "normal") return BUNDLES.normal;
 
   return BUNDLES.normal;
 }
