@@ -159,6 +159,15 @@ function countMatches(text: string, words: string[]): number {
 }
 
 function translateKnownEnglishToGerman(text: string): string {
+  const trimmed = (text || "").trim();
+
+  if (
+    trimmed.includes("I'm not fully sure what you mean yet") ||
+    trimmed.includes("I’m not fully sure what you mean yet")
+  ) {
+    return "Ich bin noch nicht ganz sicher, was du meinst. Sag mir kurz, ob du eine Routine, 1–2 Produkte oder Hilfe bei einem bestimmten Hautproblem suchst.";
+  }
+
   return text
     .replace(/This bundle includes:/g, "Diese Routine enthält:")
     .replace(/The bundle includes:/g, "Diese Routine enthält:")
@@ -172,21 +181,18 @@ function translateKnownEnglishToGerman(text: string): string {
     .replace(/Hi! I’d be happy to help you find the right SOVAH products or routine\./g, "Hi! Ich helfe dir gerne, die passenden SOVAH Produkte oder die richtige Routine zu finden.")
     .replace(/Tell me your skin type or what you mainly want help with, like dryness, glow, breakouts, or sensitivity\./g, "Sag mir kurz deinen Hauttyp oder wobei du Hilfe brauchst, zum Beispiel Trockenheit, Glow, Pickel oder Empfindlichkeit.")
     .replace(/I’m not fully sure what you mean yet\./g, "Ich bin noch nicht ganz sicher, was du meinst.")
+    .replace(/I'm not fully sure what you mean yet\./g, "Ich bin noch nicht ganz sicher, was du meinst.")
     .replace(/Tell me which product or routine you mean, and I’ll help from there\./g, "Sag mir, welches Produkt oder welche Routine du meinst, dann helfe ich dir weiter.")
     .replace(/Tell me your skin type and goal, and I’ll tell you if it fits\./g, "Sag mir deinen Hauttyp und dein Ziel, dann sage ich dir, ob es passt.")
     .replace(/You can find it here\./g, "Du findest es hier.")
-    .replace(/Use \*\*/g, "Verwende **")
-    .replace(/\*\* after \*\*/g, "** nach **")
-    .replace(/\*\* first and then \*\*/g, "** zuerst und danach **")
-    .replace(/This combination can be too active in the same routine\./g, "Diese Kombination kann in derselben Routine zu aktiv sein.")
-    .replace(/I would rather alternate them than use them directly together\./g, "Ich würde sie lieber abwechseln, statt direkt zusammen zu verwenden.")
-    .replace(/This can be a logical combination within one routine, depending on your skin\./g, "Das kann je nach Haut eine logische Kombination in einer Routine sein.")
-    .replace(/Always use SPF during the day when using more active products\./g, "Verwende tagsüber immer SPF, wenn du aktivere Produkte nutzt.")
     .replace(/Products that pair well with this:/g, "Produkte, die gut dazu passen:")
     .replace(/I don't have a pairing list for this yet\./g, "Dazu habe ich noch keine feste Kombinationsliste.")
     .replace(/That’s still a bit too general\./g, "Das ist noch etwas zu allgemein.")
     .replace(/Do you mean:/g, "Meinst du:")
-    .replace(/Which one do you mean exactly\?/g, "Welches meinst du genau?");
+    .replace(/Which one do you mean exactly\?/g, "Welches meinst du genau?")
+    .replace(/For these products, I would use them like this:/g, "Diese Produkte würde ich so verwenden:")
+    .replace(/When:/g, "Wann:")
+    .replace(/Step:/g, "Schritt:");
 }
 
 function tr(lang: Lang, nl: string, en: string, de?: string): string {
@@ -651,74 +657,12 @@ function detectLanguage(
   historyText = "",
   forcedLang?: string
 ): Lang {
+  if (forcedLang === "nl" || forcedLang === "en" || forcedLang === "de") {
+    return forcedLang;
+  }
+
   const current = normalize(currentMessage);
   const history = normalize(historyText);
-
-  const strongEnglishSignals = [
-    "can i combine",
-    "how do i use",
-    "which routine",
-    "i want",
-    "i have",
-    "i need",
-    "i don't want",
-    "i dont want",
-    "do not",
-    "does it include",
-    "is it included",
-    "not included",
-    "included",
-    "dry skin",
-    "breakouts",
-    "older skin",
-    "what do you recommend",
-    "can you recommend",
-    "day cream",
-    "night cream",
-    "those",
-    "them",
-    "this one",
-    "that one",
-    "moisturising",
-    "anti age",
-    "hello",
-    "hi",
-    "what do i need",
-    "help me choose",
-    "skin concern",
-    "main concern",
-    "recommend for me",
-    "build my routine",
-    "target your concern",
-  ];
-
-  const strongDutchSignals = [
-    "kan ik combineren",
-    "hoe gebruik ik",
-    "welke routine",
-    "ik wil",
-    "droge huid",
-    "puistjes",
-    "oudere huid",
-    "wat raad je aan",
-    "kan je aanraden",
-    "dagcrème",
-    "dagcreme",
-    "nachtcrème",
-    "nachtcreme",
-    "deze",
-    "die",
-    "dit product",
-    "hydraterend",
-    "hallo",
-    "hoi",
-    "wat heb ik nodig",
-    "help me kiezen",
-    "huidprobleem",
-    "mijn grootste huidprobleem",
-    "routine opbouwen",
-    "kies op huidprobleem",
-  ];
 
   const strongGermanSignals = [
     "welche routine",
@@ -737,150 +681,80 @@ function detectLanguage(
     "produkt empfehlen",
   ];
 
+  const strongEnglishSignals = [
+    "can i combine",
+    "how do i use",
+    "which routine",
+    "i want",
+    "i have",
+    "i need",
+    "dry skin",
+    "breakouts",
+    "what do you recommend",
+    "what do i need",
+    "help me choose",
+    "skin concern",
+    "build my routine",
+  ];
+
+  const strongDutchSignals = [
+    "kan ik combineren",
+    "hoe gebruik ik",
+    "welke routine",
+    "ik wil",
+    "droge huid",
+    "puistjes",
+    "wat raad je aan",
+    "wat heb ik nodig",
+    "help me kiezen",
+    "huidprobleem",
+    "routine opbouwen",
+  ];
+
+  const hasStrongDe = strongGermanSignals.some((w) => current.includes(w));
   const hasStrongEn = strongEnglishSignals.some((w) => current.includes(w));
   const hasStrongNl = strongDutchSignals.some((w) => current.includes(w));
-  const hasStrongDe = strongGermanSignals.some((w) => current.includes(w));
 
   if (hasStrongDe && !hasStrongEn && !hasStrongNl) return "de";
   if (hasStrongEn && !hasStrongNl && !hasStrongDe) return "en";
   if (hasStrongNl && !hasStrongEn && !hasStrongDe) return "nl";
 
-  const dutchSignals = [
-    "ik",
-    "mijn",
-    "huid",
-    "droog",
-    "droge",
-    "vette",
-    "vet",
-    "gevoelig",
-    "welke",
-    "wat",
-    "past",
-    "bij",
-    "mij",
-    "puistjes",
-    "routine",
-    "product",
-    "producten",
-    "hoe gebruik",
-    "wanneer gebruik",
-    "oudere huid",
-    "fijne lijntjes",
-    "rimpels",
-    "geen routine",
-    "paar producten",
-    "deze",
-    "die",
-    "dit",
-    "droge huid",
-    "gevoelige huid",
-    "voor puistjes",
-    "dagcreme",
-    "dagcrème",
-    "hallo",
-    "hoi",
-    "wat heb ik nodig",
-    "help me kiezen",
-    "huidprobleem",
-    "kies op huidprobleem",
-    "routine opbouwen",
-  ];
-
   const germanSignals = [
-    "ich",
-    "meine",
-    "haut",
-    "trocken",
-    "trockene haut",
-    "ölig",
-    "fettige haut",
-    "empfindlich",
-    "welche",
-    "was",
-    "passt",
-    "pickel",
-    "akne",
-    "unreinheiten",
-    "routine",
-    "produkt",
-    "produkte",
-    "wie benutze",
-    "kombinieren",
-    "empfehlen",
-    "feine linien",
-    "fahle haut",
-    "glow",
-    "hautproblem",
+    "ich", "meine", "haut", "trocken", "trockene", "ölig", "fettige",
+    "empfindlich", "welche", "was", "passt", "pickel", "akne",
+    "unreinheiten", "routine", "produkt", "produkte", "wie benutze",
+    "kombinieren", "empfehlen", "feine linien", "fahle haut", "hautproblem",
   ];
-
+  const dutchSignals = [
+    "ik", "mijn", "huid", "droog", "droge", "vette", "vet", "gevoelig",
+    "welke", "wat", "past", "bij", "mij", "puistjes", "routine",
+    "product", "producten", "hoe gebruik", "wanneer gebruik", "huidprobleem",
+    "wat heb ik nodig", "help me kiezen",
+  ];
   const englishSignals = [
-    "my",
-    "i",
-    "have",
-    "need",
-    "dont",
-    "don't",
-    "skin",
-    "dry",
-    "oily",
-    "sensitive",
-    "which",
-    "what",
-    "routine",
-    "product",
-    "products",
-    "how do i use",
-    "when do i use",
-    "older skin",
-    "fine lines",
-    "wrinkles",
-    "not a full routine",
-    "few products",
-    "this",
-    "that",
-    "dry skin",
-    "sensitive skin",
-    "breakouts",
-    "those",
-    "them",
-    "both",
-    "day cream",
-    "night cream",
-    "hello",
-    "hi",
-    "what do i need",
-    "help me choose",
-    "skin concern",
-    "main concern",
-    "targeted concern",
-    "concern",
-    "got it",
-    "acne breakouts",
-    "recommend for me",
-    "build my routine",
+    "my", "i", "have", "need", "skin", "dry", "oily", "sensitive",
+    "which", "what", "routine", "product", "products", "how do i use",
+    "breakouts", "what do i need", "help me choose", "skin concern",
   ];
 
+  const currentDe = countMatches(current, germanSignals);
   const currentNl = countMatches(current, dutchSignals);
   const currentEn = countMatches(current, englishSignals);
-  const currentDe = countMatches(current, germanSignals);
+  const historyDe = countMatches(history, germanSignals);
   const historyNl = countMatches(history, dutchSignals);
   const historyEn = countMatches(history, englishSignals);
-  const historyDe = countMatches(history, germanSignals);
 
   if (currentDe > 0 && currentNl === 0 && currentEn === 0) return "de";
   if (currentEn > 0 && currentNl === 0 && currentDe === 0) return "en";
   if (currentNl > 0 && currentEn === 0 && currentDe === 0) return "nl";
 
+  const deScore = currentDe * 5 + historyDe;
   const nlScore = currentNl * 5 + historyNl;
   const enScore = currentEn * 5 + historyEn;
-  const deScore = currentDe * 5 + historyDe;
 
   if (deScore > nlScore && deScore > enScore) return "de";
   if (nlScore > enScore) return "nl";
   if (enScore > nlScore) return "en";
-
-  if (forcedLang === "nl" || forcedLang === "en" || forcedLang === "de") return forcedLang;
   return "nl";
 }
 
@@ -1091,11 +965,11 @@ function detectDrySignal(text: string): boolean {
     "trekkerig",
     "schilfertjes",
     "schilferig",
-  
     "trockene haut",
     "trocken",
     "feuchtigkeitsarm",
-    "spannt",]);
+    "spannt",
+  ]);
 }
 
 function detectGlowSignal(text: string): boolean {
@@ -1114,11 +988,11 @@ function detectGlowSignal(text: string): boolean {
     "meer glow",
     "glowy",
     "egale glow",
-  
     "fahle haut",
     "müde haut",
     "mehr glow",
-    "strahlend",]);
+    "strahlend",
+  ]);
 }
 
 function detectBreakoutSignal(text: string): boolean {
@@ -1133,13 +1007,13 @@ function detectBreakoutSignal(text: string): boolean {
     "blackheads",
     "clogged pores",
     "onzuiverheden",
-    "mee eters",
-    "mee-eters",
-  
     "pickel",
     "akne",
     "unreinheiten",
-    "mitesser",]);
+    "mitesser",
+    "mee eters",
+    "mee-eters",
+  ]);
 }
 
 function detectSensitiveSignal(text: string): boolean {
@@ -1157,11 +1031,11 @@ function detectSensitiveSignal(text: string): boolean {
     "roodheid",
     "geïrriteerd",
     "geirriteerd",
-  
     "empfindlich",
     "empfindliche haut",
     "gereizt",
-    "rötung",]);
+    "rötung",
+  ]);
 }
 
 function detectAntiAgeSignal(text: string): boolean {
@@ -1183,12 +1057,11 @@ function detectAntiAgeSignal(text: string): boolean {
     "oudere huid",
     "verouderende huid",
     "first signs of aging",
-  
     "falten",
     "feine linien",
-    "aging",
     "reife haut",
-    "straffheit",]);
+    "straffheit",
+  ]);
 }
 
 function detectConcernIntent(text: string): boolean {
@@ -2246,6 +2119,7 @@ function concernLabel(concern: Concern, lang: Lang): string {
     oily: "oily skin",
     normal: "normal skin",
   };
+
   const de: Record<string, string> = {
     dry: "trockene oder feuchtigkeitsarme Haut",
     acne: "Akne, Pickel oder Unreinheiten",
@@ -2612,6 +2486,8 @@ function buildProductUsageReply(product: Product, lang: Lang): string {
     parts.push(
       lang === "nl"
         ? `**Wanneer gebruik je het?**\n${whenToUse}`
+        : lang === "de"
+        ? `**Wann benutzt du es?**\n${whenToUse}`
         : `**When do you use it?**\n${whenToUse}`
     );
   }
@@ -2620,6 +2496,8 @@ function buildProductUsageReply(product: Product, lang: Lang): string {
     parts.push(
       lang === "nl"
         ? `**Stap in je routine**\n${step}`
+        : lang === "de"
+        ? `**Schritt in deiner Routine**\n${step}`
         : `**Step in your routine**\n${step}`
     );
   }
@@ -3082,7 +2960,8 @@ async function callOpenAIFallback(
       reply: tr(
         lang,
         "Ik weet nog niet helemaal wat je bedoelt. Gaat het om een product, hoe je iets gebruikt, een paar producten, of wil je hulp met de juiste routine?",
-        "I'm not fully sure what you mean yet. Is it about a product, how to use something, a few products, or do you want help with the right routine?"
+        "I'm not fully sure what you mean yet. Is it about a product, how to use something, a few products, or do you want help with the right routine?",
+        "Ich bin noch nicht ganz sicher, was du meinst. Geht es um ein Produkt, die Anwendung, 1–2 Produkte oder die passende Routine?"
       ),
       actions: [],
       lang,
@@ -3120,7 +2999,8 @@ async function callOpenAIFallback(
         reply: tr(
           lang,
           "Vertel me welk product of welke routine je bedoelt, dan help ik je verder.",
-          "Tell me which product or routine you mean, and I’ll help from there."
+          "Tell me which product or routine you mean, and I’ll help from there.",
+          "Sag mir kurz, welches Produkt oder welche Routine du meinst, dann helfe ich dir weiter."
         ),
         actions: [],
         lang,
@@ -3145,7 +3025,8 @@ async function callOpenAIFallback(
       reply: tr(
         lang,
         "Ik weet nog niet helemaal wat je bedoelt. Vertel me welk product of welke routine je bedoelt, dan help ik je verder.",
-        "I'm not fully sure what you mean yet. Tell me which product or routine you mean, and I’ll help from there."
+        "I'm not fully sure what you mean yet. Tell me which product or routine you mean, and I’ll help from there.",
+        "Ich bin noch nicht ganz sicher, was du meinst. Sag mir kurz, ob du eine Routine, 1–2 Produkte oder Hilfe bei einem bestimmten Hautproblem suchst."
       ),
       actions: [],
       lang,
