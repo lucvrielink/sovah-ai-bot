@@ -1491,6 +1491,16 @@ function shouldRedirectToQuiz(message: string, combinedUserText: string): boolea
 
   if (signalCount >= 2) return true;
 
+  // If there is one clear concern, answer directly in chat instead of sending the customer away to the quiz.
+  // Example: "what fits for acne?" should recommend Acne Skin Routine / Simple Acne Routine,
+  // not only say "take the quiz".
+  if (
+    signalCount >= 1 &&
+    detectPrimaryConcern(combinedUserText)
+  ) {
+    return false;
+  }
+
   if (
     signalCount >= 1 &&
     hasAny(current, [
@@ -2174,18 +2184,20 @@ function buildSalesRouteReply(message: string, combinedUserText: string, lang: L
     };
   }
 
-  if (simple) {
-    return {
-      reply: buildRoutineRecommendationReply(simple, lang, concern, { includeProducts: true, includeSpfNote }),
-      actions: buildActionsForBundle(simple, lang),
-      lang,
-    };
-  }
-
+  // Default: for a clear concern without "simple" wording, recommend the full routine.
+  // This makes the chatbot decisive instead of giving a small/basic answer by default.
   if (full) {
     return {
       reply: buildRoutineRecommendationReply(full, lang, concern, { includeProducts: true, includeSpfNote }),
       actions: buildActionsForBundle(full, lang),
+      lang,
+    };
+  }
+
+  if (simple) {
+    return {
+      reply: buildRoutineRecommendationReply(simple, lang, concern, { includeProducts: true, includeSpfNote }),
+      actions: buildActionsForBundle(simple, lang),
       lang,
     };
   }
@@ -3110,6 +3122,7 @@ export async function POST(req: Request) {
     // C4. Direct concern statements should not instantly push a routine.
     // Ask whether the customer wants something small or complete first, unless they already said it.
     if (
+      false &&
       currentHasGoalSignal &&
       !contextSuggestsProductOnly &&
       !detectSimpleRoutinePreference(message) &&
