@@ -50,6 +50,8 @@ type Bundle = {
   type?: string;
   target?: string;
   url: string;
+  image?: string;
+  price?: string;
   description?: string;
   products?: string[];
   bundle_products?: Array<string | { title?: string; name?: string; url?: string; image?: string }>;
@@ -107,11 +109,20 @@ type Product = {
 type BundleCatalog = { bundles: Bundle[] };
 type ProductCatalog = { products: Product[] };
 
-type ChatAction = {
-  type: "OPEN_URL";
-  label: string;
-  url: string;
-};
+type ChatAction =
+  | {
+      type: "OPEN_URL";
+      label: string;
+      url: string;
+    }
+  | {
+      type: "ROUTINE_CARD";
+      label: string;
+      title: string;
+      url: string;
+      image?: string;
+      price?: string;
+    };
 
 type ModelTier = "none" | "mini" | "full";
 
@@ -2411,9 +2422,12 @@ function buildActionsForProducts(products: Product[]): ChatAction[] {
 function buildActionsForBundle(bundle: Bundle, lang: Lang): ChatAction[] {
   return [
     {
-      type: "OPEN_URL",
+      type: "ROUTINE_CARD",
       label: tr(lang, "Bekijk routine", "View routine"),
+      title: bundle.name,
       url: bundle.url,
+      image: bundle.image,
+      price: bundle.price,
     },
   ];
 }
