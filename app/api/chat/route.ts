@@ -170,9 +170,16 @@ type AnswerResult = {
   bundle_ids: string[];
 };
 
+type ConversationContext = {
+  product_ids: string[];
+  bundle_ids: string[];
+  intent: Intent | null;
+};
+
 type RequestBody = {
   message?: unknown;
   history?: unknown;
+  context?: unknown;
   lang?: unknown;
   sessionId?: unknown;
 };
@@ -368,6 +375,56 @@ function parseHistory(value: unknown): string[] {
     .slice(-MAX_HISTORY_ITEMS);
 }
 
+function parseConversationContext(value: unknown): ConversationContext {
+  const empty: ConversationContext = {
+    product_ids: [],
+    bundle_ids: [],
+    intent: null,
+  };
+
+  if (!value || typeof value !== "object") return empty;
+
+  const raw = value as Record<string, unknown>;
+  const product_ids = Array.isArray(raw.product_ids)
+    ? unique(
+        raw.product_ids
+          .filter((item): item is string => typeof item === "string")
+          .filter((id) => productsById.has(id))
+      ).slice(0, 3)
+    : [];
+
+  const bundle_ids = Array.isArray(raw.bundle_ids)
+    ? unique(
+        raw.bundle_ids
+          .filter((item): item is string => typeof item === "string")
+          .filter((id) => bundlesById.has(id))
+      ).slice(0, 2)
+    : [];
+
+  const allowedIntents: Intent[] = [
+    "greeting",
+    "product_info",
+    "ingredients",
+    "certifications",
+    "usage",
+    "compatibility",
+    "comparison",
+    "product_recommendation",
+    "routine_recommendation",
+    "bundle_contents",
+    "general_skincare",
+    "support",
+    "other",
+  ];
+
+  const intent =
+    typeof raw.intent === "string" && allowedIntents.includes(raw.intent as Intent)
+      ? (raw.intent as Intent)
+      : null;
+
+  return { product_ids, bundle_ids, intent };
+}
+
 function detectLanguage(message: string, forced: unknown): Lang {
   if (forced === "nl" || forced === "en" || forced === "de") return forced;
   const text = normalize(message);
@@ -492,6 +549,110 @@ function deterministicBundleMatches(message: string): Bundle[] {
   const close = scored.filter((item) => item.score >= top - 4);
   if (close.length > 1 && top < 130) return [];
   return scored.filter((item) => item.score >= top - 20).slice(0, 2).map((x) => x.bundle);
+}
+
+
+function stripHistoryPrefix(item: string): string {
+  return item.replace(/^(user|assistant):\s*/i, "").trim();
+}
+
+function latestAssistantMessage(history: string[]): string {
+  for (let i = history.length - 1; i >= 0; i--) {
+    if (/^assistant:/i.test(history[i])) {
+      return stripHistoryPrefix(history[i]);
+    }
+  }
+  return "";
+}
+
+function recentProductsFromHistory(history: string[]): Product[] {
+  for (let i = history.length - 1; i >= 0; i--) {
+    const matches = deterministicProductMatches(stripHistoryPrefix(history[i]));
+    if (matches.length) return matches;
+  }
+  return [];
+}
+
+function recentBundlesFromHistory(history: string[]): Bundle[] {
+  for (let i = history.length - 1; i >= 0; i--) {
+    const matches = deterministicBundleMatches(stripHistoryPrefix(history[i]));
+    if (matches.length) return matches;
+  }
+  return [];
+}
+
+function isContextDependentFollowUp(message: string): boolean {
+  const text = normalize(message);
+  if (!text || text.length > 120) return false;
+
+  return (
+    /^(ja|ja graag|graag|doe maar|zeker|prima|ok|oke|oké|vertel|leg uit|meer uitleg|ga door|yes|yes please|please do|go ahead|sure|tell me more|explain|continue|ja bitte|mach das|gern|gerne|erklär|erklar|weiter)$/.test(
+      text
+    ) ||
+    /\b(die|dat|deze|daarover|daarmee|erover|hetzelfde|that|this|those|it|them|dazu|darüber|das|dieses)\b/.test(
+      text
+    )
+  );
+}
+
+function inferFollowUpIntent(
+  message: string,
+  history: string[],
+  products: Product[],
+  bundles: Bundle[],
+  previousIntent: Intent | null
+): Intent {
+  const latestAssistant = normalize(latestAssistantMessage(history));
+  const combined = `${normalize(message)} ${latestAssistant}`;
+
+  if (
+    /(ingredient|ingredients|inci|wat zit|wat bevat|belangrijkste ingredient|belangrijkste ingrediënten|contains|what is in|what's in|inhaltsstoff)/.test(
+      combined
+    )
+  ) {
+    return bundles.length ? "bundle_contents" : "ingredients";
+  }
+
+  if (
+    /(hoe gebruik|wanneer gebruik|gebruikswijze|how do i use|when do i use|wie benutze|wann benutze)/.test(
+      combined
+    )
+  ) {
+    return "usage";
+  }
+
+  if (
+    /(vegan|gluten|nut free|noten|allergen|parfum|fragrance|cosmos|certific|keurmerk)/.test(
+      combined
+    )
+  ) {
+    return "certifications";
+  }
+
+  if (/(combin|samen|together|pair|past bij|vertr[aä]gt sich)/.test(combined)) {
+    return "compatibility";
+  }
+
+  if (/(verschil|compare|versus|\bvs\b|welke is beter|which is better)/.test(combined)) {
+    return "comparison";
+  }
+
+  if (previousIntent) return previousIntent;
+  if (bundles.length) return "bundle_contents";
+  if (products.length) return "product_info";
+  return "general_skincare";
+}
+
+function buildConversationContext(
+  intent: Intent,
+  products: Product[],
+  bundles: Bundle[]
+): ConversationContext {
+  return {
+    intent,
+    product_ids: unique(products.map((product) => product.id)).slice(0, 3),
+    bundle_ids: unique(bundles.map((bundle) => bundle.id)).slice(0, 2),
+  };
 }
 
 function inferIntent(message: string, products: Product[], bundles: Bundle[]): Intent {
@@ -642,7 +803,8 @@ async function resolveWithAI(
           "Return only IDs that exist in the supplied index. Do not invent IDs. " +
           "Choose clarification only when two or more products remain genuinely plausible. " +
           "A question about what a named product contains is ingredients. A question about what a routine contains is bundle_contents. " +
-          "For general skincare questions, IDs may be empty. Use the conversation context but prioritize the latest customer message.",
+          "For general skincare questions, IDs may be empty. Use the conversation context but prioritize the latest customer message. " +
+          "Short replies such as 'doe maar', 'ja graag', 'go ahead', 'tell me more' or 'leg uit' continue the assistant's latest offer and should keep the previously discussed product or routine.",
       },
       {
         role: "user",
@@ -794,6 +956,7 @@ Core rules:
 - Every SOVAH-specific fact, ingredient, percentage, claim, certification, price, routine or usage instruction must come only from the supplied catalog context.
 - Never mention a supplier, private label, product sheet, internal source, internal ID, wholesale price or recommended supplier price.
 - Silently understand normal spelling and phonetic mistakes. If one intended product is clear, answer directly instead of presenting unrelated alternatives.
+- Treat short acknowledgements such as "doe maar", "ja graag", "go ahead" and "tell me more" as a continuation of the latest assistant offer. Do not restart the conversation or ask the customer to choose a new topic when the recent context is clear.
 - Use exact current public product and routine names.
 - Never invent ingredients, percentages, claims, certifications or routine contents.
 - Use approved cosmetic wording. Do not diagnose, treat or claim to cure acne, eczema, rosacea or other medical conditions.
@@ -1264,6 +1427,7 @@ export async function POST(req: Request) {
 
   const message = safeString(body.message, MAX_MESSAGE_LENGTH);
   const history = parseHistory(body.history);
+  const previousContext = parseConversationContext(body.context);
   const lang = detectLanguage(message, body.lang);
   if (!message) {
     return jsonResponse(
@@ -1291,6 +1455,38 @@ export async function POST(req: Request) {
   let selectedProducts = deterministicProducts;
   let selectedBundles = deterministicBundles;
   let resolver: ResolverResult | null = null;
+
+  const contextualFollowUp = isContextDependentFollowUp(message);
+
+  if (contextualFollowUp) {
+    if (!selectedProducts.length) {
+      selectedProducts = previousContext.product_ids
+        .map((id) => productsById.get(id))
+        .filter((item): item is Product => Boolean(item));
+
+      if (!selectedProducts.length) {
+        selectedProducts = recentProductsFromHistory(history);
+      }
+    }
+
+    if (!selectedBundles.length) {
+      selectedBundles = previousContext.bundle_ids
+        .map((id) => bundlesById.get(id))
+        .filter((item): item is Bundle => Boolean(item));
+
+      if (!selectedBundles.length) {
+        selectedBundles = recentBundlesFromHistory(history);
+      }
+    }
+
+    intent = inferFollowUpIntent(
+      message,
+      history,
+      selectedProducts,
+      selectedBundles,
+      previousContext.intent
+    );
+  }
 
   const shouldResolve =
     !selectedProducts.length ||
@@ -1323,6 +1519,11 @@ export async function POST(req: Request) {
               reply: resolver.clarification_question,
               actions: [],
               lang,
+              context: buildConversationContext(
+                intent,
+                selectedProducts,
+                selectedBundles
+              ),
               ...(DEBUG
                 ? {
                     meta: {
@@ -1376,6 +1577,11 @@ export async function POST(req: Request) {
         reply: answer.reply,
         actions,
         lang,
+        context: buildConversationContext(
+          intent,
+          selectedProducts,
+          selectedBundles
+        ),
         ...(DEBUG
           ? {
               meta: {
@@ -1410,6 +1616,11 @@ export async function POST(req: Request) {
       reply: fallback.reply,
       actions: fallback.actions,
       lang,
+      context: buildConversationContext(
+        intent,
+        selectedProducts,
+        selectedBundles
+      ),
       ...(DEBUG
         ? {
             meta: {
