@@ -2984,7 +2984,7 @@ async function callOpenAIFallback(
         },
       ],
       reasoning: {
-        effort: tier === "full" ? "medium" : "minimal",
+        effort: tier === "full" ? "medium" : "low",
       },
       text: {
         verbosity: "low",
