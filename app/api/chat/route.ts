@@ -126,6 +126,12 @@ type ChatAction =
 
 type ModelTier = "none" | "mini" | "full";
 
+type AIChatPayload = {
+  reply: string;
+  product_titles: string[];
+  bundle_titles: string[];
+};
+
 const QUIZ_URL = "https://sovahcare.com/pages/find-your-routine";
 
 const bundleCatalog: BundleCatalog = JSON.parse(BUNDLES_JSON);
@@ -2902,6 +2908,10 @@ STRICT RULES:
 - Keep the reply concise, premium, natural, and practical.
 - Never mention suppliers or external brands.
 - First classify the customer intent: product info, bundle contents, usage, comparison, concern advice, simple routine, full routine, or add-on.
+- Resolve obvious spelling mistakes and phonetic misspellings semantically against the catalog. If one product is clearly intended, answer directly instead of asking the customer to choose between unrelated alternatives.
+- When you identify a product or bundle, use its exact current catalog title once.
+- For a single-product information question, mention only that one product unless the customer explicitly asks for a comparison or alternatives.
+- If the customer asks about ingredients and the catalog does not contain a complete ingredient list, say that clearly and do not invent ingredients.
 - If the user asks what products are in a routine, answer with the real bundle_products only. Do not re-recommend.
 - If the user has acne, pimples, breakouts or blemishes, do not jump straight to only Acne Spot Care. Prefer Simple Acne Routine first, then Acne Spot Care as add-on.
 - If the user asks what products are in any routine, answer with the bundle_products from the bundle catalog. Do not recommend a different routine.
@@ -2913,7 +2923,7 @@ STRICT RULES:
 - If the user clearly wants only products, recommend 1 or 2 products maximum.
 - If the user wants a full routine or best routine match, recommend the matching catalog routine when clear; otherwise point to the skincare quiz.
 - If uncertain, ask at most one short clarifying question.
-- Do not output JSON.
+- Return only the fields required by the response schema.
 - Do not use emojis.
 - Keep the answer under 120 words unless the user explicitly asks for more detail.
 
@@ -2949,6 +2959,67 @@ Write the best answer now in ${languageName(lang)}.
 `.trim();
 }
 
+
+function findExactProductByTitle(title: string): Product | undefined {
+  const key = normalizeLoose(title);
+  return productCatalog.products.find(
+    (product) => normalizeLoose(product.title) === key
+  );
+}
+
+function findExactBundleByTitle(title: string): Bundle | undefined {
+  const key = normalizeLoose(title);
+  return bundleCatalog.bundles.find(
+    (bundle) => normalizeLoose(bundle.name) === key
+  );
+}
+
+function extractExactProductsFromText(text: string): Product[] {
+  const haystack = normalizeLoose(text);
+  return dedupeProducts(
+    productCatalog.products.filter((product) =>
+      haystack.includes(normalizeLoose(product.title))
+    )
+  );
+}
+
+function extractExactBundlesFromText(text: string): Bundle[] {
+  const haystack = normalizeLoose(text);
+  const seen = new Set<string>();
+  const matches: Bundle[] = [];
+
+  for (const bundle of bundleCatalog.bundles) {
+    const key = normalizeLoose(bundle.name);
+    if (!key || !haystack.includes(key) || seen.has(key)) continue;
+    seen.add(key);
+    matches.push(bundle);
+  }
+
+  return matches;
+}
+
+function parseAIChatPayload(raw: string): AIChatPayload | null {
+  try {
+    const parsed = JSON.parse(raw) as Partial<AIChatPayload>;
+
+    if (typeof parsed.reply !== "string" || !parsed.reply.trim()) {
+      return null;
+    }
+
+    return {
+      reply: parsed.reply.trim(),
+      product_titles: Array.isArray(parsed.product_titles)
+        ? parsed.product_titles.filter((item): item is string => typeof item === "string")
+        : [],
+      bundle_titles: Array.isArray(parsed.bundle_titles)
+        ? parsed.bundle_titles.filter((item): item is string => typeof item === "string")
+        : [],
+    };
+  } catch {
+    return null;
+  }
+}
+
 async function callOpenAIFallback(
   message: string,
   history: string[],
@@ -2971,30 +3042,83 @@ async function callOpenAIFallback(
   const model = tier === "full" ? "gpt-5.4" : "gpt-5.4-mini";
 
   try {
-    const response = await openai.responses.create({
-      model,
-      input: [
-        {
-          role: "system",
-          content: buildOpenAISystemPrompt(lang),
+    const createResponse = (maxOutputTokens: number) =>
+      openai.responses.create({
+        model,
+        input: [
+          {
+            role: "system",
+            content: buildOpenAISystemPrompt(lang),
+          },
+          {
+            role: "user",
+            content: buildOpenAIUserPrompt(message, history, lang),
+          },
+        ],
+        reasoning: {
+          effort: tier === "full" ? "medium" : "low",
         },
-        {
-          role: "user",
-          content: buildOpenAIUserPrompt(message, history, lang),
+        text: {
+          verbosity: "low",
+          format: {
+            type: "json_schema",
+            name: "sovah_chat_response",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                reply: {
+                  type: "string",
+                },
+                product_titles: {
+                  type: "array",
+                  items: {
+                    type: "string",
+                  },
+                },
+                bundle_titles: {
+                  type: "array",
+                  items: {
+                    type: "string",
+                  },
+                },
+              },
+              required: ["reply", "product_titles", "bundle_titles"],
+              additionalProperties: false,
+            },
+          },
         },
-      ],
-      reasoning: {
-        effort: tier === "full" ? "medium" : "low",
-      },
-      text: {
-        verbosity: "low",
-      },
-      max_output_tokens: tier === "full" ? 260 : 180,
-    });
+        max_output_tokens: maxOutputTokens,
+      });
 
-    const text = (response.output_text || "").trim();
+    let response = await createResponse(tier === "full" ? 2200 : 1600);
 
-    if (!text) {
+    if (
+      response.status === "incomplete" &&
+      response.incomplete_details?.reason === "max_output_tokens"
+    ) {
+      console.warn("OpenAI response incomplete; retrying with a larger output budget.");
+      response = await createResponse(tier === "full" ? 4200 : 3000);
+    }
+
+    if (response.status === "incomplete") {
+      console.warn("OpenAI response still incomplete:", response.incomplete_details);
+      return {
+        reply: tr(
+          lang,
+          "Mijn antwoord werd niet volledig gegenereerd. Probeer je vraag nog één keer te stellen.",
+          "My answer was not generated completely. Please ask your question once more.",
+          "Meine Antwort wurde nicht vollständig erstellt. Bitte stelle deine Frage noch einmal."
+        ),
+        actions: [],
+        lang,
+      };
+    }
+
+    const payload = parseAIChatPayload((response.output_text || "").trim());
+
+    if (!payload) {
+      console.error("OpenAI returned an invalid structured response:", response.output_text);
       return {
         reply: tr(
           lang,
@@ -3007,17 +3131,44 @@ async function callOpenAIFallback(
       };
     }
 
-    const mentionedProductsInReply = resolveProductsFromMessage(text);
-    const mentionedBundlesInReply = findMentionedBundles(text);
+    const schemaProducts = payload.product_titles
+      .map(findExactProductByTitle)
+      .filter((product): product is Product => Boolean(product));
+
+    const schemaBundles = payload.bundle_titles
+      .map(findExactBundleByTitle)
+      .filter((bundle): bundle is Bundle => Boolean(bundle));
+
+    // Exact-title fallback only. Do not scan AI prose with broad aliases such as
+    // "moisturiser" or "lichte gel", because those create unrelated product buttons.
+    const exactProductsInReply = extractExactProductsFromText(payload.reply);
+    const exactBundlesInReply = extractExactBundlesFromText(payload.reply);
+
+    const selectedProducts = dedupeProducts([
+      ...schemaProducts,
+      ...exactProductsInReply,
+    ]).slice(0, 2);
+
+    const selectedBundles = [...schemaBundles, ...exactBundlesInReply].filter(
+      (bundle, index, all) =>
+        all.findIndex(
+          (candidate) =>
+            normalizeLoose(candidate.name) === normalizeLoose(bundle.name)
+        ) === index
+    );
 
     let actions: ChatAction[] = [];
-    if (mentionedBundlesInReply.length > 0) {
-      actions = buildActionsForBundle(mentionedBundlesInReply[0], lang);
-    } else if (mentionedProductsInReply.length > 0) {
-      actions = buildActionsForProducts(mentionedProductsInReply);
+    if (selectedBundles.length > 0) {
+      actions = buildActionsForBundle(selectedBundles[0], lang);
+    } else if (selectedProducts.length > 0) {
+      actions = buildActionsForProducts(selectedProducts);
     }
 
-    return { reply: text, actions: actions.slice(0, 3), lang };
+    return {
+      reply: payload.reply,
+      actions: actions.slice(0, 2),
+      lang,
+    };
   } catch (error) {
     console.error("OpenAI fallback error:", error);
 
