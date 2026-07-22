@@ -168,6 +168,7 @@ type AnswerResult = {
   reply: string;
   product_ids: string[];
   bundle_ids: string[];
+  handoff: "none" | "quiz" | "support";
 };
 
 type ConversationContext = {
@@ -189,13 +190,13 @@ type RateState = { count: number; resetAt: number };
 const QUIZ_URL = "https://sovahcare.com/pages/find-your-routine";
 const SUPPORT_URL = "https://sovahcare.com/pages/contact";
 const MAX_MESSAGE_LENGTH = 1600;
-const MAX_HISTORY_ITEMS = 12;
-const MAX_HISTORY_ITEM_LENGTH = 1200;
+const MAX_HISTORY_ITEMS = 6;
+const MAX_HISTORY_ITEM_LENGTH = 600;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_REQUESTS = 30;
 const DEBUG = process.env.SOVAH_DEBUG === "1";
-const RESOLVER_MODEL = process.env.SOVAH_RESOLVER_MODEL || "gpt-5.4-nano";
-const ANSWER_MODEL = process.env.SOVAH_ANSWER_MODEL || "gpt-5.4-mini";
+const RESOLVER_MODEL = process.env.SOVAH_RESOLVER_MODEL || "gpt-5-nano";
+const ANSWER_MODEL = process.env.SOVAH_ANSWER_MODEL || "gpt-5-mini";
 
 const productsPath = path.join(process.cwd(), "data", "product_catalog.json");
 const bundlesPath = path.join(process.cwd(), "data", "bundle_catalog.json");
@@ -655,10 +656,51 @@ function buildConversationContext(
   };
 }
 
+function isExplicitQuizRequest(message: string): boolean {
+  return /(huidquiz|huid quiz|huidtest|skin quiz|skincare quiz|routine finder|find your routine|hautquiz|haut quiz|hauttest)/.test(
+    normalize(message)
+  );
+}
+
+function isSupportRequest(message: string): boolean {
+  return /(contact|klantenservice|customer service|kundenservice|bestelling|mijn order|my order|order status|bestellnummer|retour|return|refund|terugbetaling|verzending|shipping|lieferung|pakket|package|paket)/.test(
+    normalize(message)
+  );
+}
+
+function isPersonalRecommendationRequest(message: string): boolean {
+  const text = normalize(message);
+  return (
+    /(wat|welk|welke).*(past|werkt|geschikt|raad|aanraden).*(mij|mijn huid)/.test(text) ||
+    /(advies|routine|producten?).*(voor|bij).*(mijn huid|droge huid|vette huid|gevoelige huid|gecombineerde huid|acne|puistjes)/.test(
+      text
+    ) ||
+    /(ik heb|mijn huid is).*(droog|vet|gevoelig|gecombineerd|onzuiver|acne|puistjes).*(wat|welk|welke|advies|routine)/.test(
+      text
+    ) ||
+    /^(ik heb|mijn huid is).*(droog|vet|gevoelig|gecombineerd|onzuiver|acne|puistjes)/.test(
+      text
+    ) ||
+    /(what should i use|what suits me|recommend.*for my skin|routine for my skin|products? for my skin)/.test(
+      text
+    ) ||
+    /^(i have|my skin is).*(dry|oily|sensitive|combination|breakouts|acne)/.test(text) ||
+    /(was passt zu mir|empfehlung.*meine haut|routine.*meine haut|produkte.*meine haut)/.test(
+      text
+    ) ||
+    /^meine haut ist.*(trocken|fettig|empfindlich|unrein)/.test(text)
+  );
+}
+
 function inferIntent(message: string, products: Product[], bundles: Bundle[]): Intent {
   const text = normalize(message);
   if (/^(hi|hello|hey|hoi|hallo|goedemorgen|goedenavond)$/.test(text)) {
     return "greeting";
+  }
+  if (isSupportRequest(message)) return "support";
+  if (isExplicitQuizRequest(message)) return "routine_recommendation";
+  if (!products.length && isPersonalRecommendationRequest(message)) {
+    return "routine_recommendation";
   }
   if (
     /(ingredient|ingredients|inci|wat zit|wat bevat|bevat het|contains|what is in|what's in|was ist drin|inhaltsstoff)/.test(
@@ -681,16 +723,18 @@ function inferIntent(message: string, products: Product[], bundles: Bundle[]): I
   ) {
     return "usage";
   }
-  if (/(combin|samen|together|pair|past bij|vertr[aä]gt sich)/.test(text)) {
+  if (
+    /(samen gebruiken|kan ik .* combineren|combine with|use together|pair with|past .* bij|vertr[aä]gt sich)/.test(
+      text
+    )
+  ) {
     return "compatibility";
   }
   if (/(verschil|compare|comparison|versus|\bvs\b|welke is beter|which is better)/.test(text)) {
     return "comparison";
   }
   if (
-    /(welke routine|routine opbouwen|build my routine|which routine|routine empfehlen|complete routine|simpele routine)/.test(
-      text
-    )
+    /(welke routine|routine opbouwen|build my routine|which routine|routine empfehlen|complete routine|simpele routine|persoonlijk advies|personal advice)/.test(text)
   ) {
     return "routine_recommendation";
   }
@@ -713,7 +757,7 @@ function productIndexForResolver() {
     type: product.type,
     skin_types: product.skin_types,
     concerns: product.concerns,
-    aliases: allProductAliases(product).slice(0, 28),
+    aliases: allProductAliases(product).slice(0, 16),
   }));
 }
 
@@ -724,7 +768,7 @@ function bundleIndexForResolver() {
     type: bundle.type,
     target: bundle.target,
     product_ids: bundle.product_ids,
-    aliases: allBundleAliases(bundle).slice(0, 36),
+    aliases: allBundleAliases(bundle).slice(0, 18),
   }));
 }
 
@@ -826,7 +870,7 @@ async function resolveWithAI(
         schema,
       },
     },
-    max_output_tokens: 900,
+    max_output_tokens: 600,
   });
 
   if (response.status === "incomplete") {
@@ -836,8 +880,8 @@ async function resolveWithAI(
   return parseJson<ResolverResult>(response.output_text || "");
 }
 
-function publicProductContext(product: Product, lang: Lang, includeFullInci: boolean) {
-  return {
+function publicProductContext(product: Product, lang: Lang, intent: Intent) {
+  const base = {
     id: product.id,
     title: product.title,
     price: product.price,
@@ -846,38 +890,79 @@ function publicProductContext(product: Product, lang: Lang, includeFullInci: boo
     routine_step: product.routine_step,
     volume_ml: product.volume_ml,
     description: product.description[lang],
-    usage: product.usage[lang],
-    when_to_use: product.when_to_use[lang],
+  };
+
+  const safety = {
+    patch_test: product.safety.patch_test,
+    sun_sensitivity: product.safety.sun_sensitivity,
+    avoid_eye_area: product.safety.avoid_eye_area,
+    beginner_frequency: product.safety.beginner_frequency,
+    avoid_same_routine_with: product.safety.avoid_same_routine_with,
+    warning:
+      lang === "nl"
+        ? product.safety.warning_nl
+        : lang === "de"
+          ? product.safety.warning_de
+          : product.safety.warning_en,
+  };
+
+  if (intent === "ingredients") {
+    return {
+      ...base,
+      key_ingredients: product.key_ingredients,
+      active_percentages: product.active_percentages,
+      inci: product.inci,
+      safety,
+    };
+  }
+
+  if (intent === "certifications") {
+    return {
+      ...base,
+      inci: product.inci,
+      certifications: product.certifications,
+      verification: product.verification,
+    };
+  }
+
+  if (intent === "usage") {
+    return {
+      ...base,
+      usage: product.usage[lang],
+      when_to_use: product.when_to_use[lang],
+      safety,
+    };
+  }
+
+  if (intent === "compatibility" || intent === "comparison") {
+    return {
+      ...base,
+      skin_types: product.skin_types,
+      concerns: product.concerns,
+      key_ingredients: product.key_ingredients,
+      active_percentages: product.active_percentages,
+      compatibility: product.compatibility,
+      safety,
+    };
+  }
+
+  return {
+    ...base,
     skin_types: product.skin_types,
     concerns: product.concerns,
     key_ingredients: product.key_ingredients,
-    active_percentages: product.active_percentages,
-    inci: includeFullInci ? product.inci : undefined,
-    aroma: product.aroma,
     approved_claims: product.claims.approved[lang],
-    certifications: product.certifications,
-    pao: product.pao,
-    regional_availability: product.regional_availability,
-    safety: {
-      patch_test: product.safety.patch_test,
-      sun_sensitivity: product.safety.sun_sensitivity,
-      avoid_eye_area: product.safety.avoid_eye_area,
-      beginner_frequency: product.safety.beginner_frequency,
-      warning:
-        lang === "nl"
-          ? product.safety.warning_nl
-          : lang === "de"
-            ? product.safety.warning_de
-            : product.safety.warning_en,
-    },
-    verification: product.verification,
   };
 }
 
-function publicBundleContext(bundle: Bundle, lang: Lang) {
+function publicBundleContext(bundle: Bundle, lang: Lang, intent: Intent) {
   const products = bundle.product_ids
     .map((id) => productsById.get(id))
     .filter((item): item is Product => Boolean(item));
+  const includeSafetyDetails =
+    intent === "certifications" ||
+    intent === "compatibility" ||
+    intent === "comparison";
   return {
     id: bundle.id,
     name: bundle.name,
@@ -892,12 +977,20 @@ function publicBundleContext(bundle: Bundle, lang: Lang) {
       type: product.type,
       routine_step: product.routine_step,
       description: product.description[lang],
-      certifications: product.certifications,
-      safety: product.safety,
-      verification: product.verification,
+      ...(includeSafetyDetails
+        ? {
+            certifications: product.certifications,
+            safety: product.safety,
+            verification: product.verification,
+          }
+        : {}),
     })),
-    derived_certification_summary: bundle.derived_certification_summary,
-    safety: bundle.safety,
+    ...(includeSafetyDetails
+      ? {
+          derived_certification_summary: bundle.derived_certification_summary,
+          safety: bundle.safety,
+        }
+      : {}),
   };
 }
 
@@ -951,24 +1044,22 @@ function buildAnswerSystemPrompt(lang: Lang): string {
   const languageName = lang === "nl" ? "Dutch" : lang === "de" ? "German" : "English";
   return `You are the SOVAH skincare assistant. Answer in ${languageName}.
 
-Core rules:
-- You may answer general skincare questions with cautious educational information.
-- Every SOVAH-specific fact, ingredient, percentage, claim, certification, price, routine or usage instruction must come only from the supplied catalog context.
-- Never mention a supplier, private label, product sheet, internal source, internal ID, wholesale price or recommended supplier price.
-- Silently understand normal spelling and phonetic mistakes. If one intended product is clear, answer directly instead of presenting unrelated alternatives.
-- Treat short acknowledgements such as "doe maar", "ja graag", "go ahead" and "tell me more" as a continuation of the latest assistant offer. Do not restart the conversation or ask the customer to choose a new topic when the recent context is clear.
-- Use exact current public product and routine names.
-- Never invent ingredients, percentages, claims, certifications or routine contents.
-- Use approved cosmetic wording. Do not diagnose, treat or claim to cure acne, eczema, rosacea or other medical conditions.
-- "Allergen label free" does not mean allergen-free. "Nut free" does not guarantee safety for every allergy. For a serious allergy, advise checking the physical label and seeking professional guidance.
-- If a certification is null, unverified or contradicted by a verification conflict, say it is not confirmed. When INCI conflicts with a fragrance-free declaration, prioritize the INCI and explain that fragrance-free cannot be confirmed.
-- For ingredient questions, use the exact INCI and active percentages. Explain only relevant ingredients, not every ingredient unless the customer asks for the full INCI.
-- For combination questions, use the safety and compatibility data. Be conservative with exfoliants and targeted actives.
-- SPF is a standalone product and is never included in a SOVAH routine or bundle.
-- Recommend at most one routine and two optional products. Do not overwhelm the customer.
-- For severe, painful, persistent or rapidly worsening skin problems, recommend a doctor or dermatologist.
-- Keep the answer useful and concise: usually 2-6 sentences or a short list.
-- Return product IDs or bundle IDs only when a matching button/card would genuinely help.`;
+Response rules:
+- Answer the latest question first, naturally and concisely. Usually use 2-4 short sentences or a short list, with at most one clear next step.
+- Continue short follow-ups such as "doe maar", "ja graag", "go ahead" and "tell me more" from the recent context.
+- For personal product advice, routine selection, an uncertain skin type, or an explicit request for the skin quiz: give a short helpful explanation and set handoff to "quiz". Do not build a personalized routine inside chat when the quiz is the better route.
+- For order, shipping, return, refund or customer-service questions: set handoff to "support". Do not invent store-policy details.
+- When handoff is "quiz" or "support", return no product or bundle IDs.
+- Return product or bundle IDs only when the matching button or card directly helps with the answer.
+
+Accuracy and safety:
+- General skincare education may be cautious, but every SOVAH fact, ingredient, percentage, claim, certification, price, routine and usage instruction must come only from the supplied catalog context.
+- Never expose a supplier, private-label source, internal ID, source document, wholesale price or recommended supplier price. Use only current public names.
+- Never invent ingredients, percentages, claims, certifications or routine contents. If data is missing, unverified or conflicting, say it is not confirmed.
+- Use cosmetic wording. Do not diagnose or claim to treat or cure acne, eczema, rosacea or another medical condition.
+- "Allergen label free" is not allergen-free, and "nut free" is not a guarantee for every allergy. For serious allergies, advise checking the physical label and seeking professional guidance.
+- For ingredients, use exact supplied INCI and active percentages. For combinations, follow supplied safety and compatibility data and be conservative with exfoliants and targeted actives.
+- SPF is standalone and never included in a SOVAH routine or bundle. For severe, painful, persistent or rapidly worsening concerns, recommend a doctor or dermatologist.`;
 }
 
 async function answerWithAI(args: {
@@ -981,9 +1072,9 @@ async function answerWithAI(args: {
 }): Promise<AnswerResult | null> {
   if (!openai) return null;
 
-  const includeFullInci =
-    args.intent === "ingredients" || args.intent === "certifications";
-  const related = relatedProducts(args.selectedProducts);
+  const includeRelated =
+    args.intent === "compatibility" || args.intent === "comparison";
+  const related = includeRelated ? relatedProducts(args.selectedProducts).slice(0, 2) : [];
   const allowedProductIds = unique([
     ...args.selectedProducts.map((p) => p.id),
     ...related.map((p) => p.id),
@@ -1010,8 +1101,12 @@ async function answerWithAI(args: {
           enum: allowedBundleIds.length ? allowedBundleIds : bundleIds,
         },
       },
+      handoff: {
+        type: "string",
+        enum: ["none", "quiz", "support"],
+      },
     },
-    required: ["reply", "product_ids", "bundle_ids"],
+    required: ["reply", "product_ids", "bundle_ids", "handoff"],
     additionalProperties: false,
   };
 
@@ -1020,13 +1115,13 @@ async function answerWithAI(args: {
     latest_message: args.message,
     recent_history: args.history,
     selected_products: args.selectedProducts.map((product) =>
-      publicProductContext(product, args.lang, includeFullInci)
+      publicProductContext(product, args.lang, args.intent)
     ),
     related_products: related.map((product) =>
-      publicProductContext(product, args.lang, false)
+      publicProductContext(product, args.lang, args.intent)
     ),
     selected_bundles: args.selectedBundles.map((bundle) =>
-      publicBundleContext(bundle, args.lang)
+      publicBundleContext(bundle, args.lang, args.intent)
     ),
     ingredient_glossary: glossaryForProducts(args.selectedProducts, args.lang),
     global_policy: productCatalog.policy,
@@ -1049,7 +1144,7 @@ async function answerWithAI(args: {
         schema,
       },
     },
-    max_output_tokens: 1800,
+    max_output_tokens: 900,
   });
 
   if (response.status === "incomplete") {
@@ -1066,6 +1161,10 @@ async function answerWithAI(args: {
     bundle_ids: unique(parsed.bundle_ids || [])
       .filter((id) => allowedBundleIds.includes(id))
       .slice(0, 1),
+    handoff:
+      parsed.handoff === "quiz" || parsed.handoff === "support"
+        ? parsed.handoff
+        : "none",
   };
 }
 
@@ -1093,12 +1192,77 @@ function bundleAction(bundle: Bundle, lang: Lang): ChatAction {
   };
 }
 
+function quizAction(lang: Lang): ChatAction {
+  return {
+    type: "OPEN_URL",
+    label: tr(lang, "Start de huidquiz", "Start the skin quiz", "Hautquiz starten"),
+    url: QUIZ_URL,
+  };
+}
+
+function supportAction(lang: Lang): ChatAction {
+  return {
+    type: "OPEN_URL",
+    label: tr(lang, "Neem contact op", "Contact support", "Support kontaktieren"),
+    url: SUPPORT_URL,
+  };
+}
+
+function effectiveHandoff(
+  answer: AnswerResult,
+  message: string,
+  intent: Intent,
+  selectedProducts: Product[],
+  selectedBundles: Bundle[]
+): AnswerResult["handoff"] {
+  if (answer.handoff !== "none") return answer.handoff;
+  if (intent === "support" || isSupportRequest(message)) return "support";
+  if (isExplicitQuizRequest(message)) return "quiz";
+  if (
+    (intent === "product_recommendation" || intent === "routine_recommendation") &&
+    !selectedProducts.length &&
+    !selectedBundles.length
+  ) {
+    return "quiz";
+  }
+  return "none";
+}
+
+function ensureHandoffCopy(
+  reply: string,
+  handoff: AnswerResult["handoff"],
+  lang: Lang
+): string {
+  const text = normalize(reply);
+  if (handoff === "quiz" && !/(quiz|huidtest|hauttest|routine finder)/.test(text)) {
+    return `${reply}\n\n${tr(
+      lang,
+      "Voor een persoonlijk advies kun je het beste de korte huidquiz doen.",
+      "For personal advice, the short skin quiz is the best next step.",
+      "Für eine persönliche Empfehlung ist der kurze Hautquiz der beste nächste Schritt."
+    )}`;
+  }
+  if (handoff === "support" && !/(contact|klantenservice|support|kundenservice)/.test(text)) {
+    return `${reply}\n\n${tr(
+      lang,
+      "Neem hiervoor contact op met onze klantenservice.",
+      "Please contact our customer service team for this.",
+      "Bitte kontaktiere dafür unseren Kundenservice."
+    )}`;
+  }
+  return reply;
+}
+
 function buildActions(
   answer: AnswerResult,
   selectedProducts: Product[],
   selectedBundles: Bundle[],
-  lang: Lang
+  lang: Lang,
+  handoff: AnswerResult["handoff"]
 ): ChatAction[] {
+  if (handoff === "quiz") return [quizAction(lang)];
+  if (handoff === "support") return [supportAction(lang)];
+
   const allowedProducts = new Set([
     ...selectedProducts.map((p) => p.id),
     ...relatedProducts(selectedProducts).map((p) => p.id),
@@ -1305,6 +1469,18 @@ function deterministicFallback(args: {
   const product = args.products[0];
   const bundle = args.bundles[0];
 
+  if (args.intent === "support" || isSupportRequest(args.message)) {
+    return {
+      reply: tr(
+        args.lang,
+        "Voor vragen over je bestelling, verzending of retour helpt onze klantenservice je verder.",
+        "Our customer service team can help with orders, shipping, and returns.",
+        "Bei Fragen zu Bestellung, Versand oder Rückgabe hilft dir unser Kundenservice weiter."
+      ),
+      actions: [supportAction(args.lang)],
+    };
+  }
+
   if (bundle) {
     const names = bundle.product_ids
       .map((id) => productsById.get(id)?.title)
@@ -1363,6 +1539,23 @@ function deterministicFallback(args: {
     };
   }
 
+  if (
+    args.intent === "product_recommendation" ||
+    args.intent === "routine_recommendation" ||
+    isExplicitQuizRequest(args.message) ||
+    isPersonalRecommendationRequest(args.message)
+  ) {
+    return {
+      reply: tr(
+        args.lang,
+        "Voor een passend persoonlijk advies kun je het beste de korte huidquiz doen. Je antwoorden worden gebruikt om de meest geschikte SOVAH-routine te kiezen.",
+        "For suitable personal advice, the short skin quiz is the best next step. Your answers are used to select the most suitable SOVAH routine.",
+        "Für eine passende persönliche Empfehlung ist der kurze Hautquiz der beste nächste Schritt. Deine Antworten werden genutzt, um die passendste SOVAH-Routine auszuwählen."
+      ),
+      actions: [quizAction(args.lang)],
+    };
+  }
+
   return {
     reply: tr(
       args.lang,
@@ -1370,13 +1563,7 @@ function deterministicFallback(args: {
       "Tell me which product you mean, or share your skin type and main skin goal, and I will help you more specifically.",
       "Sag mir, welches Produkt du meinst, oder nenne deinen Hauttyp und dein wichtigstes Hautziel, dann helfe ich dir gezielt weiter."
     ),
-    actions: [
-      {
-        type: "OPEN_URL",
-        label: tr(args.lang, "Start de huidquiz", "Start the skin quiz", "Hautquiz starten"),
-        url: QUIZ_URL,
-      },
-    ],
+    actions: [quizAction(args.lang)],
   };
 }
 
@@ -1488,12 +1675,27 @@ export async function POST(req: Request) {
     );
   }
 
+  const productLookupIntents: Intent[] = [
+    "product_info",
+    "ingredients",
+    "certifications",
+    "usage",
+    "compatibility",
+    "comparison",
+  ];
+  const needsProductResolution =
+    productLookupIntents.includes(intent) && !selectedProducts.length;
+  const needsBundleResolution =
+    intent === "bundle_contents" && !selectedBundles.length;
+  const incompleteComparison =
+    intent === "comparison" && selectedProducts.length < 2;
+  const unresolvedFollowUp =
+    contextualFollowUp && !selectedProducts.length && !selectedBundles.length;
   const shouldResolve =
-    !selectedProducts.length ||
-    (!selectedBundles.length && intent === "routine_recommendation") ||
-    intent === "product_recommendation" ||
-    intent === "comparison" ||
-    intent === "general_skincare";
+    needsProductResolution ||
+    needsBundleResolution ||
+    incompleteComparison ||
+    unresolvedFollowUp;
 
   if (shouldResolve && openai) {
     try {
@@ -1545,12 +1747,16 @@ export async function POST(req: Request) {
     }
   }
 
-  // For a bundle question, its products are part of the grounded answer context.
-  if (selectedBundles.length && !selectedProducts.length) {
+  // Only expand a routine into full product context when a comparison needs it.
+  if (
+    selectedBundles.length &&
+    !selectedProducts.length &&
+    (intent === "compatibility" || intent === "comparison")
+  ) {
     selectedProducts = unique(selectedBundles.flatMap((bundle) => bundle.product_ids))
       .map((id) => productsById.get(id))
       .filter((item): item is Product => Boolean(item))
-      .slice(0, 8);
+      .slice(0, 4);
   }
 
   let answer: AnswerResult | null = null;
@@ -1571,10 +1777,23 @@ export async function POST(req: Request) {
   }
 
   if (answer) {
-    const actions = buildActions(answer, selectedProducts, selectedBundles, lang);
+    const handoff = effectiveHandoff(
+      answer,
+      message,
+      intent,
+      selectedProducts,
+      selectedBundles
+    );
+    const actions = buildActions(
+      answer,
+      selectedProducts,
+      selectedBundles,
+      lang,
+      handoff
+    );
     return jsonResponse(
       {
-        reply: answer.reply,
+        reply: ensureHandoffCopy(answer.reply, handoff, lang),
         actions,
         lang,
         context: buildConversationContext(
