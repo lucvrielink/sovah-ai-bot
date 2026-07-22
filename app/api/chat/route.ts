@@ -709,7 +709,7 @@ function simpleRoutineTarget(message: string): SimpleRoutineTarget | null {
   if (/(rijpe huid|huidveroudering|fijne lijntjes|rimpels|mature skin|aging skin|ageing skin|fine lines|wrinkles|reife haut|hautalterung|falten)/.test(text)) {
     return "aging";
   }
-  if (/(doffe huid|vermoeide huid|meer glow|dull skin|tired-looking skin|lack of glow|fahle haut|mude haut)/.test(text)) {
+  if (/(doffe huid|vermoeide huid|meer glow|pigmentvlekken|ophelderen|dull skin|tired-looking skin|lack of glow|dark spots?|brightening|hyperpigmentation|fahle haut|mude haut|pigmentflecken|aufhellen)/.test(text)) {
     return "dull";
   }
   if (/(normale huid|normal skin|normale haut|^normaal$|^normal$)/.test(text)) {
@@ -717,7 +717,7 @@ function simpleRoutineTarget(message: string): SimpleRoutineTarget | null {
   }
   // There is no separate Simple Dry routine in the live catalog. The Simple
   // Normal routine contains the cleanser and moisturiser intended for normal/dry skin.
-  if (/(droge huid|dry skin|trockene haut|^droog$|^dry$|^trocken$)/.test(text)) {
+  if (/(droge huid|hydratatie|vochtarme huid|diepe hydratatie|dry skin|hydration|deep hydration|dehydrated skin|trockene haut|feuchtigkeit|dehydrierte haut|^droog$|^dry$|^trocken$)/.test(text)) {
     return "normal";
   }
   return null;
@@ -1181,6 +1181,7 @@ Response rules:
 - Exception: when the customer explicitly asks for only 1-2 products or says they do not want a full routine, never suggest the quiz or individual products and set handoff to "none". If no matching Simple Routine is supplied, ask one concise question for their skin type or main concern. If a matching Simple Routine is supplied, recommend only that two-product Simple Routine and return its bundle ID so the routine card is shown.
 - A supplied selected product in this Simple Routine flow is an optional add-on. Mention at most one add-on in the written answer only when it directly matches the stated concern, and return its product ID for a normal link button. The Simple Routine gets the routine card; the add-on must never be presented as another routine or card.
 - For a matched Simple Routine, keep the answer compact and scannable: put the bold routine name on the first line and the two included product names on the next line. If there is an add-on, add one separate short paragraph starting with the bold label "Optional add-on:". Do not repeat the price or URL, and never ask whether the customer wants the routine card or add-on link because those controls are rendered automatically.
+- Never ask two recommendation clarification questions in a row. When the latest customer message answers the previous preference or concern question and a matching Simple Routine is supplied, recommend it immediately. Do not ask whether they prefer gel, serum or cream in the Simple Routine flow.
 - For order, shipping, return, refund or customer-service questions: set handoff to "support". Do not invent store-policy details.
 - When handoff is "quiz" or "support", return no product or bundle IDs.
 - Return product or bundle IDs only when the matching button or card directly helps with the answer.
@@ -1844,8 +1845,8 @@ export async function POST(req: Request) {
 
   const latestAssistant = normalize(latestAssistantMessage(history));
   const followsSimpleRoutineQuestion =
-    previousContext.intent === "product_recommendation" &&
-    /(huidtype|huidklacht|skin type|skin concern|hauttyp|hautziel|simple routine)/.test(
+    Boolean(simpleRoutineTarget(message)) &&
+    /(huidtype|huidklacht|voorkeur|prioriteit|hydratatie|donkere vlekken|skin type|skin concern|prefer|prioriti[sz]e|hydration|dark spots?|brightening|hauttyp|hautziel|bevorzug|prioritat|feuchtigkeit|pigmentflecken|simple routine|gel|serum|cream|creme)/.test(
       latestAssistant
     );
   const contextualFollowUp =
