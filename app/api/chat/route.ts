@@ -742,6 +742,29 @@ function isSimpleRoutine(bundle: Bundle): boolean {
   return bundle.id.startsWith("simple-");
 }
 
+const ADD_ON_PRODUCT_IDS = new Set([
+  "acne-spot-care",
+  "aha-peeling-concentrate-exfoliating-face-serum",
+  "smoothing-eye-cream",
+]);
+
+function isAddOnProduct(product: Product): boolean {
+  return ADD_ON_PRODUCT_IDS.has(product.id);
+}
+
+function addOnForMessage(message: string): Product | null {
+  const text = normalize(message);
+  let productId: string | null = null;
+  if (/\b(acne|breakouts?|blemishes|pimples|puistjes?|onzuiverheden|unreinheiten?|pickel)\b/.test(text)) {
+    productId = "acne-spot-care";
+  } else if (/(oogzone|oogcontour|donkere kringen|wallen|eye area|eye contour|dark circles|puffiness|augenpartie|augenringe)/.test(text)) {
+    productId = "smoothing-eye-cream";
+  } else if (/(ruwe textuur|ongelijke textuur|grove porien|verstopte porien|doffe huid|rough texture|uneven texture|large pores|clogged pores|dull skin|raue hautstruktur|verstopfte poren|fahle haut)/.test(text)) {
+    productId = "aha-peeling-concentrate-exfoliating-face-serum";
+  }
+  return productId ? productsById.get(productId) || null : null;
+}
+
 function isSupportRequest(message: string): boolean {
   return /(contact|klantenservice|customer service|kundenservice|bestelling|mijn order|my order|order status|bestellnummer|retour|return|refund|terugbetaling|verzending|shipping|lieferung|pakket|package|paket)/.test(
     normalize(message)
@@ -1131,6 +1154,7 @@ Response rules:
 - Continue short follow-ups such as "doe maar", "ja graag", "go ahead" and "tell me more" from the recent context.
 - For full routine selection, an uncertain skin type when a routine is requested, or an explicit request for the skin quiz: give a short helpful explanation and set handoff to "quiz". Do not build a personalized routine inside chat when the quiz is the better route.
 - Exception: when the customer explicitly asks for only 1-2 products or says they do not want a full routine, never suggest the quiz or individual products and set handoff to "none". If no matching Simple Routine is supplied, ask one concise question for their skin type or main concern. If a matching Simple Routine is supplied, recommend only that two-product Simple Routine and return its bundle ID so the routine card is shown.
+- A supplied selected product in this Simple Routine flow is an optional add-on. Mention at most one add-on in the written answer only when it directly matches the stated concern, and return its product ID for a normal link button. The Simple Routine gets the routine card; the add-on must never be presented as another routine or card.
 - For order, shipping, return, refund or customer-service questions: set handoff to "support". Do not invent store-policy details.
 - When handoff is "quiz" or "support", return no product or bundle IDs.
 - Return product or bundle IDs only when the matching button or card directly helps with the answer.
@@ -1360,9 +1384,9 @@ function buildActions(
     const bundle = bundlesById.get(id);
     if (bundle) actions.push(bundleAction(bundle, lang));
   }
-  if (actions.length) return actions.slice(0, 1);
 
   for (const id of answer.product_ids) {
+    if (actions.length >= 2) break;
     if (!allowedProducts.has(id)) continue;
     const product = productsById.get(id);
     if (product) actions.push(productAction(product, lang));
@@ -1568,17 +1592,21 @@ function deterministicFallback(args: {
 
   if (isLimitedProductRecommendationRequest(args.message)) {
     if (bundle && isSimpleRoutine(bundle)) {
+      const addOn = args.products.find(isAddOnProduct);
       const names = bundle.product_ids
         .map((id) => productsById.get(id)?.title)
         .filter((item): item is string => Boolean(item));
       return {
         reply: tr(
           args.lang,
-          `Op basis van je huidtype of klacht past **${bundle.name}** het beste. Deze eenvoudige set bevat ${names.join(" en ")}.`,
-          `Based on your skin type or concern, **${bundle.name}** is the best match. This simple set contains ${names.join(" and ")}.`,
-          `Basierend auf deinem Hauttyp oder Hautziel passt **${bundle.name}** am besten. Dieses einfache Set enthält ${names.join(" und ")}.`
+          `Op basis van je huidtype of klacht past **${bundle.name}** het beste. Deze eenvoudige set bevat ${names.join(" en ")}.${addOn ? ` Als gerichte add-on kun je **${addOn.title}** toevoegen.` : ""}`,
+          `Based on your skin type or concern, **${bundle.name}** is the best match. This simple set contains ${names.join(" and ")}.${addOn ? ` As a targeted add-on, you can add **${addOn.title}**.` : ""}`,
+          `Basierend auf deinem Hauttyp oder Hautziel passt **${bundle.name}** am besten. Dieses einfache Set enthält ${names.join(" und ")}.${addOn ? ` Als gezieltes Add-on kannst du **${addOn.title}** ergänzen.` : ""}`
         ),
-        actions: [bundleAction(bundle, args.lang)],
+        actions: [
+          bundleAction(bundle, args.lang),
+          ...(addOn ? [productAction(addOn, args.lang)] : []),
+        ],
       };
     }
 
@@ -1594,17 +1622,24 @@ function deterministicFallback(args: {
   }
 
   if (bundle) {
+    const addOn =
+      args.intent === "product_recommendation" && isSimpleRoutine(bundle)
+        ? args.products.find(isAddOnProduct)
+        : null;
     const names = bundle.product_ids
       .map((id) => productsById.get(id)?.title)
       .filter((item): item is string => Boolean(item));
     return {
       reply: tr(
         args.lang,
-        `**${bundle.name}** bevat:\n- ${names.join("\n- ")}\n\nSPF zit niet in deze routine.`,
-        `**${bundle.name}** includes:\n- ${names.join("\n- ")}\n\nSPF is not included in this routine.`,
-        `**${bundle.name}** enthält:\n- ${names.join("\n- ")}\n\nSPF ist nicht in dieser Routine enthalten.`
+        `**${bundle.name}** bevat:\n- ${names.join("\n- ")}\n\nSPF zit niet in deze routine.${addOn ? `\n\nOptionele add-on: **${addOn.title}**.` : ""}`,
+        `**${bundle.name}** includes:\n- ${names.join("\n- ")}\n\nSPF is not included in this routine.${addOn ? `\n\nOptional add-on: **${addOn.title}**.` : ""}`,
+        `**${bundle.name}** enthält:\n- ${names.join("\n- ")}\n\nSPF ist nicht in dieser Routine enthalten.${addOn ? `\n\nOptionales Add-on: **${addOn.title}**.` : ""}`
       ),
-      actions: [bundleAction(bundle, args.lang)],
+      actions: [
+        bundleAction(bundle, args.lang),
+        ...(addOn ? [productAction(addOn, args.lang)] : []),
+      ],
     };
   }
 
@@ -1764,7 +1799,12 @@ export async function POST(req: Request) {
   const matchedSimpleRoutine = limitedProductRequest
     ? simpleRoutineForMessage(message)
     : null;
-  const deterministicProducts = limitedProductRequest ? [] : matchedProducts;
+  const matchedAddOn = limitedProductRequest ? addOnForMessage(message) : null;
+  const deterministicProducts = limitedProductRequest
+    ? matchedAddOn
+      ? [matchedAddOn]
+      : []
+    : matchedProducts;
   const deterministicBundles = matchedSimpleRoutine
     ? [matchedSimpleRoutine]
     : limitedProductRequest
@@ -1817,8 +1857,17 @@ export async function POST(req: Request) {
     const simpleRoutine = followsSimpleRoutineQuestion
       ? simpleRoutineForMessage(message)
       : null;
+    const followUpAddOn = followsSimpleRoutineQuestion
+      ? addOnForMessage(message)
+      : null;
+    if (followUpAddOn) {
+      selectedProducts = [followUpAddOn];
+    }
     if (simpleRoutine) {
-      selectedProducts = [];
+      selectedProducts = selectedProducts
+        .filter(isAddOnProduct)
+        .filter((product) => !simpleRoutine.product_ids.includes(product.id))
+        .slice(0, 1);
       selectedBundles = [simpleRoutine];
       intent = "product_recommendation";
       simpleRoutineFollowUp = true;
@@ -1939,12 +1988,14 @@ export async function POST(req: Request) {
       selectedBundles
     );
     const selectedSimpleRoutine = selectedBundles.find(isSimpleRoutine);
+    const selectedAddOn = selectedProducts.find(isAddOnProduct);
     const answerForActions =
-      (limitedProductRequest || simpleRoutineFollowUp) && selectedSimpleRoutine
+      limitedProductRequest || followsSimpleRoutineQuestion || simpleRoutineFollowUp
         ? {
             ...answer,
-            product_ids: [],
-            bundle_ids: [selectedSimpleRoutine.id],
+            product_ids:
+              selectedSimpleRoutine && selectedAddOn ? [selectedAddOn.id] : [],
+            bundle_ids: selectedSimpleRoutine ? [selectedSimpleRoutine.id] : [],
           }
         : answer;
     const actions = buildActions(
