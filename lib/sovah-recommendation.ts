@@ -43,7 +43,7 @@ export type QuizAnswers = {
   routinePreference: RoutinePreference;
 };
 
-type Bundle = {
+export type Bundle = {
   name: string;
   handle: string;
   url: string;
@@ -54,7 +54,7 @@ type Bundle = {
   products: string[];
 };
 
-type Addon = {
+export type Addon = {
   title: string;
   handle: string;
   url: string;

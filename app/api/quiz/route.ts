@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import {
   getQuizRecommendation,
+  type Addon,
+  type Bundle,
   type Concern,
   type Goal,
   type Lang,
@@ -113,7 +115,7 @@ function normalizeQuizAnswers(body: unknown): QuizAnswers {
   };
 }
 
-function cleanRecommendedBundle(bundle: any) {
+function cleanRecommendedBundle(bundle: Bundle) {
   return {
     name: bundle?.name || "",
     url: bundle?.url || "",
@@ -126,7 +128,7 @@ function cleanRecommendedBundle(bundle: any) {
   };
 }
 
-function cleanAddon(addon: any) {
+function cleanAddon(addon: Addon | null) {
   if (!addon) return null;
 
   return {
