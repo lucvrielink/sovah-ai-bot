@@ -765,6 +765,31 @@ function addOnForMessage(message: string): Product | null {
   return productId ? productsById.get(productId) || null : null;
 }
 
+
+function simpleRoutineReply(
+  bundle: Bundle,
+  addOn: Product | undefined,
+  lang: Lang
+): string {
+  const productNames = bundle.product_ids
+    .map((id) => productsById.get(id)?.title)
+    .filter((title): title is string => Boolean(title));
+  const addOnReason = addOn
+    ? addOn.id === "acne-spot-care"
+      ? tr(lang, "voor plaatselijke puistjes", "for individual blemishes", "für einzelne Unreinheiten")
+      : addOn.id === "smoothing-eye-cream"
+        ? tr(lang, "voor de oogzone en donkere kringen", "for the eye area and dark circles", "für die Augenpartie und Augenringe")
+        : tr(lang, "voor textuur en dofheid", "for texture and dullness", "für Hautstruktur und fahle Haut")
+    : null;
+
+  const addOnCopy =
+    addOn && addOnReason
+      ? `\n\n${tr(lang, "**Optionele add-on:**", "**Optional add-on:**", "**Optionales Add-on:**")} ${addOn.title} — ${addOnReason}.`
+      : "";
+
+  return `**${bundle.name}**\n${productNames.join(" + ")}${addOnCopy}`;
+}
+
 function isSupportRequest(message: string): boolean {
   return /(contact|klantenservice|customer service|kundenservice|bestelling|mijn order|my order|order status|bestellnummer|retour|return|refund|terugbetaling|verzending|shipping|lieferung|pakket|package|paket)/.test(
     normalize(message)
@@ -2016,7 +2041,10 @@ export async function POST(req: Request) {
           "What is your skin type or main skin concern? For example dry, sensitive, oily, combination, normal, breakouts, dullness, or signs of ageing. Then I will select the matching two-product Simple Routine.",
           "Was ist dein Hauttyp oder dein wichtigstes Hautziel? Zum Beispiel trocken, empfindlich, fettig, Mischhaut, normal, Unreinheiten, fahle Haut oder Hautalterung. Dann wähle ich die passende Simple Routine mit zwei Produkten."
         )
-      : ensureHandoffCopy(answer.reply, handoff, lang);
+      : selectedSimpleRoutine &&
+          (limitedProductRequest || followsSimpleRoutineQuestion || simpleRoutineFollowUp)
+        ? simpleRoutineReply(selectedSimpleRoutine, selectedAddOn, lang)
+        : ensureHandoffCopy(answer.reply, handoff, lang);
     return jsonResponse(
       {
         reply,
