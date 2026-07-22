@@ -765,6 +765,31 @@ function addOnForMessage(message: string): Product | null {
   return productId ? productsById.get(productId) || null : null;
 }
 
+
+function simpleRoutineReply(
+  bundle: Bundle,
+  addOn: Product | undefined,
+  lang: Lang
+): string {
+  const productNames = bundle.product_ids
+    .map((id) => productsById.get(id)?.title)
+    .filter((title): title is string => Boolean(title));
+  const addOnReason = addOn
+    ? addOn.id === "acne-spot-care"
+      ? tr(lang, "voor plaatselijke puistjes", "for individual blemishes", "für einzelne Unreinheiten")
+      : addOn.id === "smoothing-eye-cream"
+        ? tr(lang, "voor de oogzone en donkere kringen", "for the eye area and dark circles", "für die Augenpartie und Augenringe")
+        : tr(lang, "voor textuur en dofheid", "for texture and dullness", "für Hautstruktur und fahle Haut")
+    : null;
+
+  const addOnCopy =
+    addOn && addOnReason
+      ? `\n\n${tr(lang, "**Optionele add-on:**", "**Optional add-on:**", "**Optionales Add-on:**")} ${addOn.title} — ${addOnReason}.`
+      : "";
+
+  return `**${bundle.name}**\n${productNames.join(" + ")}${addOnCopy}`;
+}
+
 function isSupportRequest(message: string): boolean {
   return /(contact|klantenservice|customer service|kundenservice|bestelling|mijn order|my order|order status|bestellnummer|retour|return|refund|terugbetaling|verzending|shipping|lieferung|pakket|package|paket)/.test(
     normalize(message)
@@ -1155,6 +1180,7 @@ Response rules:
 - For full routine selection, an uncertain skin type when a routine is requested, or an explicit request for the skin quiz: give a short helpful explanation and set handoff to "quiz". Do not build a personalized routine inside chat when the quiz is the better route.
 - Exception: when the customer explicitly asks for only 1-2 products or says they do not want a full routine, never suggest the quiz or individual products and set handoff to "none". If no matching Simple Routine is supplied, ask one concise question for their skin type or main concern. If a matching Simple Routine is supplied, recommend only that two-product Simple Routine and return its bundle ID so the routine card is shown.
 - A supplied selected product in this Simple Routine flow is an optional add-on. Mention at most one add-on in the written answer only when it directly matches the stated concern, and return its product ID for a normal link button. The Simple Routine gets the routine card; the add-on must never be presented as another routine or card.
+- For a matched Simple Routine, keep the answer compact and scannable: put the bold routine name on the first line and the two included product names on the next line. If there is an add-on, add one separate short paragraph starting with the bold label "Optional add-on:". Do not repeat the price or URL, and never ask whether the customer wants the routine card or add-on link because those controls are rendered automatically.
 - For order, shipping, return, refund or customer-service questions: set handoff to "support". Do not invent store-policy details.
 - When handoff is "quiz" or "support", return no product or bundle IDs.
 - Return product or bundle IDs only when the matching button or card directly helps with the answer.
@@ -2015,7 +2041,10 @@ export async function POST(req: Request) {
           "What is your skin type or main skin concern? For example dry, sensitive, oily, combination, normal, breakouts, dullness, or signs of ageing. Then I will select the matching two-product Simple Routine.",
           "Was ist dein Hauttyp oder dein wichtigstes Hautziel? Zum Beispiel trocken, empfindlich, fettig, Mischhaut, normal, Unreinheiten, fahle Haut oder Hautalterung. Dann wähle ich die passende Simple Routine mit zwei Produkten."
         )
-      : ensureHandoffCopy(answer.reply, handoff, lang);
+      : selectedSimpleRoutine &&
+          (limitedProductRequest || followsSimpleRoutineQuestion || simpleRoutineFollowUp)
+        ? simpleRoutineReply(selectedSimpleRoutine, selectedAddOn, lang)
+        : ensureHandoffCopy(answer.reply, handoff, lang);
     return jsonResponse(
       {
         reply,
