@@ -590,7 +590,7 @@ function isContextDependentFollowUp(message: string): boolean {
     /^(ja|ja graag|graag|doe maar|zeker|prima|ok|oke|oké|vertel|leg uit|meer uitleg|ga door|yes|yes please|please do|go ahead|sure|tell me more|explain|continue|ja bitte|mach das|gern|gerne|erklär|erklar|weiter)$/.test(
       text
     ) ||
-    Boolean(statedSkinType(message)) ||
+    Boolean(simpleRoutineTarget(message)) ||
     /\b(die|dat|deze|daarover|daarmee|erover|hetzelfde|that|this|those|it|them|dazu|darüber|das|dieses)\b/.test(
       text
     )
@@ -683,54 +683,63 @@ function isLimitedProductRecommendationRequest(message: string): boolean {
   return mentionsProducts && (asksForOneOrTwo || rejectsFullRoutine);
 }
 
-type StatedSkinType = "dry" | "sensitive" | "oily" | "combination" | "normal";
+type SimpleRoutineTarget =
+  | "normal"
+  | "sensitive"
+  | "oily"
+  | "combination"
+  | "aging"
+  | "acne"
+  | "dull";
 
-function statedSkinType(message: string): StatedSkinType | null {
+function simpleRoutineTarget(message: string): SimpleRoutineTarget | null {
   const text = normalize(message);
-  if (/(gecombineerde huid|gemengde huid|combination skin|mischhaut)/.test(text)) {
+  if (/\b(acne|breakouts?|blemishes|pimples|puistjes?|onzuiverheden|unreinheiten?|pickel)\b/.test(text)) {
+    return "acne";
+  }
+  if (/(gecombineerde huid|gemengde huid|combination skin|mischhaut|^gecombineerd$|^gemengd$|^combination$|^misch$)/.test(text)) {
     return "combination";
   }
-  if (/(gevoelige huid|sensitive skin|empfindliche haut)/.test(text)) {
+  if (/(gevoelige huid|sensitive skin|empfindliche haut|reactieve huid|reactive skin|^gevoelig$|^sensitive$|^empfindlich$)/.test(text)) {
     return "sensitive";
   }
-  if (/(droge huid|dry skin|trockene haut)/.test(text)) return "dry";
-  if (/(vette huid|oily skin|fettige haut)/.test(text)) return "oily";
-  if (/(normale huid|normal skin|normale haut)/.test(text)) return "normal";
-  if (/^(droog|dry|trocken)$/.test(text)) return "dry";
-  if (/^(gevoelig|sensitive|empfindlich)$/.test(text)) return "sensitive";
-  if (/^(vet|vettig|oily|fettig)$/.test(text)) return "oily";
-  if (/^(gecombineerd|gemengd|combination|misch)$/.test(text)) return "combination";
-  if (/^(normaal|normal)$/.test(text)) return "normal";
+  if (/(vette huid|oily skin|fettige haut|glimmende huid|shiny skin|^vet$|^vettig$|^oily$|^fettig$)/.test(text)) {
+    return "oily";
+  }
+  if (/(rijpe huid|huidveroudering|fijne lijntjes|rimpels|mature skin|aging skin|ageing skin|fine lines|wrinkles|reife haut|hautalterung|falten)/.test(text)) {
+    return "aging";
+  }
+  if (/(doffe huid|vermoeide huid|meer glow|dull skin|tired-looking skin|lack of glow|fahle haut|mude haut)/.test(text)) {
+    return "dull";
+  }
+  if (/(normale huid|normal skin|normale haut|^normaal$|^normal$)/.test(text)) {
+    return "normal";
+  }
+  // There is no separate Simple Dry routine in the live catalog. The Simple
+  // Normal routine contains the cleanser and moisturiser intended for normal/dry skin.
+  if (/(droge huid|dry skin|trockene haut|^droog$|^dry$|^trocken$)/.test(text)) {
+    return "normal";
+  }
   return null;
 }
 
-function acneMoisturizerForSkinType(skinType: StatedSkinType): Product | null {
-  const productId =
-    skinType === "oily" || skinType === "combination"
-      ? "oil-free-hydrating-gel-moisturizer"
-      : skinType === "dry"
-        ? "moisturising-day-face-cream"
-        : "niacinamide-gel-face-moisturiser";
-  return productsById.get(productId) || null;
+function simpleRoutineForMessage(message: string): Bundle | null {
+  const target = simpleRoutineTarget(message);
+  if (!target) return null;
+  const bundleIdByTarget: Record<SimpleRoutineTarget, string> = {
+    normal: "simple-normal-skin-routine",
+    sensitive: "simple-sensitive-skin-routine",
+    oily: "simple-oily-skin-routine",
+    combination: "simple-combination-skin-routine",
+    aging: "simple-aging-skin-routine",
+    acne: "simple-acne-routine",
+    dull: "simple-dull-skin-routine",
+  };
+  return bundlesById.get(bundleIdByTarget[target]) || null;
 }
 
-function hasAcneConcern(message: string): boolean {
-  return /\b(acne|breakouts?|blemishes|pimples|puistjes?|onzuiverheden|unreinheiten?|pickel)\b/.test(
-    normalize(message)
-  );
-}
-
-function directProductRecommendations(message: string): Product[] {
-  if (!isLimitedProductRecommendationRequest(message)) return [];
-
-  if (!hasAcneConcern(message)) return [];
-
-  const acneSpotCare = productsById.get("acne-spot-care");
-  const skinType = statedSkinType(message);
-  const moisturizer = skinType ? acneMoisturizerForSkinType(skinType) : null;
-  return [acneSpotCare, moisturizer].filter(
-    (product): product is Product => Boolean(product)
-  );
+function isSimpleRoutine(bundle: Bundle): boolean {
+  return bundle.id.startsWith("simple-");
 }
 
 function isSupportRequest(message: string): boolean {
@@ -920,8 +929,7 @@ async function resolveWithAI(
           "Choose clarification only when two or more products remain genuinely plausible. " +
           "A question about what a named product contains is ingredients. A question about what a routine contains is bundle_contents. " +
           "For general skincare questions, IDs may be empty. Use the conversation context but prioritize the latest customer message. " +
-          "When the customer explicitly asks for only one or two products or rejects a full routine, keep the intent product_recommendation. Select no more than two matching products when their skin concern is clear; otherwise ask one short clarification question without suggesting the skin quiz. " +
-          "For a limited acne or breakout request, Acne Spot Care is the targeted product, but the moisturizer depends on skin type. If dry, sensitive, oily, combination or normal skin is not clear from the conversation, ask only for that skin type before choosing a moisturizer. " +
+          "When the customer explicitly asks for only one or two products or rejects a full routine, keep the intent product_recommendation and never select individual products. Ask for their skin type or main concern if it is not known, then choose only the matching supplied Simple Routine bundle. Never suggest the skin quiz for this flow. " +
           "Short replies such as 'doe maar', 'ja graag', 'go ahead', 'tell me more' or 'leg uit' continue the assistant's latest offer and should keep the previously discussed product or routine.",
       },
       {
@@ -1122,8 +1130,7 @@ Response rules:
 - Answer the latest question first, naturally and concisely. Usually use 2-4 short sentences or a short list, with at most one clear next step.
 - Continue short follow-ups such as "doe maar", "ja graag", "go ahead" and "tell me more" from the recent context.
 - For full routine selection, an uncertain skin type when a routine is requested, or an explicit request for the skin quiz: give a short helpful explanation and set handoff to "quiz". Do not build a personalized routine inside chat when the quiz is the better route.
-- Exception: when the customer explicitly asks for only 1-2 products or says they do not want a full routine, never suggest the quiz and set handoff to "none". Recommend up to two supplied matching products directly. If the supplied context is not enough, ask one concise question about their main skin concern instead.
-- For a limited acne or breakout request, recommend Acne Spot Care plus the supplied moisturizer selected for the customer's stated skin type. If their skin type is not yet known, mention Acne Spot Care and ask whether their skin is dry, sensitive, oily, combination or normal; do not choose a moisturizer yet and do not suggest the quiz.
+- Exception: when the customer explicitly asks for only 1-2 products or says they do not want a full routine, never suggest the quiz or individual products and set handoff to "none". If no matching Simple Routine is supplied, ask one concise question for their skin type or main concern. If a matching Simple Routine is supplied, recommend only that two-product Simple Routine and return its bundle ID so the routine card is shown.
 - For order, shipping, return, refund or customer-service questions: set handoff to "support". Do not invent store-policy details.
 - When handoff is "quiz" or "support", return no product or bundle IDs.
 - Return product or bundle IDs only when the matching button or card directly helps with the answer.
@@ -1294,10 +1301,10 @@ function effectiveHandoff(
   if (intent === "support" || isSupportRequest(message)) return "support";
   if (isExplicitQuizRequest(message)) return "quiz";
   if (isLimitedProductRecommendationRequest(message)) return "none";
-  if (intent === "product_recommendation" && selectedProducts.length) return "none";
+  if (intent === "product_recommendation") return "none";
   if (answer.handoff !== "none") return answer.handoff;
   if (
-    (intent === "product_recommendation" || intent === "routine_recommendation") &&
+    intent === "routine_recommendation" &&
     !selectedProducts.length &&
     !selectedBundles.length
   ) {
@@ -1560,61 +1567,29 @@ function deterministicFallback(args: {
   }
 
   if (isLimitedProductRecommendationRequest(args.message)) {
-    const recommendations = args.products.slice(0, 2);
-    if (
-      hasAcneConcern(args.message) &&
-      !statedSkinType(args.message) &&
-      recommendations.some((item) => item.id === "acne-spot-care")
-    ) {
+    if (bundle && isSimpleRoutine(bundle)) {
+      const names = bundle.product_ids
+        .map((id) => productsById.get(id)?.title)
+        .filter((item): item is string => Boolean(item));
       return {
         reply: tr(
           args.lang,
-          "Voor puistjes is Acne Spot Care de gerichte keuze. Welk huidtype heb je: droog, gevoelig, vet, gecombineerd of normaal? Dan kies ik de passende moisturiser erbij.",
-          "Acne Spot Care is the targeted choice for breakouts. Is your skin dry, sensitive, oily, combination, or normal? Then I will pair it with the right moisturizer.",
-          "Acne Spot Care ist die gezielte Wahl bei Unreinheiten. Ist deine Haut trocken, empfindlich, fettig, eine Mischhaut oder normal? Dann ergänze ich die passende Feuchtigkeitspflege."
+          `Op basis van je huidtype of klacht past **${bundle.name}** het beste. Deze eenvoudige set bevat ${names.join(" en ")}.`,
+          `Based on your skin type or concern, **${bundle.name}** is the best match. This simple set contains ${names.join(" and ")}.`,
+          `Basierend auf deinem Hauttyp oder Hautziel passt **${bundle.name}** am besten. Dieses einfache Set enthält ${names.join(" und ")}.`
         ),
-        actions: recommendations.map((item) => productAction(item, args.lang)),
-      };
-    }
-    if (recommendations.length) {
-      const names = recommendations.map((item) => `**${item.title}**`).join(" + ");
-      return {
-        reply: tr(
-          args.lang,
-          `Mijn beste 1–2 matches voor je genoemde huiddoel zijn ${names}. Open de producten hieronder voor de details en het gebruik.`,
-          `My best 1–2 matches for the skin concern you mentioned are ${names}. Open the products below for details and directions.`,
-          `Meine besten 1–2 Empfehlungen für dein genanntes Hautziel sind ${names}. Öffne die Produkte unten für Details und Anwendung.`
-        ),
-        actions: recommendations.map((item) => productAction(item, args.lang)),
+        actions: [bundleAction(bundle, args.lang)],
       };
     }
 
     return {
       reply: tr(
         args.lang,
-        "Wat is je belangrijkste huiddoel: droogte, gevoeligheid, puistjes, dofheid of huidveroudering? Dan kies ik direct 1–2 producten voor je.",
-        "What is your main skin concern: dryness, sensitivity, breakouts, dullness, or signs of ageing? Then I can pick 1–2 products directly.",
-        "Was ist dein wichtigstes Hautziel: Trockenheit, Empfindlichkeit, Unreinheiten, fahle Haut oder Hautalterung? Dann wähle ich direkt 1–2 Produkte aus."
+        "Wat is je huidtype of belangrijkste huidklacht? Bijvoorbeeld droog, gevoelig, vet, gecombineerd, normaal, puistjes, dofheid of huidveroudering. Dan kies ik de passende Simple Routine met twee producten.",
+        "What is your skin type or main skin concern? For example dry, sensitive, oily, combination, normal, breakouts, dullness, or signs of ageing. Then I will select the matching two-product Simple Routine.",
+        "Was ist dein Hauttyp oder dein wichtigstes Hautziel? Zum Beispiel trocken, empfindlich, fettig, Mischhaut, normal, Unreinheiten, fahle Haut oder Hautalterung. Dann wähle ich die passende Simple Routine mit zwei Produkten."
       ),
       actions: [],
-    };
-  }
-
-  if (
-    args.intent === "product_recommendation" &&
-    args.products.some((item) => item.id === "acne-spot-care") &&
-    args.products.length >= 2
-  ) {
-    const recommendations = args.products.slice(0, 2);
-    const names = recommendations.map((item) => `**${item.title}**`).join(" + ");
-    return {
-      reply: tr(
-        args.lang,
-        `Voor dit huidtype kies ik ${names}: gerichte verzorging voor puistjes plus een passende hydraterende stap.`,
-        `For this skin type, I recommend ${names}: targeted blemish care plus a suitable moisturizing step.`,
-        `Für diesen Hauttyp empfehle ich ${names}: gezielte Pflege bei Unreinheiten plus eine passende Feuchtigkeitspflege.`
-      ),
-      actions: recommendations.map((item) => productAction(item, args.lang)),
     };
   }
 
@@ -1676,8 +1651,19 @@ function deterministicFallback(args: {
     };
   }
 
+  if (args.intent === "product_recommendation") {
+    return {
+      reply: tr(
+        args.lang,
+        "Wat is je huidtype of belangrijkste huidklacht? Dan kies ik de passende Simple Routine met twee producten.",
+        "What is your skin type or main skin concern? Then I will select the matching two-product Simple Routine.",
+        "Was ist dein Hauttyp oder dein wichtigstes Hautziel? Dann wähle ich die passende Simple Routine mit zwei Produkten."
+      ),
+      actions: [],
+    };
+  }
+
   if (
-    args.intent === "product_recommendation" ||
     args.intent === "routine_recommendation" ||
     isExplicitQuizRequest(args.message) ||
     isPersonalRecommendationRequest(args.message)
@@ -1773,19 +1759,31 @@ export async function POST(req: Request) {
 
   let usedAI = false;
   let resolverUsed = false;
-  const directRecommendations = directProductRecommendations(message);
   const matchedProducts = deterministicProductMatches(message);
-  const deterministicProducts = directRecommendations.length
-    ? unique([...directRecommendations, ...matchedProducts]).slice(0, 2)
-    : matchedProducts;
-  const deterministicBundles = deterministicBundleMatches(message);
+  const limitedProductRequest = isLimitedProductRecommendationRequest(message);
+  const matchedSimpleRoutine = limitedProductRequest
+    ? simpleRoutineForMessage(message)
+    : null;
+  const deterministicProducts = limitedProductRequest ? [] : matchedProducts;
+  const deterministicBundles = matchedSimpleRoutine
+    ? [matchedSimpleRoutine]
+    : limitedProductRequest
+      ? []
+      : deterministicBundleMatches(message);
   let intent = inferIntent(message, deterministicProducts, deterministicBundles);
   let selectedProducts = deterministicProducts;
   let selectedBundles = deterministicBundles;
   let resolver: ResolverResult | null = null;
-  let acneMoisturizerFollowUp = false;
+  let simpleRoutineFollowUp = false;
 
-  const contextualFollowUp = isContextDependentFollowUp(message);
+  const latestAssistant = normalize(latestAssistantMessage(history));
+  const followsSimpleRoutineQuestion =
+    previousContext.intent === "product_recommendation" &&
+    /(huidtype|huidklacht|skin type|skin concern|hauttyp|hautziel|simple routine)/.test(
+      latestAssistant
+    );
+  const contextualFollowUp =
+    isContextDependentFollowUp(message) || followsSimpleRoutineQuestion;
 
   if (contextualFollowUp) {
     if (!selectedProducts.length) {
@@ -1816,20 +1814,14 @@ export async function POST(req: Request) {
       previousContext.intent
     );
 
-    const skinType = statedSkinType(message);
-    const followsAcneRecommendation =
-      previousContext.intent === "product_recommendation" &&
-      (previousContext.product_ids.includes("acne-spot-care") ||
-        selectedProducts.some((product) => product.id === "acne-spot-care"));
-    if (skinType && followsAcneRecommendation) {
-      const acneSpotCare = productsById.get("acne-spot-care");
-      const moisturizer = acneMoisturizerForSkinType(skinType);
-      selectedProducts = [acneSpotCare, moisturizer].filter(
-        (product): product is Product => Boolean(product)
-      );
-      selectedBundles = [];
+    const simpleRoutine = followsSimpleRoutineQuestion
+      ? simpleRoutineForMessage(message)
+      : null;
+    if (simpleRoutine) {
+      selectedProducts = [];
+      selectedBundles = [simpleRoutine];
       intent = "product_recommendation";
-      acneMoisturizerFollowUp = true;
+      simpleRoutineFollowUp = true;
     }
   }
 
@@ -1843,19 +1835,17 @@ export async function POST(req: Request) {
   ];
   const needsProductResolution =
     productLookupIntents.includes(intent) && !selectedProducts.length;
-  const needsRecommendationResolution =
-    intent === "product_recommendation" &&
-    isLimitedProductRecommendationRequest(message) &&
-    !selectedProducts.length;
   const needsBundleResolution =
     intent === "bundle_contents" && !selectedBundles.length;
   const incompleteComparison =
     intent === "comparison" && selectedProducts.length < 2;
   const unresolvedFollowUp =
-    contextualFollowUp && !selectedProducts.length && !selectedBundles.length;
+    contextualFollowUp &&
+    !followsSimpleRoutineQuestion &&
+    !selectedProducts.length &&
+    !selectedBundles.length;
   const shouldResolve =
     needsProductResolution ||
-    needsRecommendationResolution ||
     needsBundleResolution ||
     incompleteComparison ||
     unresolvedFollowUp;
@@ -1948,13 +1938,13 @@ export async function POST(req: Request) {
       selectedProducts,
       selectedBundles
     );
+    const selectedSimpleRoutine = selectedBundles.find(isSimpleRoutine);
     const answerForActions =
-      (isLimitedProductRecommendationRequest(message) || acneMoisturizerFollowUp) &&
-      selectedProducts.length
+      (limitedProductRequest || simpleRoutineFollowUp) && selectedSimpleRoutine
         ? {
             ...answer,
-            product_ids: selectedProducts.slice(0, 2).map((product) => product.id),
-            bundle_ids: [],
+            product_ids: [],
+            bundle_ids: [selectedSimpleRoutine.id],
           }
         : answer;
     const actions = buildActions(
@@ -1964,18 +1954,15 @@ export async function POST(req: Request) {
       lang,
       handoff
     );
-    const asksForAcneSkinType =
-      isLimitedProductRecommendationRequest(message) &&
-      hasAcneConcern(message) &&
-      !statedSkinType(message) &&
-      selectedProducts.some((product) => product.id === "acne-spot-care") &&
-      selectedProducts.length === 1;
-    const reply = asksForAcneSkinType
+    const needsSimpleRoutineDetails =
+      (limitedProductRequest || followsSimpleRoutineQuestion) &&
+      !selectedSimpleRoutine;
+    const reply = needsSimpleRoutineDetails
       ? tr(
           lang,
-          "Voor puistjes is Acne Spot Care de gerichte keuze. Welk huidtype heb je: droog, gevoelig, vet, gecombineerd of normaal? Dan kies ik de passende moisturiser erbij.",
-          "Acne Spot Care is the targeted choice for breakouts. Is your skin dry, sensitive, oily, combination, or normal? Then I will pair it with the right moisturizer.",
-          "Acne Spot Care ist die gezielte Wahl bei Unreinheiten. Ist deine Haut trocken, empfindlich, fettig, eine Mischhaut oder normal? Dann ergänze ich die passende Feuchtigkeitspflege."
+          "Wat is je huidtype of belangrijkste huidklacht? Bijvoorbeeld droog, gevoelig, vet, gecombineerd, normaal, puistjes, dofheid of huidveroudering. Dan kies ik de passende Simple Routine met twee producten.",
+          "What is your skin type or main skin concern? For example dry, sensitive, oily, combination, normal, breakouts, dullness, or signs of ageing. Then I will select the matching two-product Simple Routine.",
+          "Was ist dein Hauttyp oder dein wichtigstes Hautziel? Zum Beispiel trocken, empfindlich, fettig, Mischhaut, normal, Unreinheiten, fahle Haut oder Hautalterung. Dann wähle ich die passende Simple Routine mit zwei Produkten."
         )
       : ensureHandoffCopy(answer.reply, handoff, lang);
     return jsonResponse(
