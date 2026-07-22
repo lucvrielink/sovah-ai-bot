@@ -745,6 +745,7 @@ function isSimpleRoutine(bundle: Bundle): boolean {
 const ADD_ON_PRODUCT_IDS = new Set([
   "acne-spot-care",
   "aha-peeling-concentrate-exfoliating-face-serum",
+  "dark-spot-face-cream-kojic",
   "smoothing-eye-cream",
 ]);
 
@@ -759,6 +760,8 @@ function addOnForMessage(message: string): Product | null {
     productId = "acne-spot-care";
   } else if (/(oogzone|oogcontour|donkere kringen|wallen|eye area|eye contour|dark circles|puffiness|augenpartie|augenringe)/.test(text)) {
     productId = "smoothing-eye-cream";
+  } else if (/(donkere vlekken|donkere plekjes|pigmentvlekken|ongelijke teint|ophelderen|dark spots?|discoloration|uneven tone|brightening|hyperpigmentation|dunkle flecken|pigmentflecken|ungleichmassiger hautton|aufhellen)/.test(text)) {
+    productId = "dark-spot-face-cream-kojic";
   } else if (/(ruwe textuur|ongelijke textuur|grove porien|verstopte porien|doffe huid|rough texture|uneven texture|large pores|clogged pores|dull skin|raue hautstruktur|verstopfte poren|fahle haut)/.test(text)) {
     productId = "aha-peeling-concentrate-exfoliating-face-serum";
   }
@@ -779,7 +782,9 @@ function simpleRoutineReply(
       ? tr(lang, "voor plaatselijke puistjes", "for individual blemishes", "für einzelne Unreinheiten")
       : addOn.id === "smoothing-eye-cream"
         ? tr(lang, "voor de oogzone en donkere kringen", "for the eye area and dark circles", "für die Augenpartie und Augenringe")
-        : tr(lang, "voor textuur en dofheid", "for texture and dullness", "für Hautstruktur und fahle Haut")
+        : addOn.id === "dark-spot-face-cream-kojic"
+          ? tr(lang, "voor donkere vlekken en een egalere teint", "for dark spots and a more even tone", "für dunkle Flecken und einen gleichmäßigeren Hautton")
+          : tr(lang, "voor textuur en dofheid", "for texture and dullness", "für Hautstruktur und fahle Haut")
     : null;
 
   const addOnCopy =
