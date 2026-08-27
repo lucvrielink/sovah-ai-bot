@@ -28,6 +28,7 @@ type Product = {
   url: string;
   image?: string | null;
   variant_id?: number | null;
+  available_for_sale?: boolean;
   type?: string | null;
   routine_step?: string | null;
   volume_ml?: number | null;
@@ -153,6 +154,18 @@ type ChatAction =
       url: string;
       image?: string;
       price?: string;
+    }
+  | {
+      type: "PRODUCT_CARD";
+      title: string;
+      url: string;
+      image: string;
+      price?: string;
+      variantId?: number;
+      availableForSale: boolean;
+      viewLabel: string;
+      addToCartLabel: string;
+      soldOutLabel: string;
     };
 
 type ResolverResult = {
@@ -1309,14 +1322,21 @@ async function answerWithAI(args: {
 
 function productAction(product: Product, lang: Lang): ChatAction {
   return {
-    type: "OPEN_URL",
-    label: tr(
-      lang,
-      `Bekijk ${product.title}`,
-      `View ${product.title}`,
-      `${product.title} ansehen`
-    ),
+    type: "PRODUCT_CARD",
+    title: product.title,
     url: product.url,
+    image: product.image || "",
+    price: product.price || undefined,
+    variantId: product.variant_id || undefined,
+    availableForSale: product.available_for_sale !== false && Boolean(product.variant_id),
+    viewLabel: tr(lang, "Bekijk", "View", "Ansehen"),
+    addToCartLabel: tr(
+      lang,
+      "In winkelwagen",
+      "Add to cart",
+      "In den Warenkorb"
+    ),
+    soldOutLabel: tr(lang, "Uitverkocht", "Sold out", "Ausverkauft"),
   };
 }
 
