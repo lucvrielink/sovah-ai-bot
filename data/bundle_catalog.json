@@ -1,7 +1,7 @@
 {
-  "catalog_version": "2026-06-22-rich-v1",
+  "catalog_version": "2026-09-07-focused-routines-v1",
   "generated_from": "SOVAH active routines linked to product_catalog.json",
-  "last_verified": "2026-06-22",
+  "last_verified": "2026-09-07",
   "global_rules": {
     "product_catalog_is_source_of_truth": true,
     "edit_product_ids_not_generated_bundle_products": true,
@@ -24,19 +24,17 @@
         "Dry & Dehydrated Skin Routine"
       ],
       "type": "full_routine",
-      "target": "Dry, tight or dehydrated skin",
-      "price": "€144,95",
+      "target": "Dry, tight or dehydrated-feeling skin",
+      "price": "€89,95",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/dry-dehydrated-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Dry_Dehydrated_Skin_Routine_Skincare_Set_for_Dry_and_Dehydrated_Skin.png?v=1776108066",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-dry-skin-routine-3-step-texture.png?v=1788774738",
       "variant_id": 52332020433234,
       "routing_priority": 80,
       "product_ids": [
         "micellar-cleansing-water",
-        "hydrating-toner",
         "hydrating-face-serum",
-        "moisturising-day-face-cream",
-        "ceramide-barrier-night-cream"
+        "moisturising-day-face-cream"
       ],
       "bundle_products": [
         {
@@ -44,12 +42,6 @@
           "title": "Micellar Cleansing Water",
           "url": "https://sovahcare.com/products/micellar-cleansing-water",
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796"
-        },
-        {
-          "id": "hydrating-toner",
-          "title": "Hydrating Toner",
-          "url": "https://sovahcare.com/products/hydrating-toner",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Toner-fragrance-free-vegan.jpg?v=1775136707"
         },
         {
           "id": "hydrating-face-serum",
@@ -62,12 +54,6 @@
           "title": "Moisturising Day Face Cream with Hyaluronic Acid",
           "url": "https://sovahcare.com/products/moisturising-day-cream",
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Moisturising-Day-Cream-hyaluronic-moisturizer.jpg?v=1775136917"
-        },
-        {
-          "id": "ceramide-barrier-night-cream",
-          "title": "Ceramide Barrier Night Cream for Dry & Normal Skin",
-          "url": "https://sovahcare.com/products/ceramide-barrier-night-cream",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Ceramide-Barrier-Night-Cream-barrier-repair-moisturizer_54139ef5-7701-4007-afb4-adb7140f7dd7.jpg?v=1775136179"
         }
       ],
       "derived_certification_summary": {
@@ -146,17 +132,15 @@
       ],
       "type": "full_routine",
       "target": "Sensitive, reactive or easily irritated skin",
-      "price": "€144,95",
+      "price": "€79,95",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/sensitive-reactive-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Sensitive_Reactive_Skin_Routine_Soothing_Skincare_for_Sensitive_and_Reactive_Skin.png?v=1776108959",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-sensitive-skin-routine-3-step-texture-v2.png?v=1788774919",
       "variant_id": 52332074074450,
       "routing_priority": 85,
       "product_ids": [
         "micellar-cleansing-water",
         "hydrating-toner",
-        "hydrating-face-serum",
-        "calming-facial-oil",
         "ceramide-barrier-night-cream"
       ],
       "bundle_products": [
@@ -173,18 +157,6 @@
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Toner-fragrance-free-vegan.jpg?v=1775136707"
         },
         {
-          "id": "hydrating-face-serum",
-          "title": "Hydrating Face Serum with Aloe & Hyaluronic Acid",
-          "url": "https://sovahcare.com/products/hydrating-serum",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Serum-vegan-natural-certified.jpg?v=1775136609"
-        },
-        {
-          "id": "calming-facial-oil",
-          "title": "Calming Facial Oil",
-          "url": "https://sovahcare.com/products/calming-facial-oil",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Calming-Facial-Oil-nourishing-face-oil.jpg?v=1775135603"
-        },
-        {
           "id": "ceramide-barrier-night-cream",
           "title": "Ceramide Barrier Night Cream for Dry & Normal Skin",
           "url": "https://sovahcare.com/products/ceramide-barrier-night-cream",
@@ -194,7 +166,7 @@
       "derived_certification_summary": {
         "all_products_vegan": true,
         "all_products_gluten_free": true,
-        "all_products_nut_free": false,
+        "all_products_nut_free": true,
         "all_products_fragrance_free": false,
         "contains_fragrance_or_unverified_fragrance_status": true,
         "contains_manual_review_item": true
@@ -491,17 +463,16 @@
         "Glow & Radiance Routine"
       ],
       "type": "full_routine",
-      "target": "Dull, tired-looking or low-glow skin",
-      "price": "€124,95",
+      "target": "Dull or tired-looking skin",
+      "price": "€89,95",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/glow-radiance-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-dull-skin-routine-micellar-cleansing-water-vitamin-c-serum-antioxidant-ginkgo-gel-booster-moisturising-day-cream.png?v=1780325781",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-dull-skin-routine-3-step-texture.png?v=1788774730",
       "variant_id": 52332474302802,
       "routing_priority": 70,
       "product_ids": [
         "micellar-cleansing-water",
         "vitamin-c-serum",
-        "antioxidant-ginkgo-hydrating-gel-booster",
         "moisturising-day-face-cream"
       ],
       "bundle_products": [
@@ -516,12 +487,6 @@
           "title": "Vitamin C Serum",
           "url": "https://sovahcare.com/products/vitamin-c-serum",
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Vitamin-C-Serum-vegan-gluten-free-natural-certified_6292763e-027a-4de1-850b-3953b8983743.jpg?v=1775134504"
-        },
-        {
-          "id": "antioxidant-ginkgo-hydrating-gel-booster",
-          "title": "Antioxidant Ginkgo Hydrating Gel Booster",
-          "url": "https://sovahcare.com/products/antioxidant-ginkgo-gel-booster",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Antioxidant-Ginkgo-Gel-Booster-hydrating-gel-serum.jpg?v=1775135203"
         },
         {
           "id": "moisturising-day-face-cream",
@@ -607,19 +572,17 @@
         "Firm & Smooth Skin Routine"
       ],
       "type": "full_routine",
-      "target": "Aging skin, fine lines or loss of firmness",
-      "price": "€159,95",
+      "target": "Mature skin or skin showing early visible signs of ageing",
+      "price": "€94,95",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/firm-smooth-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Firm_Smooth_Skin_Routine_Firming_Anti-Aging_Skincare_for_Mature_Skin.png?v=1776108992",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-aging-skin-routine-3-step-texture.png?v=1788774764",
       "variant_id": 52332494487890,
       "routing_priority": 80,
       "product_ids": [
         "micellar-cleansing-water",
         "peptide-anti-aging-serum",
-        "collagen-boost-serum",
-        "anti-age-day-cream",
-        "ceramide-barrier-night-cream"
+        "anti-age-day-cream"
       ],
       "bundle_products": [
         {
@@ -635,22 +598,10 @@
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Peptide-Anti-Aging-Serum-vegan-natural-certified-gluten-free_b3d3c1a2-9748-4728-9c8d-31ef88dd41fc.jpg?v=1775137936"
         },
         {
-          "id": "collagen-boost-serum",
-          "title": "Collagen Boost Serum",
-          "url": "https://sovahcare.com/products/collagen-boost-serum",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Collagen-Boost-Serum-firming-hydrating-serum.jpg?v=1775136257"
-        },
-        {
           "id": "anti-age-day-cream",
           "title": "Anti-Age Day Cream",
           "url": "https://sovahcare.com/products/anti-age-day-cream",
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Anti-Age-Day-Cream-hyaluronic-acid-moisturizer.jpg?v=1775135005"
-        },
-        {
-          "id": "ceramide-barrier-night-cream",
-          "title": "Ceramide Barrier Night Cream for Dry & Normal Skin",
-          "url": "https://sovahcare.com/products/ceramide-barrier-night-cream",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Ceramide-Barrier-Night-Cream-barrier-repair-moisturizer_54139ef5-7701-4007-afb4-adb7140f7dd7.jpg?v=1775136179"
         }
       ],
       "derived_certification_summary": {
@@ -893,16 +844,16 @@
       "name": "Simple Sensitive Skin Routine",
       "old_names": [],
       "type": "simple_routine",
-      "target": "Sensitive skin, simple 2-step routine",
+      "target": "Sensitive-feeling skin that needs a minimal evening routine",
       "price": "€59,95",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/simple-sensitive-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-micellar-cleansing-water-niacinamide-gel-moisturiser-skincare-duo.png?v=1780324703",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-sensitive-routine-texture_7722fa04-0364-4f75-a580-7b8065300010.png?v=1788774758",
       "variant_id": 53486257340754,
       "routing_priority": 88,
       "product_ids": [
         "micellar-cleansing-water",
-        "niacinamide-gel-face-moisturiser"
+        "ceramide-barrier-night-cream"
       ],
       "bundle_products": [
         {
@@ -912,10 +863,10 @@
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796"
         },
         {
-          "id": "niacinamide-gel-face-moisturiser",
-          "title": "Niacinamide Gel Face Moisturiser",
-          "url": "https://sovahcare.com/products/niacinamide-gel-moisturiser-1",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Niacinamide-Gel-Moisturiser-vitamin-B3-moisturizer_d227899e-7edf-4a39-a992-ce94684179df.jpg?v=1775138791"
+          "id": "ceramide-barrier-night-cream",
+          "title": "Ceramide Barrier Night Cream for Dry & Normal Skin",
+          "url": "https://sovahcare.com/products/ceramide-barrier-night-cream",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Ceramide-Barrier-Night-Cream-barrier-repair-moisturizer_54139ef5-7701-4007-afb4-adb7140f7dd7.jpg?v=1775136179"
         }
       ],
       "derived_certification_summary": {
@@ -1090,16 +1041,16 @@
       "name": "Simple Combination Skin Routine",
       "old_names": [],
       "type": "simple_routine",
-      "target": "Combination skin, simple 2-step routine",
+      "target": "Combination skin with oilier and drier areas",
       "price": "€69,95",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/simple-combination-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-purifying-mousse-oil-free-hydrating-gel-skincare-duo.png?v=1780324287",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-combination-routine-texture-v2.png?v=1788774751",
       "variant_id": 53486266450258,
       "routing_priority": 72,
       "product_ids": [
         "purifying-mousse",
-        "oil-free-hydrating-gel-moisturizer"
+        "niacinamide-gel-face-moisturiser"
       ],
       "bundle_products": [
         {
@@ -1109,10 +1060,10 @@
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Purifying-Mousse-gluten-free-nut-free-vegan-natural-certified.jpg?v=1775137464"
         },
         {
-          "id": "oil-free-hydrating-gel-moisturizer",
-          "title": "Oil-Free Hydrating Gel Moisturizer",
-          "url": "https://sovahcare.com/products/oil-free-hydrating-gel",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Oil-Free-Hydrating-Gel-vegan-natural-certified.jpg?v=1775137249"
+          "id": "niacinamide-gel-face-moisturiser",
+          "title": "Niacinamide Gel Face Moisturiser",
+          "url": "https://sovahcare.com/products/niacinamide-gel-moisturiser-1",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Niacinamide-Gel-Moisturiser-vitamin-B3-moisturizer_d227899e-7edf-4a39-a992-ce94684179df.jpg?v=1775138791"
         }
       ],
       "derived_certification_summary": {
@@ -1294,16 +1245,16 @@
         "Simple Blemish Control Routine"
       ],
       "type": "simple_routine",
-      "target": "Acne or pimples, simple 2-step routine",
-      "price": "€69,95",
+      "target": "Blemish-prone skin that needs a focused cleansing and spot-care duo",
+      "price": "€59,95",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/simple-acne-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-purifying-mousse-niacinamide-gel-moisturiser-skincare-duo.png?v=1780323659",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-acne-routine-texture-v2.png?v=1788774772",
       "variant_id": 53486280114514,
       "routing_priority": 98,
       "product_ids": [
         "purifying-mousse",
-        "niacinamide-gel-face-moisturiser"
+        "acne-spot-care"
       ],
       "bundle_products": [
         {
@@ -1313,10 +1264,10 @@
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Purifying-Mousse-gluten-free-nut-free-vegan-natural-certified.jpg?v=1775137464"
         },
         {
-          "id": "niacinamide-gel-face-moisturiser",
-          "title": "Niacinamide Gel Face Moisturiser",
-          "url": "https://sovahcare.com/products/niacinamide-gel-moisturiser-1",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Niacinamide-Gel-Moisturiser-vitamin-B3-moisturizer_d227899e-7edf-4a39-a992-ce94684179df.jpg?v=1775138791"
+          "id": "acne-spot-care",
+          "title": "Acne Spot Care",
+          "url": "https://sovahcare.com/products/acne-spot-care",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Acne-Spot-Care-acne-treatment-blemish-care_718e95d2-b927-4adc-b551-15bebb4fce84.jpg?v=1775133667"
         }
       ],
       "derived_certification_summary": {
@@ -1411,23 +1362,23 @@
       "name": "Simple Dull Skin Routine",
       "old_names": [],
       "type": "simple_routine",
-      "target": "Dull or tired-looking skin, simple 2-step routine",
-      "price": "€59,95",
+      "target": "Dull-looking skin that needs a simple morning glow duo",
+      "price": "€69,95",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/simple-dull-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-micellar-cleansing-water-moisturising-day-cream-hydrating-skincare-duo.png?v=1780323397",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-dull-routine-texture-v2.png?v=1788774744",
       "variant_id": 53486284505426,
       "routing_priority": 68,
       "product_ids": [
-        "micellar-cleansing-water",
+        "vitamin-c-serum",
         "moisturising-day-face-cream"
       ],
       "bundle_products": [
         {
-          "id": "micellar-cleansing-water",
-          "title": "Micellar Cleansing Water",
-          "url": "https://sovahcare.com/products/micellar-cleansing-water",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796"
+          "id": "vitamin-c-serum",
+          "title": "Vitamin C Serum",
+          "url": "https://sovahcare.com/products/vitamin-c-serum",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Vitamin-C-Serum-vegan-gluten-free-natural-certified_6292763e-027a-4de1-850b-3953b8983743.jpg?v=1775134504"
         },
         {
           "id": "moisturising-day-face-cream",
@@ -1439,10 +1390,10 @@
       "derived_certification_summary": {
         "all_products_vegan": true,
         "all_products_gluten_free": true,
-        "all_products_nut_free": true,
+        "all_products_nut_free": false,
         "all_products_fragrance_free": false,
         "contains_fragrance_or_unverified_fragrance_status": true,
-        "contains_manual_review_item": true
+        "contains_manual_review_item": false
       },
       "ai_detection": {
         "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
@@ -1508,7 +1459,7 @@
       "safety": {
         "spf_included": false,
         "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": "This routine contains one or more products with a catalog verification conflict."
+        "manual_review_note": null
       }
     }
   ]
