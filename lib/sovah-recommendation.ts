@@ -322,16 +322,14 @@ const BUNDLES: Record<string, Bundle> = {
     url: "https://sovahcare.com/products/dry-dehydrated-skin-routine",
     variantId: 52332020433234,
     image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Dry_Dehydrated_Skin_Routine_Skincare_Set_for_Dry_and_Dehydrated_Skin.png?v=1776108066",
-    price: "€144,95",
+      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-dry-skin-routine-3-step-texture.png?v=1788774738",
+    price: "€89,95",
     description:
-      "A complete routine for dry, tight or dehydrated skin that needs hydration and comfort.",
+      "A focused three-step routine for dry, tight or dehydrated-feeling skin.",
     products: [
       PRODUCTS.micellar.title,
-      PRODUCTS.toner.title,
       PRODUCTS.hydratingSerum.title,
       PRODUCTS.dayCream.title,
-      PRODUCTS.nightCream.title,
     ],
   },
 
@@ -341,15 +339,13 @@ const BUNDLES: Record<string, Bundle> = {
     url: "https://sovahcare.com/products/sensitive-reactive-skin-routine",
     variantId: 52332074074450,
     image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Sensitive_Reactive_Skin_Routine_Soothing_Skincare_for_Sensitive_and_Reactive_Skin.png?v=1776108959",
-    price: "€144,95",
+      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-sensitive-skin-routine-3-step-texture-v2.png?v=1788774919",
+    price: "€79,95",
     description:
-      "A complete gentle routine for sensitive, reactive or easily irritated skin.",
+      "A restrained three-step evening routine for sensitive or easily reactive skin.",
     products: [
       PRODUCTS.micellar.title,
       PRODUCTS.toner.title,
-      PRODUCTS.hydratingSerum.title,
-      PRODUCTS.calmingOil.title,
       PRODUCTS.nightCream.title,
     ],
   },
@@ -394,14 +390,13 @@ const BUNDLES: Record<string, Bundle> = {
     url: "https://sovahcare.com/products/glow-radiance-routine",
     variantId: 52332474302802,
     image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-dull-skin-routine-micellar-cleansing-water-vitamin-c-serum-antioxidant-ginkgo-gel-booster-moisturising-day-cream.png?v=1780325781",
-    price: "€124,95",
+      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-dull-skin-routine-3-step-texture.png?v=1788774730",
+    price: "€89,95",
     description:
-      "A brightening routine for dull, tired-looking skin that needs more glow.",
+      "A focused three-step morning routine for a fresher, more radiant-looking complexion.",
     products: [
       PRODUCTS.micellar.title,
       PRODUCTS.vitaminC.title,
-      PRODUCTS.ginkgoBooster.title,
       PRODUCTS.dayCream.title,
     ],
   },
@@ -412,16 +407,14 @@ const BUNDLES: Record<string, Bundle> = {
     url: "https://sovahcare.com/products/firm-smooth-skin-routine",
     variantId: 52332494487890,
     image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH_Firm_Smooth_Skin_Routine_Firming_Anti-Aging_Skincare_for_Mature_Skin.png?v=1776108992",
-    price: "€159,95",
+      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-aging-skin-routine-3-step-texture.png?v=1788774764",
+    price: "€94,95",
     description:
-      "A complete routine for aging skin, fine lines and firmer-looking skin.",
+      "A focused three-step morning routine for hydration and smoother-looking skin.",
     products: [
       PRODUCTS.micellar.title,
       PRODUCTS.peptide.title,
-      PRODUCTS.collagen.title,
       PRODUCTS.antiAgeDayCream.title,
-      PRODUCTS.nightCream.title,
     ],
   },
 
@@ -461,11 +454,11 @@ const BUNDLES: Record<string, Bundle> = {
     url: "https://sovahcare.com/products/simple-sensitive-skin-routine",
     variantId: 53486257340754,
     image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-micellar-cleansing-water-niacinamide-gel-moisturiser-skincare-duo.png?v=1780324703",
+      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-sensitive-routine-texture_7722fa04-0364-4f75-a580-7b8065300010.png?v=1788774758",
     price: "€59,95",
     description:
-      "A simple two-product routine for sensitive skin that needs a gentle start.",
-    products: [PRODUCTS.micellar.title, PRODUCTS.niacinamide.title],
+      "A simple two-product evening routine for sensitive-feeling skin and barrier support.",
+    products: [PRODUCTS.micellar.title, PRODUCTS.nightCream.title],
   },
 
   simpleOily: {
@@ -487,11 +480,11 @@ const BUNDLES: Record<string, Bundle> = {
     url: "https://sovahcare.com/products/simple-combination-skin-routine",
     variantId: 53486266450258,
     image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-purifying-mousse-oil-free-hydrating-gel-skincare-duo.png?v=1780324287",
+      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-combination-routine-texture-v2.png?v=1788774751",
     price: "€69,95",
     description:
-      "A simple two-product routine for combination skin that needs a light, balanced start.",
-    products: [PRODUCTS.purifyingMousse.title, PRODUCTS.oilFreeGel.title],
+      "A simple two-product routine for combination skin with cleansing and lightweight moisture.",
+    products: [PRODUCTS.purifyingMousse.title, PRODUCTS.niacinamide.title],
   },
 
   simpleAging: {
@@ -513,11 +506,11 @@ const BUNDLES: Record<string, Bundle> = {
     url: "https://sovahcare.com/products/simple-acne-routine",
     variantId: 53486280114514,
     image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-purifying-mousse-niacinamide-gel-moisturiser-skincare-duo.png?v=1780323659",
-    price: "€69,95",
+      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-acne-routine-texture-v2.png?v=1788774772",
+    price: "€59,95",
     description:
-      "A simple two-product routine for acne-prone or blemish-prone skin.",
-    products: [PRODUCTS.purifyingMousse.title, PRODUCTS.niacinamide.title],
+      "A focused cleansing and spot-care duo for blemish-prone skin.",
+    products: [PRODUCTS.purifyingMousse.title, PRODUCTS.acneSpot.title],
   },
 
   simpleDull: {
@@ -526,11 +519,11 @@ const BUNDLES: Record<string, Bundle> = {
     url: "https://sovahcare.com/products/simple-dull-skin-routine",
     variantId: 53486284505426,
     image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-micellar-cleansing-water-moisturising-day-cream-hydrating-skincare-duo.png?v=1780323397",
-    price: "€59,95",
+      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-dull-routine-texture-v2.png?v=1788774744",
+    price: "€69,95",
     description:
-      "A simple two-product routine for dull or tired-looking skin that needs a basic glow-supporting start.",
-    products: [PRODUCTS.micellar.title, PRODUCTS.dayCream.title],
+      "A simple two-product morning duo for brighter-looking, hydrated skin.",
+    products: [PRODUCTS.vitaminC.title, PRODUCTS.dayCream.title],
   },
 };
 
