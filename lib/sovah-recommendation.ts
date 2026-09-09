@@ -1,3 +1,5 @@
+import bundleCatalogData from "../data/bundle_catalog.json";
+
 export type Lang = "nl" | "en";
 
 export type SkinType =
@@ -52,6 +54,7 @@ export type Bundle = {
   price: string;
   description: string;
   products: string[];
+  howToUse: Record<Lang, string>;
 };
 
 export type Addon = {
@@ -315,216 +318,62 @@ const PRODUCTS = {
   },
 } as const;
 
+type BundleCatalogEntry = {
+  id: string;
+  name: string;
+  url: string;
+  image?: string | null;
+  price?: string | null;
+  variant_id?: number | null;
+  bundle_products?: Array<{ title: string }>;
+  description?: Partial<Record<Lang, string>>;
+  how_to_use?: Partial<Record<Lang, string>>;
+};
+
+const bundleCatalogEntries = (
+  bundleCatalogData as { bundles: BundleCatalogEntry[] }
+).bundles;
+
+function bundleFromCatalog(id: string): Bundle {
+  const entry = bundleCatalogEntries.find((bundle) => bundle.id === id);
+  if (!entry) throw new Error(`Missing bundle catalog entry: ${id}`);
+  const handle = new URL(entry.url).pathname.split("/").filter(Boolean).pop();
+  if (!handle || !entry.variant_id || !entry.image || !entry.price) {
+    throw new Error(`Incomplete bundle catalog entry: ${id}`);
+  }
+  return {
+    name: entry.name,
+    handle,
+    url: entry.url,
+    variantId: entry.variant_id,
+    image: entry.image,
+    price: entry.price,
+    description: entry.description?.en || "",
+    products: (entry.bundle_products || []).map((product) => product.title),
+    howToUse: {
+      nl: entry.how_to_use?.nl || "",
+      en: entry.how_to_use?.en || "",
+    },
+  };
+}
+
 const BUNDLES: Record<string, Bundle> = {
-  dry: {
-    name: "Dry Skin Routine",
-    handle: "dry-dehydrated-skin-routine",
-    url: "https://sovahcare.com/products/dry-dehydrated-skin-routine",
-    variantId: 52332020433234,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-dry-skin-routine-3-step-texture.png?v=1788774738",
-    price: "€89,95",
-    description:
-      "A focused three-step routine for dry, tight or dehydrated-feeling skin.",
-    products: [
-      PRODUCTS.micellar.title,
-      PRODUCTS.hydratingSerum.title,
-      PRODUCTS.dayCream.title,
-    ],
-  },
-
-  sensitive: {
-    name: "Sensitive Skin Routine",
-    handle: "sensitive-reactive-skin-routine",
-    url: "https://sovahcare.com/products/sensitive-reactive-skin-routine",
-    variantId: 52332074074450,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-sensitive-skin-routine-3-step-texture-v2.png?v=1788774919",
-    price: "€79,95",
-    description:
-      "A restrained three-step evening routine for sensitive or easily reactive skin.",
-    products: [
-      PRODUCTS.micellar.title,
-      PRODUCTS.toner.title,
-      PRODUCTS.nightCream.title,
-    ],
-  },
-
-  acne: {
-    name: "Acne Skin Routine",
-    handle: "clear-balanced-skin-routine",
-    url: "https://sovahcare.com/products/clear-balanced-skin-routine",
-    variantId: 52332389204306,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-acne-routine-purifying-mousse-oil-free-hydrating-gel-acne-spot-care_a4fa3783-526d-4bd3-ae28-fbac40fb6a22.png?v=1780327241",
-    price: "€99,95",
-    description:
-      "A focused routine for acne-prone skin, breakouts, pimples and blemishes.",
-    products: [
-      PRODUCTS.purifyingMousse.title,
-      PRODUCTS.oilFreeGel.title,
-      PRODUCTS.acneSpot.title,
-    ],
-  },
-
-  combination: {
-    name: "Combination Skin Routine",
-    handle: "combination-skin-balance-routine",
-    url: "https://sovahcare.com/products/combination-skin-balance-routine",
-    variantId: 52332448809298,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-combination-skin-balance-routine-purifying-mousse-hydrating-toner-niacinamide-gel-moisturiser.png?v=1780325388",
-    price: "€89,95",
-    description:
-      "A balancing routine for combination skin with oilier and drier areas.",
-    products: [
-      PRODUCTS.purifyingMousse.title,
-      PRODUCTS.toner.title,
-      PRODUCTS.niacinamide.title,
-    ],
-  },
-
-  dull: {
-    name: "Dull Skin Routine",
-    handle: "glow-radiance-routine",
-    url: "https://sovahcare.com/products/glow-radiance-routine",
-    variantId: 52332474302802,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-dull-skin-routine-3-step-texture.png?v=1788774730",
-    price: "€89,95",
-    description:
-      "A focused three-step morning routine for a fresher, more radiant-looking complexion.",
-    products: [
-      PRODUCTS.micellar.title,
-      PRODUCTS.vitaminC.title,
-      PRODUCTS.dayCream.title,
-    ],
-  },
-
-  aging: {
-    name: "Aging Skin Routine",
-    handle: "firm-smooth-skin-routine",
-    url: "https://sovahcare.com/products/firm-smooth-skin-routine",
-    variantId: 52332494487890,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-aging-skin-routine-3-step-texture.png?v=1788774764",
-    price: "€94,95",
-    description:
-      "A focused three-step morning routine for hydration and smoother-looking skin.",
-    products: [
-      PRODUCTS.micellar.title,
-      PRODUCTS.peptide.title,
-      PRODUCTS.antiAgeDayCream.title,
-    ],
-  },
-
-  simpleNormal: {
-    name: "Simple Normal Skin Routine",
-    handle: "simple-daily-skincare-routine",
-    url: "https://sovahcare.com/products/simple-daily-skincare-routine",
-    variantId: 52332514246994,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-normal-routine-micellar-cleansing-water-moisturising-day-cream_030fa985-7455-4c86-b1d4-56ee017330eb.png?v=1780326580",
-    price: "€59,95",
-    description:
-      "A simple two-product routine for normal skin or beginners who want a basic start.",
-    products: [PRODUCTS.micellar.title, PRODUCTS.dayCream.title],
-  },
-
-  normal: {
-    name: "Normal Skin Routine",
-    handle: "normal-balanced-skin-routine",
-    url: "https://sovahcare.com/products/normal-balanced-skin-routine",
-    variantId: 52435433292114,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-normal-balanced-skin-routine-micellar-cleansing-water-hydrating-toner-niacinamide-gel-moisturiser.png?v=1780325164",
-    price: "€79,95",
-    description:
-      "A balanced daily routine for normal skin that wants simple daily support.",
-    products: [
-      PRODUCTS.micellar.title,
-      PRODUCTS.toner.title,
-      PRODUCTS.niacinamide.title,
-    ],
-  },
-
-  simpleSensitive: {
-    name: "Simple Sensitive Skin Routine",
-    handle: "simple-sensitive-skin-routine",
-    url: "https://sovahcare.com/products/simple-sensitive-skin-routine",
-    variantId: 53486257340754,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-sensitive-routine-texture_7722fa04-0364-4f75-a580-7b8065300010.png?v=1788774758",
-    price: "€59,95",
-    description:
-      "A simple two-product evening routine for sensitive-feeling skin and barrier support.",
-    products: [PRODUCTS.micellar.title, PRODUCTS.nightCream.title],
-  },
-
-  simpleOily: {
-    name: "Simple Oily Skin Routine",
-    handle: "simple-oily-skin-routine",
-    url: "https://sovahcare.com/products/simple-oily-skin-routine",
-    variantId: 53486265729362,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-purifying-mousse-oil-free-hydrating-gel-skincare-duo.png?v=1780324287",
-    price: "€69,95",
-    description:
-      "A simple two-product routine for oily or shiny skin that still needs lightweight hydration.",
-    products: [PRODUCTS.purifyingMousse.title, PRODUCTS.oilFreeGel.title],
-  },
-
-  simpleCombination: {
-    name: "Simple Combination Skin Routine",
-    handle: "simple-combination-skin-routine",
-    url: "https://sovahcare.com/products/simple-combination-skin-routine",
-    variantId: 53486266450258,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-combination-routine-texture-v2.png?v=1788774751",
-    price: "€69,95",
-    description:
-      "A simple two-product routine for combination skin with cleansing and lightweight moisture.",
-    products: [PRODUCTS.purifyingMousse.title, PRODUCTS.niacinamide.title],
-  },
-
-  simpleAging: {
-    name: "Simple Aging Skin Routine",
-    handle: "simple-aging-skin-routine",
-    url: "https://sovahcare.com/products/simple-aging-skin-routine",
-    variantId: 53486268186962,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-micellar-cleansing-water-anti-age-day-cream-skincare-duo.png?v=1780324041",
-    price: "€59,95",
-    description:
-      "A simple two-product routine for aging skin or early fine-line support.",
-    products: [PRODUCTS.micellar.title, PRODUCTS.antiAgeDayCream.title],
-  },
-
-  simpleAcne: {
-    name: "Simple Acne Routine",
-    handle: "simple-acne-routine",
-    url: "https://sovahcare.com/products/simple-acne-routine",
-    variantId: 53486280114514,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-acne-routine-texture-v2.png?v=1788774772",
-    price: "€59,95",
-    description:
-      "A focused cleansing and spot-care duo for blemish-prone skin.",
-    products: [PRODUCTS.purifyingMousse.title, PRODUCTS.acneSpot.title],
-  },
-
-  simpleDull: {
-    name: "Simple Dull Skin Routine",
-    handle: "simple-dull-skin-routine",
-    url: "https://sovahcare.com/products/simple-dull-skin-routine",
-    variantId: 53486284505426,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-dull-routine-texture-v2.png?v=1788774744",
-    price: "€69,95",
-    description:
-      "A simple two-product morning duo for brighter-looking, hydrated skin.",
-    products: [PRODUCTS.vitaminC.title, PRODUCTS.dayCream.title],
-  },
+  dry: bundleFromCatalog("dry-skin-routine"),
+  sensitive: bundleFromCatalog("sensitive-skin-routine"),
+  acne: bundleFromCatalog("acne-skin-routine"),
+  combination: bundleFromCatalog("combination-skin-routine"),
+  dull: bundleFromCatalog("dull-skin-routine"),
+  aging: bundleFromCatalog("aging-skin-routine"),
+  normal: bundleFromCatalog("normal-skin-routine"),
+  oily: bundleFromCatalog("oily-skin-routine"),
+  simpleNormal: bundleFromCatalog("simple-normal-skin-routine"),
+  simpleSensitive: bundleFromCatalog("simple-sensitive-skin-routine"),
+  simpleOily: bundleFromCatalog("simple-oily-skin-routine"),
+  simpleCombination: bundleFromCatalog("simple-combination-skin-routine"),
+  simpleAging: bundleFromCatalog("simple-aging-skin-routine"),
+  simpleAcne: bundleFromCatalog("simple-acne-routine"),
+  simpleDull: bundleFromCatalog("simple-dull-skin-routine"),
+  simpleDry: bundleFromCatalog("simple-dry-routine"),
 };
 
 const ADDONS: Record<string, Addon> = {
@@ -636,9 +485,6 @@ function chooseSimpleBundle(answers: QuizAnswers): Bundle {
   const { skinType, concern, goal, sensitivityLevel } = answers;
 
   if (concern === "breakouts") return BUNDLES.simpleAcne;
-  if (skinType === "combination") return BUNDLES.simpleCombination;
-  if (skinType === "oily") return BUNDLES.simpleOily;
-
   if (
     concern === "sensitivity" ||
     skinType === "sensitive" ||
@@ -646,6 +492,12 @@ function chooseSimpleBundle(answers: QuizAnswers): Bundle {
     goal === "calm"
   ) {
     return BUNDLES.simpleSensitive;
+  }
+
+  if (skinType === "combination") return BUNDLES.simpleCombination;
+  if (skinType === "oily") return BUNDLES.simpleOily;
+  if (concern === "dryness" || skinType === "dry" || goal === "hydration") {
+    return BUNDLES.simpleDry;
   }
 
   if (concern === "antiage" || goal === "firm") return BUNDLES.simpleAging;
@@ -692,7 +544,7 @@ function chooseFullBundle(answers: QuizAnswers): Bundle {
   }
 
   if (skinType === "combination") return BUNDLES.combination;
-  if (skinType === "oily") return BUNDLES.acne;
+  if (skinType === "oily") return BUNDLES.oily;
   if (skinType === "normal") return BUNDLES.normal;
 
   return BUNDLES.normal;
@@ -771,6 +623,8 @@ function getLocalizedReasonShort(lang: Lang, bundle: Bundle): string {
         return "Deze routine past het best bij fijne lijntjes, huidveroudering en een stevigere uitstraling.";
       case "Normal Skin Routine":
         return "Deze routine past het best bij een normale huid die dagelijkse balans zoekt.";
+      case "Oily Skin Routine":
+        return "Deze routine past het best bij een vette of snel glimmende huid.";
       case "Simple Normal Skin Routine":
         return "Deze routine past het best als je simpel wilt beginnen met normale huidverzorging.";
       case "Simple Sensitive Skin Routine":
@@ -785,6 +639,8 @@ function getLocalizedReasonShort(lang: Lang, bundle: Bundle): string {
         return "Deze routine past het best als je simpel wilt starten tegen puistjes en onzuiverheden.";
       case "Simple Dull Skin Routine":
         return "Deze routine past het best als je simpel wilt starten voor een frissere, minder doffe huid.";
+      case "Simple Dry Routine":
+        return "Deze routine past het best als je een eenvoudige start wilt voor een droge of trekkerige huid.";
       default:
         return "Deze routine past het best bij jouw antwoorden.";
     }
@@ -805,6 +661,8 @@ function getLocalizedReasonShort(lang: Lang, bundle: Bundle): string {
       return "This routine is the best match for fine lines, aging skin and firmer-looking skin.";
     case "Normal Skin Routine":
       return "This routine is the best match for normal skin that wants daily balance.";
+    case "Oily Skin Routine":
+      return "This routine is the best match for oily or quickly shiny skin.";
     case "Simple Normal Skin Routine":
       return "This routine is the best match if you want a simple start for normal skin.";
     case "Simple Sensitive Skin Routine":
@@ -819,6 +677,8 @@ function getLocalizedReasonShort(lang: Lang, bundle: Bundle): string {
       return "This routine is the best match if you want a simple start for pimples and blemishes.";
     case "Simple Dull Skin Routine":
       return "This routine is the best match if you want a simple start for fresher-looking, less dull skin.";
+    case "Simple Dry Routine":
+      return "This routine is the best match if you want a simple start for dry or tight-feeling skin.";
     default:
       return "This routine is the best match for your answers.";
   }
@@ -845,145 +705,18 @@ function getLocalizedSteps(
   bundle: Bundle,
   addon: Addon | null
 ): string[] {
-  const cleanserTitles: string[] = [
-    PRODUCTS.micellar.title,
-    PRODUCTS.purifyingMousse.title,
-  ];
-
-  const moisturizerTitles: string[] = [
-    PRODUCTS.dayCream.title,
-    PRODUCTS.oilFreeGel.title,
-    PRODUCTS.niacinamide.title,
-    PRODUCTS.antiAgeDayCream.title,
-  ];
-
-  const nonTreatmentTitles: string[] = [
-    PRODUCTS.micellar.title,
-    PRODUCTS.purifyingMousse.title,
-    PRODUCTS.toner.title,
-    PRODUCTS.dayCream.title,
-    PRODUCTS.nightCream.title,
-    PRODUCTS.oilFreeGel.title,
-    PRODUCTS.niacinamide.title,
-    PRODUCTS.antiAgeDayCream.title,
-  ];
-
-  const cleanser = bundle.products.find((product) =>
-    cleanserTitles.includes(product)
-  );
-
-  const toner = bundle.products.find(
-    (product) => product === PRODUCTS.toner.title
-  );
-
-  const treatmentProducts = bundle.products.filter(
-    (product) => !nonTreatmentTitles.includes(product)
-  );
-
-  const moisturizer = bundle.products.find((product) =>
-    moisturizerTitles.includes(product)
-  );
-
-  const nightCream = bundle.products.find(
-    (product) => product === PRODUCTS.nightCream.title
-  );
-
-  const steps: string[] = [];
-
-  if (lang === "nl") {
-    if (cleanser) {
-      steps.push(`Begin met ${cleanser} om je huid te reinigen.`);
-    }
-
-    if (toner) {
-      steps.push(`Gebruik daarna ${toner} als voorbereidende stap.`);
-    }
-
-    if (treatmentProducts.length > 0) {
-      steps.push(
-        `Breng daarna je gerichte verzorging aan: ${treatmentProducts.join(
-          ", "
-        )}.`
-      );
-    }
-
-    if (moisturizer) {
-      steps.push(`Sluit overdag af met ${moisturizer}.`);
-    }
-
-    if (nightCream) {
-      steps.push(`Gebruik in de avond ${nightCream} als laatste stap.`);
-    }
-
-    if (addon) {
-      if (addon.title === PRODUCTS.acneSpot.title) {
-        steps.push(
-          `Gebruik ${addon.title} alleen plaatselijk op puistjes of onzuivere zones.`
-        );
-      } else if (addon.title === PRODUCTS.aha.title) {
-        steps.push(
-          `Gebruik ${addon.title} rustig in de avond en bouw langzaam op.`
-        );
-      } else if (
-        addon.title === PRODUCTS.kojicCream.title ||
-        addon.title === PRODUCTS.kojicExfoliator.title
-      ) {
-        steps.push(
-          `Gebruik ${addon.title} als extra stap voor een egalere uitstraling.`
-        );
-      } else {
-        steps.push(
-          `Voeg ${addon.title} toe als extra stap waar je huid dat nodig heeft.`
-        );
-      }
-    }
-
-    return steps;
-  }
-
-  if (cleanser) {
-    steps.push(`Start with ${cleanser} to cleanse the skin.`);
-  }
-
-  if (toner) {
-    steps.push(`Follow with ${toner} as a prep step.`);
-  }
-
-  if (treatmentProducts.length > 0) {
-    steps.push(
-      `Then apply your targeted care: ${treatmentProducts.join(", ")}.`
-    );
-  }
-
-  if (moisturizer) {
-    steps.push(`Finish during the day with ${moisturizer}.`);
-  }
-
-  if (nightCream) {
-    steps.push(`Use ${nightCream} in the evening as your final step.`);
-  }
+  const steps = (bundle.howToUse[lang] || bundle.howToUse.en)
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
 
   if (addon) {
-    if (addon.title === PRODUCTS.acneSpot.title) {
-      steps.push(
-        `Use ${addon.title} only on targeted pimples or blemish-prone areas.`
-      );
-    } else if (addon.title === PRODUCTS.aha.title) {
-      steps.push(
-        `Use ${addon.title} carefully in the evening and build up slowly.`
-      );
-    } else if (
-      addon.title === PRODUCTS.kojicCream.title ||
-      addon.title === PRODUCTS.kojicExfoliator.title
-    ) {
-      steps.push(
-        `Use ${addon.title} as an extra step for a more even-looking complexion.`
-      );
-    } else {
-      steps.push(`Add ${addon.title} as an extra step where your skin needs it.`);
-    }
+    steps.push(
+      lang === "nl"
+        ? `Optionele extra stap: ${addon.title}. Volg altijd de gebruiksinstructies op de productpagina.`
+        : `Optional extra step: ${addon.title}. Always follow the directions on its product page.`
+    );
   }
-
   return steps;
 }
 

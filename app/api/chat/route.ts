@@ -106,6 +106,8 @@ type Bundle = {
   image?: string | null;
   variant_id?: number | null;
   routing_priority?: number;
+  description?: Partial<Record<Lang, string>>;
+  how_to_use?: Partial<Record<Lang, string>>;
   product_ids: string[];
   bundle_products?: Array<{
     id: string;
@@ -684,6 +686,7 @@ function isLimitedProductRecommendationRequest(message: string): boolean {
 }
 
 type SimpleRoutineTarget =
+  | "dry"
   | "normal"
   | "sensitive"
   | "oily"
@@ -715,10 +718,8 @@ function simpleRoutineTarget(message: string): SimpleRoutineTarget | null {
   if (/(normale huid|normal skin|normale haut|^normaal$|^normal$)/.test(text)) {
     return "normal";
   }
-  // There is no separate Simple Dry routine in the live catalog. The Simple
-  // Normal routine contains the cleanser and moisturiser intended for normal/dry skin.
   if (/(droge huid|hydratatie|vochtarme huid|diepe hydratatie|dry skin|hydration|deep hydration|dehydrated skin|trockene haut|feuchtigkeit|dehydrierte haut|^droog$|^dry$|^trocken$)/.test(text)) {
-    return "normal";
+    return "dry";
   }
   return null;
 }
@@ -727,6 +728,7 @@ function simpleRoutineForMessage(message: string): Bundle | null {
   const target = simpleRoutineTarget(message);
   if (!target) return null;
   const bundleIdByTarget: Record<SimpleRoutineTarget, string> = {
+    dry: "simple-dry-routine",
     normal: "simple-normal-skin-routine",
     sensitive: "simple-sensitive-skin-routine",
     oily: "simple-oily-skin-routine",
@@ -1105,6 +1107,8 @@ function publicBundleContext(bundle: Bundle, lang: Lang, intent: Intent) {
     target: bundle.target,
     price: bundle.price,
     url: bundle.url,
+    description: bundle.description?.[lang] || bundle.description?.en || bundle.target,
+    how_to_use: bundle.how_to_use?.[lang] || bundle.how_to_use?.en || "",
     product_ids: bundle.product_ids,
     products: products.map((product) => ({
       id: product.id,
@@ -1661,6 +1665,13 @@ function deterministicFallback(args: {
     const names = bundle.product_ids
       .map((id) => productsById.get(id)?.title)
       .filter((item): item is string => Boolean(item));
+    const howToUse = bundle.how_to_use?.[args.lang] || bundle.how_to_use?.en || "";
+    if (args.intent === "usage" && howToUse) {
+      return {
+        reply: `**${bundle.name}**\n\n${howToUse}`,
+        actions: [bundleAction(bundle, args.lang)],
+      };
+    }
     return {
       reply: tr(
         args.lang,

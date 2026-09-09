@@ -1,13 +1,14 @@
 {
-  "catalog_version": "2026-09-07-focused-routines-v1",
-  "generated_from": "SOVAH active routines linked to product_catalog.json",
-  "last_verified": "2026-09-07",
+  "catalog_version": "2026-09-09-shopify-routines-v2",
+  "generated_from": "Current active Shopify routines, variants, images and sovah metafields",
+  "last_verified": "2026-09-09",
   "global_rules": {
     "product_catalog_is_source_of_truth": true,
     "edit_product_ids_not_generated_bundle_products": true,
     "spf_must_never_be_included": true,
     "old_names_are_recognition_only": true,
-    "routine_certifications_must_be_derived_from_all_products": true
+    "routine_certifications_must_be_derived_from_all_products": true,
+    "patch_test_must_be_in_every_how_to_use": true
   },
   "global_ai_routing_rules": [
     "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly.",
@@ -18,221 +19,6 @@
   ],
   "bundles": [
     {
-      "id": "dry-skin-routine",
-      "name": "Dry Skin Routine",
-      "old_names": [
-        "Dry & Dehydrated Skin Routine"
-      ],
-      "type": "full_routine",
-      "target": "Dry, tight or dehydrated-feeling skin",
-      "price": "€89,95",
-      "currency": "EUR",
-      "url": "https://sovahcare.com/products/dry-dehydrated-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-dry-skin-routine-3-step-texture.png?v=1788774738",
-      "variant_id": 52332020433234,
-      "routing_priority": 80,
-      "product_ids": [
-        "micellar-cleansing-water",
-        "hydrating-face-serum",
-        "moisturising-day-face-cream"
-      ],
-      "bundle_products": [
-        {
-          "id": "micellar-cleansing-water",
-          "title": "Micellar Cleansing Water",
-          "url": "https://sovahcare.com/products/micellar-cleansing-water",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796"
-        },
-        {
-          "id": "hydrating-face-serum",
-          "title": "Hydrating Face Serum with Aloe & Hyaluronic Acid",
-          "url": "https://sovahcare.com/products/hydrating-serum",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Serum-vegan-natural-certified.jpg?v=1775136609"
-        },
-        {
-          "id": "moisturising-day-face-cream",
-          "title": "Moisturising Day Face Cream with Hyaluronic Acid",
-          "url": "https://sovahcare.com/products/moisturising-day-cream",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Moisturising-Day-Cream-hyaluronic-moisturizer.jpg?v=1775136917"
-        }
-      ],
-      "derived_certification_summary": {
-        "all_products_vegan": true,
-        "all_products_gluten_free": true,
-        "all_products_nut_free": true,
-        "all_products_fragrance_free": false,
-        "contains_fragrance_or_unverified_fragrance_status": true,
-        "contains_manual_review_item": true
-      },
-      "ai_detection": {
-        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
-        "quiz_route": [
-          "advanced routine",
-          "alles wat ik nodig heb",
-          "best routine",
-          "beste aanpak",
-          "beste routine",
-          "complete bundel",
-          "complete routine",
-          "complete set",
-          "complete skincare routine",
-          "dehydrated skin",
-          "droge huid",
-          "droge plekjes",
-          "droge wangen",
-          "droog na reinigen",
-          "dry patches",
-          "dry skin",
-          "everything I need",
-          "flaky skin",
-          "full routine",
-          "hele skincare routine",
-          "huid voelt strak",
-          "hydration routine",
-          "mijn huid trekt",
-          "rough skin",
-          "schilferige huid",
-          "skin lacks moisture",
-          "tight skin",
-          "trekkerige huid",
-          "uitgebreide routine",
-          "vochtarme huid",
-          "volledige routine",
-          "wat helpt tegen droge huid"
-        ],
-        "misspellings": [
-          "dorge huid",
-          "drie skin",
-          "droge huidd",
-          "drogehuid",
-          "droog huid",
-          "drooge huid",
-          "drry skin",
-          "schilferigehuid",
-          "trekkerig huid",
-          "vocht arme huid"
-        ],
-        "recognize_old_names_but_do_not_display_them": [
-          "Dry & Dehydrated Skin Routine"
-        ],
-        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
-        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
-      },
-      "safety": {
-        "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": "This routine contains one or more products with a catalog verification conflict."
-      }
-    },
-    {
-      "id": "sensitive-skin-routine",
-      "name": "Sensitive Skin Routine",
-      "old_names": [
-        "Sensitive & Reactive Skin Routine"
-      ],
-      "type": "full_routine",
-      "target": "Sensitive, reactive or easily irritated skin",
-      "price": "€79,95",
-      "currency": "EUR",
-      "url": "https://sovahcare.com/products/sensitive-reactive-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-sensitive-skin-routine-3-step-texture-v2.png?v=1788774919",
-      "variant_id": 52332074074450,
-      "routing_priority": 85,
-      "product_ids": [
-        "micellar-cleansing-water",
-        "hydrating-toner",
-        "ceramide-barrier-night-cream"
-      ],
-      "bundle_products": [
-        {
-          "id": "micellar-cleansing-water",
-          "title": "Micellar Cleansing Water",
-          "url": "https://sovahcare.com/products/micellar-cleansing-water",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796"
-        },
-        {
-          "id": "hydrating-toner",
-          "title": "Hydrating Toner",
-          "url": "https://sovahcare.com/products/hydrating-toner",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Toner-fragrance-free-vegan.jpg?v=1775136707"
-        },
-        {
-          "id": "ceramide-barrier-night-cream",
-          "title": "Ceramide Barrier Night Cream for Dry & Normal Skin",
-          "url": "https://sovahcare.com/products/ceramide-barrier-night-cream",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Ceramide-Barrier-Night-Cream-barrier-repair-moisturizer_54139ef5-7701-4007-afb4-adb7140f7dd7.jpg?v=1775136179"
-        }
-      ],
-      "derived_certification_summary": {
-        "all_products_vegan": true,
-        "all_products_gluten_free": true,
-        "all_products_nut_free": true,
-        "all_products_fragrance_free": false,
-        "contains_fragrance_or_unverified_fragrance_status": true,
-        "contains_manual_review_item": true
-      },
-      "ai_detection": {
-        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
-        "quiz_route": [
-          "advanced routine",
-          "alles wat ik nodig heb",
-          "best routine",
-          "beste aanpak",
-          "beste routine",
-          "brandend gevoel huid",
-          "calming routine",
-          "complete bundel",
-          "complete routine",
-          "complete set",
-          "complete skincare routine",
-          "easily irritated",
-          "everything I need",
-          "full routine",
-          "gentle routine",
-          "gevoelige huid",
-          "hele skincare routine",
-          "mijn huid prikt",
-          "milde routine",
-          "producten irriteren mijn huid",
-          "reactieve huid",
-          "reactive skin",
-          "red skin",
-          "redness",
-          "rode huid",
-          "roodheid",
-          "sensitive skin",
-          "skin burns",
-          "snel geïrriteerde huid",
-          "stinging skin",
-          "uitgebreide routine",
-          "volledige routine",
-          "zachte routine"
-        ],
-        "misspellings": [
-          "geirriteerde huid",
-          "gevoelige huidd",
-          "gevoeligehuid",
-          "iritated skin",
-          "mijn huid reageerd snel",
-          "reactiv skin",
-          "reaktieve huid",
-          "rednes",
-          "sensetive skin",
-          "senstive skin"
-        ],
-        "recognize_old_names_but_do_not_display_them": [
-          "Sensitive & Reactive Skin Routine"
-        ],
-        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
-        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
-      },
-      "safety": {
-        "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": "This routine contains one or more products with a catalog verification conflict."
-      }
-    },
-    {
       "id": "acne-skin-routine",
       "name": "Acne Skin Routine",
       "old_names": [
@@ -240,30 +26,32 @@
         "Acne Routine"
       ],
       "type": "full_routine",
-      "target": "Acne, blemishes, pimples or breakout-prone skin",
-      "price": "€99,95",
+      "target": "Een gerichte driestappenroutine voor een vette, verstopte en onzuivere huid, met lichte hydratatie en plaatselijke verzorging.",
+      "price": "€89,95",
+      "compare_at_price": "€104,85",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/clear-balanced-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-acne-routine-purifying-mousse-oil-free-hydrating-gel-acne-spot-care_a4fa3783-526d-4bd3-ae28-fbac40fb6a22.png?v=1780327241",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-full-acne-hero_be3145fa-42c0-4976-bda1-b141345a4565.png?v=1788799978",
+      "image_alt": "Acne Skin Routine SOVAH product set",
       "variant_id": 52332389204306,
       "routing_priority": 95,
       "product_ids": [
-        "purifying-mousse",
-        "oil-free-hydrating-gel-moisturizer",
+        "acne-purifying-face-wash",
+        "acne-care-moisturiser",
         "acne-spot-care"
       ],
       "bundle_products": [
         {
-          "id": "purifying-mousse",
-          "title": "Purifying Mousse",
-          "url": "https://sovahcare.com/products/purifying-mousse",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Purifying-Mousse-gluten-free-nut-free-vegan-natural-certified.jpg?v=1775137464"
+          "id": "acne-purifying-face-wash",
+          "title": "Acne Purifying Face Wash",
+          "url": "https://sovahcare.com/products/acne-purifying-face-wash",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/No2BhYsI9dGiw89kKKbqgINLtSpAUGBu.jpg?v=1788785914"
         },
         {
-          "id": "oil-free-hydrating-gel-moisturizer",
-          "title": "Oil-Free Hydrating Gel Moisturizer",
-          "url": "https://sovahcare.com/products/oil-free-hydrating-gel",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Oil-Free-Hydrating-Gel-vegan-natural-certified.jpg?v=1775137249"
+          "id": "acne-care-moisturiser",
+          "title": "Acne Care Moisturiser",
+          "url": "https://sovahcare.com/products/acne-care-moisturiser",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/8PDCQWPyUGwPqD1D1cdkLl7UU0Tv2ntW.jpg?v=1788791104"
         },
         {
           "id": "acne-spot-care",
@@ -272,6 +60,14 @@
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Acne-Spot-Care-acne-treatment-blemish-care_718e95d2-b927-4adc-b551-15bebb4fce84.jpg?v=1775133667"
         }
       ],
+      "description": {
+        "nl": "Een gerichte driestappenroutine voor een vette, verstopte en onzuivere huid, met lichte hydratatie en plaatselijke verzorging.",
+        "en": "A streamlined three-step routine for oily, congested and blemish-prone skin. It removes daily buildup, provides non-heavy hydration and adds targeted care where needed."
+      },
+      "how_to_use": {
+        "nl": "Ochtend\n1. Reinig met Acne Purifying Face Wash.\n2. Breng Acne Care Moisturiser aan.\n3. Sluit af met een aparte breedspectrum-SPF.\n\nAvond\n1. Reinig met Acne Purifying Face Wash.\n2. Breng Acne Care Moisturiser aan.\n3. Gebruik Acne Spot Care alleen plaatselijk op onzuiverheden volgens de productpagina.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning\n1. Cleanse with Acne Purifying Face Wash.\n2. Apply Acne Care Moisturiser.\n3. Finish with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse with Acne Purifying Face Wash.\n2. Apply Acne Care Moisturiser.\n3. Apply Acne Spot Care only to individual blemishes as directed.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
       "derived_certification_summary": {
         "all_products_vegan": true,
         "all_products_gluten_free": true,
@@ -322,7 +118,8 @@
           "verstopte poriën",
           "volledige routine",
           "wat helpt tegen acne",
-          "whiteheads"
+          "whiteheads",
+          "acne skin routine"
         ],
         "misspellings": [
           "acnee",
@@ -349,8 +146,134 @@
       },
       "safety": {
         "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": null
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
+      }
+    },
+    {
+      "id": "aging-skin-routine",
+      "name": "Aging Skin Routine",
+      "old_names": [
+        "Firm & Smooth Skin Routine"
+      ],
+      "type": "full_routine",
+      "target": "Een complete vierstappenroutine voor de huid met zichtbare tekenen van huidveroudering, droogte of verminderde stevigheid.",
+      "price": "€129,95",
+      "compare_at_price": "€149,80",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/firm-smooth-skin-routine",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-full-aging-hero_657054ba-bfcf-48a1-b3fe-0290c58ae478.png?v=1788799973",
+      "image_alt": "Aging Skin Routine SOVAH product set",
+      "variant_id": 52332494487890,
+      "routing_priority": 80,
+      "product_ids": [
+        "gentle-cleansing-milk",
+        "peptide-anti-aging-serum",
+        "anti-age-day-cream",
+        "collagen-anti-age-night-cream"
+      ],
+      "bundle_products": [
+        {
+          "id": "gentle-cleansing-milk",
+          "title": "Gentle Cleansing Milk",
+          "url": "https://sovahcare.com/products/gentle-cleansing-milk",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/pIGrJR_7RB9IsxNHzZ4J_d8gJYm9scfp.jpg?v=1788785104"
+        },
+        {
+          "id": "peptide-anti-aging-serum",
+          "title": "Peptide Anti-Aging Serum",
+          "url": "https://sovahcare.com/products/peptide-anti-aging-serum",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Peptide-Anti-Aging-Serum-vegan-natural-certified-gluten-free_b3d3c1a2-9748-4728-9c8d-31ef88dd41fc.jpg?v=1775137936"
+        },
+        {
+          "id": "anti-age-day-cream",
+          "title": "Anti-Age Day Cream",
+          "url": "https://sovahcare.com/products/anti-age-day-cream",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Anti-Age-Day-Cream-hyaluronic-acid-moisturizer.jpg?v=1775135005"
+        },
+        {
+          "id": "collagen-anti-age-night-cream",
+          "title": "Collagen Anti-Age Night Cream",
+          "url": "https://sovahcare.com/products/collagen-anti-age-night-cream",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/2qCPcuDpYZ1Qyg8hAmDdVvAYCbl3NR8E.jpg?v=1788791825"
+        }
+      ],
+      "description": {
+        "nl": "Een complete vierstappenroutine voor de huid met zichtbare tekenen van huidveroudering, droogte of verminderde stevigheid.",
+        "en": "A complete four-step routine for skin showing visible signs of ageing, such as fine lines, dryness and reduced firmness. It combines gentle cleansing with targeted peptide care and comforting day and night moisturisation."
+      },
+      "how_to_use": {
+        "nl": "Ochtend\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Peptide Anti-Aging Serum aan.\n3. Sluit af met Anti-Age Day Cream en daarna een aparte breedspectrum-SPF.\n\nAvond\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Peptide Anti-Aging Serum aan.\n3. Sluit af met Collagen Anti-Age Night Cream.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Peptide Anti-Aging Serum.\n3. Finish with Anti-Age Day Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Peptide Anti-Aging Serum.\n3. Finish with Collagen Anti-Age Night Cream.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
+      "derived_certification_summary": {
+        "all_products_vegan": false,
+        "all_products_gluten_free": false,
+        "all_products_nut_free": false,
+        "all_products_fragrance_free": false,
+        "contains_fragrance_or_unverified_fragrance_status": true,
+        "contains_manual_review_item": false
+      },
+      "ai_detection": {
+        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
+        "quiz_route": [
+          "advanced routine",
+          "aging skin",
+          "alles wat ik nodig heb",
+          "anti aging",
+          "anti rimpel",
+          "anti-aging",
+          "best routine",
+          "beste aanpak",
+          "beste routine",
+          "collagen routine",
+          "complete bundel",
+          "complete routine",
+          "complete set",
+          "complete skincare routine",
+          "everything I need",
+          "fijne lijntjes",
+          "fine lines",
+          "firming routine",
+          "first signs of aging",
+          "full routine",
+          "hele skincare routine",
+          "huidveroudering",
+          "loss of firmness",
+          "mature skin",
+          "minder stevige huid",
+          "peptide routine",
+          "rijpere huid",
+          "rimpels",
+          "uitgebreide routine",
+          "verstevigende routine",
+          "volledige routine",
+          "wrinkles",
+          "aging skin routine",
+          "rijpe huid"
+        ],
+        "misspellings": [
+          "ageing skin",
+          "anti ageing",
+          "anti agingg",
+          "antiage routine",
+          "fijne lijnjes",
+          "rijpere huidd",
+          "rijperehuid",
+          "rimpels routien",
+          "verstevigende routien",
+          "wrinkels"
+        ],
+        "recognize_old_names_but_do_not_display_them": [
+          "Firm & Smooth Skin Routine"
+        ],
+        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
+        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
+      },
+      "safety": {
+        "spf_included": false,
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
       }
     },
     {
@@ -360,42 +283,52 @@
         "Combination Skin Balance Routine"
       ],
       "type": "full_routine",
-      "target": "Combination skin with oily and dry areas",
-      "price": "€89,95",
+      "target": "Een gebalanceerde driestappenroutine voor een huid met een vettere T-zone en normale of drogere zones.",
+      "price": "€84,95",
+      "compare_at_price": "€94,85",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/combination-skin-balance-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-combination-skin-balance-routine-purifying-mousse-hydrating-toner-niacinamide-gel-moisturiser.png?v=1780325388",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-full-combination-hero_83887b50-29bc-4ecd-8f73-b04c96f3f56c.png?v=1788799974",
+      "image_alt": "Combination Skin Routine SOVAH product set",
       "variant_id": 52332448809298,
       "routing_priority": 75,
       "product_ids": [
-        "purifying-mousse",
-        "hydrating-toner",
-        "niacinamide-gel-face-moisturiser"
+        "clarifying-gel",
+        "purifying-toner",
+        "light-moisturising-day-cream"
       ],
       "bundle_products": [
         {
-          "id": "purifying-mousse",
-          "title": "Purifying Mousse",
-          "url": "https://sovahcare.com/products/purifying-mousse",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Purifying-Mousse-gluten-free-nut-free-vegan-natural-certified.jpg?v=1775137464"
+          "id": "clarifying-gel",
+          "title": "Clarifying Gel",
+          "url": "https://sovahcare.com/products/clarifying-gel",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/RXbZPfNSJ1g-KKJnqkrmCgaIXOzM_6Tj.jpg?v=1788785493"
         },
         {
-          "id": "hydrating-toner",
-          "title": "Hydrating Toner",
-          "url": "https://sovahcare.com/products/hydrating-toner",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Toner-fragrance-free-vegan.jpg?v=1775136707"
+          "id": "purifying-toner",
+          "title": "Purifying Toner",
+          "url": "https://sovahcare.com/products/purifying-toner",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/HBcyYbfEVPVO7ywhjIZy5SDBQJO-R3RZ.jpg?v=1788786153"
         },
         {
-          "id": "niacinamide-gel-face-moisturiser",
-          "title": "Niacinamide Gel Face Moisturiser",
-          "url": "https://sovahcare.com/products/niacinamide-gel-moisturiser-1",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Niacinamide-Gel-Moisturiser-vitamin-B3-moisturizer_d227899e-7edf-4a39-a992-ce94684179df.jpg?v=1775138791"
+          "id": "light-moisturising-day-cream",
+          "title": "Light Moisturising Day Cream",
+          "url": "https://sovahcare.com/products/light-moisturising-day-cream",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/Sl3cFTiZ9EICj_mCaWSbiyHQmkRuwhGz.jpg?v=1788786605"
         }
       ],
+      "description": {
+        "nl": "Een gebalanceerde driestappenroutine voor een huid met een vettere T-zone en normale of drogere zones.",
+        "en": "A balanced three-step routine for skin that feels oily through the T-zone but normal or dry elsewhere. It refreshes, refines and moisturises without a heavy finish."
+      },
+      "how_to_use": {
+        "nl": "Ochtend\n1. Reinig met Clarifying Gel.\n2. Breng Purifying Toner aan.\n3. Sluit af met Light Moisturising Day Cream en een aparte breedspectrum-SPF.\n\nAvond\nHerhaal dezelfde volgorde. Begin om de avond met de toner als je huid nog niet gewend is aan zuiverende producten.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning\n1. Cleanse with Clarifying Gel.\n2. Apply Purifying Toner.\n3. Finish with Light Moisturising Day Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\nRepeat the same order. Start Purifying Toner every other evening if your skin is new to clarifying products.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
       "derived_certification_summary": {
-        "all_products_vegan": true,
-        "all_products_gluten_free": true,
-        "all_products_nut_free": true,
+        "all_products_vegan": false,
+        "all_products_gluten_free": false,
+        "all_products_nut_free": false,
         "all_products_fragrance_free": false,
         "contains_fragrance_or_unverified_fragrance_status": true,
         "contains_manual_review_item": false
@@ -430,7 +363,8 @@
           "uitgebreide routine",
           "vette neus droge wangen",
           "vette t-zone",
-          "volledige routine"
+          "volledige routine",
+          "combination skin routine"
         ],
         "misspellings": [
           "combenatie huid",
@@ -452,8 +386,133 @@
       },
       "safety": {
         "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": null
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
+      }
+    },
+    {
+      "id": "dry-skin-routine",
+      "name": "Dry Skin Routine",
+      "old_names": [
+        "Dry & Dehydrated Skin Routine"
+      ],
+      "type": "full_routine",
+      "target": "Een comfortabele vierstappenroutine voor een droge, trekkerige of vochtarme huid, met aparte verzorging voor dag en nacht.",
+      "price": "€124,95",
+      "compare_at_price": "€144,80",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/dry-dehydrated-skin-routine",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-full-dry-hero_321b0df9-c873-4ed8-b8b6-33ebb582b0da.png?v=1788799984",
+      "image_alt": "Dry Skin Routine SOVAH product set",
+      "variant_id": 52332020433234,
+      "routing_priority": 80,
+      "product_ids": [
+        "gentle-cleansing-milk",
+        "hydrating-face-serum",
+        "moisturising-day-face-cream",
+        "ceramide-barrier-night-cream"
+      ],
+      "bundle_products": [
+        {
+          "id": "gentle-cleansing-milk",
+          "title": "Gentle Cleansing Milk",
+          "url": "https://sovahcare.com/products/gentle-cleansing-milk",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/pIGrJR_7RB9IsxNHzZ4J_d8gJYm9scfp.jpg?v=1788785104"
+        },
+        {
+          "id": "hydrating-face-serum",
+          "title": "Hydrating Face Serum with Aloe & Hyaluronic Acid",
+          "url": "https://sovahcare.com/products/hydrating-serum",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Serum-vegan-natural-certified.jpg?v=1775136609"
+        },
+        {
+          "id": "moisturising-day-face-cream",
+          "title": "Moisturising Day Face Cream with Hyaluronic Acid",
+          "url": "https://sovahcare.com/products/moisturising-day-cream",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Moisturising-Day-Cream-hyaluronic-moisturizer.jpg?v=1775136917"
+        },
+        {
+          "id": "ceramide-barrier-night-cream",
+          "title": "Ceramide Barrier Night Cream for Dry & Normal Skin",
+          "url": "https://sovahcare.com/products/ceramide-barrier-night-cream",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Ceramide-Barrier-Night-Cream-barrier-repair-moisturizer_54139ef5-7701-4007-afb4-adb7140f7dd7.jpg?v=1775136179"
+        }
+      ],
+      "description": {
+        "nl": "Een comfortabele vierstappenroutine voor een droge, trekkerige of vochtarme huid, met aparte verzorging voor dag en nacht.",
+        "en": "A comforting four-step routine for skin that feels dry, tight or dehydrated. It combines gentle cleansing, a hydrating serum and separate day and night moisturisers."
+      },
+      "how_to_use": {
+        "nl": "Ochtend\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Hydrating Serum aan.\n3. Sluit af met Moisturising Day Face Cream en een aparte breedspectrum-SPF.\n\nAvond\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Hydrating Serum aan.\n3. Sluit af met Ceramide Barrier Night Cream.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Hydrating Serum.\n3. Finish with Moisturising Day Face Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Hydrating Serum.\n3. Finish with Ceramide Barrier Night Cream.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
+      "derived_certification_summary": {
+        "all_products_vegan": false,
+        "all_products_gluten_free": false,
+        "all_products_nut_free": false,
+        "all_products_fragrance_free": false,
+        "contains_fragrance_or_unverified_fragrance_status": true,
+        "contains_manual_review_item": false
+      },
+      "ai_detection": {
+        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
+        "quiz_route": [
+          "advanced routine",
+          "alles wat ik nodig heb",
+          "best routine",
+          "beste aanpak",
+          "beste routine",
+          "complete bundel",
+          "complete routine",
+          "complete set",
+          "complete skincare routine",
+          "dehydrated skin",
+          "droge huid",
+          "droge plekjes",
+          "droge wangen",
+          "droog na reinigen",
+          "dry patches",
+          "dry skin",
+          "everything I need",
+          "flaky skin",
+          "full routine",
+          "hele skincare routine",
+          "huid voelt strak",
+          "hydration routine",
+          "mijn huid trekt",
+          "rough skin",
+          "schilferige huid",
+          "skin lacks moisture",
+          "tight skin",
+          "trekkerige huid",
+          "uitgebreide routine",
+          "vochtarme huid",
+          "volledige routine",
+          "wat helpt tegen droge huid",
+          "dry skin routine"
+        ],
+        "misspellings": [
+          "dorge huid",
+          "drie skin",
+          "droge huidd",
+          "drogehuid",
+          "droog huid",
+          "drooge huid",
+          "drry skin",
+          "schilferigehuid",
+          "trekkerig huid",
+          "vocht arme huid"
+        ],
+        "recognize_old_names_but_do_not_display_them": [
+          "Dry & Dehydrated Skin Routine"
+        ],
+        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
+        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
+      },
+      "safety": {
+        "spf_included": false,
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
       }
     },
     {
@@ -463,24 +522,26 @@
         "Glow & Radiance Routine"
       ],
       "type": "full_routine",
-      "target": "Dull or tired-looking skin",
-      "price": "€89,95",
+      "target": "Een gerichte driestappenroutine voor een vermoeid, dof of ongelijkmatig ogende huid.",
+      "price": "€94,95",
+      "compare_at_price": "€109,85",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/glow-radiance-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-dull-skin-routine-3-step-texture.png?v=1788774730",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-full-dull-hero_cd1812eb-4375-4606-b772-530a24620140.png?v=1788799976",
+      "image_alt": "Dull Skin Routine SOVAH product set",
       "variant_id": 52332474302802,
       "routing_priority": 70,
       "product_ids": [
-        "micellar-cleansing-water",
+        "radiant-glow-facial-wash",
         "vitamin-c-serum",
-        "moisturising-day-face-cream"
+        "niacinamide-gel-face-moisturiser"
       ],
       "bundle_products": [
         {
-          "id": "micellar-cleansing-water",
-          "title": "Micellar Cleansing Water",
-          "url": "https://sovahcare.com/products/micellar-cleansing-water",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796"
+          "id": "radiant-glow-facial-wash",
+          "title": "Radiant Glow Facial Wash",
+          "url": "https://sovahcare.com/products/radiant-glow-facial-wash",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/wQHJEkwHALggtZADi4n6gEFS4FXOzu1p.jpg?v=1788785733"
         },
         {
           "id": "vitamin-c-serum",
@@ -489,19 +550,27 @@
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Vitamin-C-Serum-vegan-gluten-free-natural-certified_6292763e-027a-4de1-850b-3953b8983743.jpg?v=1775134504"
         },
         {
-          "id": "moisturising-day-face-cream",
-          "title": "Moisturising Day Face Cream with Hyaluronic Acid",
-          "url": "https://sovahcare.com/products/moisturising-day-cream",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Moisturising-Day-Cream-hyaluronic-moisturizer.jpg?v=1775136917"
+          "id": "niacinamide-gel-face-moisturiser",
+          "title": "Niacinamide Gel Face Moisturiser",
+          "url": "https://sovahcare.com/products/niacinamide-gel-moisturiser-1",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Niacinamide-Gel-Moisturiser-vitamin-B3-moisturizer_d227899e-7edf-4a39-a992-ce94684179df.jpg?v=1775138791"
         }
       ],
+      "description": {
+        "nl": "Een gerichte driestappenroutine voor een vermoeid, dof of ongelijkmatig ogende huid.",
+        "en": "A focused three-step routine for skin that looks tired, uneven or lacking in radiance. It cleanses gently, adds antioxidant care and finishes with lightweight hydration."
+      },
+      "how_to_use": {
+        "nl": "Ochtend\n1. Reinig met Radiant Glow Facial Wash.\n2. Breng Vitamin C Serum aan.\n3. Sluit af met Niacinamide Gel Face Moisturiser en een aparte breedspectrum-SPF.\n\nAvond\nHerhaal dezelfde volgorde. Bouw Vitamin C Serum rustig op als je huid nog niet gewend is aan actieve huidverzorging.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning\n1. Cleanse with Radiant Glow Facial Wash.\n2. Apply Vitamin C Serum.\n3. Finish with Niacinamide Gel Face Moisturiser.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\nRepeat the same order. Introduce Vitamin C Serum gradually if your skin is new to active skincare.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
       "derived_certification_summary": {
         "all_products_vegan": true,
         "all_products_gluten_free": true,
         "all_products_nut_free": false,
         "all_products_fragrance_free": false,
         "contains_fragrance_or_unverified_fragrance_status": true,
-        "contains_manual_review_item": true
+        "contains_manual_review_item": false
       },
       "ai_detection": {
         "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
@@ -538,7 +607,9 @@
           "tired skin",
           "uitgebreide routine",
           "vermoeide huid",
-          "volledige routine"
+          "volledige routine",
+          "dull skin routine",
+          "radiance"
         ],
         "misspellings": [
           "brightning routine",
@@ -561,92 +632,532 @@
       },
       "safety": {
         "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": "This routine contains one or more products with a catalog verification conflict."
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
       }
     },
     {
-      "id": "aging-skin-routine",
-      "name": "Aging Skin Routine",
+      "id": "normal-skin-routine",
+      "name": "Normal Skin Routine",
       "old_names": [
-        "Firm & Smooth Skin Routine"
+        "Normal & Balanced Skin Routine"
       ],
       "type": "full_routine",
-      "target": "Mature skin or skin showing early visible signs of ageing",
-      "price": "€94,95",
+      "target": "Een gebalanceerde driestappenroutine voor de normale huid met milde reiniging, hydratatie en dagelijkse verzorging.",
+      "price": "€89,95",
+      "compare_at_price": "€104,85",
       "currency": "EUR",
-      "url": "https://sovahcare.com/products/firm-smooth-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-aging-skin-routine-3-step-texture.png?v=1788774764",
-      "variant_id": 52332494487890,
-      "routing_priority": 80,
+      "url": "https://sovahcare.com/products/normal-balanced-skin-routine",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-full-normal-hero_dd9554b8-be01-4934-893c-7655944dbe63.png?v=1788799982",
+      "image_alt": "Normal Skin Routine SOVAH product set",
+      "variant_id": 52435433292114,
+      "routing_priority": 55,
       "product_ids": [
-        "micellar-cleansing-water",
-        "peptide-anti-aging-serum",
-        "anti-age-day-cream"
+        "cleansing-foam",
+        "hydrating-face-serum",
+        "moisturising-day-face-cream"
       ],
       "bundle_products": [
         {
-          "id": "micellar-cleansing-water",
-          "title": "Micellar Cleansing Water",
-          "url": "https://sovahcare.com/products/micellar-cleansing-water",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796"
+          "id": "cleansing-foam",
+          "title": "Cleansing Foam",
+          "url": "https://sovahcare.com/products/cleansing-foam",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/0fz5ChxZ5mfwtN9rCpCBJg1hpK0oWrtL.jpg?v=1788784807"
         },
         {
-          "id": "peptide-anti-aging-serum",
-          "title": "Peptide Anti-Aging Serum",
-          "url": "https://sovahcare.com/products/peptide-anti-aging-serum",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Peptide-Anti-Aging-Serum-vegan-natural-certified-gluten-free_b3d3c1a2-9748-4728-9c8d-31ef88dd41fc.jpg?v=1775137936"
+          "id": "hydrating-face-serum",
+          "title": "Hydrating Face Serum with Aloe & Hyaluronic Acid",
+          "url": "https://sovahcare.com/products/hydrating-serum",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Serum-vegan-natural-certified.jpg?v=1775136609"
         },
         {
-          "id": "anti-age-day-cream",
-          "title": "Anti-Age Day Cream",
-          "url": "https://sovahcare.com/products/anti-age-day-cream",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Anti-Age-Day-Cream-hyaluronic-acid-moisturizer.jpg?v=1775135005"
+          "id": "moisturising-day-face-cream",
+          "title": "Moisturising Day Face Cream with Hyaluronic Acid",
+          "url": "https://sovahcare.com/products/moisturising-day-cream",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Moisturising-Day-Cream-hyaluronic-moisturizer.jpg?v=1775136917"
         }
       ],
+      "description": {
+        "nl": "Een gebalanceerde driestappenroutine voor de normale huid met milde reiniging, hydratatie en dagelijkse verzorging.",
+        "en": "A balanced three-step routine for normal skin that benefits from gentle cleansing, lasting hydration and comfortable daily moisture."
+      },
+      "how_to_use": {
+        "nl": "Ochtend\n1. Reinig met Cleansing Foam.\n2. Breng Hydrating Serum aan.\n3. Sluit af met Moisturising Day Face Cream en een aparte breedspectrum-SPF.\n\nAvond\nHerhaal dezelfde drie verzorgingsstappen.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning\n1. Cleanse with Cleansing Foam.\n2. Apply Hydrating Serum.\n3. Finish with Moisturising Day Face Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\nRepeat the same three skincare steps.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
       "derived_certification_summary": {
         "all_products_vegan": true,
         "all_products_gluten_free": true,
         "all_products_nut_free": true,
         "all_products_fragrance_free": false,
         "contains_fragrance_or_unverified_fragrance_status": true,
-        "contains_manual_review_item": true
+        "contains_manual_review_item": false
       },
       "ai_detection": {
         "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
         "quiz_route": [
           "advanced routine",
-          "aging skin",
           "alles wat ik nodig heb",
-          "anti aging",
-          "anti rimpel",
-          "anti-aging",
+          "balanced skin",
           "best routine",
           "beste aanpak",
           "beste routine",
-          "collagen routine",
           "complete bundel",
           "complete routine",
           "complete set",
           "complete skincare routine",
           "everything I need",
+          "full routine",
+          "gebalanceerde huid",
+          "geen groot huidprobleem",
+          "hele skincare routine",
+          "ik wil gewoon huidverzorging",
+          "mijn huid is normaal",
+          "normal skin",
+          "normale huid",
+          "uitgebreide routine",
+          "volledige routine",
+          "normal skin routine"
+        ],
+        "misspellings": [],
+        "recognize_old_names_but_do_not_display_them": [
+          "Normal & Balanced Skin Routine"
+        ],
+        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
+        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
+      },
+      "safety": {
+        "spf_included": false,
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
+      }
+    },
+    {
+      "id": "oily-skin-routine",
+      "name": "Oily Skin Routine",
+      "old_names": [],
+      "type": "full_routine",
+      "target": "Een frisse driestappenroutine voor een huid die snel glanst of vet aanvoelt, met lichte texturen.",
+      "price": "€84,95",
+      "compare_at_price": "€94,85",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/oily-skin-routine",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-full-oily-hero_04bcb176-93da-4c6f-b576-c5e5b1dda21d.png?v=1788799983",
+      "image_alt": "Oily Skin Routine SOVAH product set",
+      "variant_id": 54585427231058,
+      "routing_priority": 75,
+      "product_ids": [
+        "clarifying-gel",
+        "purifying-toner",
+        "oil-free-hydrating-gel-moisturizer"
+      ],
+      "bundle_products": [
+        {
+          "id": "clarifying-gel",
+          "title": "Clarifying Gel",
+          "url": "https://sovahcare.com/products/clarifying-gel",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/RXbZPfNSJ1g-KKJnqkrmCgaIXOzM_6Tj.jpg?v=1788785493"
+        },
+        {
+          "id": "purifying-toner",
+          "title": "Purifying Toner",
+          "url": "https://sovahcare.com/products/purifying-toner",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/HBcyYbfEVPVO7ywhjIZy5SDBQJO-R3RZ.jpg?v=1788786153"
+        },
+        {
+          "id": "oil-free-hydrating-gel-moisturizer",
+          "title": "Oil-Free Hydrating Gel Moisturizer",
+          "url": "https://sovahcare.com/products/oil-free-hydrating-gel",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Oil-Free-Hydrating-Gel-vegan-natural-certified.jpg?v=1775137249"
+        }
+      ],
+      "description": {
+        "nl": "Een frisse driestappenroutine voor een huid die snel glanst of vet aanvoelt, met lichte texturen.",
+        "en": "A fresh three-step routine for skin that becomes shiny quickly or feels oily throughout the day. It cleanses, refreshes and hydrates with lightweight textures."
+      },
+      "how_to_use": {
+        "nl": "Ochtend en avond\n1. Reinig met Clarifying Gel.\n2. Breng Purifying Toner aan.\n3. Breng Oil-Free Hydrating Gel Moisturizer aan.\n4. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning and evening\n1. Cleanse with Clarifying Gel.\n2. Apply Purifying Toner.\n3. Apply Oil-Free Hydrating Gel Moisturizer.\n4. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
+      "derived_certification_summary": {
+        "all_products_vegan": false,
+        "all_products_gluten_free": false,
+        "all_products_nut_free": false,
+        "all_products_fragrance_free": false,
+        "contains_fragrance_or_unverified_fragrance_status": true,
+        "contains_manual_review_item": false
+      },
+      "ai_detection": {
+        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
+        "quiz_route": [
+          "oily skin routine",
+          "vette huid",
+          "glimmende huid",
+          "oily skin",
+          "shine prone",
+          "complete routine",
+          "volledige routine",
+          "full routine"
+        ],
+        "recognize_old_names_but_do_not_display_them": []
+      },
+      "safety": {
+        "spf_included": false,
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
+      }
+    },
+    {
+      "id": "sensitive-skin-routine",
+      "name": "Sensitive Skin Routine",
+      "old_names": [
+        "Sensitive & Reactive Skin Routine"
+      ],
+      "type": "full_routine",
+      "target": "Een milde driestappenroutine voor een gevoelige of reactief aanvoelende huid, met verzorging voor dag en nacht.",
+      "price": "€104,95",
+      "compare_at_price": "€119,85",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/sensitive-reactive-skin-routine",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-full-sensitive-hero_ad6c55fa-d2a0-490c-a332-6efe9bc6252e.png?v=1788799980",
+      "image_alt": "Sensitive Skin Routine SOVAH product set",
+      "variant_id": 52332074074450,
+      "routing_priority": 85,
+      "product_ids": [
+        "sensitive-skin-oil-to-milk-cleanser",
+        "sensitive-skin-moisturiser-fragrance-free",
+        "sensitive-skin-overnight-cream-fragrance-free"
+      ],
+      "bundle_products": [
+        {
+          "id": "sensitive-skin-oil-to-milk-cleanser",
+          "title": "Sensitive Skin Oil-To-Milk Cleanser",
+          "url": "https://sovahcare.com/products/sensitive-skin-oil-to-milk-cleanser",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/ScG3LGfW8c5DmmlBMQ3at_uJapiwFJMS.jpg?v=1788785314"
+        },
+        {
+          "id": "sensitive-skin-moisturiser-fragrance-free",
+          "title": "Sensitive Skin Moisturiser, Fragrance Free",
+          "url": "https://sovahcare.com/products/sensitive-skin-moisturiser-fragrance-free",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/Bn-AOHMmaXxyurlmR4of5t-en1PKeFbO.jpg?v=1788787624"
+        },
+        {
+          "id": "sensitive-skin-overnight-cream-fragrance-free",
+          "title": "Sensitive Skin Overnight Cream, Fragrance Free",
+          "url": "https://sovahcare.com/products/sensitive-skin-overnight-cream-fragrance-free",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/rTibN5NTMMZQhfb9Ku00Vm-Y4UnnWXAj.jpg?v=1788792187"
+        }
+      ],
+      "description": {
+        "nl": "Een milde driestappenroutine voor een gevoelige of reactief aanvoelende huid, met verzorging voor dag en nacht.",
+        "en": "A gentle three-step routine created for sensitive, easily stressed or reactive-feeling skin. It combines comforting oil-to-milk cleansing with fragrance-free moisturisers for day and night."
+      },
+      "how_to_use": {
+        "nl": "Ochtend\n1. Masseer Sensitive Skin Oil-To-Milk Cleanser op een droge of vochtige huid.\n2. Voeg water toe, masseer tot de textuur melkachtig wordt en spoel af.\n3. Breng Sensitive Skin Moisturiser aan en sluit af met een aparte breedspectrum-SPF.\n\nAvond\n1. Reinig op dezelfde manier.\n2. Sluit af met Sensitive Skin Overnight Cream.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning\n1. Massage Sensitive Skin Oil-To-Milk Cleanser onto dry or damp skin.\n2. Add water, massage until it turns milky and rinse.\n3. Apply Sensitive Skin Moisturiser.\n4. Finish with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse in the same way.\n2. Finish with Sensitive Skin Overnight Cream.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
+      "derived_certification_summary": {
+        "all_products_vegan": false,
+        "all_products_gluten_free": false,
+        "all_products_nut_free": false,
+        "all_products_fragrance_free": false,
+        "contains_fragrance_or_unverified_fragrance_status": true,
+        "contains_manual_review_item": false
+      },
+      "ai_detection": {
+        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
+        "quiz_route": [
+          "advanced routine",
+          "alles wat ik nodig heb",
+          "best routine",
+          "beste aanpak",
+          "beste routine",
+          "brandend gevoel huid",
+          "calming routine",
+          "complete bundel",
+          "complete routine",
+          "complete set",
+          "complete skincare routine",
+          "easily irritated",
+          "everything I need",
+          "full routine",
+          "gentle routine",
+          "gevoelige huid",
+          "hele skincare routine",
+          "mijn huid prikt",
+          "milde routine",
+          "producten irriteren mijn huid",
+          "reactieve huid",
+          "reactive skin",
+          "red skin",
+          "redness",
+          "rode huid",
+          "roodheid",
+          "sensitive skin",
+          "skin burns",
+          "snel geïrriteerde huid",
+          "stinging skin",
+          "uitgebreide routine",
+          "volledige routine",
+          "zachte routine",
+          "sensitive skin routine"
+        ],
+        "misspellings": [
+          "geirriteerde huid",
+          "gevoelige huidd",
+          "gevoeligehuid",
+          "iritated skin",
+          "mijn huid reageerd snel",
+          "reactiv skin",
+          "reaktieve huid",
+          "rednes",
+          "sensetive skin",
+          "senstive skin"
+        ],
+        "recognize_old_names_but_do_not_display_them": [
+          "Sensitive & Reactive Skin Routine"
+        ],
+        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
+        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
+      },
+      "safety": {
+        "spf_included": false,
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
+      }
+    },
+    {
+      "id": "simple-acne-routine",
+      "name": "Simple Acne Routine",
+      "old_names": [
+        "Simple Blemish Control Routine"
+      ],
+      "type": "simple_routine",
+      "target": "Een gerichte tweestappenroutine voor een vette, verstopte en onzuivere huid.",
+      "price": "€64,95",
+      "compare_at_price": "€74,90",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/simple-acne-routine",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-acne-hero_9296f7a3-f7e9-4c0a-8871-ea7d3e25f4c7.png?v=1788800018",
+      "image_alt": "Simple Acne Routine SOVAH product duo",
+      "variant_id": 53486280114514,
+      "routing_priority": 98,
+      "product_ids": [
+        "acne-purifying-face-wash",
+        "acne-care-moisturiser"
+      ],
+      "bundle_products": [
+        {
+          "id": "acne-purifying-face-wash",
+          "title": "Acne Purifying Face Wash",
+          "url": "https://sovahcare.com/products/acne-purifying-face-wash",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/No2BhYsI9dGiw89kKKbqgINLtSpAUGBu.jpg?v=1788785914"
+        },
+        {
+          "id": "acne-care-moisturiser",
+          "title": "Acne Care Moisturiser",
+          "url": "https://sovahcare.com/products/acne-care-moisturiser",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/8PDCQWPyUGwPqD1D1cdkLl7UU0Tv2ntW.jpg?v=1788791104"
+        }
+      ],
+      "description": {
+        "nl": "Een gerichte tweestappenroutine voor een vette, verstopte en onzuivere huid.",
+        "en": "A focused two-step routine for oily, congested and blemish-prone skin. It cleanses daily buildup and restores lightweight moisture without unnecessary layers."
+      },
+      "how_to_use": {
+        "nl": "Ochtend en avond\n1. Reinig met Acne Purifying Face Wash.\n2. Breng Acne Care Moisturiser aan.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning and evening\n1. Cleanse with Acne Purifying Face Wash.\n2. Apply Acne Care Moisturiser.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
+      "derived_certification_summary": {
+        "all_products_vegan": true,
+        "all_products_gluten_free": true,
+        "all_products_nut_free": true,
+        "all_products_fragrance_free": false,
+        "contains_fragrance_or_unverified_fragrance_status": true,
+        "contains_manual_review_item": false
+      },
+      "ai_detection": {
+        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
+        "quiz_route": [
+          "2 stappen routine",
+          "2 step routine",
+          "acne",
+          "acne cream",
+          "acne creme",
+          "acne crème",
+          "basic routine",
+          "basis routine",
+          "beginner routine",
+          "blackheads",
+          "blemishes",
+          "breakout prone skin",
+          "breakouts",
+          "bultjes",
+          "chin acne",
+          "clogged pores",
+          "easy routine",
+          "forehead acne",
+          "ik heb acne",
+          "ik wil maar 2 producten",
+          "ik wil simpel beginnen",
+          "makkelijke routine",
+          "mee-eters",
+          "minimal routine",
+          "niet te veel producten",
+          "onzuivere huid",
+          "onzuiverheden",
+          "pimple routine",
+          "pimples",
+          "puistjes",
+          "puistjes op kin",
+          "quick routine",
+          "simpele routine",
+          "simple routine",
+          "snelle routine",
+          "spot treatment routine",
+          "spots",
+          "starter routine",
+          "startersroutine",
+          "twee stappen routine",
+          "two step routine",
+          "uitbraken",
+          "verstopte poriën",
+          "wat heb ik minimaal nodig",
+          "wat helpt tegen acne",
+          "weinig producten",
+          "whiteheads",
+          "simple acne routine",
+          "simple",
+          "eenvoudig",
+          "2 stappen",
+          "starter",
+          "minimal"
+        ],
+        "misspellings": [
+          "acnee",
+          "acneee",
+          "akne",
+          "aknee huid",
+          "blemishs",
+          "break outs",
+          "ik heb acnee",
+          "mee eters",
+          "onzuiverheiden",
+          "pimpls",
+          "puistjes huid",
+          "puistjeshuid",
+          "puitjes",
+          "verstopte porien"
+        ],
+        "recognize_old_names_but_do_not_display_them": [
+          "Simple Blemish Control Routine"
+        ],
+        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
+        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
+      },
+      "safety": {
+        "spf_included": false,
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
+      }
+    },
+    {
+      "id": "simple-aging-skin-routine",
+      "name": "Simple Aging Skin Routine",
+      "old_names": [],
+      "type": "simple_routine",
+      "target": "Een eenvoudige tweestappenroutine voor de huid met vroege tekenen van huidveroudering.",
+      "price": "€59,95",
+      "compare_at_price": "€69,90",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/simple-aging-skin-routine",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-aging-hero_ef688016-5abe-432a-84fa-a6a3475aa603.png?v=1788800015",
+      "image_alt": "Simple Aging Skin Routine SOVAH product duo",
+      "variant_id": 53486268186962,
+      "routing_priority": 78,
+      "product_ids": [
+        "gentle-cleansing-milk",
+        "peptide-ageless-am-pm-cream"
+      ],
+      "bundle_products": [
+        {
+          "id": "gentle-cleansing-milk",
+          "title": "Gentle Cleansing Milk",
+          "url": "https://sovahcare.com/products/gentle-cleansing-milk",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/pIGrJR_7RB9IsxNHzZ4J_d8gJYm9scfp.jpg?v=1788785104"
+        },
+        {
+          "id": "peptide-ageless-am-pm-cream",
+          "title": "Peptide Ageless AM/PM Cream",
+          "url": "https://sovahcare.com/products/peptide-ageless-am-pm-cream",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/x5KLzZi3kfv5rbw_ubBx2uIPpaKzQMz2.jpg?v=1788791408"
+        }
+      ],
+      "description": {
+        "nl": "Een eenvoudige tweestappenroutine voor de huid met vroege tekenen van huidveroudering.",
+        "en": "A simple two-step routine for skin showing early signs of ageing. Gentle cleansing and a peptide moisturiser make consistent morning and evening care easy."
+      },
+      "how_to_use": {
+        "nl": "Ochtend en avond\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Peptide Ageless AM/PM Cream aan op gezicht en hals.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning and evening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Peptide Ageless AM/PM Cream to the face and neck.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
+      "derived_certification_summary": {
+        "all_products_vegan": false,
+        "all_products_gluten_free": false,
+        "all_products_nut_free": false,
+        "all_products_fragrance_free": false,
+        "contains_fragrance_or_unverified_fragrance_status": true,
+        "contains_manual_review_item": false
+      },
+      "ai_detection": {
+        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
+        "quiz_route": [
+          "2 stappen routine",
+          "2 step routine",
+          "aging skin",
+          "anti aging",
+          "anti rimpel",
+          "anti-aging",
+          "basic routine",
+          "basis routine",
+          "beginner routine",
+          "collagen routine",
+          "easy routine",
           "fijne lijntjes",
           "fine lines",
           "firming routine",
           "first signs of aging",
-          "full routine",
-          "hele skincare routine",
           "huidveroudering",
+          "ik wil maar 2 producten",
+          "ik wil simpel beginnen",
           "loss of firmness",
+          "makkelijke routine",
           "mature skin",
           "minder stevige huid",
+          "minimal routine",
+          "niet te veel producten",
           "peptide routine",
+          "quick routine",
           "rijpere huid",
           "rimpels",
-          "uitgebreide routine",
+          "simpele routine",
+          "simple routine",
+          "snelle routine",
+          "starter routine",
+          "startersroutine",
+          "twee stappen routine",
+          "two step routine",
           "verstevigende routine",
-          "volledige routine",
-          "wrinkles"
+          "wat heb ik minimaal nodig",
+          "weinig producten",
+          "wrinkles",
+          "simple aging skin routine",
+          "rijpe huid",
+          "simple",
+          "eenvoudig",
+          "2 stappen",
+          "starter",
+          "minimal"
         ],
         "misspellings": [
           "ageing skin",
@@ -660,16 +1171,129 @@
           "verstevigende routien",
           "wrinkels"
         ],
-        "recognize_old_names_but_do_not_display_them": [
-          "Firm & Smooth Skin Routine"
-        ],
+        "recognize_old_names_but_do_not_display_them": [],
         "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
         "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
       },
       "safety": {
         "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": "This routine contains one or more products with a catalog verification conflict."
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
+      }
+    },
+    {
+      "id": "simple-combination-skin-routine",
+      "name": "Simple Combination Skin Routine",
+      "old_names": [],
+      "type": "simple_routine",
+      "target": "Een eenvoudige tweestappenroutine voor een gecombineerde huid met lichte hydratatie.",
+      "price": "€59,95",
+      "compare_at_price": "€69,90",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/simple-combination-skin-routine",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-combination-hero_0ddb9d01-20db-4ca5-8c03-a313f13e4af8.png?v=1788800021",
+      "image_alt": "Simple Combination Skin Routine SOVAH product duo",
+      "variant_id": 53486266450258,
+      "routing_priority": 72,
+      "product_ids": [
+        "clarifying-gel",
+        "light-moisturising-day-cream"
+      ],
+      "bundle_products": [
+        {
+          "id": "clarifying-gel",
+          "title": "Clarifying Gel",
+          "url": "https://sovahcare.com/products/clarifying-gel",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/RXbZPfNSJ1g-KKJnqkrmCgaIXOzM_6Tj.jpg?v=1788785493"
+        },
+        {
+          "id": "light-moisturising-day-cream",
+          "title": "Light Moisturising Day Cream",
+          "url": "https://sovahcare.com/products/light-moisturising-day-cream",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/Sl3cFTiZ9EICj_mCaWSbiyHQmkRuwhGz.jpg?v=1788786605"
+        }
+      ],
+      "description": {
+        "nl": "Een eenvoudige tweestappenroutine voor een gecombineerde huid met lichte hydratatie.",
+        "en": "A simple two-step routine for combination skin. It refreshes areas prone to shine while providing comfortable, lightweight moisture across the face."
+      },
+      "how_to_use": {
+        "nl": "Ochtend en avond\n1. Reinig met Clarifying Gel.\n2. Breng Light Moisturising Day Cream aan.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning and evening\n1. Cleanse with Clarifying Gel.\n2. Apply Light Moisturising Day Cream.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
+      "derived_certification_summary": {
+        "all_products_vegan": false,
+        "all_products_gluten_free": false,
+        "all_products_nut_free": false,
+        "all_products_fragrance_free": false,
+        "contains_fragrance_or_unverified_fragrance_status": true,
+        "contains_manual_review_item": false
+      },
+      "ai_detection": {
+        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
+        "quiz_route": [
+          "2 stappen routine",
+          "2 step routine",
+          "basic routine",
+          "basis routine",
+          "beginner routine",
+          "combinatiehuid",
+          "combination skin",
+          "deels vet deels droog",
+          "droge wangen",
+          "dry cheeks",
+          "easy routine",
+          "gecombineerde huid",
+          "gemengde huid",
+          "ik wil maar 2 producten",
+          "ik wil simpel beginnen",
+          "makkelijke routine",
+          "minimal routine",
+          "mixed skin",
+          "niet te veel producten",
+          "not fully oily not fully dry",
+          "oily t-zone",
+          "part oily part dry",
+          "quick routine",
+          "simpele routine",
+          "simple routine",
+          "skin is oily and dry",
+          "snelle routine",
+          "starter routine",
+          "startersroutine",
+          "twee stappen routine",
+          "two step routine",
+          "vette neus droge wangen",
+          "vette t-zone",
+          "wat heb ik minimaal nodig",
+          "weinig producten",
+          "simple combination skin routine",
+          "simple",
+          "eenvoudig",
+          "2 stappen",
+          "starter",
+          "minimal"
+        ],
+        "misspellings": [
+          "combenatie huid",
+          "combi skin",
+          "combinatie huid",
+          "combinatiehuidd",
+          "comby skin",
+          "gecombineerdehuid",
+          "gemengdehuid",
+          "kombinatie huid",
+          "mixed skinn",
+          "vette t zone"
+        ],
+        "recognize_old_names_but_do_not_display_them": [],
+        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
+        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
+      },
+      "safety": {
+        "spf_included": false,
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
       }
     },
     {
@@ -679,23 +1303,25 @@
         "Simple Daily Skincare Routine"
       ],
       "type": "simple_routine",
-      "target": "Normal skin, simple 2-step routine",
+      "target": "Een gebalanceerde tweestappenroutine met de dagelijkse basis voor een normale huid.",
       "price": "€59,95",
+      "compare_at_price": "€69,90",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/simple-daily-skincare-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-normal-routine-micellar-cleansing-water-moisturising-day-cream_030fa985-7455-4c86-b1d4-56ee017330eb.png?v=1780326580",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-normal-hero_63426440-cb84-46cd-b132-1954b0782df5.png?v=1788800024",
+      "image_alt": "Simple Normal Skin Routine SOVAH product duo",
       "variant_id": 52332514246994,
       "routing_priority": 60,
       "product_ids": [
-        "micellar-cleansing-water",
+        "cleansing-foam",
         "moisturising-day-face-cream"
       ],
       "bundle_products": [
         {
-          "id": "micellar-cleansing-water",
-          "title": "Micellar Cleansing Water",
-          "url": "https://sovahcare.com/products/micellar-cleansing-water",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796"
+          "id": "cleansing-foam",
+          "title": "Cleansing Foam",
+          "url": "https://sovahcare.com/products/cleansing-foam",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/0fz5ChxZ5mfwtN9rCpCBJg1hpK0oWrtL.jpg?v=1788784807"
         },
         {
           "id": "moisturising-day-face-cream",
@@ -704,13 +1330,21 @@
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Moisturising-Day-Cream-hyaluronic-moisturizer.jpg?v=1775136917"
         }
       ],
+      "description": {
+        "nl": "Een gebalanceerde tweestappenroutine met de dagelijkse basis voor een normale huid.",
+        "en": "A balanced two-step routine for normal skin. It covers the daily essentials with a gentle foam cleanse and comfortable moisturising cream."
+      },
+      "how_to_use": {
+        "nl": "Ochtend en avond\n1. Reinig met Cleansing Foam.\n2. Breng Moisturising Day Face Cream aan.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning and evening\n1. Cleanse with Cleansing Foam.\n2. Apply Moisturising Day Face Cream.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
       "derived_certification_summary": {
         "all_products_vegan": true,
         "all_products_gluten_free": true,
         "all_products_nut_free": true,
         "all_products_fragrance_free": false,
         "contains_fragrance_or_unverified_fragrance_status": true,
-        "contains_manual_review_item": true
+        "contains_manual_review_item": false
       },
       "ai_detection": {
         "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
@@ -739,7 +1373,13 @@
           "twee stappen routine",
           "two step routine",
           "wat heb ik minimaal nodig",
-          "weinig producten"
+          "weinig producten",
+          "simple normal skin routine",
+          "simple",
+          "eenvoudig",
+          "2 stappen",
+          "starter",
+          "minimal"
         ],
         "misspellings": [],
         "recognize_old_names_but_do_not_display_them": [
@@ -750,41 +1390,105 @@
       },
       "safety": {
         "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": "This routine contains one or more products with a catalog verification conflict."
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
       }
     },
     {
-      "id": "normal-skin-routine",
-      "name": "Normal Skin Routine",
-      "old_names": [
-        "Normal & Balanced Skin Routine"
-      ],
-      "type": "full_routine",
-      "target": "Normal or balanced skin",
-      "price": "€79,95",
+      "id": "simple-dry-routine",
+      "name": "Simple Dry Routine",
+      "old_names": [],
+      "type": "simple_routine",
+      "target": "Een comfortabele tweestappenroutine voor een droge of trekkerig aanvoelende huid.",
+      "price": "€59,95",
+      "compare_at_price": "€69,90",
       "currency": "EUR",
-      "url": "https://sovahcare.com/products/normal-balanced-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-normal-balanced-skin-routine-micellar-cleansing-water-hydrating-toner-niacinamide-gel-moisturiser.png?v=1780325164",
-      "variant_id": 52435433292114,
-      "routing_priority": 55,
+      "url": "https://sovahcare.com/products/simple-dry-routine",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-dry-hero_3d9d7b5b-47b5-4e13-9703-341be38937c8.png?v=1788800027",
+      "image_alt": "Simple Dry Skin Routine SOVAH product duo",
+      "variant_id": 54585112428882,
+      "routing_priority": 75,
       "product_ids": [
-        "micellar-cleansing-water",
-        "hydrating-toner",
+        "gentle-cleansing-milk",
+        "nourishing-rich-cream-fragrance-free"
+      ],
+      "bundle_products": [
+        {
+          "id": "gentle-cleansing-milk",
+          "title": "Gentle Cleansing Milk",
+          "url": "https://sovahcare.com/products/gentle-cleansing-milk",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/pIGrJR_7RB9IsxNHzZ4J_d8gJYm9scfp.jpg?v=1788785104"
+        },
+        {
+          "id": "nourishing-rich-cream-fragrance-free",
+          "title": "Nourishing Rich Cream, Fragrance Free",
+          "url": "https://sovahcare.com/products/nourishing-rich-cream-fragrance-free",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/IHQZhKJpppy6HmExiRmatbgEzzFo7EPE.jpg?v=1788788374"
+        }
+      ],
+      "description": {
+        "nl": "Een comfortabele tweestappenroutine voor een droge of trekkerig aanvoelende huid.",
+        "en": "A comforting two-step routine for dry or tight-feeling skin. Creamy cleansing is followed by a richer fragrance-free moisturiser to help maintain softness and comfort."
+      },
+      "how_to_use": {
+        "nl": "Ochtend en avond\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Nourishing Rich Cream aan op gezicht en hals.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning and evening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Nourishing Rich Cream to the face and neck.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
+      "derived_certification_summary": {
+        "all_products_vegan": false,
+        "all_products_gluten_free": false,
+        "all_products_nut_free": false,
+        "all_products_fragrance_free": false,
+        "contains_fragrance_or_unverified_fragrance_status": true,
+        "contains_manual_review_item": false
+      },
+      "ai_detection": {
+        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
+        "quiz_route": [
+          "simple dry routine",
+          "droge huid",
+          "trekkerige huid",
+          "vochtarme huid",
+          "dry skin",
+          "dehydrated skin",
+          "simple",
+          "eenvoudig",
+          "2 stappen",
+          "starter",
+          "minimal"
+        ],
+        "recognize_old_names_but_do_not_display_them": []
+      },
+      "safety": {
+        "spf_included": false,
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
+      }
+    },
+    {
+      "id": "simple-dull-skin-routine",
+      "name": "Simple Dull Skin Routine",
+      "old_names": [],
+      "type": "simple_routine",
+      "target": "Een verhelderende tweestappenroutine voor een vermoeid of dof ogende huid.",
+      "price": "€64,95",
+      "compare_at_price": "€74,90",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/simple-dull-skin-routine",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-dull-hero_e55c48d5-adcb-4b06-b5d3-316d82891b51.png?v=1788800017",
+      "image_alt": "Simple Dull Skin Routine SOVAH product duo",
+      "variant_id": 53486284505426,
+      "routing_priority": 68,
+      "product_ids": [
+        "radiant-glow-facial-wash",
         "niacinamide-gel-face-moisturiser"
       ],
       "bundle_products": [
         {
-          "id": "micellar-cleansing-water",
-          "title": "Micellar Cleansing Water",
-          "url": "https://sovahcare.com/products/micellar-cleansing-water",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796"
-        },
-        {
-          "id": "hydrating-toner",
-          "title": "Hydrating Toner",
-          "url": "https://sovahcare.com/products/hydrating-toner",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Hydrating-Toner-fragrance-free-vegan.jpg?v=1775136707"
+          "id": "radiant-glow-facial-wash",
+          "title": "Radiant Glow Facial Wash",
+          "url": "https://sovahcare.com/products/radiant-glow-facial-wash",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/wQHJEkwHALggtZADi4n6gEFS4FXOzu1p.jpg?v=1788785733"
         },
         {
           "id": "niacinamide-gel-face-moisturiser",
@@ -793,89 +1497,21 @@
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Niacinamide-Gel-Moisturiser-vitamin-B3-moisturizer_d227899e-7edf-4a39-a992-ce94684179df.jpg?v=1775138791"
         }
       ],
+      "description": {
+        "nl": "Een verhelderende tweestappenroutine voor een vermoeid of dof ogende huid.",
+        "en": "A brightening two-step routine for skin that looks tired or lacks freshness. It combines a radiance-focused cleanser with lightweight niacinamide hydration."
+      },
+      "how_to_use": {
+        "nl": "Ochtend en avond\n1. Reinig met Radiant Glow Facial Wash.\n2. Breng Niacinamide Gel Face Moisturiser aan.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning and evening\n1. Cleanse with Radiant Glow Facial Wash.\n2. Apply Niacinamide Gel Face Moisturiser.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
       "derived_certification_summary": {
         "all_products_vegan": true,
         "all_products_gluten_free": true,
         "all_products_nut_free": true,
         "all_products_fragrance_free": false,
         "contains_fragrance_or_unverified_fragrance_status": true,
-        "contains_manual_review_item": true
-      },
-      "ai_detection": {
-        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
-        "quiz_route": [
-          "advanced routine",
-          "alles wat ik nodig heb",
-          "balanced skin",
-          "best routine",
-          "beste aanpak",
-          "beste routine",
-          "complete bundel",
-          "complete routine",
-          "complete set",
-          "complete skincare routine",
-          "everything I need",
-          "full routine",
-          "gebalanceerde huid",
-          "geen groot huidprobleem",
-          "hele skincare routine",
-          "ik wil gewoon huidverzorging",
-          "mijn huid is normaal",
-          "normal skin",
-          "normale huid",
-          "uitgebreide routine",
-          "volledige routine"
-        ],
-        "misspellings": [],
-        "recognize_old_names_but_do_not_display_them": [
-          "Normal & Balanced Skin Routine"
-        ],
-        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
-        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
-      },
-      "safety": {
-        "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": "This routine contains one or more products with a catalog verification conflict."
-      }
-    },
-    {
-      "id": "simple-sensitive-skin-routine",
-      "name": "Simple Sensitive Skin Routine",
-      "old_names": [],
-      "type": "simple_routine",
-      "target": "Sensitive-feeling skin that needs a minimal evening routine",
-      "price": "€59,95",
-      "currency": "EUR",
-      "url": "https://sovahcare.com/products/simple-sensitive-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-sensitive-routine-texture_7722fa04-0364-4f75-a580-7b8065300010.png?v=1788774758",
-      "variant_id": 53486257340754,
-      "routing_priority": 88,
-      "product_ids": [
-        "micellar-cleansing-water",
-        "ceramide-barrier-night-cream"
-      ],
-      "bundle_products": [
-        {
-          "id": "micellar-cleansing-water",
-          "title": "Micellar Cleansing Water",
-          "url": "https://sovahcare.com/products/micellar-cleansing-water",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796"
-        },
-        {
-          "id": "ceramide-barrier-night-cream",
-          "title": "Ceramide Barrier Night Cream for Dry & Normal Skin",
-          "url": "https://sovahcare.com/products/ceramide-barrier-night-cream",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Ceramide-Barrier-Night-Cream-barrier-repair-moisturizer_54139ef5-7701-4007-afb4-adb7140f7dd7.jpg?v=1775136179"
-        }
-      ],
-      "derived_certification_summary": {
-        "all_products_vegan": true,
-        "all_products_gluten_free": true,
-        "all_products_nut_free": true,
-        "all_products_fragrance_free": false,
-        "contains_fragrance_or_unverified_fragrance_status": true,
-        "contains_manual_review_item": true
+        "contains_manual_review_item": false
       },
       "ai_detection": {
         "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
@@ -885,53 +1521,61 @@
           "basic routine",
           "basis routine",
           "beginner routine",
-          "brandend gevoel huid",
-          "calming routine",
-          "easily irritated",
+          "brightening routine",
+          "doffe huid",
+          "dull skin",
           "easy routine",
-          "gentle routine",
-          "gevoelige huid",
+          "fletse huid",
+          "frisse huid",
+          "gezonde glow",
+          "glow routine",
+          "grauwe huid",
+          "grey skin",
+          "huid mist glans",
+          "huid ziet moe uit",
           "ik wil maar 2 producten",
           "ik wil simpel beginnen",
+          "lack of glow",
+          "lifeless skin",
           "makkelijke routine",
-          "mijn huid prikt",
-          "milde routine",
+          "meer glow",
           "minimal routine",
           "niet te veel producten",
-          "producten irriteren mijn huid",
           "quick routine",
-          "reactieve huid",
-          "reactive skin",
-          "red skin",
-          "redness",
-          "rode huid",
-          "roodheid",
-          "sensitive skin",
+          "radiant skin",
           "simpele routine",
           "simple routine",
-          "skin burns",
-          "snel geïrriteerde huid",
+          "skin looks flat",
+          "skin looks tired",
           "snelle routine",
           "starter routine",
           "startersroutine",
-          "stinging skin",
+          "tired skin",
           "twee stappen routine",
           "two step routine",
+          "vermoeide huid",
           "wat heb ik minimaal nodig",
           "weinig producten",
-          "zachte routine"
+          "simple dull skin routine",
+          "radiance",
+          "simple",
+          "eenvoudig",
+          "2 stappen",
+          "starter",
+          "minimal"
         ],
         "misspellings": [
-          "geirriteerde huid",
-          "gevoelige huidd",
-          "gevoeligehuid",
-          "iritated skin",
-          "mijn huid reageerd snel",
-          "reactiv skin",
-          "reaktieve huid",
-          "rednes",
-          "sensetive skin",
-          "senstive skin"
+          "brightning routine",
+          "dofe huid",
+          "doffe huidd",
+          "doffehuid",
+          "dul skin",
+          "glow routien",
+          "lack of glwo",
+          "meer gloow",
+          "meer glwo",
+          "tierd skin",
+          "vermoeidehuid"
         ],
         "recognize_old_names_but_do_not_display_them": [],
         "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
@@ -939,8 +1583,8 @@
       },
       "safety": {
         "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": "This routine contains one or more products with a catalog verification conflict."
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
       }
     },
     {
@@ -948,23 +1592,25 @@
       "name": "Simple Oily Skin Routine",
       "old_names": [],
       "type": "simple_routine",
-      "target": "Oily skin, simple 2-step routine",
-      "price": "€69,95",
+      "target": "Een frisse tweestappenroutine voor een vette en glimmende huid.",
+      "price": "€59,95",
+      "compare_at_price": "€69,90",
       "currency": "EUR",
       "url": "https://sovahcare.com/products/simple-oily-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-purifying-mousse-oil-free-hydrating-gel-skincare-duo.png?v=1780324287",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-oily-hero_acb1a5fd-9ec7-415d-a92c-59a7e10c6495.png?v=1788800022",
+      "image_alt": "Simple Oily Skin Routine SOVAH product duo",
       "variant_id": 53486265729362,
       "routing_priority": 76,
       "product_ids": [
-        "purifying-mousse",
+        "clarifying-gel",
         "oil-free-hydrating-gel-moisturizer"
       ],
       "bundle_products": [
         {
-          "id": "purifying-mousse",
-          "title": "Purifying Mousse",
-          "url": "https://sovahcare.com/products/purifying-mousse",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Purifying-Mousse-gluten-free-nut-free-vegan-natural-certified.jpg?v=1775137464"
+          "id": "clarifying-gel",
+          "title": "Clarifying Gel",
+          "url": "https://sovahcare.com/products/clarifying-gel",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/RXbZPfNSJ1g-KKJnqkrmCgaIXOzM_6Tj.jpg?v=1788785493"
         },
         {
           "id": "oil-free-hydrating-gel-moisturizer",
@@ -973,6 +1619,14 @@
           "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Oil-Free-Hydrating-Gel-vegan-natural-certified.jpg?v=1775137249"
         }
       ],
+      "description": {
+        "nl": "Een frisse tweestappenroutine voor een vette en glimmende huid.",
+        "en": "A fresh two-step routine for oily and shine-prone skin. It removes daily buildup and follows with oil-free hydration so skin feels clean, balanced and comfortable."
+      },
+      "how_to_use": {
+        "nl": "Ochtend en avond\n1. Reinig met Clarifying Gel.\n2. Breng Oil-Free Hydrating Gel Moisturizer aan.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning and evening\n1. Cleanse with Clarifying Gel.\n2. Apply Oil-Free Hydrating Gel Moisturizer.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
       "derived_certification_summary": {
         "all_products_vegan": true,
         "all_products_gluten_free": true,
@@ -1015,7 +1669,14 @@
           "vette huid",
           "vette t-zone",
           "wat heb ik minimaal nodig",
-          "weinig producten"
+          "weinig producten",
+          "simple oily skin routine",
+          "shine prone",
+          "simple",
+          "eenvoudig",
+          "2 stappen",
+          "starter",
+          "minimal"
         ],
         "misspellings": [
           "glimmendehuid",
@@ -1032,364 +1693,53 @@
       },
       "safety": {
         "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": null
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
       }
     },
     {
-      "id": "simple-combination-skin-routine",
-      "name": "Simple Combination Skin Routine",
+      "id": "simple-sensitive-skin-routine",
+      "name": "Simple Sensitive Skin Routine",
       "old_names": [],
       "type": "simple_routine",
-      "target": "Combination skin with oilier and drier areas",
+      "target": "Een milde tweestappenroutine voor een gevoelige of reactief aanvoelende huid.",
       "price": "€69,95",
+      "compare_at_price": "€79,90",
       "currency": "EUR",
-      "url": "https://sovahcare.com/products/simple-combination-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-combination-routine-texture-v2.png?v=1788774751",
-      "variant_id": 53486266450258,
-      "routing_priority": 72,
+      "url": "https://sovahcare.com/products/simple-sensitive-skin-routine",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-sensitive-hero_74cb0468-1d7f-4230-b902-fe57d4490825.png?v=1788800025",
+      "image_alt": "Simple Sensitive Skin Routine SOVAH product duo",
+      "variant_id": 53486257340754,
+      "routing_priority": 88,
       "product_ids": [
-        "purifying-mousse",
-        "niacinamide-gel-face-moisturiser"
+        "sensitive-skin-oil-to-milk-cleanser",
+        "sensitive-skin-moisturiser-fragrance-free"
       ],
       "bundle_products": [
         {
-          "id": "purifying-mousse",
-          "title": "Purifying Mousse",
-          "url": "https://sovahcare.com/products/purifying-mousse",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Purifying-Mousse-gluten-free-nut-free-vegan-natural-certified.jpg?v=1775137464"
+          "id": "sensitive-skin-oil-to-milk-cleanser",
+          "title": "Sensitive Skin Oil-To-Milk Cleanser",
+          "url": "https://sovahcare.com/products/sensitive-skin-oil-to-milk-cleanser",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/ScG3LGfW8c5DmmlBMQ3at_uJapiwFJMS.jpg?v=1788785314"
         },
         {
-          "id": "niacinamide-gel-face-moisturiser",
-          "title": "Niacinamide Gel Face Moisturiser",
-          "url": "https://sovahcare.com/products/niacinamide-gel-moisturiser-1",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Niacinamide-Gel-Moisturiser-vitamin-B3-moisturizer_d227899e-7edf-4a39-a992-ce94684179df.jpg?v=1775138791"
+          "id": "sensitive-skin-moisturiser-fragrance-free",
+          "title": "Sensitive Skin Moisturiser, Fragrance Free",
+          "url": "https://sovahcare.com/products/sensitive-skin-moisturiser-fragrance-free",
+          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/Bn-AOHMmaXxyurlmR4of5t-en1PKeFbO.jpg?v=1788787624"
         }
       ],
+      "description": {
+        "nl": "Een milde tweestappenroutine voor een gevoelige of reactief aanvoelende huid.",
+        "en": "A gentle two-step routine for sensitive, easily stressed or reactive-feeling skin. It pairs an oil-to-milk cleanser designed for sensitive-feeling skin with a fragrance-free daily moisturiser."
+      },
+      "how_to_use": {
+        "nl": "Ochtend en avond\n1. Masseer Sensitive Skin Oil-To-Milk Cleanser op een droge of vochtige huid.\n2. Voeg water toe, masseer tot de textuur melkachtig wordt en spoel af.\n3. Breng Sensitive Skin Moisturiser aan.\n4. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
+        "en": "Morning and evening\n1. Massage Sensitive Skin Oil-To-Milk Cleanser onto dry or damp skin.\n2. Add water, massage until it turns milky and rinse.\n3. Apply Sensitive Skin Moisturiser.\n4. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+      },
       "derived_certification_summary": {
-        "all_products_vegan": true,
-        "all_products_gluten_free": true,
-        "all_products_nut_free": true,
-        "all_products_fragrance_free": false,
-        "contains_fragrance_or_unverified_fragrance_status": true,
-        "contains_manual_review_item": false
-      },
-      "ai_detection": {
-        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
-        "quiz_route": [
-          "2 stappen routine",
-          "2 step routine",
-          "basic routine",
-          "basis routine",
-          "beginner routine",
-          "combinatiehuid",
-          "combination skin",
-          "deels vet deels droog",
-          "droge wangen",
-          "dry cheeks",
-          "easy routine",
-          "gecombineerde huid",
-          "gemengde huid",
-          "ik wil maar 2 producten",
-          "ik wil simpel beginnen",
-          "makkelijke routine",
-          "minimal routine",
-          "mixed skin",
-          "niet te veel producten",
-          "not fully oily not fully dry",
-          "oily t-zone",
-          "part oily part dry",
-          "quick routine",
-          "simpele routine",
-          "simple routine",
-          "skin is oily and dry",
-          "snelle routine",
-          "starter routine",
-          "startersroutine",
-          "twee stappen routine",
-          "two step routine",
-          "vette neus droge wangen",
-          "vette t-zone",
-          "wat heb ik minimaal nodig",
-          "weinig producten"
-        ],
-        "misspellings": [
-          "combenatie huid",
-          "combi skin",
-          "combinatie huid",
-          "combinatiehuidd",
-          "comby skin",
-          "gecombineerdehuid",
-          "gemengdehuid",
-          "kombinatie huid",
-          "mixed skinn",
-          "vette t zone"
-        ],
-        "recognize_old_names_but_do_not_display_them": [],
-        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
-        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
-      },
-      "safety": {
-        "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": null
-      }
-    },
-    {
-      "id": "simple-aging-skin-routine",
-      "name": "Simple Aging Skin Routine",
-      "old_names": [],
-      "type": "simple_routine",
-      "target": "Aging skin, simple 2-step routine",
-      "price": "€59,95",
-      "currency": "EUR",
-      "url": "https://sovahcare.com/products/simple-aging-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-micellar-cleansing-water-anti-age-day-cream-skincare-duo.png?v=1780324041",
-      "variant_id": 53486268186962,
-      "routing_priority": 78,
-      "product_ids": [
-        "micellar-cleansing-water",
-        "anti-age-day-cream"
-      ],
-      "bundle_products": [
-        {
-          "id": "micellar-cleansing-water",
-          "title": "Micellar Cleansing Water",
-          "url": "https://sovahcare.com/products/micellar-cleansing-water",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Micellar-Cleansing-Water-vegan-organic-certified.jpg?v=1775136796"
-        },
-        {
-          "id": "anti-age-day-cream",
-          "title": "Anti-Age Day Cream",
-          "url": "https://sovahcare.com/products/anti-age-day-cream",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Anti-Age-Day-Cream-hyaluronic-acid-moisturizer.jpg?v=1775135005"
-        }
-      ],
-      "derived_certification_summary": {
-        "all_products_vegan": true,
-        "all_products_gluten_free": true,
-        "all_products_nut_free": true,
-        "all_products_fragrance_free": false,
-        "contains_fragrance_or_unverified_fragrance_status": true,
-        "contains_manual_review_item": true
-      },
-      "ai_detection": {
-        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
-        "quiz_route": [
-          "2 stappen routine",
-          "2 step routine",
-          "aging skin",
-          "anti aging",
-          "anti rimpel",
-          "anti-aging",
-          "basic routine",
-          "basis routine",
-          "beginner routine",
-          "collagen routine",
-          "easy routine",
-          "fijne lijntjes",
-          "fine lines",
-          "firming routine",
-          "first signs of aging",
-          "huidveroudering",
-          "ik wil maar 2 producten",
-          "ik wil simpel beginnen",
-          "loss of firmness",
-          "makkelijke routine",
-          "mature skin",
-          "minder stevige huid",
-          "minimal routine",
-          "niet te veel producten",
-          "peptide routine",
-          "quick routine",
-          "rijpere huid",
-          "rimpels",
-          "simpele routine",
-          "simple routine",
-          "snelle routine",
-          "starter routine",
-          "startersroutine",
-          "twee stappen routine",
-          "two step routine",
-          "verstevigende routine",
-          "wat heb ik minimaal nodig",
-          "weinig producten",
-          "wrinkles"
-        ],
-        "misspellings": [
-          "ageing skin",
-          "anti ageing",
-          "anti agingg",
-          "antiage routine",
-          "fijne lijnjes",
-          "rijpere huidd",
-          "rijperehuid",
-          "rimpels routien",
-          "verstevigende routien",
-          "wrinkels"
-        ],
-        "recognize_old_names_but_do_not_display_them": [],
-        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
-        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
-      },
-      "safety": {
-        "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": "This routine contains one or more products with a catalog verification conflict."
-      }
-    },
-    {
-      "id": "simple-acne-routine",
-      "name": "Simple Acne Routine",
-      "old_names": [
-        "Simple Blemish Control Routine"
-      ],
-      "type": "simple_routine",
-      "target": "Blemish-prone skin that needs a focused cleansing and spot-care duo",
-      "price": "€59,95",
-      "currency": "EUR",
-      "url": "https://sovahcare.com/products/simple-acne-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-acne-routine-texture-v2.png?v=1788774772",
-      "variant_id": 53486280114514,
-      "routing_priority": 98,
-      "product_ids": [
-        "purifying-mousse",
-        "acne-spot-care"
-      ],
-      "bundle_products": [
-        {
-          "id": "purifying-mousse",
-          "title": "Purifying Mousse",
-          "url": "https://sovahcare.com/products/purifying-mousse",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Purifying-Mousse-gluten-free-nut-free-vegan-natural-certified.jpg?v=1775137464"
-        },
-        {
-          "id": "acne-spot-care",
-          "title": "Acne Spot Care",
-          "url": "https://sovahcare.com/products/acne-spot-care",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Acne-Spot-Care-acne-treatment-blemish-care_718e95d2-b927-4adc-b551-15bebb4fce84.jpg?v=1775133667"
-        }
-      ],
-      "derived_certification_summary": {
-        "all_products_vegan": true,
-        "all_products_gluten_free": true,
-        "all_products_nut_free": true,
-        "all_products_fragrance_free": false,
-        "contains_fragrance_or_unverified_fragrance_status": true,
-        "contains_manual_review_item": false
-      },
-      "ai_detection": {
-        "routing_mode": "broad_semantic_customer_language_not_exact_match_only",
-        "quiz_route": [
-          "2 stappen routine",
-          "2 step routine",
-          "acne",
-          "acne cream",
-          "acne creme",
-          "acne crème",
-          "basic routine",
-          "basis routine",
-          "beginner routine",
-          "blackheads",
-          "blemishes",
-          "breakout prone skin",
-          "breakouts",
-          "bultjes",
-          "chin acne",
-          "clogged pores",
-          "easy routine",
-          "forehead acne",
-          "ik heb acne",
-          "ik wil maar 2 producten",
-          "ik wil simpel beginnen",
-          "makkelijke routine",
-          "mee-eters",
-          "minimal routine",
-          "niet te veel producten",
-          "onzuivere huid",
-          "onzuiverheden",
-          "pimple routine",
-          "pimples",
-          "puistjes",
-          "puistjes op kin",
-          "quick routine",
-          "simpele routine",
-          "simple routine",
-          "snelle routine",
-          "spot treatment routine",
-          "spots",
-          "starter routine",
-          "startersroutine",
-          "twee stappen routine",
-          "two step routine",
-          "uitbraken",
-          "verstopte poriën",
-          "wat heb ik minimaal nodig",
-          "wat helpt tegen acne",
-          "weinig producten",
-          "whiteheads"
-        ],
-        "misspellings": [
-          "acnee",
-          "acneee",
-          "akne",
-          "aknee huid",
-          "blemishs",
-          "break outs",
-          "ik heb acnee",
-          "mee eters",
-          "onzuiverheiden",
-          "pimpls",
-          "puistjes huid",
-          "puistjeshuid",
-          "puitjes",
-          "verstopte porien"
-        ],
-        "recognize_old_names_but_do_not_display_them": [
-          "Simple Blemish Control Routine"
-        ],
-        "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
-        "do_not_route_when": "Do not route only on one overlapping word if the full message clearly points to another concern."
-      },
-      "safety": {
-        "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": null
-      }
-    },
-    {
-      "id": "simple-dull-skin-routine",
-      "name": "Simple Dull Skin Routine",
-      "old_names": [],
-      "type": "simple_routine",
-      "target": "Dull-looking skin that needs a simple morning glow duo",
-      "price": "€69,95",
-      "currency": "EUR",
-      "url": "https://sovahcare.com/products/simple-dull-skin-routine",
-      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/sovah-simple-dull-routine-texture-v2.png?v=1788774744",
-      "variant_id": 53486284505426,
-      "routing_priority": 68,
-      "product_ids": [
-        "vitamin-c-serum",
-        "moisturising-day-face-cream"
-      ],
-      "bundle_products": [
-        {
-          "id": "vitamin-c-serum",
-          "title": "Vitamin C Serum",
-          "url": "https://sovahcare.com/products/vitamin-c-serum",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Vitamin-C-Serum-vegan-gluten-free-natural-certified_6292763e-027a-4de1-850b-3953b8983743.jpg?v=1775134504"
-        },
-        {
-          "id": "moisturising-day-face-cream",
-          "title": "Moisturising Day Face Cream with Hyaluronic Acid",
-          "url": "https://sovahcare.com/products/moisturising-day-cream",
-          "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Moisturising-Day-Cream-hyaluronic-moisturizer.jpg?v=1775136917"
-        }
-      ],
-      "derived_certification_summary": {
-        "all_products_vegan": true,
-        "all_products_gluten_free": true,
+        "all_products_vegan": false,
+        "all_products_gluten_free": false,
         "all_products_nut_free": false,
         "all_products_fragrance_free": false,
         "contains_fragrance_or_unverified_fragrance_status": true,
@@ -1403,54 +1753,59 @@
           "basic routine",
           "basis routine",
           "beginner routine",
-          "brightening routine",
-          "doffe huid",
-          "dull skin",
+          "brandend gevoel huid",
+          "calming routine",
+          "easily irritated",
           "easy routine",
-          "fletse huid",
-          "frisse huid",
-          "gezonde glow",
-          "glow routine",
-          "grauwe huid",
-          "grey skin",
-          "huid mist glans",
-          "huid ziet moe uit",
+          "gentle routine",
+          "gevoelige huid",
           "ik wil maar 2 producten",
           "ik wil simpel beginnen",
-          "lack of glow",
-          "lifeless skin",
           "makkelijke routine",
-          "meer glow",
+          "mijn huid prikt",
+          "milde routine",
           "minimal routine",
           "niet te veel producten",
+          "producten irriteren mijn huid",
           "quick routine",
-          "radiant skin",
+          "reactieve huid",
+          "reactive skin",
+          "red skin",
+          "redness",
+          "rode huid",
+          "roodheid",
+          "sensitive skin",
           "simpele routine",
           "simple routine",
-          "skin looks flat",
-          "skin looks tired",
+          "skin burns",
+          "snel geïrriteerde huid",
           "snelle routine",
           "starter routine",
           "startersroutine",
-          "tired skin",
+          "stinging skin",
           "twee stappen routine",
           "two step routine",
-          "vermoeide huid",
           "wat heb ik minimaal nodig",
-          "weinig producten"
+          "weinig producten",
+          "zachte routine",
+          "simple sensitive skin routine",
+          "simple",
+          "eenvoudig",
+          "2 stappen",
+          "starter",
+          "minimal"
         ],
         "misspellings": [
-          "brightning routine",
-          "dofe huid",
-          "doffe huidd",
-          "doffehuid",
-          "dul skin",
-          "glow routien",
-          "lack of glwo",
-          "meer gloow",
-          "meer glwo",
-          "tierd skin",
-          "vermoeidehuid"
+          "geirriteerde huid",
+          "gevoelige huidd",
+          "gevoeligehuid",
+          "iritated skin",
+          "mijn huid reageerd snel",
+          "reactiv skin",
+          "reaktieve huid",
+          "rednes",
+          "sensetive skin",
+          "senstive skin"
         ],
         "recognize_old_names_but_do_not_display_them": [],
         "routing_rule": "Prefer simple_routine if the customer asks for simple, starter, basic, quick, minimal, 2-step, few products or budget-friendly. Prefer full_routine if the customer asks for complete, best, full, uitgebreid, everything they need, or does not ask for simple.",
@@ -1458,8 +1813,8 @@
       },
       "safety": {
         "spf_included": false,
-        "derive_product_safety_from_product_catalog": true,
-        "manual_review_note": null
+        "patch_test_required": true,
+        "derive_product_safety_from_product_catalog": true
       }
     }
   ]

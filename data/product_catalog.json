@@ -1,7 +1,7 @@
 {
-  "catalog_version": "2026-06-22-rich-v1",
+  "catalog_version": "2026-09-09-shopify-routines-v2",
   "generated_from": "SOVAH active catalog plus supplier product sheet 2026.05",
-  "last_verified": "2026-06-22",
+  "last_verified": "2026-09-09",
   "policy": {
     "active_products_only": true,
     "never_expose_supplier_identity": true,
@@ -201,8 +201,8 @@
         "supplier_declared_fragrance_free": true,
         "dermatologically_tested": false,
         "cosmos": "COSMOS ORGANIC",
-        "natural_origin_percentage": 99.0,
-        "organic_percentage": 13.0,
+        "natural_origin_percentage": 99,
+        "organic_percentage": 13,
         "cruelty_free": null
       },
       "pao": "6M",
@@ -410,8 +410,8 @@
         "supplier_declared_fragrance_free": true,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 99.0,
-        "organic_percentage": 7.0,
+        "natural_origin_percentage": 99,
+        "organic_percentage": 7,
         "cruelty_free": null
       },
       "pao": "6M",
@@ -634,8 +634,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 99.0,
-        "organic_percentage": 25.0,
+        "natural_origin_percentage": 99,
+        "organic_percentage": 25,
         "cruelty_free": null
       },
       "pao": "Refer to expiry date",
@@ -847,8 +847,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 99.0,
-        "organic_percentage": 11.0,
+        "natural_origin_percentage": 99,
+        "organic_percentage": 11,
         "cruelty_free": null
       },
       "pao": "3M",
@@ -1062,8 +1062,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 99.0,
-        "organic_percentage": 22.0,
+        "natural_origin_percentage": 99,
+        "organic_percentage": 22,
         "cruelty_free": null
       },
       "pao": "Refer to expiry date",
@@ -1515,8 +1515,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 98.0,
-        "organic_percentage": 10.0,
+        "natural_origin_percentage": 98,
+        "organic_percentage": 10,
         "cruelty_free": null
       },
       "pao": "6M",
@@ -1718,8 +1718,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 99.0,
-        "organic_percentage": 8.0,
+        "natural_origin_percentage": 99,
+        "organic_percentage": 8,
         "cruelty_free": null
       },
       "pao": "3M",
@@ -1933,8 +1933,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS ORGANIC",
-        "natural_origin_percentage": 100.0,
-        "organic_percentage": 63.0,
+        "natural_origin_percentage": 100,
+        "organic_percentage": 63,
         "cruelty_free": null
       },
       "pao": "3M",
@@ -2146,8 +2146,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 100.0,
-        "organic_percentage": 2.0,
+        "natural_origin_percentage": 100,
+        "organic_percentage": 2,
         "cruelty_free": null
       },
       "pao": "3M",
@@ -2358,8 +2358,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 99.0,
-        "organic_percentage": 11.0,
+        "natural_origin_percentage": 99,
+        "organic_percentage": 11,
         "cruelty_free": null
       },
       "pao": "3M",
@@ -2568,8 +2568,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 100.0,
-        "organic_percentage": 27.0,
+        "natural_origin_percentage": 100,
+        "organic_percentage": 27,
         "cruelty_free": null
       },
       "pao": "Refer to expiry date",
@@ -2807,8 +2807,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 99.0,
-        "organic_percentage": 20.0,
+        "natural_origin_percentage": 99,
+        "organic_percentage": 20,
         "cruelty_free": null
       },
       "pao": "3M",
@@ -3029,8 +3029,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 100.0,
-        "organic_percentage": 23.0,
+        "natural_origin_percentage": 100,
+        "organic_percentage": 23,
         "cruelty_free": null
       },
       "pao": "6M",
@@ -3261,8 +3261,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 100.0,
-        "organic_percentage": 21.0,
+        "natural_origin_percentage": 100,
+        "organic_percentage": 21,
         "cruelty_free": null
       },
       "pao": "Refer to expiry date",
@@ -3478,8 +3478,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": true,
         "cosmos": "COSMOS ORGANIC",
-        "natural_origin_percentage": 99.0,
-        "organic_percentage": 61.0,
+        "natural_origin_percentage": 99,
+        "organic_percentage": 61,
         "cruelty_free": null
       },
       "pao": "3M",
@@ -3712,8 +3712,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 100.0,
-        "organic_percentage": 18.0,
+        "natural_origin_percentage": 100,
+        "organic_percentage": 18,
         "cruelty_free": null
       },
       "pao": "Refer to expiry date",
@@ -3962,8 +3962,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": true,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 99.0,
-        "organic_percentage": 13.0,
+        "natural_origin_percentage": 99,
+        "organic_percentage": 13,
         "cruelty_free": null
       },
       "pao": "Refer to expiry date",
@@ -4188,8 +4188,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": true,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 98.0,
-        "organic_percentage": 6.0,
+        "natural_origin_percentage": 98,
+        "organic_percentage": 6,
         "cruelty_free": null
       },
       "pao": "Refer to expiry date",
@@ -4420,8 +4420,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": true,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 100.0,
-        "organic_percentage": 8.0,
+        "natural_origin_percentage": 100,
+        "organic_percentage": 8,
         "cruelty_free": null
       },
       "pao": "Refer to expiry date",
@@ -4643,8 +4643,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS ORGANIC",
-        "natural_origin_percentage": 99.0,
-        "organic_percentage": 62.0,
+        "natural_origin_percentage": 99,
+        "organic_percentage": 62,
         "cruelty_free": null
       },
       "pao": "3M",
@@ -4856,7 +4856,7 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": true,
         "cosmos": "COSMOS NATURAL",
-        "natural_origin_percentage": 98.0,
+        "natural_origin_percentage": 98,
         "organic_percentage": null,
         "cruelty_free": null
       },
@@ -5096,8 +5096,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": "COSMOS ORGANIC",
-        "natural_origin_percentage": 100.0,
-        "organic_percentage": 28.0,
+        "natural_origin_percentage": 100,
+        "organic_percentage": 28,
         "cruelty_free": null
       },
       "pao": "Refer to expiry date",
@@ -5326,8 +5326,8 @@
         "supplier_declared_fragrance_free": false,
         "dermatologically_tested": false,
         "cosmos": null,
-        "natural_origin_percentage": 100.0,
-        "organic_percentage": 27.0,
+        "natural_origin_percentage": 100,
+        "organic_percentage": 27,
         "cruelty_free": null
       },
       "pao": "Refer to expiry date",
@@ -5413,6 +5413,2371 @@
       },
       "verification": {
         "status": "verified",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "acne-care-moisturiser",
+      "title": "Acne Care Moisturiser",
+      "price": "€39,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/acne-care-moisturiser",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/8PDCQWPyUGwPqD1D1cdkLl7UU0Tv2ntW.jpg?v=1788791104",
+      "variant_id": 54584830001490,
+      "type": "moisturiser",
+      "routine_step": "moisturise",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Acne Care Moisturiser",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een lichte crème die de onzuivere huid hydrateert zonder zwaar aan te voelen en helpt de huid er gladder en evenwichtiger uit te laten zien.",
+        "en": "A lightweight moisturiser that hydrates blemish-prone skin without a heavy feel, helping the complexion look smoother and more balanced.",
+        "de": "A lightweight moisturiser that hydrates blemish-prone skin without a heavy feel, helping the complexion look smoother and more balanced."
+      },
+      "usage": {
+        "nl": "Breng een hoeveelheid ter grootte van een erwt aan op een schone huid van gezicht en hals. Gebruik 's ochtends en 's avonds en sluit overdag af met een aparte breedspectrum-SPF.",
+        "en": "Apply a pea-sized amount to clean skin on the face and neck. Use morning and evening; finish your morning routine with a separate broad-spectrum SPF.",
+        "de": "Apply a pea-sized amount to clean skin on the face and neck. Use morning and evening; finish your morning routine with a separate broad-spectrum SPF."
+      },
+      "when_to_use": {
+        "nl": "Breng een hoeveelheid ter grootte van een erwt aan op een schone huid van gezicht en hals. Gebruik 's ochtends en 's avonds en sluit overdag af met een aparte breedspectrum-SPF.",
+        "en": "Apply a pea-sized amount to clean skin on the face and neck. Use morning and evening; finish your morning routine with a separate broad-spectrum SPF.",
+        "de": "Apply a pea-sized amount to clean skin on the face and neck. Use morning and evening; finish your morning routine with a separate broad-spectrum SPF."
+      },
+      "skin_types": [
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "blemishes",
+        "breakouts",
+        "dehydration"
+      ],
+      "supplier_skin_type_raw": [
+        "oily",
+        "combination"
+      ],
+      "supplier_concerns_raw": [
+        "blemishes",
+        "breakouts",
+        "dehydration"
+      ],
+      "key_ingredients": [
+        "Zinc PCA",
+        "Sodium PCA",
+        "Hyaluronic Acid",
+        "Mate Leaf & Iceland Moss"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aqua/Water",
+        "Glycerin**",
+        "Argania Spinosa (Argan) Kernel Oil*",
+        "Pentylene Glycol",
+        "Polyglyceryl-6 Stearate",
+        "Cetearyl Alcohol",
+        "Cellulose",
+        "Sodium PCA",
+        "Isoamyl Laurate",
+        "Zinc PCA",
+        "Aroma/Fragrance",
+        "Caprylic/Capric Triglyceride",
+        "Propanediol",
+        "Polyglyceryl-6 Behenate",
+        "Alcohol",
+        "Xanthan Gum",
+        "Ilex Paraguariensis (Mate) Leaf Extract*",
+        "Palmitic Acid",
+        "Stearic Acid",
+        "Ascorbyl Palmitate",
+        "Tocopherol",
+        "Potassium Hydroxide",
+        "Sodium Phytate",
+        "Sodium Hyaluronate",
+        "Cetraria Islandica (Iceland Moss) Extract",
+        "Usnea Barbata (Lichen) Extract",
+        "Rhamnose",
+        "Juniperus Communis (Juniper) Callus Extract",
+        "CI 77007 (Ultramarines)****",
+        "Glucose",
+        "Glucuronic Acid",
+        "Silica",
+        "Kaolin",
+        "Maltodextrin",
+        "CI 75815 (Chlorophyllin Copper Complex)",
+        "Linalool***",
+        "Linalyl Acetate***",
+        "Citrus Aurantium Bergamia Peel Oil",
+        "Citral***",
+        "Limonene***",
+        "Juniperus Virginiana Oil",
+        "Citronellol***",
+        "Pinene***"
+      ],
+      "inci_raw": "Aqua/Water, Glycerin**, Argania Spinosa (Argan) Kernel Oil*, Pentylene Glycol, Polyglyceryl-6 Stearate, Cetearyl Alcohol, Cellulose, Sodium PCA, Isoamyl Laurate, Zinc PCA, Aroma/Fragrance, Caprylic/Capric Triglyceride, Propanediol, Polyglyceryl-6 Behenate, Alcohol, Xanthan Gum, Ilex Paraguariensis (Mate) Leaf Extract*, Palmitic Acid, Stearic Acid, Ascorbyl Palmitate, Tocopherol, Potassium Hydroxide, Sodium Phytate, Sodium Hyaluronate, Cetraria Islandica (Iceland Moss) Extract, Usnea Barbata (Lichen) Extract, Rhamnose, Juniperus Communis (Juniper) Callus Extract, CI 77007 (Ultramarines)****, Glucose, Glucuronic Acid, Silica, Kaolin, Maltodextrin, CI 75815 (Chlorophyllin Copper Complex), Linalool***, Linalyl Acetate***, Citrus Aurantium Bergamia Peel Oil, Citral***, Limonene***, Juniperus Virginiana Oil, Citronellol***, Pinene***",
+      "aroma": "Contains fragrance",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een lichte crème die de onzuivere huid hydrateert zonder zwaar aan te voelen en helpt de huid er gladder en evenwichtiger uit te laten zien."
+          ],
+          "en": [
+            "A lightweight moisturiser that hydrates blemish-prone skin without a heavy feel, helping the complexion look smoother and more balanced."
+          ],
+          "de": [
+            "A lightweight moisturiser that hydrates blemish-prone skin without a heavy feel, helping the complexion look smoother and more balanced."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": true,
+        "gluten_free": true,
+        "nut_free": true,
+        "allergen_label_free": null,
+        "fragrance_free": false,
+        "supplier_declared_fragrance_free": null,
+        "dermatologically_tested": null,
+        "cosmos": "COSMOS NATURAL",
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": false,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Acne Care Moisturiser",
+          "acne-care-moisturiser",
+          "acne care moisturiser"
+        ],
+        "customer_language_examples": [
+          "oily",
+          "combination",
+          "blemishes",
+          "breakouts",
+          "dehydration",
+          "Zinc PCA",
+          "Sodium PCA",
+          "Hyaluronic Acid",
+          "Mate Leaf & Iceland Moss"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "acne-purifying-face-wash",
+      "title": "Acne Purifying Face Wash",
+      "price": "€34,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/acne-purifying-face-wash",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/No2BhYsI9dGiw89kKKbqgINLtSpAUGBu.jpg?v=1788785914",
+      "variant_id": 54582874833234,
+      "type": "cleanser",
+      "routine_step": "cleanse",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Acne Purifying Face Wash",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een milde, pH-gebalanceerde reiniger voor de onzuivere huid die vuil en overtollig talg verwijdert zonder agressief te reinigen.",
+        "en": "A gentle, pH-balanced cleanser created for blemish-prone skin, helping remove impurities and excess sebum without harsh surfactants.",
+        "de": "A gentle, pH-balanced cleanser created for blemish-prone skin, helping remove impurities and excess sebum without harsh surfactants."
+      },
+      "usage": {
+        "nl": "Breng een kleine hoeveelheid aan op een vochtige huid, masseer zacht in en spoel goed af. Gebruik 's ochtends en/of 's avonds.",
+        "en": "Apply a small amount to damp skin, massage gently and rinse thoroughly. Use morning and/or evening.",
+        "de": "Apply a small amount to damp skin, massage gently and rinse thoroughly. Use morning and/or evening."
+      },
+      "when_to_use": {
+        "nl": "Breng een kleine hoeveelheid aan op een vochtige huid, masseer zacht in en spoel goed af. Gebruik 's ochtends en/of 's avonds.",
+        "en": "Apply a small amount to damp skin, massage gently and rinse thoroughly. Use morning and/or evening.",
+        "de": "Apply a small amount to damp skin, massage gently and rinse thoroughly. Use morning and/or evening."
+      },
+      "skin_types": [
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "blemishes",
+        "breakouts",
+        "cleansing"
+      ],
+      "supplier_skin_type_raw": [
+        "oily",
+        "combination"
+      ],
+      "supplier_concerns_raw": [
+        "blemishes",
+        "breakouts",
+        "cleansing"
+      ],
+      "key_ingredients": [
+        "Sodium PCA",
+        "Mate Leaf Extract",
+        "Iceland Moss & Juniper",
+        "Kaolin"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aqua/Water",
+        "Coco-Glucoside",
+        "Cocamidopropyl Betaine",
+        "Glycerin",
+        "Xanthan Gum",
+        "Propanediol",
+        "Sodium PCA",
+        "Sodium Levulinate",
+        "Lactic Acid",
+        "Ilex Paraguariensis (Mate) Leaf Extract*",
+        "Parfum/Fragrance",
+        "Acacia Senegal Gum",
+        "Sodium Anisate",
+        "Alcohol",
+        "Rhamnose",
+        "CI 77007 (Ultramarines)***",
+        "Glucose",
+        "Glucuronic Acid",
+        "Cetraria Islandica (Iceland Moss) Extract",
+        "Usnea Barbata (Lichen) Extract",
+        "Juniperus Communis (Juniper) Callus Extract",
+        "Silica",
+        "Kaolin",
+        "Linalool**",
+        "Linalyl Acetate**"
+      ],
+      "inci_raw": "Aqua/Water, Coco-Glucoside, Cocamidopropyl Betaine, Glycerin, Xanthan Gum, Propanediol, Sodium PCA, Sodium Levulinate, Lactic Acid, Ilex Paraguariensis (Mate) Leaf Extract*, Parfum/Fragrance, Acacia Senegal Gum, Sodium Anisate, Alcohol, Rhamnose, CI 77007 (Ultramarines)***, Glucose, Glucuronic Acid, Cetraria Islandica (Iceland Moss) Extract, Usnea Barbata (Lichen) Extract, Juniperus Communis (Juniper) Callus Extract, Silica, Kaolin, Linalool**, Linalyl Acetate**",
+      "aroma": "Contains fragrance",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een milde, pH-gebalanceerde reiniger voor de onzuivere huid die vuil en overtollig talg verwijdert zonder agressief te reinigen."
+          ],
+          "en": [
+            "A gentle, pH-balanced cleanser created for blemish-prone skin, helping remove impurities and excess sebum without harsh surfactants."
+          ],
+          "de": [
+            "A gentle, pH-balanced cleanser created for blemish-prone skin, helping remove impurities and excess sebum without harsh surfactants."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": true,
+        "gluten_free": true,
+        "nut_free": true,
+        "allergen_label_free": null,
+        "fragrance_free": false,
+        "supplier_declared_fragrance_free": null,
+        "dermatologically_tested": null,
+        "cosmos": null,
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": true,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Acne Purifying Face Wash",
+          "acne-purifying-face-wash",
+          "acne purifying face wash"
+        ],
+        "customer_language_examples": [
+          "oily",
+          "combination",
+          "blemishes",
+          "breakouts",
+          "cleansing",
+          "Sodium PCA",
+          "Mate Leaf Extract",
+          "Iceland Moss & Juniper",
+          "Kaolin"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "clarifying-gel",
+      "title": "Clarifying Gel",
+      "price": "€29,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/clarifying-gel",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/RXbZPfNSJ1g-KKJnqkrmCgaIXOzM_6Tj.jpg?v=1788785493",
+      "variant_id": 54582688547154,
+      "type": "cleanser",
+      "routine_step": "cleanse",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Clarifying Gel",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een frisse gelreiniger die dagelijkse onzuiverheden en overtollig talg verwijdert en de huid schoon en comfortabel laat aanvoelen.",
+        "en": "A fresh gel cleanser that removes daily impurities and excess oil while leaving the skin clean and comfortable.",
+        "de": "A fresh gel cleanser that removes daily impurities and excess oil while leaving the skin clean and comfortable."
+      },
+      "usage": {
+        "nl": "Schuim een kleine hoeveelheid op tussen natte handen, masseer over de vochtige huid en spoel goed af. Gebruik 's ochtends en/of 's avonds.",
+        "en": "Lather a small amount between wet hands, massage over damp skin and rinse thoroughly. Use morning and/or evening.",
+        "de": "Lather a small amount between wet hands, massage over damp skin and rinse thoroughly. Use morning and/or evening."
+      },
+      "when_to_use": {
+        "nl": "Schuim een kleine hoeveelheid op tussen natte handen, masseer over de vochtige huid en spoel goed af. Gebruik 's ochtends en/of 's avonds.",
+        "en": "Lather a small amount between wet hands, massage over damp skin and rinse thoroughly. Use morning and/or evening.",
+        "de": "Lather a small amount between wet hands, massage over damp skin and rinse thoroughly. Use morning and/or evening."
+      },
+      "skin_types": [
+        "normal",
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "blemishes",
+        "breakouts",
+        "cleansing",
+        "makeup_removal"
+      ],
+      "supplier_skin_type_raw": [
+        "normal",
+        "oily",
+        "combination"
+      ],
+      "supplier_concerns_raw": [
+        "blemishes",
+        "breakouts",
+        "cleansing",
+        "makeup_removal"
+      ],
+      "key_ingredients": [
+        "Aloe Juice",
+        "Glycerin",
+        "Sodium PCA",
+        "Plum Fruit Extract"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aloe Barbadensis (Aloe) Leaf Juice*",
+        "Lauryl Glucoside",
+        "Glycerin",
+        "Sodium Coco-Sulfate",
+        "Aqua",
+        "Sodium PCA",
+        "Disodium Cocoyl Glutamate",
+        "Sodium Levulinate",
+        "Citric Acid",
+        "Coco-Glucoside",
+        "Glyceryl Oleate",
+        "Sodium Chloride",
+        "Sodium Anisate",
+        "Sodium Cocoyl Glutamate",
+        "Prunus Domestica (Plum) Fruit Extract*",
+        "Parfum",
+        "Sodium Phytate"
+      ],
+      "inci_raw": "Aloe Barbadensis (Aloe) Leaf Juice*, Lauryl Glucoside, Glycerin, Sodium Coco-Sulfate, Aqua, Sodium PCA, Disodium Cocoyl Glutamate, Sodium Levulinate, Citric Acid, Coco-Glucoside, Glyceryl Oleate, Sodium Chloride, Sodium Anisate, Sodium Cocoyl Glutamate, Prunus Domestica (Plum) Fruit Extract*, Parfum, Sodium Phytate",
+      "aroma": "Contains fragrance",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een frisse gelreiniger die dagelijkse onzuiverheden en overtollig talg verwijdert en de huid schoon en comfortabel laat aanvoelen."
+          ],
+          "en": [
+            "A fresh gel cleanser that removes daily impurities and excess oil while leaving the skin clean and comfortable."
+          ],
+          "de": [
+            "A fresh gel cleanser that removes daily impurities and excess oil while leaving the skin clean and comfortable."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": true,
+        "gluten_free": true,
+        "nut_free": true,
+        "allergen_label_free": true,
+        "fragrance_free": false,
+        "supplier_declared_fragrance_free": null,
+        "dermatologically_tested": null,
+        "cosmos": "COSMOS NATURAL",
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": true,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Clarifying Gel",
+          "clarifying-gel",
+          "clarifying gel"
+        ],
+        "customer_language_examples": [
+          "normal",
+          "oily",
+          "combination",
+          "blemishes",
+          "breakouts",
+          "cleansing",
+          "makeup_removal",
+          "Aloe Juice",
+          "Glycerin",
+          "Sodium PCA",
+          "Plum Fruit Extract"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "cleansing-foam",
+      "title": "Cleansing Foam",
+      "price": "€29,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/cleansing-foam",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/0fz5ChxZ5mfwtN9rCpCBJg1hpK0oWrtL.jpg?v=1788784807",
+      "variant_id": 54582390817106,
+      "type": "cleanser",
+      "routine_step": "cleanse",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Cleansing Foam",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een zacht, luchtig reinigingsschuim dat dagelijkse onzuiverheden en lichte make-up verwijdert zonder een trekkerig gevoel.",
+        "en": "A soft, airy cleansing foam that lifts away daily impurities and light make-up without leaving the skin feeling stripped.",
+        "de": "A soft, airy cleansing foam that lifts away daily impurities and light make-up without leaving the skin feeling stripped."
+      },
+      "usage": {
+        "nl": "Masseer 1–2 pompjes op een vochtige huid en spoel goed af met lauwwarm water. Gebruik 's ochtends en/of 's avonds.",
+        "en": "Massage 1–2 pumps onto damp skin, then rinse thoroughly with lukewarm water. Use morning and/or evening.",
+        "de": "Massage 1–2 pumps onto damp skin, then rinse thoroughly with lukewarm water. Use morning and/or evening."
+      },
+      "when_to_use": {
+        "nl": "Masseer 1–2 pompjes op een vochtige huid en spoel goed af met lauwwarm water. Gebruik 's ochtends en/of 's avonds.",
+        "en": "Massage 1–2 pumps onto damp skin, then rinse thoroughly with lukewarm water. Use morning and/or evening.",
+        "de": "Massage 1–2 pumps onto damp skin, then rinse thoroughly with lukewarm water. Use morning and/or evening."
+      },
+      "skin_types": [
+        "normal",
+        "dry",
+        "oily",
+        "combination",
+        "sensitive"
+      ],
+      "concerns": [
+        "cleansing",
+        "makeup_removal"
+      ],
+      "supplier_skin_type_raw": [
+        "normal",
+        "dry",
+        "oily",
+        "combination",
+        "sensitive"
+      ],
+      "supplier_concerns_raw": [
+        "cleansing",
+        "makeup_removal"
+      ],
+      "key_ingredients": [
+        "Rose Flower Water",
+        "Chamomile Extract",
+        "Calendula Extract",
+        "Glycerin"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aqua",
+        "Cocamidopropyl Betaine",
+        "Rosa Damascena (Rose) Flower Water*",
+        "Glycerin",
+        "Sucrose Cocoate",
+        "Sodium Levulinate",
+        "Lactic Acid",
+        "Sodium Anisate",
+        "Calendula Officinalis (Calendula) Flower Extract*",
+        "Chamomilla Recutita (Camomile) Flower Extract*",
+        "Parfum",
+        "Benzyl Alcohol",
+        "Sodium Benzoate",
+        "Potassium Sorbate"
+      ],
+      "inci_raw": "Aqua, Cocamidopropyl Betaine, Rosa Damascena (Rose) Flower Water*, Glycerin, Sucrose Cocoate, Sodium Levulinate, Lactic Acid, Sodium Anisate, Calendula Officinalis (Calendula) Flower Extract*, Chamomilla Recutita (Camomile) Flower Extract*, Parfum, Benzyl Alcohol, Sodium Benzoate, Potassium Sorbate",
+      "aroma": "Contains fragrance",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een zacht, luchtig reinigingsschuim dat dagelijkse onzuiverheden en lichte make-up verwijdert zonder een trekkerig gevoel."
+          ],
+          "en": [
+            "A soft, airy cleansing foam that lifts away daily impurities and light make-up without leaving the skin feeling stripped."
+          ],
+          "de": [
+            "A soft, airy cleansing foam that lifts away daily impurities and light make-up without leaving the skin feeling stripped."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": true,
+        "gluten_free": true,
+        "nut_free": true,
+        "allergen_label_free": true,
+        "fragrance_free": false,
+        "supplier_declared_fragrance_free": null,
+        "dermatologically_tested": null,
+        "cosmos": "COSMOS NATURAL",
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": true,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Cleansing Foam",
+          "cleansing-foam",
+          "cleansing foam"
+        ],
+        "customer_language_examples": [
+          "normal",
+          "dry",
+          "oily",
+          "combination",
+          "sensitive",
+          "cleansing",
+          "makeup_removal",
+          "Rose Flower Water",
+          "Chamomile Extract",
+          "Calendula Extract",
+          "Glycerin"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "collagen-anti-age-night-cream",
+      "title": "Collagen Anti-Age Night Cream",
+      "price": "€39,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/collagen-anti-age-night-cream",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/2qCPcuDpYZ1Qyg8hAmDdVvAYCbl3NR8E.jpg?v=1788791825",
+      "variant_id": 54584891015506,
+      "type": "moisturiser",
+      "routine_step": "final evening step",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Collagen Anti-Age Night Cream",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een rijke nachtcrème die de droge of rijpere huid ondersteunt en haar 's ochtends zachter, voller en gladder laat ogen.",
+        "en": "A rich overnight moisturiser that supports softer, plumper and smoother-looking skin by morning.",
+        "de": "A rich overnight moisturiser that supports softer, plumper and smoother-looking skin by morning."
+      },
+      "usage": {
+        "nl": "Breng 's avonds aan op een schone huid als laatste stap van je routine.",
+        "en": "Apply to clean skin in the evening as the final step of your routine.",
+        "de": "Apply to clean skin in the evening as the final step of your routine."
+      },
+      "when_to_use": {
+        "nl": "Breng 's avonds aan op een schone huid als laatste stap van je routine.",
+        "en": "Apply to clean skin in the evening as the final step of your routine.",
+        "de": "Apply to clean skin in the evening as the final step of your routine."
+      },
+      "skin_types": [
+        "dry",
+        "mature"
+      ],
+      "concerns": [
+        "dehydration",
+        "antiage",
+        "barrier_support"
+      ],
+      "supplier_skin_type_raw": [
+        "dry",
+        "mature"
+      ],
+      "supplier_concerns_raw": [
+        "dehydration",
+        "antiage",
+        "barrier_support"
+      ],
+      "key_ingredients": [
+        "Cocoa Butter",
+        "Shea Butter",
+        "Algae Extract",
+        "Sodium PCA"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aloe Barbadensis (Aloe) Leaf Juice*",
+        "Helianthus Annuus (Sunflower) Seed Oil*",
+        "Theobroma Cacao (Cocoa) Seed Butter*",
+        "Dicaprylyl Carbonate",
+        "Pentylene Glycol",
+        "Polyglyceryl-6 Stearate",
+        "Cetearyl Alcohol",
+        "Helianthus Annuus (Sunflower) Seed Cera",
+        "Butyrospermum Parkii (Shea) Butter*",
+        "Aqua",
+        "Glycerin**",
+        "Olea Europaea (Olive) Oil Unsaponifiables",
+        "Sodium PCA",
+        "Parfum",
+        "Palmitic Acid",
+        "Stearic Acid",
+        "Polyglyceryl-6 Behenate",
+        "Rhus Verniciflua Peel Cera / Rhus Succedanea Fruit Cera",
+        "Shorea Robusta Resin",
+        "Cellulose",
+        "Xanthan Gum",
+        "Algae (Algae) Extract",
+        "Nasturtium Officinale (Watercress) Flower/Leaf Extract*",
+        "Sambucus Nigra (Elder) Fruit Extract*",
+        "Sodium Phytate",
+        "Alteromonas Ferment Extract",
+        "Phenethyl Alcohol",
+        "Ascorbyl Palmitate",
+        "Tocopherol",
+        "Vanillin",
+        "Terpineol***",
+        "Lactic Acid",
+        "Linalyl Acetate***",
+        "Sodium Hyaluronate"
+      ],
+      "inci_raw": "Aloe Barbadensis (Aloe) Leaf Juice*, Helianthus Annuus (Sunflower) Seed Oil*, Theobroma Cacao (Cocoa) Seed Butter*, Dicaprylyl Carbonate, Pentylene Glycol, Polyglyceryl-6 Stearate, Cetearyl Alcohol, Helianthus Annuus (Sunflower) Seed Cera, Butyrospermum Parkii (Shea) Butter*, Aqua, Glycerin**, Olea Europaea (Olive) Oil Unsaponifiables, Sodium PCA, Parfum, Palmitic Acid, Stearic Acid, Polyglyceryl-6 Behenate, Rhus Verniciflua Peel Cera / Rhus Succedanea Fruit Cera, Shorea Robusta Resin, Cellulose, Xanthan Gum, Algae (Algae) Extract, Nasturtium Officinale (Watercress) Flower/Leaf Extract*, Sambucus Nigra (Elder) Fruit Extract*, Sodium Phytate, Alteromonas Ferment Extract, Phenethyl Alcohol, Ascorbyl Palmitate, Tocopherol, Vanillin, Terpineol***, Lactic Acid, Linalyl Acetate***, Sodium Hyaluronate",
+      "aroma": "Contains fragrance",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een rijke nachtcrème die de droge of rijpere huid ondersteunt en haar 's ochtends zachter, voller en gladder laat ogen."
+          ],
+          "en": [
+            "A rich overnight moisturiser that supports softer, plumper and smoother-looking skin by morning."
+          ],
+          "de": [
+            "A rich overnight moisturiser that supports softer, plumper and smoother-looking skin by morning."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": null,
+        "gluten_free": null,
+        "nut_free": null,
+        "allergen_label_free": null,
+        "fragrance_free": false,
+        "supplier_declared_fragrance_free": null,
+        "dermatologically_tested": null,
+        "cosmos": null,
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": false,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Collagen Anti-Age Night Cream",
+          "collagen-anti-age-night-cream",
+          "collagen anti-age night cream"
+        ],
+        "customer_language_examples": [
+          "dry",
+          "mature",
+          "dehydration",
+          "antiage",
+          "barrier_support",
+          "Cocoa Butter",
+          "Shea Butter",
+          "Algae Extract",
+          "Sodium PCA"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "gentle-cleansing-milk",
+      "title": "Gentle Cleansing Milk",
+      "price": "€29,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/gentle-cleansing-milk",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/pIGrJR_7RB9IsxNHzZ4J_d8gJYm9scfp.jpg?v=1788785104",
+      "variant_id": 54582560227666,
+      "type": "cleanser",
+      "routine_step": "cleanse",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Gentle Cleansing Milk",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een zijdezachte reinigingsmelk die make-up en dagelijkse onzuiverheden verwijdert en de droge of rijpere huid zacht en comfortabel laat aanvoelen.",
+        "en": "A silky cleansing milk that removes make-up and daily impurities while leaving dry or mature-feeling skin soft and comfortable.",
+        "de": "A silky cleansing milk that removes make-up and daily impurities while leaving dry or mature-feeling skin soft and comfortable."
+      },
+      "usage": {
+        "nl": "Masseer over het gezicht en spoel grondig af met lauwwarm water. Gebruik 's ochtends en/of 's avonds.",
+        "en": "Massage over the face, then rinse thoroughly with lukewarm water. Use morning and/or evening.",
+        "de": "Massage over the face, then rinse thoroughly with lukewarm water. Use morning and/or evening."
+      },
+      "when_to_use": {
+        "nl": "Masseer over het gezicht en spoel grondig af met lauwwarm water. Gebruik 's ochtends en/of 's avonds.",
+        "en": "Massage over the face, then rinse thoroughly with lukewarm water. Use morning and/or evening.",
+        "de": "Massage over the face, then rinse thoroughly with lukewarm water. Use morning and/or evening."
+      },
+      "skin_types": [
+        "normal",
+        "mature"
+      ],
+      "concerns": [
+        "dehydration",
+        "antiage",
+        "cleansing",
+        "makeup_removal"
+      ],
+      "supplier_skin_type_raw": [
+        "normal",
+        "mature"
+      ],
+      "supplier_concerns_raw": [
+        "dehydration",
+        "antiage",
+        "cleansing",
+        "makeup_removal"
+      ],
+      "key_ingredients": [
+        "Sunflower Oil",
+        "Shea Butter",
+        "Argan & Avocado Oils",
+        "Jojoba Oil"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aqua",
+        "Helianthus Annuus (Sunflower) Seed Oil*",
+        "Sucrose Distearate",
+        "Glycerin",
+        "Dicaprylyl Carbonate",
+        "Isoamyl Laurate",
+        "Sucrose Stearate",
+        "Butyrospermum Parkii (Shea) Butter*",
+        "Sodium Levulinate",
+        "Palmitic Acid",
+        "Stearic Acid",
+        "Xanthan Gum",
+        "Parfum",
+        "Sodium Anisate",
+        "Argania Spinosa (Argan) Kernel Oil*",
+        "Persea Gratissima (Avocado) Oil*",
+        "Simmondsia Chinensis (Jojoba) Seed Oil*",
+        "Lactic Acid",
+        "Centaurea Cyanus (Cornflower) Flower Extract*",
+        "Paeonia Lactiflora (Peony) Root Extract",
+        "Ascorbyl Palmitate",
+        "Sodium Phytate",
+        "Tocopherol",
+        "Linalool",
+        "Limonene",
+        "Benzyl Salicylate",
+        "Citral"
+      ],
+      "inci_raw": "Aqua, Helianthus Annuus (Sunflower) Seed Oil*, Sucrose Distearate, Glycerin, Dicaprylyl Carbonate, Isoamyl Laurate, Sucrose Stearate, Butyrospermum Parkii (Shea) Butter*, Sodium Levulinate, Palmitic Acid, Stearic Acid, Xanthan Gum, Parfum, Sodium Anisate, Argania Spinosa (Argan) Kernel Oil*, Persea Gratissima (Avocado) Oil*, Simmondsia Chinensis (Jojoba) Seed Oil*, Lactic Acid, Centaurea Cyanus (Cornflower) Flower Extract*, Paeonia Lactiflora (Peony) Root Extract, Ascorbyl Palmitate, Sodium Phytate, Tocopherol, Linalool, Limonene, Benzyl Salicylate, Citral",
+      "aroma": "Contains fragrance",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een zijdezachte reinigingsmelk die make-up en dagelijkse onzuiverheden verwijdert en de droge of rijpere huid zacht en comfortabel laat aanvoelen."
+          ],
+          "en": [
+            "A silky cleansing milk that removes make-up and daily impurities while leaving dry or mature-feeling skin soft and comfortable."
+          ],
+          "de": [
+            "A silky cleansing milk that removes make-up and daily impurities while leaving dry or mature-feeling skin soft and comfortable."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": null,
+        "gluten_free": null,
+        "nut_free": null,
+        "allergen_label_free": null,
+        "fragrance_free": false,
+        "supplier_declared_fragrance_free": null,
+        "dermatologically_tested": null,
+        "cosmos": null,
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": true,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Gentle Cleansing Milk",
+          "gentle-cleansing-milk",
+          "gentle cleansing milk"
+        ],
+        "customer_language_examples": [
+          "normal",
+          "mature",
+          "dehydration",
+          "antiage",
+          "cleansing",
+          "makeup_removal",
+          "Sunflower Oil",
+          "Shea Butter",
+          "Argan & Avocado Oils",
+          "Jojoba Oil"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "light-moisturising-day-cream",
+      "title": "Light Moisturising Day Cream",
+      "price": "€39,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/light-moisturising-day-cream",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/Sl3cFTiZ9EICj_mCaWSbiyHQmkRuwhGz.jpg?v=1788786605",
+      "variant_id": 54583158112594,
+      "type": "moisturiser",
+      "routine_step": "moisturise",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Light Moisturising Day Cream",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een lichte dagcrème die snel intrekt en hydrateert met een comfortabele, natuurlijk matte finish.",
+        "en": "A lightweight day cream that replenishes moisture and absorbs quickly for a hydrated, comfortable and naturally matte finish.",
+        "de": "A lightweight day cream that replenishes moisture and absorbs quickly for a hydrated, comfortable and naturally matte finish."
+      },
+      "usage": {
+        "nl": "Breng 1–2 pompjes aan op een schone huid na toner of serum. Gebruik 's ochtends en sluit af met een aparte breedspectrum-SPF.",
+        "en": "Apply 1–2 pumps to clean skin after toner or serum. Use in the morning; finish with a separate broad-spectrum SPF.",
+        "de": "Apply 1–2 pumps to clean skin after toner or serum. Use in the morning; finish with a separate broad-spectrum SPF."
+      },
+      "when_to_use": {
+        "nl": "Breng 1–2 pompjes aan op een schone huid na toner of serum. Gebruik 's ochtends en sluit af met een aparte breedspectrum-SPF.",
+        "en": "Apply 1–2 pumps to clean skin after toner or serum. Use in the morning; finish with a separate broad-spectrum SPF.",
+        "de": "Apply 1–2 pumps to clean skin after toner or serum. Use in the morning; finish with a separate broad-spectrum SPF."
+      },
+      "skin_types": [
+        "normal",
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "blemishes",
+        "breakouts",
+        "dehydration"
+      ],
+      "supplier_skin_type_raw": [
+        "normal",
+        "oily",
+        "combination"
+      ],
+      "supplier_concerns_raw": [
+        "blemishes",
+        "breakouts",
+        "dehydration"
+      ],
+      "key_ingredients": [
+        "Multi-Weight Hyaluronic Acid",
+        "Betaine",
+        "Argan Oil",
+        "Bisabolol"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aloe Barbadensis (Aloe) Leaf Juice*",
+        "Argania Spinosa (Argan) Kernel Oil*",
+        "Glycerin",
+        "Pentylene Glycol",
+        "Polyglyceryl-6 Stearate",
+        "Cetearyl Alcohol",
+        "Betaine",
+        "Isoamyl Laurate",
+        "Parfum",
+        "Polyglyceryl-6 Behenate",
+        "Cellulose",
+        "Xanthan Gum",
+        "Caprylic/Capric Triglyceride",
+        "Palmitic Acid",
+        "Stearic Acid",
+        "Aqua",
+        "Bisabolol",
+        "Carum Petroselinum (Parsley) Extract*",
+        "Quercus Robur (Oak) Bark Extract*",
+        "Ascorbyl Palmitate",
+        "Tocopherol",
+        "Hydrolyzed Hyaluronic Acid",
+        "Sodium Hyaluronate",
+        "Sodium Phytate",
+        "Arctium Lappa (Burdock) Root Extract*",
+        "Citric Acid",
+        "Lactic Acid",
+        "Sodium Benzoate",
+        "Potassium Sorbate",
+        "Limonene",
+        "Citronellol",
+        "Linalool",
+        "Geraniol",
+        "Citral"
+      ],
+      "inci_raw": "Aloe Barbadensis (Aloe) Leaf Juice*, Argania Spinosa (Argan) Kernel Oil*, Glycerin, Pentylene Glycol, Polyglyceryl-6 Stearate, Cetearyl Alcohol, Betaine, Isoamyl Laurate, Parfum, Polyglyceryl-6 Behenate, Cellulose, Xanthan Gum, Caprylic/Capric Triglyceride, Palmitic Acid, Stearic Acid, Aqua, Bisabolol, Carum Petroselinum (Parsley) Extract*, Quercus Robur (Oak) Bark Extract*, Ascorbyl Palmitate, Tocopherol, Hydrolyzed Hyaluronic Acid, Sodium Hyaluronate, Sodium Phytate, Arctium Lappa (Burdock) Root Extract*, Citric Acid, Lactic Acid, Sodium Benzoate, Potassium Sorbate, Limonene, Citronellol, Linalool, Geraniol, Citral",
+      "aroma": "Contains fragrance",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een lichte dagcrème die snel intrekt en hydrateert met een comfortabele, natuurlijk matte finish."
+          ],
+          "en": [
+            "A lightweight day cream that replenishes moisture and absorbs quickly for a hydrated, comfortable and naturally matte finish."
+          ],
+          "de": [
+            "A lightweight day cream that replenishes moisture and absorbs quickly for a hydrated, comfortable and naturally matte finish."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": null,
+        "gluten_free": null,
+        "nut_free": null,
+        "allergen_label_free": null,
+        "fragrance_free": false,
+        "supplier_declared_fragrance_free": null,
+        "dermatologically_tested": null,
+        "cosmos": null,
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": false,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Light Moisturising Day Cream",
+          "light-moisturising-day-cream",
+          "light moisturising day cream"
+        ],
+        "customer_language_examples": [
+          "normal",
+          "oily",
+          "combination",
+          "blemishes",
+          "breakouts",
+          "dehydration",
+          "Multi-Weight Hyaluronic Acid",
+          "Betaine",
+          "Argan Oil",
+          "Bisabolol"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "nourishing-rich-cream-fragrance-free",
+      "title": "Nourishing Rich Cream, Fragrance Free",
+      "price": "€39,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/nourishing-rich-cream-fragrance-free",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/IHQZhKJpppy6HmExiRmatbgEzzFo7EPE.jpg?v=1788788374",
+      "variant_id": 54583636885842,
+      "type": "moisturiser",
+      "routine_step": "moisturise",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Nourishing Rich Cream, Fragrance Free",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een rijke gezichtscrème die een droog aanvoelende huid langdurig hydrateert en zacht, glad en fluweelachtig laat aanvoelen.",
+        "en": "A rich face cream that cushions dry-feeling skin with lasting moisture and leaves it soft, smooth and velvety.",
+        "de": "A rich face cream that cushions dry-feeling skin with lasting moisture and leaves it soft, smooth and velvety."
+      },
+      "usage": {
+        "nl": "Masseer een kleine hoeveelheid in op een schone huid als laatste hydraterende stap. Gebruik 's ochtends en/of 's avonds en sluit overdag af met een aparte breedspectrum-SPF.",
+        "en": "Massage a small amount onto clean skin as the final moisturising step. Use morning and/or evening; finish your morning routine with a separate broad-spectrum SPF.",
+        "de": "Massage a small amount onto clean skin as the final moisturising step. Use morning and/or evening; finish your morning routine with a separate broad-spectrum SPF."
+      },
+      "when_to_use": {
+        "nl": "Masseer een kleine hoeveelheid in op een schone huid als laatste hydraterende stap. Gebruik 's ochtends en/of 's avonds en sluit overdag af met een aparte breedspectrum-SPF.",
+        "en": "Massage a small amount onto clean skin as the final moisturising step. Use morning and/or evening; finish your morning routine with a separate broad-spectrum SPF.",
+        "de": "Massage a small amount onto clean skin as the final moisturising step. Use morning and/or evening; finish your morning routine with a separate broad-spectrum SPF."
+      },
+      "skin_types": [
+        "normal",
+        "mature"
+      ],
+      "concerns": [
+        "dehydration",
+        "antiage",
+        "barrier_support"
+      ],
+      "supplier_skin_type_raw": [
+        "normal",
+        "mature"
+      ],
+      "supplier_concerns_raw": [
+        "dehydration",
+        "antiage",
+        "barrier_support"
+      ],
+      "key_ingredients": [
+        "Cocoa & Shea Butter",
+        "Argan Oil",
+        "Sunflower Oil",
+        "Cloudberry Extract"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aqua",
+        "Helianthus Annuus (Sunflower) Seed Oil*",
+        "Theobroma Cacao (Cocoa) Seed Butter*",
+        "Dicaprylyl Carbonate",
+        "Pentylene Glycol",
+        "Polyglyceryl-6 Stearate",
+        "Cetearyl Alcohol",
+        "Glycerin",
+        "Argania Spinosa (Argan) Kernel Oil*",
+        "Helianthus Annuus (Sunflower) Seed Cera",
+        "Butyrospermum Parkii (Shea) Butter*",
+        "Olea Europaea (Olive) Oil Unsaponifiables",
+        "Palmitic Acid",
+        "Rubus Chamaemorus (Cloudberry) Fruit Extract*",
+        "Stearic Acid",
+        "Polyglyceryl-6 Behenate",
+        "Cellulose",
+        "Rhus Verniciflua Peel Cera / Rhus Succedanea Fruit Cera",
+        "Shorea Robusta Resin",
+        "Xanthan Gum",
+        "Vanilla Planifolia (Vanilla) Bean Extract*",
+        "Sodium Phytate",
+        "Ascorbyl Palmitate",
+        "Tocopherol",
+        "Lactic Acid"
+      ],
+      "inci_raw": "Aqua, Helianthus Annuus (Sunflower) Seed Oil*, Theobroma Cacao (Cocoa) Seed Butter*, Dicaprylyl Carbonate, Pentylene Glycol, Polyglyceryl-6 Stearate, Cetearyl Alcohol, Glycerin, Argania Spinosa (Argan) Kernel Oil*, Helianthus Annuus (Sunflower) Seed Cera, Butyrospermum Parkii (Shea) Butter*, Olea Europaea (Olive) Oil Unsaponifiables, Palmitic Acid, Rubus Chamaemorus (Cloudberry) Fruit Extract*, Stearic Acid, Polyglyceryl-6 Behenate, Cellulose, Rhus Verniciflua Peel Cera / Rhus Succedanea Fruit Cera, Shorea Robusta Resin, Xanthan Gum, Vanilla Planifolia (Vanilla) Bean Extract*, Sodium Phytate, Ascorbyl Palmitate, Tocopherol, Lactic Acid",
+      "aroma": "Fragrance free",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een rijke gezichtscrème die een droog aanvoelende huid langdurig hydrateert en zacht, glad en fluweelachtig laat aanvoelen."
+          ],
+          "en": [
+            "A rich face cream that cushions dry-feeling skin with lasting moisture and leaves it soft, smooth and velvety."
+          ],
+          "de": [
+            "A rich face cream that cushions dry-feeling skin with lasting moisture and leaves it soft, smooth and velvety."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": null,
+        "gluten_free": null,
+        "nut_free": null,
+        "allergen_label_free": null,
+        "fragrance_free": true,
+        "supplier_declared_fragrance_free": true,
+        "dermatologically_tested": null,
+        "cosmos": null,
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": false,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Nourishing Rich Cream, Fragrance Free",
+          "nourishing-rich-cream-fragrance-free",
+          "nourishing rich cream, fragrance free"
+        ],
+        "customer_language_examples": [
+          "normal",
+          "mature",
+          "dehydration",
+          "antiage",
+          "barrier_support",
+          "Cocoa & Shea Butter",
+          "Argan Oil",
+          "Sunflower Oil",
+          "Cloudberry Extract"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "peptide-ageless-am-pm-cream",
+      "title": "Peptide Ageless AM/PM Cream",
+      "price": "€39,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/peptide-ageless-am-pm-cream",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/x5KLzZi3kfv5rbw_ubBx2uIPpaKzQMz2.jpg?v=1788791408",
+      "variant_id": 54584856805714,
+      "type": "moisturiser",
+      "routine_step": "moisturise",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Peptide Ageless AM/PM Cream",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een veelzijdige peptidecrème voor ochtend en avond die hydratatie, elasticiteit en een gladdere uitstraling in één stap ondersteunt.",
+        "en": "A versatile peptide moisturiser for morning and evening that supports hydration, elasticity and a smoother-looking complexion in one step.",
+        "de": "A versatile peptide moisturiser for morning and evening that supports hydration, elasticity and a smoother-looking complexion in one step."
+      },
+      "usage": {
+        "nl": "Breng 1–2 pompjes aan op een schone huid, 's ochtends en 's avonds. Sluit overdag af met een aparte breedspectrum-SPF.",
+        "en": "Apply 1–2 pumps to clean skin morning and evening. Finish your morning routine with a separate broad-spectrum SPF.",
+        "de": "Apply 1–2 pumps to clean skin morning and evening. Finish your morning routine with a separate broad-spectrum SPF."
+      },
+      "when_to_use": {
+        "nl": "Breng 1–2 pompjes aan op een schone huid, 's ochtends en 's avonds. Sluit overdag af met een aparte breedspectrum-SPF.",
+        "en": "Apply 1–2 pumps to clean skin morning and evening. Finish your morning routine with a separate broad-spectrum SPF.",
+        "de": "Apply 1–2 pumps to clean skin morning and evening. Finish your morning routine with a separate broad-spectrum SPF."
+      },
+      "skin_types": [
+        "mature"
+      ],
+      "concerns": [
+        "antiage"
+      ],
+      "supplier_skin_type_raw": [
+        "mature"
+      ],
+      "supplier_concerns_raw": [
+        "antiage"
+      ],
+      "key_ingredients": [
+        "Hexapeptide-11",
+        "Dipalmitoyl Hydroxyproline",
+        "Hyaluronic Acid & Sodium PCA",
+        "Vitamins C & E"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aqua/Water",
+        "Simmondsia Chinensis (Jojoba) Seed Oil*",
+        "Glycerin",
+        "Pentylene Glycol",
+        "Polyglyceryl-6 Stearate",
+        "Cetearyl Alcohol",
+        "Sodium PCA",
+        "Dipalmitoyl Hydroxyproline",
+        "Propanediol",
+        "Parfum/Fragrance",
+        "Dicaprylyl Carbonate",
+        "Polyglyceryl-6 Behenate",
+        "Mangifera Indica (Mango) Seed Butter*",
+        "Caprylic/Capric Triglyceride",
+        "Coco-Caprylate",
+        "Fragaria Ananassa (Strawberry) Seed Oil",
+        "Vaccinium Myrtillus (Blueberry) Seed Oil*",
+        "Xanthan Gum",
+        "Hexapeptide-11",
+        "Phytosterols",
+        "Octyldodecanol",
+        "Palmitic Acid",
+        "Stearic Acid",
+        "Tocopherol",
+        "Ascorbyl Palmitate",
+        "Hydrolyzed Hyaluronic Acid",
+        "Sodium Hyaluronate",
+        "Sodium Phytate",
+        "Potassium Hydroxide",
+        "Leuconostoc/Radish Root Ferment Filtrate",
+        "Ginkgo Biloba (Ginkgo) Leaf Extract*",
+        "Citric Acid",
+        "Sodium Benzoate",
+        "Potassium Sorbate",
+        "CI 77491 (Iron Oxides)***",
+        "Linalyl Acetate**",
+        "Geranyl Acetate**",
+        "Linalool**",
+        "Geraniol**",
+        "Citronellol**"
+      ],
+      "inci_raw": "Aqua/Water, Simmondsia Chinensis (Jojoba) Seed Oil*, Glycerin, Pentylene Glycol, Polyglyceryl-6 Stearate, Cetearyl Alcohol, Sodium PCA, Dipalmitoyl Hydroxyproline, Propanediol, Parfum/Fragrance, Dicaprylyl Carbonate, Polyglyceryl-6 Behenate, Mangifera Indica (Mango) Seed Butter*, Caprylic/Capric Triglyceride, Coco-Caprylate, Fragaria Ananassa (Strawberry) Seed Oil, Vaccinium Myrtillus (Blueberry) Seed Oil*, Xanthan Gum, Hexapeptide-11, Phytosterols, Octyldodecanol, Palmitic Acid, Stearic Acid, Tocopherol, Ascorbyl Palmitate, Hydrolyzed Hyaluronic Acid, Sodium Hyaluronate, Sodium Phytate, Potassium Hydroxide, Leuconostoc/Radish Root Ferment Filtrate, Ginkgo Biloba (Ginkgo) Leaf Extract*, Citric Acid, Sodium Benzoate, Potassium Sorbate, CI 77491 (Iron Oxides)***, Linalyl Acetate**, Geranyl Acetate**, Linalool**, Geraniol**, Citronellol**",
+      "aroma": "Contains fragrance",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een veelzijdige peptidecrème voor ochtend en avond die hydratatie, elasticiteit en een gladdere uitstraling in één stap ondersteunt."
+          ],
+          "en": [
+            "A versatile peptide moisturiser for morning and evening that supports hydration, elasticity and a smoother-looking complexion in one step."
+          ],
+          "de": [
+            "A versatile peptide moisturiser for morning and evening that supports hydration, elasticity and a smoother-looking complexion in one step."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": true,
+        "gluten_free": true,
+        "nut_free": true,
+        "allergen_label_free": null,
+        "fragrance_free": false,
+        "supplier_declared_fragrance_free": null,
+        "dermatologically_tested": null,
+        "cosmos": null,
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": false,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Peptide Ageless AM/PM Cream",
+          "peptide-ageless-am-pm-cream",
+          "peptide ageless am/pm cream"
+        ],
+        "customer_language_examples": [
+          "mature",
+          "antiage",
+          "Hexapeptide-11",
+          "Dipalmitoyl Hydroxyproline",
+          "Hyaluronic Acid & Sodium PCA",
+          "Vitamins C & E"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "purifying-toner",
+      "title": "Purifying Toner",
+      "price": "€24,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/purifying-toner",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/HBcyYbfEVPVO7ywhjIZy5SDBQJO-R3RZ.jpg?v=1788786153",
+      "variant_id": 54582983262546,
+      "type": "toner",
+      "routine_step": "after cleansing",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Purifying Toner",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een verfrissende toner die achtergebleven vuil en overtollig talg verwijdert en de huid na het reinigen soepel en in balans laat aanvoelen.",
+        "en": "A refreshing toner that removes remaining impurities and excess sebum while helping the skin feel balanced and supple after cleansing.",
+        "de": "A refreshing toner that removes remaining impurities and excess sebum while helping the skin feel balanced and supple after cleansing."
+      },
+      "usage": {
+        "nl": "Breng na het reinigen een kleine hoeveelheid aan met schone handen of een herbruikbaar wattenschijfje. Vermijd direct contact met de ogen.",
+        "en": "After cleansing, pour a small amount into clean hands or onto a reusable cotton pad and sweep over the face. Avoid direct contact with the eyes.",
+        "de": "After cleansing, pour a small amount into clean hands or onto a reusable cotton pad and sweep over the face. Avoid direct contact with the eyes."
+      },
+      "when_to_use": {
+        "nl": "Breng na het reinigen een kleine hoeveelheid aan met schone handen of een herbruikbaar wattenschijfje. Vermijd direct contact met de ogen.",
+        "en": "After cleansing, pour a small amount into clean hands or onto a reusable cotton pad and sweep over the face. Avoid direct contact with the eyes.",
+        "de": "After cleansing, pour a small amount into clean hands or onto a reusable cotton pad and sweep over the face. Avoid direct contact with the eyes."
+      },
+      "skin_types": [
+        "normal",
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "blemishes",
+        "breakouts"
+      ],
+      "supplier_skin_type_raw": [
+        "normal",
+        "oily",
+        "combination"
+      ],
+      "supplier_concerns_raw": [
+        "blemishes",
+        "breakouts"
+      ],
+      "key_ingredients": [
+        "Salicylic Acid",
+        "Lavender Flower Water",
+        "Betaine",
+        "Cucumber Extract"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aqua",
+        "Alcohol",
+        "Lavandula Angustifolia (Lavender) Flower Water*",
+        "Glycerin",
+        "Betaine",
+        "Propanediol",
+        "Acorus Calamus (Sweet Flag) Root Extract*",
+        "Cucumis Sativus (Cucumber) Fruit Extract*",
+        "Salicylic Acid",
+        "Benzyl Alcohol",
+        "Sodium Benzoate",
+        "Potassium Sorbate",
+        "Rhamnose",
+        "Glucose",
+        "Glucuronic Acid"
+      ],
+      "inci_raw": "Aqua, Alcohol, Lavandula Angustifolia (Lavender) Flower Water*, Glycerin, Betaine, Propanediol, Acorus Calamus (Sweet Flag) Root Extract*, Cucumis Sativus (Cucumber) Fruit Extract*, Salicylic Acid, Benzyl Alcohol, Sodium Benzoate, Potassium Sorbate, Rhamnose, Glucose, Glucuronic Acid",
+      "aroma": null,
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een verfrissende toner die achtergebleven vuil en overtollig talg verwijdert en de huid na het reinigen soepel en in balans laat aanvoelen."
+          ],
+          "en": [
+            "A refreshing toner that removes remaining impurities and excess sebum while helping the skin feel balanced and supple after cleansing."
+          ],
+          "de": [
+            "A refreshing toner that removes remaining impurities and excess sebum while helping the skin feel balanced and supple after cleansing."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": null,
+        "gluten_free": null,
+        "nut_free": null,
+        "allergen_label_free": null,
+        "fragrance_free": null,
+        "supplier_declared_fragrance_free": null,
+        "dermatologically_tested": null,
+        "cosmos": null,
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": true,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Purifying Toner",
+          "purifying-toner",
+          "purifying toner"
+        ],
+        "customer_language_examples": [
+          "normal",
+          "oily",
+          "combination",
+          "blemishes",
+          "breakouts",
+          "Salicylic Acid",
+          "Lavender Flower Water",
+          "Betaine",
+          "Cucumber Extract"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "radiant-glow-facial-wash",
+      "title": "Radiant Glow Facial Wash",
+      "price": "€34,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/radiant-glow-facial-wash",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/wQHJEkwHALggtZADi4n6gEFS4FXOzu1p.jpg?v=1788785733",
+      "variant_id": 54582797893970,
+      "type": "cleanser",
+      "routine_step": "cleanse",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Radiant Glow Facial Wash",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een verfrissende dagelijkse reiniger die vuil, overtollig talg en make-upresten verwijdert en de vochtbalans comfortabel houdt.",
+        "en": "A refreshing daily face wash that removes impurities, excess sebum and make-up build-up while maintaining a comfortable moisture balance.",
+        "de": "A refreshing daily face wash that removes impurities, excess sebum and make-up build-up while maintaining a comfortable moisture balance."
+      },
+      "usage": {
+        "nl": "Schuim op in natte handen, masseer zacht over een vochtige huid en spoel goed af. Schud voorzichtig als de natuurlijke formule licht is gescheiden.",
+        "en": "Lather in wet hands, massage gently over damp skin and rinse thoroughly. Natural formulas may show slight separation; shake gently before use.",
+        "de": "Lather in wet hands, massage gently over damp skin and rinse thoroughly. Natural formulas may show slight separation; shake gently before use."
+      },
+      "when_to_use": {
+        "nl": "Schuim op in natte handen, masseer zacht over een vochtige huid en spoel goed af. Schud voorzichtig als de natuurlijke formule licht is gescheiden.",
+        "en": "Lather in wet hands, massage gently over damp skin and rinse thoroughly. Natural formulas may show slight separation; shake gently before use.",
+        "de": "Lather in wet hands, massage gently over damp skin and rinse thoroughly. Natural formulas may show slight separation; shake gently before use."
+      },
+      "skin_types": [
+        "normal",
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "cleansing",
+        "makeup_removal"
+      ],
+      "supplier_skin_type_raw": [
+        "normal",
+        "oily",
+        "combination"
+      ],
+      "supplier_concerns_raw": [
+        "cleansing",
+        "makeup_removal"
+      ],
+      "key_ingredients": [
+        "Sodium PCA",
+        "Glycerin",
+        "Blackberry Extract",
+        "Sage & Burdock Root"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aloe Barbadensis (Aloe) Leaf Juice*",
+        "Coco-Glucoside",
+        "Cocamidopropyl Betaine",
+        "Glycerin",
+        "Aqua/Water",
+        "Xanthan Gum",
+        "Propanediol",
+        "Rubus Fruticosus (Blackberry) Fruit Extract*",
+        "Sodium PCA",
+        "Sodium Levulinate",
+        "Lactic Acid",
+        "Acacia Senegal Gum",
+        "Sodium Anisate",
+        "Acorus Calamus (Sweet Flag) Root Extract*",
+        "Parfum/Fragrance",
+        "Salvia Officinalis (Sage) Leaf Extract*",
+        "Rhamnose",
+        "CI 77491 (Iron Oxides)***",
+        "Glucose",
+        "Glucuronic Acid",
+        "Arctium Lappa (Burdock) Root Extract*",
+        "Citric Acid",
+        "Sodium Benzoate",
+        "Potassium Sorbate",
+        "Linalool**",
+        "Limonene**"
+      ],
+      "inci_raw": "Aloe Barbadensis (Aloe) Leaf Juice*, Coco-Glucoside, Cocamidopropyl Betaine, Glycerin, Aqua/Water, Xanthan Gum, Propanediol, Rubus Fruticosus (Blackberry) Fruit Extract*, Sodium PCA, Sodium Levulinate, Lactic Acid, Acacia Senegal Gum, Sodium Anisate, Acorus Calamus (Sweet Flag) Root Extract*, Parfum/Fragrance, Salvia Officinalis (Sage) Leaf Extract*, Rhamnose, CI 77491 (Iron Oxides)***, Glucose, Glucuronic Acid, Arctium Lappa (Burdock) Root Extract*, Citric Acid, Sodium Benzoate, Potassium Sorbate, Linalool**, Limonene**",
+      "aroma": "Contains fragrance",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een verfrissende dagelijkse reiniger die vuil, overtollig talg en make-upresten verwijdert en de vochtbalans comfortabel houdt."
+          ],
+          "en": [
+            "A refreshing daily face wash that removes impurities, excess sebum and make-up build-up while maintaining a comfortable moisture balance."
+          ],
+          "de": [
+            "A refreshing daily face wash that removes impurities, excess sebum and make-up build-up while maintaining a comfortable moisture balance."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": true,
+        "gluten_free": true,
+        "nut_free": true,
+        "allergen_label_free": null,
+        "fragrance_free": false,
+        "supplier_declared_fragrance_free": null,
+        "dermatologically_tested": null,
+        "cosmos": null,
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": true,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Radiant Glow Facial Wash",
+          "radiant-glow-facial-wash",
+          "radiant glow facial wash"
+        ],
+        "customer_language_examples": [
+          "normal",
+          "oily",
+          "combination",
+          "cleansing",
+          "makeup_removal",
+          "Sodium PCA",
+          "Glycerin",
+          "Blackberry Extract",
+          "Sage & Burdock Root"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "sensitive-skin-moisturiser-fragrance-free",
+      "title": "Sensitive Skin Moisturiser, Fragrance Free",
+      "price": "€39,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/sensitive-skin-moisturiser-fragrance-free",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/Bn-AOHMmaXxyurlmR4of5t-en1PKeFbO.jpg?v=1788787624",
+      "variant_id": 54583341908306,
+      "type": "moisturiser",
+      "routine_step": "moisturise",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Sensitive Skin Moisturiser, Fragrance Free",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een milde dagelijkse crème die de gevoelige huid hydrateert en verzorgt met een parfumvrije, dermatologisch geteste formule.",
+        "en": "A gentle daily moisturiser that hydrates and comforts delicate skin with a fragrance-free, dermatologically tested formula.",
+        "de": "A gentle daily moisturiser that hydrates and comforts delicate skin with a fragrance-free, dermatologically tested formula."
+      },
+      "usage": {
+        "nl": "Breng 1–3 pompjes aan op een schone huid van gezicht en hals. Gebruik 's ochtends en/of 's avonds en sluit overdag af met een aparte breedspectrum-SPF.",
+        "en": "Apply 1–3 pumps to clean skin on the face and neck. Use morning and/or evening; finish your morning routine with a separate broad-spectrum SPF.",
+        "de": "Apply 1–3 pumps to clean skin on the face and neck. Use morning and/or evening; finish your morning routine with a separate broad-spectrum SPF."
+      },
+      "when_to_use": {
+        "nl": "Breng 1–3 pompjes aan op een schone huid van gezicht en hals. Gebruik 's ochtends en/of 's avonds en sluit overdag af met een aparte breedspectrum-SPF.",
+        "en": "Apply 1–3 pumps to clean skin on the face and neck. Use morning and/or evening; finish your morning routine with a separate broad-spectrum SPF.",
+        "de": "Apply 1–3 pumps to clean skin on the face and neck. Use morning and/or evening; finish your morning routine with a separate broad-spectrum SPF."
+      },
+      "skin_types": [
+        "normal",
+        "dry",
+        "oily",
+        "combination",
+        "sensitive"
+      ],
+      "concerns": [
+        "dehydration",
+        "sensitivity"
+      ],
+      "supplier_skin_type_raw": [
+        "normal",
+        "dry",
+        "oily",
+        "combination",
+        "sensitive"
+      ],
+      "supplier_concerns_raw": [
+        "dehydration",
+        "sensitivity"
+      ],
+      "key_ingredients": [
+        "Aloe Juice",
+        "Jojoba Oil",
+        "Red Algae Extract",
+        "Multi-Weight Hyaluronic Acid"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aloe Barbadensis (Aloe) Leaf Juice*",
+        "Glycerin",
+        "Simmondsia Chinensis (Jojoba) Seed Oil*",
+        "Pentylene Glycol",
+        "Polyglyceryl-3 Stearate",
+        "Cetearyl Alcohol",
+        "Sodium PCA",
+        "Coco-Caprylate",
+        "Isoamyl Laurate",
+        "Caprylic/Capric Triglyceride",
+        "Aqua/Water",
+        "Hydrolyzed Rhodophyceae Extract",
+        "Octyldodecanol",
+        "Xanthan Gum",
+        "Cellulose",
+        "Irvingia Gabonensis Kernel Butter",
+        "Potassium Hydroxide",
+        "Sodium Hyaluronate",
+        "Hydrogenated Coco-Glycerides",
+        "Tocopherol",
+        "Ascorbyl Palmitate",
+        "Sodium Phytate",
+        "Hydrolyzed Hyaluronic Acid"
+      ],
+      "inci_raw": "Aloe Barbadensis (Aloe) Leaf Juice*, Glycerin, Simmondsia Chinensis (Jojoba) Seed Oil*, Pentylene Glycol, Polyglyceryl-3 Stearate, Cetearyl Alcohol, Sodium PCA, Coco-Caprylate, Isoamyl Laurate, Caprylic/Capric Triglyceride, Aqua/Water, Hydrolyzed Rhodophyceae Extract, Octyldodecanol, Xanthan Gum, Cellulose, Irvingia Gabonensis Kernel Butter, Potassium Hydroxide, Sodium Hyaluronate, Hydrogenated Coco-Glycerides, Tocopherol, Ascorbyl Palmitate, Sodium Phytate, Hydrolyzed Hyaluronic Acid",
+      "aroma": "Fragrance free",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een milde dagelijkse crème die de gevoelige huid hydrateert en verzorgt met een parfumvrije, dermatologisch geteste formule."
+          ],
+          "en": [
+            "A gentle daily moisturiser that hydrates and comforts delicate skin with a fragrance-free, dermatologically tested formula."
+          ],
+          "de": [
+            "A gentle daily moisturiser that hydrates and comforts delicate skin with a fragrance-free, dermatologically tested formula."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": null,
+        "gluten_free": null,
+        "nut_free": null,
+        "allergen_label_free": null,
+        "fragrance_free": true,
+        "supplier_declared_fragrance_free": true,
+        "dermatologically_tested": null,
+        "cosmos": null,
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": false,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Sensitive Skin Moisturiser, Fragrance Free",
+          "sensitive-skin-moisturiser-fragrance-free",
+          "sensitive skin moisturiser, fragrance free"
+        ],
+        "customer_language_examples": [
+          "normal",
+          "dry",
+          "oily",
+          "combination",
+          "sensitive",
+          "dehydration",
+          "sensitivity",
+          "Aloe Juice",
+          "Jojoba Oil",
+          "Red Algae Extract",
+          "Multi-Weight Hyaluronic Acid"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "sensitive-skin-oil-to-milk-cleanser",
+      "title": "Sensitive Skin Oil-To-Milk Cleanser",
+      "price": "€39,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/sensitive-skin-oil-to-milk-cleanser",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/ScG3LGfW8c5DmmlBMQ3at_uJapiwFJMS.jpg?v=1788785314",
+      "variant_id": 54582625206610,
+      "type": "cleanser",
+      "routine_step": "cleanse",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Sensitive Skin Oil-To-Milk Cleanser",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een comfortabele olie-gelreiniger die met water verandert in een zachte melk en make-up en vuil verwijdert zonder de gevoelige huid uit te drogen.",
+        "en": "A comforting oil-gel cleanser that transforms into a silky milk with water, dissolving make-up and impurities without stripping delicate skin.",
+        "de": "A comforting oil-gel cleanser that transforms into a silky milk with water, dissolving make-up and impurities without stripping delicate skin."
+      },
+      "usage": {
+        "nl": "Masseer op een droge of vochtige huid, voeg een beetje water toe totdat de textuur melkachtig wordt en spoel grondig af. Vermijd direct contact met de ogen.",
+        "en": "Massage onto dry or damp skin, add a little water to transform the texture, then rinse thoroughly. Avoid direct contact with the eyes.",
+        "de": "Massage onto dry or damp skin, add a little water to transform the texture, then rinse thoroughly. Avoid direct contact with the eyes."
+      },
+      "when_to_use": {
+        "nl": "Masseer op een droge of vochtige huid, voeg een beetje water toe totdat de textuur melkachtig wordt en spoel grondig af. Vermijd direct contact met de ogen.",
+        "en": "Massage onto dry or damp skin, add a little water to transform the texture, then rinse thoroughly. Avoid direct contact with the eyes.",
+        "de": "Massage onto dry or damp skin, add a little water to transform the texture, then rinse thoroughly. Avoid direct contact with the eyes."
+      },
+      "skin_types": [
+        "normal",
+        "dry",
+        "oily",
+        "combination",
+        "sensitive"
+      ],
+      "concerns": [
+        "dehydration",
+        "sensitivity",
+        "cleansing"
+      ],
+      "supplier_skin_type_raw": [
+        "normal",
+        "dry",
+        "oily",
+        "combination",
+        "sensitive"
+      ],
+      "supplier_concerns_raw": [
+        "dehydration",
+        "sensitivity",
+        "cleansing"
+      ],
+      "key_ingredients": [
+        "Sunflower Oil",
+        "Glycolipids",
+        "Chamomile Extract",
+        "Sea Buckthorn & Cloudberry"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Caprylic/Capric Triglyceride",
+        "Glycerin",
+        "Helianthus Annuus (Sunflower) Seed Oil*",
+        "Aqua",
+        "Sucrose Laurate",
+        "Sucrose Palmitate",
+        "Alcohol",
+        "Tocopherol",
+        "Mica (CI 77019)***",
+        "Parfum",
+        "Chamomilla Recutita (Camomile) Flower Extract*",
+        "Hippophae Rhamnoides (Sea Buckthorn) Fruit Extract*",
+        "Rubus Chamaemorus (Cloudberry) Fruit Extract*",
+        "CI 77491 (Iron Oxides)***",
+        "Glycolipids",
+        "Limonene**",
+        "Linalyl Acetate**"
+      ],
+      "inci_raw": "Caprylic/Capric Triglyceride, Glycerin, Helianthus Annuus (Sunflower) Seed Oil*, Aqua, Sucrose Laurate, Sucrose Palmitate, Alcohol, Tocopherol, Mica (CI 77019)***, Parfum, Chamomilla Recutita (Camomile) Flower Extract*, Hippophae Rhamnoides (Sea Buckthorn) Fruit Extract*, Rubus Chamaemorus (Cloudberry) Fruit Extract*, CI 77491 (Iron Oxides)***, Glycolipids, Limonene**, Linalyl Acetate**",
+      "aroma": "Contains fragrance",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een comfortabele olie-gelreiniger die met water verandert in een zachte melk en make-up en vuil verwijdert zonder de gevoelige huid uit te drogen."
+          ],
+          "en": [
+            "A comforting oil-gel cleanser that transforms into a silky milk with water, dissolving make-up and impurities without stripping delicate skin."
+          ],
+          "de": [
+            "A comforting oil-gel cleanser that transforms into a silky milk with water, dissolving make-up and impurities without stripping delicate skin."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": null,
+        "gluten_free": null,
+        "nut_free": null,
+        "allergen_label_free": null,
+        "fragrance_free": false,
+        "supplier_declared_fragrance_free": null,
+        "dermatologically_tested": true,
+        "cosmos": null,
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": true,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Sensitive Skin Oil-To-Milk Cleanser",
+          "sensitive-skin-oil-to-milk-cleanser",
+          "sensitive skin oil-to-milk cleanser"
+        ],
+        "customer_language_examples": [
+          "normal",
+          "dry",
+          "oily",
+          "combination",
+          "sensitive",
+          "dehydration",
+          "sensitivity",
+          "cleansing",
+          "Sunflower Oil",
+          "Glycolipids",
+          "Chamomile Extract",
+          "Sea Buckthorn & Cloudberry"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
+        "conflicts": [],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "sensitive-skin-overnight-cream-fragrance-free",
+      "title": "Sensitive Skin Overnight Cream, Fragrance Free",
+      "price": "€39,95",
+      "currency": "EUR",
+      "url": "https://sovahcare.com/products/sensitive-skin-overnight-cream-fragrance-free",
+      "image": "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/rTibN5NTMMZQhfb9Ku00Vm-Y4UnnWXAj.jpg?v=1788792187",
+      "variant_id": 54585006719314,
+      "type": "moisturiser",
+      "routine_step": "final evening step",
+      "volume_ml": null,
+      "volume_fl_oz": null,
+      "source": {
+        "supplier_product_name": "Sensitive Skin Overnight Cream, Fragrance Free",
+        "supplier_sheet_version": "2026.07",
+        "last_verified": "2026-09-09",
+        "customer_visible": false
+      },
+      "description": {
+        "nl": "Een parfumvrije nachtcrème die een gevoelige, roodheidsgevoelige huid tijdens de nacht hydrateert en comfortabel laat aanvoelen.",
+        "en": "A fragrance-free overnight cream that comforts and hydrates sensitive, redness-prone skin while you sleep.",
+        "de": "A fragrance-free overnight cream that comforts and hydrates sensitive, redness-prone skin while you sleep."
+      },
+      "usage": {
+        "nl": "Breng 's avonds 1–3 pompjes aan op een gereinigd gezicht, hals en decolleté als laatste stap van je routine.",
+        "en": "Apply 1–3 pumps to cleansed face, neck and décolleté each evening as the final step of your routine.",
+        "de": "Apply 1–3 pumps to cleansed face, neck and décolleté each evening as the final step of your routine."
+      },
+      "when_to_use": {
+        "nl": "Breng 's avonds 1–3 pompjes aan op een gereinigd gezicht, hals en decolleté als laatste stap van je routine.",
+        "en": "Apply 1–3 pumps to cleansed face, neck and décolleté each evening as the final step of your routine.",
+        "de": "Apply 1–3 pumps to cleansed face, neck and décolleté each evening as the final step of your routine."
+      },
+      "skin_types": [
+        "normal",
+        "dry",
+        "oily",
+        "combination",
+        "sensitive"
+      ],
+      "concerns": [
+        "sensitivity"
+      ],
+      "supplier_skin_type_raw": [
+        "normal",
+        "dry",
+        "oily",
+        "combination",
+        "sensitive"
+      ],
+      "supplier_concerns_raw": [
+        "sensitivity"
+      ],
+      "key_ingredients": [
+        "Aloe Juice",
+        "Jojoba Oil",
+        "Red Algae Extract",
+        "Multi-Weight Hyaluronic Acid"
+      ],
+      "active_percentages": {},
+      "inci": [
+        "Aloe Barbadensis (Aloe) Leaf Juice*",
+        "Simmondsia Chinensis (Jojoba) Seed Oil*",
+        "Glycerin",
+        "Pentylene Glycol",
+        "Polyglyceryl-3 Stearate",
+        "Cetearyl Alcohol",
+        "Coco-Caprylate",
+        "Dicaprylyl Carbonate",
+        "Isoamyl Laurate",
+        "Aqua/Water",
+        "Hydrolyzed Rhodophyceae Extract",
+        "Mangifera Indica (Mango) Seed Butter*",
+        "Cellulose",
+        "Caprylic/Capric Triglyceride",
+        "Xanthan Gum",
+        "Octyldodecanol",
+        "Potassium Hydroxide",
+        "Sodium Hyaluronate",
+        "Palmitic Acid",
+        "Stearic Acid",
+        "Tocopherol",
+        "Ascorbyl Palmitate",
+        "Sodium Phytate",
+        "Hydrolyzed Hyaluronic Acid"
+      ],
+      "inci_raw": "Aloe Barbadensis (Aloe) Leaf Juice*, Simmondsia Chinensis (Jojoba) Seed Oil*, Glycerin, Pentylene Glycol, Polyglyceryl-3 Stearate, Cetearyl Alcohol, Coco-Caprylate, Dicaprylyl Carbonate, Isoamyl Laurate, Aqua/Water, Hydrolyzed Rhodophyceae Extract, Mangifera Indica (Mango) Seed Butter*, Cellulose, Caprylic/Capric Triglyceride, Xanthan Gum, Octyldodecanol, Potassium Hydroxide, Sodium Hyaluronate, Palmitic Acid, Stearic Acid, Tocopherol, Ascorbyl Palmitate, Sodium Phytate, Hydrolyzed Hyaluronic Acid",
+      "aroma": "Fragrance free",
+      "claims": {
+        "supplier_original_en": [],
+        "approved": {
+          "nl": [
+            "Een parfumvrije nachtcrème die een gevoelige, roodheidsgevoelige huid tijdens de nacht hydrateert en comfortabel laat aanvoelen."
+          ],
+          "en": [
+            "A fragrance-free overnight cream that comforts and hydrates sensitive, redness-prone skin while you sleep."
+          ],
+          "de": [
+            "A fragrance-free overnight cream that comforts and hydrates sensitive, redness-prone skin while you sleep."
+          ]
+        },
+        "prohibited_wording": [
+          "cures acne",
+          "geneest acne",
+          "removes wrinkles",
+          "verwijdert rimpels",
+          "guaranteed results",
+          "gegarandeerd resultaat"
+        ]
+      },
+      "certifications": {
+        "vegan": null,
+        "gluten_free": null,
+        "nut_free": null,
+        "allergen_label_free": null,
+        "fragrance_free": true,
+        "supplier_declared_fragrance_free": true,
+        "dermatologically_tested": null,
+        "cosmos": "COSMOS NATURAL",
+        "natural_origin_percentage": null,
+        "organic_percentage": null,
+        "cruelty_free": null
+      },
+      "pao": null,
+      "regional_availability": "Available in the EU",
+      "safety": {
+        "patch_test": true,
+        "sun_sensitivity": false,
+        "avoid_eye_area": false,
+        "beginner_frequency": null,
+        "avoid_same_routine_with": [],
+        "warning_nl": "Alleen voor uitwendig gebruik. Test eerst op een klein stukje huid als je huid snel reageert en stop bij aanhoudende irritatie.",
+        "warning_en": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs.",
+        "warning_de": "For external use only. Patch test first if your skin is reactive and stop use if persistent irritation occurs."
+      },
+      "compatibility": {
+        "pairs_well_with": [],
+        "avoid_same_routine_with": []
+      },
+      "ai_detection": {
+        "routing_mode": "semantic_first_with_catalog_grounding",
+        "aliases": [
+          "Sensitive Skin Overnight Cream, Fragrance Free",
+          "sensitive-skin-overnight-cream-fragrance-free",
+          "sensitive skin overnight cream, fragrance free"
+        ],
+        "customer_language_examples": [
+          "normal",
+          "dry",
+          "oily",
+          "combination",
+          "sensitive",
+          "sensitivity",
+          "Aloe Juice",
+          "Jojoba Oil",
+          "Red Algae Extract",
+          "Multi-Weight Hyaluronic Acid"
+        ],
+        "misspellings": [],
+        "do_not_recommend_when": [],
+        "safety_note": "Use cosmetic language only. Do not make medical claims. Advise patch testing and gradual introduction."
+      },
+      "verification": {
+        "status": "verified_with_shopify_and_supplier_sheet",
         "conflicts": [],
         "requires_manual_review": false
       }
