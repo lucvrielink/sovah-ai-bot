@@ -685,6 +685,22 @@ function isLimitedProductRecommendationRequest(message: string): boolean {
   return mentionsProducts && (asksForOneOrTwo || rejectsFullRoutine);
 }
 
+function isExplicitSimpleRoutineRequest(message: string): boolean {
+  const text = normalize(message);
+  const asksForSimple =
+    /(simpele|eenvoudige|makkelijke|basis|starter|simple|easy|basic|minimal|einfache).{0,30}routine/.test(
+      text
+    ) ||
+    /(routine).{0,30}(simpele|eenvoudige|makkelijke|basis|starter|simple|easy|basic|minimal|einfache)/.test(
+      text
+    ) ||
+    /(2\s*[-–]?\s*stappen|twee stappen|two\s*[-–]?\s*step|zwei schritte).{0,30}routine/.test(
+      text
+    );
+
+  return asksForSimple && Boolean(simpleRoutineTarget(message));
+}
+
 type SimpleRoutineTarget =
   | "dry"
   | "normal"
@@ -1839,7 +1855,8 @@ export async function POST(req: Request) {
   let resolverUsed = false;
   const matchedProducts = deterministicProductMatches(message);
   const limitedProductRequest = isLimitedProductRecommendationRequest(message);
-  const matchedSimpleRoutine = limitedProductRequest
+  const explicitSimpleRoutineRequest = isExplicitSimpleRoutineRequest(message);
+  const matchedSimpleRoutine = limitedProductRequest || explicitSimpleRoutineRequest
     ? simpleRoutineForMessage(message)
     : null;
   const matchedAddOn = limitedProductRequest ? addOnForMessage(message) : null;
