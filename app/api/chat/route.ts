@@ -701,6 +701,19 @@ function isExplicitSimpleRoutineRequest(message: string): boolean {
   return asksForSimple && Boolean(simpleRoutineTarget(message));
 }
 
+function isExplicitFullRoutineRequest(message: string): boolean {
+  const text = normalize(message);
+  const asksForFull =
+    /(volledige|complete|hele|uitgebreide|full|whole|comprehensive|vollstandige|komplette|ganze).{0,30}routine/.test(
+      text
+    ) ||
+    /(routine).{0,30}(volledige|complete|hele|uitgebreide|full|whole|comprehensive|vollstandige|komplette|ganze)/.test(
+      text
+    );
+
+  return asksForFull && Boolean(simpleRoutineTarget(message));
+}
+
 type SimpleRoutineTarget =
   | "dry"
   | "normal"
@@ -752,6 +765,22 @@ function simpleRoutineForMessage(message: string): Bundle | null {
     aging: "simple-aging-skin-routine",
     acne: "simple-acne-routine",
     dull: "simple-dull-skin-routine",
+  };
+  return bundlesById.get(bundleIdByTarget[target]) || null;
+}
+
+function fullRoutineForMessage(message: string): Bundle | null {
+  const target = simpleRoutineTarget(message);
+  if (!target) return null;
+  const bundleIdByTarget: Record<SimpleRoutineTarget, string> = {
+    dry: "dry-skin-routine",
+    normal: "normal-skin-routine",
+    sensitive: "sensitive-skin-routine",
+    oily: "oily-skin-routine",
+    combination: "combination-skin-routine",
+    aging: "aging-skin-routine",
+    acne: "acne-skin-routine",
+    dull: "dull-skin-routine",
   };
   return bundlesById.get(bundleIdByTarget[target]) || null;
 }
@@ -1377,6 +1406,7 @@ function effectiveHandoff(
   if (intent === "support" || isSupportRequest(message)) return "support";
   if (isExplicitQuizRequest(message)) return "quiz";
   if (isExplicitSimpleRoutineRequest(message)) return "none";
+  if (isExplicitFullRoutineRequest(message)) return "none";
   if (isLimitedProductRecommendationRequest(message)) return "none";
   if (intent === "product_recommendation") return "none";
   if (answer.handoff !== "none") return answer.handoff;
@@ -1857,8 +1887,12 @@ export async function POST(req: Request) {
   const matchedProducts = deterministicProductMatches(message);
   const limitedProductRequest = isLimitedProductRecommendationRequest(message);
   const explicitSimpleRoutineRequest = isExplicitSimpleRoutineRequest(message);
+  const explicitFullRoutineRequest = isExplicitFullRoutineRequest(message);
   const matchedSimpleRoutine = limitedProductRequest || explicitSimpleRoutineRequest
     ? simpleRoutineForMessage(message)
+    : null;
+  const matchedFullRoutine = explicitFullRoutineRequest
+    ? fullRoutineForMessage(message)
     : null;
   const matchedAddOn = limitedProductRequest ? addOnForMessage(message) : null;
   const deterministicProducts = limitedProductRequest
@@ -1868,6 +1902,8 @@ export async function POST(req: Request) {
     : matchedProducts;
   const deterministicBundles = matchedSimpleRoutine
     ? [matchedSimpleRoutine]
+    : matchedFullRoutine
+      ? [matchedFullRoutine]
     : limitedProductRequest
       ? []
       : deterministicBundleMatches(message);
@@ -1879,6 +1915,7 @@ export async function POST(req: Request) {
 
   const latestAssistant = normalize(latestAssistantMessage(history));
   const followsSimpleRoutineQuestion =
+    !explicitFullRoutineRequest &&
     Boolean(simpleRoutineTarget(message)) &&
     /(huidtype|huidklacht|voorkeur|prioriteit|hydratatie|donkere vlekken|skin type|skin concern|prefer|prioriti[sz]e|hydration|dark spots?|brightening|hauttyp|hautziel|bevorzug|prioritat|feuchtigkeit|pigmentflecken|simple routine|gel|serum|cream|creme)/.test(
       latestAssistant
@@ -2049,23 +2086,25 @@ export async function POST(req: Request) {
       selectedBundles
     );
     const selectedSimpleRoutine = selectedBundles.find(isSimpleRoutine);
+    const selectedRequestedRoutine = selectedBundles[0];
     const selectedAddOn = selectedProducts.find(isAddOnProduct);
-    const selectedSimpleRoutineUsage =
-      selectedSimpleRoutine && intent === "usage"
-        ? selectedSimpleRoutine.how_to_use?.[lang] ||
-          selectedSimpleRoutine.how_to_use?.en ||
+    const selectedRoutineUsage =
+      selectedRequestedRoutine && intent === "usage"
+        ? selectedRequestedRoutine.how_to_use?.[lang] ||
+          selectedRequestedRoutine.how_to_use?.en ||
           ""
         : "";
     const answerForActions =
       limitedProductRequest ||
       explicitSimpleRoutineRequest ||
+      explicitFullRoutineRequest ||
       followsSimpleRoutineQuestion ||
       simpleRoutineFollowUp
         ? {
             ...answer,
             product_ids:
               selectedSimpleRoutine && selectedAddOn ? [selectedAddOn.id] : [],
-            bundle_ids: selectedSimpleRoutine ? [selectedSimpleRoutine.id] : [],
+            bundle_ids: selectedRequestedRoutine ? [selectedRequestedRoutine.id] : [],
           }
         : answer;
     const actions = buildActions(
@@ -2087,8 +2126,8 @@ export async function POST(req: Request) {
           "What is your skin type or main skin concern? For example dry, sensitive, oily, combination, normal, breakouts, dullness, or signs of ageing. Then I will select the matching two-product Simple Routine.",
           "Was ist dein Hauttyp oder dein wichtigstes Hautziel? Zum Beispiel trocken, empfindlich, fettig, Mischhaut, normal, Unreinheiten, fahle Haut oder Hautalterung. Dann wähle ich die passende Simple Routine mit zwei Produkten."
         )
-      : selectedSimpleRoutineUsage
-        ? `**${selectedSimpleRoutine!.name}**\n\n${selectedSimpleRoutineUsage}`
+      : selectedRoutineUsage
+        ? `**${selectedRequestedRoutine!.name}**\n\n${selectedRoutineUsage}`
         : selectedSimpleRoutine &&
           (limitedProductRequest ||
             explicitSimpleRoutineRequest ||
