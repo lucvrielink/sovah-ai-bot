@@ -1376,6 +1376,7 @@ function effectiveHandoff(
 ): AnswerResult["handoff"] {
   if (intent === "support" || isSupportRequest(message)) return "support";
   if (isExplicitQuizRequest(message)) return "quiz";
+  if (isExplicitSimpleRoutineRequest(message)) return "none";
   if (isLimitedProductRecommendationRequest(message)) return "none";
   if (intent === "product_recommendation") return "none";
   if (answer.handoff !== "none") return answer.handoff;
@@ -2049,8 +2050,17 @@ export async function POST(req: Request) {
     );
     const selectedSimpleRoutine = selectedBundles.find(isSimpleRoutine);
     const selectedAddOn = selectedProducts.find(isAddOnProduct);
+    const selectedSimpleRoutineUsage =
+      selectedSimpleRoutine && intent === "usage"
+        ? selectedSimpleRoutine.how_to_use?.[lang] ||
+          selectedSimpleRoutine.how_to_use?.en ||
+          ""
+        : "";
     const answerForActions =
-      limitedProductRequest || followsSimpleRoutineQuestion || simpleRoutineFollowUp
+      limitedProductRequest ||
+      explicitSimpleRoutineRequest ||
+      followsSimpleRoutineQuestion ||
+      simpleRoutineFollowUp
         ? {
             ...answer,
             product_ids:
@@ -2066,7 +2076,9 @@ export async function POST(req: Request) {
       handoff
     );
     const needsSimpleRoutineDetails =
-      (limitedProductRequest || followsSimpleRoutineQuestion) &&
+      (limitedProductRequest ||
+        explicitSimpleRoutineRequest ||
+        followsSimpleRoutineQuestion) &&
       !selectedSimpleRoutine;
     const reply = needsSimpleRoutineDetails
       ? tr(
@@ -2075,8 +2087,13 @@ export async function POST(req: Request) {
           "What is your skin type or main skin concern? For example dry, sensitive, oily, combination, normal, breakouts, dullness, or signs of ageing. Then I will select the matching two-product Simple Routine.",
           "Was ist dein Hauttyp oder dein wichtigstes Hautziel? Zum Beispiel trocken, empfindlich, fettig, Mischhaut, normal, Unreinheiten, fahle Haut oder Hautalterung. Dann wähle ich die passende Simple Routine mit zwei Produkten."
         )
-      : selectedSimpleRoutine &&
-          (limitedProductRequest || followsSimpleRoutineQuestion || simpleRoutineFollowUp)
+      : selectedSimpleRoutineUsage
+        ? `**${selectedSimpleRoutine!.name}**\n\n${selectedSimpleRoutineUsage}`
+        : selectedSimpleRoutine &&
+          (limitedProductRequest ||
+            explicitSimpleRoutineRequest ||
+            followsSimpleRoutineQuestion ||
+            simpleRoutineFollowUp)
         ? simpleRoutineReply(selectedSimpleRoutine, selectedAddOn, lang)
         : ensureHandoffCopy(answer.reply, handoff, lang);
     return jsonResponse(
