@@ -28,6 +28,7 @@ type Product = {
   url: string;
   image?: string | null;
   variant_id?: number | null;
+  available_for_sale?: boolean;
   type?: string | null;
   routine_step?: string | null;
   volume_ml?: number | null;

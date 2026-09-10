@@ -1,6 +1,6 @@
 import bundleCatalogData from "../data/bundle_catalog.json";
 
-export type Lang = "nl" | "en";
+export type Lang = "nl" | "en" | "de";
 
 export type SkinType =
   | "dry"
@@ -53,6 +53,7 @@ export type Bundle = {
   image: string;
   price: string;
   description: string;
+  descriptions: Record<Lang, string>;
   products: string[];
   howToUse: Record<Lang, string>;
 };
@@ -287,16 +288,6 @@ const PRODUCTS = {
     price: "€34,95",
   },
 
-  spf: {
-    title: "Sun Protection SPF50 Stick, no tint",
-    handle: "sun-protection-spf50-stick-no-tint",
-    url: "https://sovahcare.com/products/sun-protection-spf50-stick-no-tint",
-    variantId: 51952704848210,
-    image:
-      "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Sun-Protection-SPF50-Stick-no-tint.jpg?v=1775137726",
-    price: "€29,95",
-  },
-
   acneSpot: {
     title: "Acne Spot Care",
     handle: "acne-spot-care",
@@ -304,7 +295,7 @@ const PRODUCTS = {
     variantId: 51984072966482,
     image:
       "https://cdn.shopify.com/s/files/1/1007/2974/9842/files/SOVAH-Acne-Spot-Care-acne-treatment-blemish-care_718e95d2-b927-4adc-b551-15bebb4fce84.jpg?v=1775133667",
-    price: "€34,95",
+    price: "€29,95",
   },
 
   niacinamide: {
@@ -349,10 +340,16 @@ function bundleFromCatalog(id: string): Bundle {
     image: entry.image,
     price: entry.price,
     description: entry.description?.en || "",
+    descriptions: {
+      nl: entry.description?.nl || entry.description?.en || "",
+      en: entry.description?.en || "",
+      de: entry.description?.de || entry.description?.en || "",
+    },
     products: (entry.bundle_products || []).map((product) => product.title),
     howToUse: {
       nl: entry.how_to_use?.nl || "",
       en: entry.how_to_use?.en || "",
+      de: entry.how_to_use?.de || entry.how_to_use?.en || "",
     },
   };
 }
@@ -465,16 +462,6 @@ const ADDONS: Record<string, Addon> = {
       "An evening oil-serum for smoother-looking skin and anti-aging support.",
   },
 
-  spf: {
-    title: PRODUCTS.spf.title,
-    handle: PRODUCTS.spf.handle,
-    url: PRODUCTS.spf.url,
-    variantId: PRODUCTS.spf.variantId,
-    image: PRODUCTS.spf.image,
-    price: PRODUCTS.spf.price,
-    description:
-      "A standalone SPF product for daily sun protection. It is not included inside SOVAH routine bundles.",
-  },
 };
 
 function wantsSimpleRoutine(answers: QuizAnswers): boolean {
@@ -646,6 +633,28 @@ function getLocalizedReasonShort(lang: Lang, bundle: Bundle): string {
     }
   }
 
+  if (lang === "de") {
+    const reasons: Record<string, string> = {
+      "Dry Skin Routine": "Diese Routine passt am besten zu trockener, spannender oder feuchtigkeitsarmer Haut.",
+      "Sensitive Skin Routine": "Diese Routine passt am besten zu empfindlicher oder leicht reagierender Haut.",
+      "Acne Skin Routine": "Diese Routine passt am besten zu Pickeln, Unreinheiten und zu Ausbrüchen neigender Haut.",
+      "Combination Skin Routine": "Diese Routine passt am besten zu Mischhaut mit fettigeren und trockeneren Bereichen.",
+      "Dull Skin Routine": "Diese Routine passt am besten zu fahler Haut, die mehr Frische und Ausstrahlung benötigt.",
+      "Aging Skin Routine": "Diese Routine passt am besten zu feinen Linien und reifer wirkender Haut.",
+      "Normal Skin Routine": "Diese Routine passt am besten zu normaler Haut, die tägliche Balance benötigt.",
+      "Oily Skin Routine": "Diese Routine passt am besten zu fettiger oder schnell glänzender Haut.",
+      "Simple Normal Skin Routine": "Diese Routine ist ein einfacher Einstieg für normale Haut.",
+      "Simple Sensitive Skin Routine": "Diese Routine ist ein einfacher, milder Einstieg für empfindliche Haut.",
+      "Simple Oily Skin Routine": "Diese Routine ist ein einfacher Einstieg für fettige oder glänzende Haut.",
+      "Simple Combination Skin Routine": "Diese Routine ist ein einfacher Einstieg für Mischhaut.",
+      "Simple Aging Skin Routine": "Diese Routine ist ein einfacher Einstieg in die Pflege reifer wirkender Haut.",
+      "Simple Acne Routine": "Diese Routine ist ein einfacher Einstieg bei Pickeln und Unreinheiten.",
+      "Simple Dull Skin Routine": "Diese Routine ist ein einfacher Einstieg für frischer und strahlender wirkende Haut.",
+      "Simple Dry Routine": "Diese Routine ist ein einfacher Einstieg für trockene oder spannende Haut.",
+    };
+    return reasons[bundle.name] || "Diese Routine passt am besten zu deinen Antworten.";
+  }
+
   switch (bundle.name) {
     case "Dry Skin Routine":
       return "This routine is the best match for dry, tight or dehydrated-feeling skin.";
@@ -695,6 +704,12 @@ function getLocalizedReasonLong(
       : `${bundle.name} sluit het best aan op je antwoorden en houdt je routine duidelijk, passend en niet onnodig ingewikkeld.`;
   }
 
+  if (lang === "de") {
+    return addon
+      ? `${bundle.name} passt am besten zu deinen Antworten. ${addon.title} wird als gezielter optionaler Zusatzschritt empfohlen.`
+      : `${bundle.name} passt am besten zu deinen Antworten und hält deine Pflege klar, passend und nicht unnötig kompliziert.`;
+  }
+
   return addon
     ? `${bundle.name} is the best fit for your answers. ${addon.title} is added as an extra recommended step where it makes sense.`
     : `${bundle.name} is the best fit for your answers and keeps your routine clear, relevant and not unnecessarily complicated.`;
@@ -714,6 +729,8 @@ function getLocalizedSteps(
     steps.push(
       lang === "nl"
         ? `Optionele extra stap: ${addon.title}. Volg altijd de gebruiksinstructies op de productpagina.`
+        : lang === "de"
+          ? `Optionaler Zusatzschritt: ${addon.title}. Befolge immer die Anwendungshinweise auf der Produktseite.`
         : `Optional extra step: ${addon.title}. Always follow the directions on its product page.`
     );
   }

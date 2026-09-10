@@ -1,7 +1,7 @@
 {
-  "catalog_version": "2026-09-09-shopify-routines-v2",
+  "catalog_version": "2026-09-10-shopify-routines-v3",
   "generated_from": "Current active Shopify routines, variants, images and sovah metafields",
-  "last_verified": "2026-09-09",
+  "last_verified": "2026-09-10",
   "global_rules": {
     "product_catalog_is_source_of_truth": true,
     "edit_product_ids_not_generated_bundle_products": true,
@@ -62,11 +62,13 @@
       ],
       "description": {
         "nl": "Een gerichte driestappenroutine voor een vette, verstopte en onzuivere huid, met lichte hydratatie en plaatselijke verzorging.",
-        "en": "A streamlined three-step routine for oily, congested and blemish-prone skin. It removes daily buildup, provides non-heavy hydration and adds targeted care where needed."
+        "en": "A streamlined three-step routine for oily, congested and blemish-prone skin. It removes daily buildup, provides non-heavy hydration and adds targeted care where needed.",
+        "de": "Acne Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 3 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend\n1. Reinig met Acne Purifying Face Wash.\n2. Breng Acne Care Moisturiser aan.\n3. Sluit af met een aparte breedspectrum-SPF.\n\nAvond\n1. Reinig met Acne Purifying Face Wash.\n2. Breng Acne Care Moisturiser aan.\n3. Gebruik Acne Spot Care alleen plaatselijk op onzuiverheden volgens de productpagina.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning\n1. Cleanse with Acne Purifying Face Wash.\n2. Apply Acne Care Moisturiser.\n3. Finish with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse with Acne Purifying Face Wash.\n2. Apply Acne Care Moisturiser.\n3. Apply Acne Spot Care only to individual blemishes as directed.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning\n1. Cleanse with Acne Purifying Face Wash.\n2. Apply Acne Care Moisturiser.\n3. Finish with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse with Acne Purifying Face Wash.\n2. Apply Acne Care Moisturiser.\n3. Apply Acne Spot Care only to individual blemishes as directed.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens\n1. Mit Acne Purifying Face Wash reinigen.\n2. Acne Care Moisturiser auftragen.\n3. Abschließend eine separate Breitspektrum-Sonnencreme auftragen.\n\nAbends\n1. Mit Acne Purifying Face Wash reinigen.\n2. Acne Care Moisturiser auftragen.\n3. Acne Spot Care nach Anleitung nur punktuell auf einzelne Unreinheiten auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": true,
@@ -200,11 +202,13 @@
       ],
       "description": {
         "nl": "Een complete vierstappenroutine voor de huid met zichtbare tekenen van huidveroudering, droogte of verminderde stevigheid.",
-        "en": "A complete four-step routine for skin showing visible signs of ageing, such as fine lines, dryness and reduced firmness. It combines gentle cleansing with targeted peptide care and comforting day and night moisturisation."
+        "en": "A complete four-step routine for skin showing visible signs of ageing, such as fine lines, dryness and reduced firmness. It combines gentle cleansing with targeted peptide care and comforting day and night moisturisation.",
+        "de": "Aging Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 4 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Peptide Anti-Aging Serum aan.\n3. Sluit af met Anti-Age Day Cream en daarna een aparte breedspectrum-SPF.\n\nAvond\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Peptide Anti-Aging Serum aan.\n3. Sluit af met Collagen Anti-Age Night Cream.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Peptide Anti-Aging Serum.\n3. Finish with Anti-Age Day Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Peptide Anti-Aging Serum.\n3. Finish with Collagen Anti-Age Night Cream.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Peptide Anti-Aging Serum.\n3. Finish with Anti-Age Day Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Peptide Anti-Aging Serum.\n3. Finish with Collagen Anti-Age Night Cream.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens\n1. Mit Gentle Cleansing Milk reinigen.\n2. Peptide Anti-Aging Serum auftragen.\n3. Abschließend Anti-Age Day Cream auftragen.\n4. Danach eine separate Breitspektrum-Sonnencreme auftragen.\n\nAbends\n1. Mit Gentle Cleansing Milk reinigen.\n2. Peptide Anti-Aging Serum auftragen.\n3. Abschließend Collagen Anti-Age Night Cream auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": false,
@@ -319,11 +323,13 @@
       ],
       "description": {
         "nl": "Een gebalanceerde driestappenroutine voor een huid met een vettere T-zone en normale of drogere zones.",
-        "en": "A balanced three-step routine for skin that feels oily through the T-zone but normal or dry elsewhere. It refreshes, refines and moisturises without a heavy finish."
+        "en": "A balanced three-step routine for skin that feels oily through the T-zone but normal or dry elsewhere. It refreshes, refines and moisturises without a heavy finish.",
+        "de": "Combination Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 3 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend\n1. Reinig met Clarifying Gel.\n2. Breng Purifying Toner aan.\n3. Sluit af met Light Moisturising Day Cream en een aparte breedspectrum-SPF.\n\nAvond\nHerhaal dezelfde volgorde. Begin om de avond met de toner als je huid nog niet gewend is aan zuiverende producten.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning\n1. Cleanse with Clarifying Gel.\n2. Apply Purifying Toner.\n3. Finish with Light Moisturising Day Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\nRepeat the same order. Start Purifying Toner every other evening if your skin is new to clarifying products.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning\n1. Cleanse with Clarifying Gel.\n2. Apply Purifying Toner.\n3. Finish with Light Moisturising Day Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\nRepeat the same order. Start Purifying Toner every other evening if your skin is new to clarifying products.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens\n1. Mit Clarifying Gel reinigen.\n2. Purifying Toner auftragen.\n3. Abschließend Light Moisturising Day Cream auftragen.\n4. Danach eine separate Breitspektrum-Sonnencreme auftragen.\n\nAbends\nDie gleiche Reihenfolge wiederholen. Purifying Toner zunächst jeden zweiten Abend verwenden, wenn klärende Produkte neu für deine Haut sind.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": false,
@@ -440,11 +446,13 @@
       ],
       "description": {
         "nl": "Een comfortabele vierstappenroutine voor een droge, trekkerige of vochtarme huid, met aparte verzorging voor dag en nacht.",
-        "en": "A comforting four-step routine for skin that feels dry, tight or dehydrated. It combines gentle cleansing, a hydrating serum and separate day and night moisturisers."
+        "en": "A comforting four-step routine for skin that feels dry, tight or dehydrated. It combines gentle cleansing, a hydrating serum and separate day and night moisturisers.",
+        "de": "Dry Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 4 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Hydrating Serum aan.\n3. Sluit af met Moisturising Day Face Cream en een aparte breedspectrum-SPF.\n\nAvond\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Hydrating Serum aan.\n3. Sluit af met Ceramide Barrier Night Cream.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Hydrating Serum.\n3. Finish with Moisturising Day Face Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Hydrating Serum.\n3. Finish with Ceramide Barrier Night Cream.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Hydrating Serum.\n3. Finish with Moisturising Day Face Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Hydrating Serum.\n3. Finish with Ceramide Barrier Night Cream.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens\n1. Mit Gentle Cleansing Milk reinigen.\n2. Hydrating Serum auftragen.\n3. Abschließend Moisturising Day Face Cream auftragen.\n4. Danach eine separate Breitspektrum-Sonnencreme auftragen.\n\nAbends\n1. Mit Gentle Cleansing Milk reinigen.\n2. Hydrating Serum auftragen.\n3. Abschließend Ceramide Barrier Night Cream auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": false,
@@ -558,11 +566,13 @@
       ],
       "description": {
         "nl": "Een gerichte driestappenroutine voor een vermoeid, dof of ongelijkmatig ogende huid.",
-        "en": "A focused three-step routine for skin that looks tired, uneven or lacking in radiance. It cleanses gently, adds antioxidant care and finishes with lightweight hydration."
+        "en": "A focused three-step routine for skin that looks tired, uneven or lacking in radiance. It cleanses gently, adds antioxidant care and finishes with lightweight hydration.",
+        "de": "Dull Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 3 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend\n1. Reinig met Radiant Glow Facial Wash.\n2. Breng Vitamin C Serum aan.\n3. Sluit af met Niacinamide Gel Face Moisturiser en een aparte breedspectrum-SPF.\n\nAvond\nHerhaal dezelfde volgorde. Bouw Vitamin C Serum rustig op als je huid nog niet gewend is aan actieve huidverzorging.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning\n1. Cleanse with Radiant Glow Facial Wash.\n2. Apply Vitamin C Serum.\n3. Finish with Niacinamide Gel Face Moisturiser.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\nRepeat the same order. Introduce Vitamin C Serum gradually if your skin is new to active skincare.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning\n1. Cleanse with Radiant Glow Facial Wash.\n2. Apply Vitamin C Serum.\n3. Finish with Niacinamide Gel Face Moisturiser.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\nRepeat the same order. Introduce Vitamin C Serum gradually if your skin is new to active skincare.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens\n1. Mit Radiant Glow Facial Wash reinigen.\n2. Vitamin C Serum auftragen.\n3. Abschließend Niacinamide Gel Face Moisturiser auftragen.\n4. Danach eine separate Breitspektrum-Sonnencreme auftragen.\n\nAbends\nDie gleiche Reihenfolge wiederholen. Vitamin C Serum schrittweise einführen, wenn Wirkstoffpflege neu für deine Haut ist.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": true,
@@ -679,11 +689,13 @@
       ],
       "description": {
         "nl": "Een gebalanceerde driestappenroutine voor de normale huid met milde reiniging, hydratatie en dagelijkse verzorging.",
-        "en": "A balanced three-step routine for normal skin that benefits from gentle cleansing, lasting hydration and comfortable daily moisture."
+        "en": "A balanced three-step routine for normal skin that benefits from gentle cleansing, lasting hydration and comfortable daily moisture.",
+        "de": "Normal Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 3 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend\n1. Reinig met Cleansing Foam.\n2. Breng Hydrating Serum aan.\n3. Sluit af met Moisturising Day Face Cream en een aparte breedspectrum-SPF.\n\nAvond\nHerhaal dezelfde drie verzorgingsstappen.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning\n1. Cleanse with Cleansing Foam.\n2. Apply Hydrating Serum.\n3. Finish with Moisturising Day Face Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\nRepeat the same three skincare steps.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning\n1. Cleanse with Cleansing Foam.\n2. Apply Hydrating Serum.\n3. Finish with Moisturising Day Face Cream.\n4. Follow with a separate broad-spectrum sunscreen.\n\nEvening\nRepeat the same three skincare steps.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens\n1. Mit Cleansing Foam reinigen.\n2. Hydrating Serum auftragen.\n3. Abschließend Moisturising Day Face Cream auftragen.\n4. Danach eine separate Breitspektrum-Sonnencreme auftragen.\n\nAbends\nDie gleichen drei Pflegeschritte wiederholen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": true,
@@ -773,11 +785,13 @@
       ],
       "description": {
         "nl": "Een frisse driestappenroutine voor een huid die snel glanst of vet aanvoelt, met lichte texturen.",
-        "en": "A fresh three-step routine for skin that becomes shiny quickly or feels oily throughout the day. It cleanses, refreshes and hydrates with lightweight textures."
+        "en": "A fresh three-step routine for skin that becomes shiny quickly or feels oily throughout the day. It cleanses, refreshes and hydrates with lightweight textures.",
+        "de": "Oily Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 3 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend en avond\n1. Reinig met Clarifying Gel.\n2. Breng Purifying Toner aan.\n3. Breng Oil-Free Hydrating Gel Moisturizer aan.\n4. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning and evening\n1. Cleanse with Clarifying Gel.\n2. Apply Purifying Toner.\n3. Apply Oil-Free Hydrating Gel Moisturizer.\n4. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning and evening\n1. Cleanse with Clarifying Gel.\n2. Apply Purifying Toner.\n3. Apply Oil-Free Hydrating Gel Moisturizer.\n4. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens und abends\n1. Mit Clarifying Gel reinigen.\n2. Purifying Toner auftragen.\n3. Oil-Free Hydrating Gel Moisturizer auftragen.\n4. Morgens abschließend eine separate Breitspektrum-Sonnencreme auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": false,
@@ -850,11 +864,13 @@
       ],
       "description": {
         "nl": "Een milde driestappenroutine voor een gevoelige of reactief aanvoelende huid, met verzorging voor dag en nacht.",
-        "en": "A gentle three-step routine created for sensitive, easily stressed or reactive-feeling skin. It combines comforting oil-to-milk cleansing with fragrance-free moisturisers for day and night."
+        "en": "A gentle three-step routine created for sensitive, easily stressed or reactive-feeling skin. It combines comforting oil-to-milk cleansing with fragrance-free moisturisers for day and night.",
+        "de": "Sensitive Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 3 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend\n1. Masseer Sensitive Skin Oil-To-Milk Cleanser op een droge of vochtige huid.\n2. Voeg water toe, masseer tot de textuur melkachtig wordt en spoel af.\n3. Breng Sensitive Skin Moisturiser aan en sluit af met een aparte breedspectrum-SPF.\n\nAvond\n1. Reinig op dezelfde manier.\n2. Sluit af met Sensitive Skin Overnight Cream.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning\n1. Massage Sensitive Skin Oil-To-Milk Cleanser onto dry or damp skin.\n2. Add water, massage until it turns milky and rinse.\n3. Apply Sensitive Skin Moisturiser.\n4. Finish with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse in the same way.\n2. Finish with Sensitive Skin Overnight Cream.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning\n1. Massage Sensitive Skin Oil-To-Milk Cleanser onto dry or damp skin.\n2. Add water, massage until it turns milky and rinse.\n3. Apply Sensitive Skin Moisturiser.\n4. Finish with a separate broad-spectrum sunscreen.\n\nEvening\n1. Cleanse in the same way.\n2. Finish with Sensitive Skin Overnight Cream.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens\n1. Sensitive Skin Oil-To-Milk Cleanser in die trockene oder feuchte Haut einmassieren.\n2. Wasser hinzufügen, einmassieren, bis die Textur milchig wird, und abspülen.\n3. Sensitive Skin Moisturiser auftragen.\n4. Abschließend eine separate Breitspektrum-Sonnencreme auftragen.\n\nAbends\n1. Auf die gleiche Weise reinigen.\n2. Abschließend Sensitive Skin Overnight Cream auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": false,
@@ -962,11 +978,13 @@
       ],
       "description": {
         "nl": "Een gerichte tweestappenroutine voor een vette, verstopte en onzuivere huid.",
-        "en": "A focused two-step routine for oily, congested and blemish-prone skin. It cleanses daily buildup and restores lightweight moisture without unnecessary layers."
+        "en": "A focused two-step routine for oily, congested and blemish-prone skin. It cleanses daily buildup and restores lightweight moisture without unnecessary layers.",
+        "de": "Simple Acne Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 2 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend en avond\n1. Reinig met Acne Purifying Face Wash.\n2. Breng Acne Care Moisturiser aan.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning and evening\n1. Cleanse with Acne Purifying Face Wash.\n2. Apply Acne Care Moisturiser.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning and evening\n1. Cleanse with Acne Purifying Face Wash.\n2. Apply Acne Care Moisturiser.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens und abends\n1. Mit Acne Purifying Face Wash reinigen.\n2. Acne Care Moisturiser auftragen.\n3. Morgens abschließend eine separate Breitspektrum-Sonnencreme auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": true,
@@ -1095,11 +1113,13 @@
       ],
       "description": {
         "nl": "Een eenvoudige tweestappenroutine voor de huid met vroege tekenen van huidveroudering.",
-        "en": "A simple two-step routine for skin showing early signs of ageing. Gentle cleansing and a peptide moisturiser make consistent morning and evening care easy."
+        "en": "A simple two-step routine for skin showing early signs of ageing. Gentle cleansing and a peptide moisturiser make consistent morning and evening care easy.",
+        "de": "Simple Aging Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 2 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend en avond\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Peptide Ageless AM/PM Cream aan op gezicht en hals.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning and evening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Peptide Ageless AM/PM Cream to the face and neck.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning and evening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Peptide Ageless AM/PM Cream to the face and neck.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens und abends\n1. Mit Gentle Cleansing Milk reinigen.\n2. Peptide Ageless AM/PM Cream auf Gesicht und Hals auftragen.\n3. Morgens abschließend eine separate Breitspektrum-Sonnencreme auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": false,
@@ -1215,11 +1235,13 @@
       ],
       "description": {
         "nl": "Een eenvoudige tweestappenroutine voor een gecombineerde huid met lichte hydratatie.",
-        "en": "A simple two-step routine for combination skin. It refreshes areas prone to shine while providing comfortable, lightweight moisture across the face."
+        "en": "A simple two-step routine for combination skin. It refreshes areas prone to shine while providing comfortable, lightweight moisture across the face.",
+        "de": "Simple Combination Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 2 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend en avond\n1. Reinig met Clarifying Gel.\n2. Breng Light Moisturising Day Cream aan.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning and evening\n1. Cleanse with Clarifying Gel.\n2. Apply Light Moisturising Day Cream.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning and evening\n1. Cleanse with Clarifying Gel.\n2. Apply Light Moisturising Day Cream.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens und abends\n1. Mit Clarifying Gel reinigen.\n2. Light Moisturising Day Cream auftragen.\n3. Morgens abschließend eine separate Breitspektrum-Sonnencreme auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": false,
@@ -1332,11 +1354,13 @@
       ],
       "description": {
         "nl": "Een gebalanceerde tweestappenroutine met de dagelijkse basis voor een normale huid.",
-        "en": "A balanced two-step routine for normal skin. It covers the daily essentials with a gentle foam cleanse and comfortable moisturising cream."
+        "en": "A balanced two-step routine for normal skin. It covers the daily essentials with a gentle foam cleanse and comfortable moisturising cream.",
+        "de": "Simple Normal Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 2 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend en avond\n1. Reinig met Cleansing Foam.\n2. Breng Moisturising Day Face Cream aan.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning and evening\n1. Cleanse with Cleansing Foam.\n2. Apply Moisturising Day Face Cream.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning and evening\n1. Cleanse with Cleansing Foam.\n2. Apply Moisturising Day Face Cream.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens und abends\n1. Mit Cleansing Foam reinigen.\n2. Moisturising Day Face Cream auftragen.\n3. Morgens abschließend eine separate Breitspektrum-Sonnencreme auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": true,
@@ -1428,11 +1452,13 @@
       ],
       "description": {
         "nl": "Een comfortabele tweestappenroutine voor een droge of trekkerig aanvoelende huid.",
-        "en": "A comforting two-step routine for dry or tight-feeling skin. Creamy cleansing is followed by a richer fragrance-free moisturiser to help maintain softness and comfort."
+        "en": "A comforting two-step routine for dry or tight-feeling skin. Creamy cleansing is followed by a richer fragrance-free moisturiser to help maintain softness and comfort.",
+        "de": "Simple Dry Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 2 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend en avond\n1. Reinig met Gentle Cleansing Milk.\n2. Breng Nourishing Rich Cream aan op gezicht en hals.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning and evening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Nourishing Rich Cream to the face and neck.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning and evening\n1. Cleanse with Gentle Cleansing Milk.\n2. Apply Nourishing Rich Cream to the face and neck.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens und abends\n1. Mit Gentle Cleansing Milk reinigen.\n2. Nourishing Rich Cream auf Gesicht und Hals auftragen.\n3. Morgens abschließend eine separate Breitspektrum-Sonnencreme auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": false,
@@ -1499,11 +1525,13 @@
       ],
       "description": {
         "nl": "Een verhelderende tweestappenroutine voor een vermoeid of dof ogende huid.",
-        "en": "A brightening two-step routine for skin that looks tired or lacks freshness. It combines a radiance-focused cleanser with lightweight niacinamide hydration."
+        "en": "A brightening two-step routine for skin that looks tired or lacks freshness. It combines a radiance-focused cleanser with lightweight niacinamide hydration.",
+        "de": "Simple Dull Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 2 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend en avond\n1. Reinig met Radiant Glow Facial Wash.\n2. Breng Niacinamide Gel Face Moisturiser aan.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning and evening\n1. Cleanse with Radiant Glow Facial Wash.\n2. Apply Niacinamide Gel Face Moisturiser.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning and evening\n1. Cleanse with Radiant Glow Facial Wash.\n2. Apply Niacinamide Gel Face Moisturiser.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens und abends\n1. Mit Radiant Glow Facial Wash reinigen.\n2. Niacinamide Gel Face Moisturiser auftragen.\n3. Morgens abschließend eine separate Breitspektrum-Sonnencreme auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": true,
@@ -1621,11 +1649,13 @@
       ],
       "description": {
         "nl": "Een frisse tweestappenroutine voor een vette en glimmende huid.",
-        "en": "A fresh two-step routine for oily and shine-prone skin. It removes daily buildup and follows with oil-free hydration so skin feels clean, balanced and comfortable."
+        "en": "A fresh two-step routine for oily and shine-prone skin. It removes daily buildup and follows with oil-free hydration so skin feels clean, balanced and comfortable.",
+        "de": "Simple Oily Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 2 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend en avond\n1. Reinig met Clarifying Gel.\n2. Breng Oil-Free Hydrating Gel Moisturizer aan.\n3. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning and evening\n1. Cleanse with Clarifying Gel.\n2. Apply Oil-Free Hydrating Gel Moisturizer.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning and evening\n1. Cleanse with Clarifying Gel.\n2. Apply Oil-Free Hydrating Gel Moisturizer.\n3. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens und abends\n1. Mit Clarifying Gel reinigen.\n2. Oil-Free Hydrating Gel Moisturizer auftragen.\n3. Morgens abschließend eine separate Breitspektrum-Sonnencreme auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": true,
@@ -1731,11 +1761,13 @@
       ],
       "description": {
         "nl": "Een milde tweestappenroutine voor een gevoelige of reactief aanvoelende huid.",
-        "en": "A gentle two-step routine for sensitive, easily stressed or reactive-feeling skin. It pairs an oil-to-milk cleanser designed for sensitive-feeling skin with a fragrance-free daily moisturiser."
+        "en": "A gentle two-step routine for sensitive, easily stressed or reactive-feeling skin. It pairs an oil-to-milk cleanser designed for sensitive-feeling skin with a fragrance-free daily moisturiser.",
+        "de": "Simple Sensitive Skin Routine ist eine abgestimmte SOVAH-Pflegeroutine mit 2 Produkten für dieses Hautbedürfnis."
       },
       "how_to_use": {
         "nl": "Ochtend en avond\n1. Masseer Sensitive Skin Oil-To-Milk Cleanser op een droge of vochtige huid.\n2. Voeg water toe, masseer tot de textuur melkachtig wordt en spoel af.\n3. Breng Sensitive Skin Moisturiser aan.\n4. Sluit 's ochtends af met een aparte breedspectrum-SPF.\n\nTest elk product eerst afzonderlijk op een klein stukje huid. Voeg één product tegelijk toe en stop bij aanhoudende irritatie.",
-        "en": "Morning and evening\n1. Massage Sensitive Skin Oil-To-Milk Cleanser onto dry or damp skin.\n2. Add water, massage until it turns milky and rinse.\n3. Apply Sensitive Skin Moisturiser.\n4. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs."
+        "en": "Morning and evening\n1. Massage Sensitive Skin Oil-To-Milk Cleanser onto dry or damp skin.\n2. Add water, massage until it turns milky and rinse.\n3. Apply Sensitive Skin Moisturiser.\n4. In the morning, finish with a separate broad-spectrum sunscreen.\n\nPatch test each product separately before using the full routine. Introduce one product at a time and stop use if persistent irritation occurs.",
+        "de": "Morgens und abends\n1. Sensitive Skin Oil-To-Milk Cleanser in die trockene oder feuchte Haut einmassieren.\n2. Wasser hinzufügen, einmassieren, bis die Textur milchig wird, und abspülen.\n3. Sensitive Skin Moisturiser auftragen.\n4. Morgens abschließend eine separate Breitspektrum-Sonnencreme auftragen.\n\nJedes Produkt vor der vollständigen Routine einzeln an einer kleinen Hautstelle testen. Produkte nacheinander einführen und bei anhaltender Reizung nicht weiterverwenden."
       },
       "derived_certification_summary": {
         "all_products_vegan": false,

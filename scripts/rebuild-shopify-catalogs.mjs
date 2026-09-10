@@ -75,6 +75,7 @@ const newProducts = snapshot.products.map((p) => {
     url: `https://sovahcare.com/products/${p.handle}`,
     image: p.image,
     variant_id: Number(p.variantId),
+    available_for_sale: true,
     type,
     routine_step: type === "cleanser" ? "cleanse" : type === "toner" ? "after cleansing" : /night|overnight/i.test(p.title) ? "final evening step" : "moisturise",
     volume_ml: null,
@@ -138,8 +139,9 @@ const newProducts = snapshot.products.map((p) => {
 const byId = new Map(productCatalog.products.map((p) => [p.id, p]));
 for (const product of newProducts) byId.set(product.id, product);
 productCatalog.products = [...byId.values()];
-productCatalog.catalog_version = "2026-09-09-shopify-routines-v2";
-productCatalog.last_verified = "2026-09-09";
+productCatalog.products = productCatalog.products.filter((product) => !/spf|sunscreen/i.test(product.id));
+productCatalog.catalog_version = "2026-09-10-shopify-routines-v3";
+productCatalog.last_verified = "2026-09-10";
 
 const gidToProductId = new Map([
   ...snapshot.products.map((p) => [p.shopifyId, p.handle]),
@@ -261,8 +263,16 @@ const bundles = snapshot.routines.map((routine) => {
     routing_priority: previous.routing_priority || (id.includes("acne") ? 95 : id.includes("sensitive") ? 90 : 75),
     product_ids: productIds,
     bundle_products: products,
-    description: { nl: nlIntro[id], en: routine.intro },
-    how_to_use: { nl: `${howToNl[id]}\n\n${patchNl}`, en: `${routine.howTo}\n\n${patchEn}` },
+    description: {
+      nl: nlIntro[id],
+      en: routine.intro,
+      de: previous.description?.de || routine.intro,
+    },
+    how_to_use: {
+      nl: `${howToNl[id]}\n\n${patchNl}`,
+      en: `${routine.howTo}\n\n${patchEn}`,
+      de: previous.how_to_use?.de || `${routine.howTo}\n\n${patchEn}`,
+    },
     derived_certification_summary: {
       all_products_vegan: vegan,
       all_products_gluten_free: glutenFree,
@@ -282,9 +292,9 @@ const bundles = snapshot.routines.map((routine) => {
 });
 
 const bundleCatalog = {
-  catalog_version: "2026-09-09-shopify-routines-v2",
+  catalog_version: "2026-09-10-shopify-routines-v3",
   generated_from: "Current active Shopify routines, variants, images and sovah metafields",
-  last_verified: "2026-09-09",
+  last_verified: "2026-09-10",
   global_rules: {
     product_catalog_is_source_of_truth: true,
     edit_product_ids_not_generated_bundle_products: true,

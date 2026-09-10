@@ -26,7 +26,7 @@ export async function OPTIONS() {
   });
 }
 
-const VALID_LANGS = ["nl", "en"] as const;
+const VALID_LANGS = ["nl", "en", "de"] as const;
 
 const VALID_SKIN_TYPES = [
   "dry",
@@ -115,7 +115,7 @@ function normalizeQuizAnswers(body: unknown): QuizAnswers {
   };
 }
 
-function cleanRecommendedBundle(bundle: Bundle) {
+function cleanRecommendedBundle(bundle: Bundle, lang: Lang) {
   return {
     name: bundle?.name || "",
     url: bundle?.url || "",
@@ -123,7 +123,7 @@ function cleanRecommendedBundle(bundle: Bundle) {
     variantId: bundle?.variantId ?? null,
     image: bundle?.image || null,
     price: bundle?.price || null,
-    description: bundle?.description || "",
+    description: bundle?.descriptions?.[lang] || bundle?.description || "",
     products: Array.isArray(bundle?.products) ? bundle.products : [],
   };
 }
@@ -190,7 +190,7 @@ export async function POST(req: Request) {
         success: true,
         result: {
           lang: result.lang || answers.lang,
-          recommendedBundle: cleanRecommendedBundle(result.recommendedBundle),
+          recommendedBundle: cleanRecommendedBundle(result.recommendedBundle, answers.lang),
           addon: cleanAddon(result.addon),
           reasonShort: result.reasonShort || "",
           reasonLong: result.reasonLong || "",

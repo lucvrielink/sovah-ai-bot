@@ -1,7 +1,9 @@
 import fs from "node:fs";
 
-const products = JSON.parse(fs.readFileSync("data/product_catalog.json", "utf8")).products;
-const bundles = JSON.parse(fs.readFileSync("data/bundle_catalog.json", "utf8")).bundles;
+const productCatalog = JSON.parse(fs.readFileSync("data/product_catalog.json", "utf8"));
+const bundleCatalog = JSON.parse(fs.readFileSync("data/bundle_catalog.json", "utf8"));
+const products = productCatalog.products;
+const bundles = bundleCatalog.bundles;
 const snapshot = JSON.parse(fs.readFileSync("data/shopify_source_snapshot.json", "utf8"));
 
 const expected = {
@@ -28,8 +30,10 @@ const assert = (condition, message) => {
   if (!condition) errors.push(message);
 };
 
-assert(products.length === 38, `Expected 38 products, found ${products.length}`);
+assert(products.length === 37, `Expected 37 products, found ${products.length}`);
 assert(bundles.length === 16, `Expected 16 routines, found ${bundles.length}`);
+assert(productCatalog.catalog_version === bundleCatalog.catalog_version, "Product and routine catalog versions differ");
+assert(productCatalog.catalog_version === "2026-09-10-shopify-routines-v3", "Unexpected catalog version");
 assert(new Set(products.map((item) => item.id)).size === products.length, "Duplicate product IDs found");
 assert(new Set(bundles.map((item) => item.id)).size === bundles.length, "Duplicate routine IDs found");
 
@@ -48,6 +52,7 @@ for (const bundle of bundles) {
   assert(Boolean(bundle.price), `${bundle.id}: missing price`);
   assert(/test elk product/i.test(bundle.how_to_use?.nl || ""), `${bundle.id}: Dutch patch-test text missing`);
   assert(/patch test each product/i.test(bundle.how_to_use?.en || ""), `${bundle.id}: English patch-test text missing`);
+  assert(/jedes produkt/i.test(bundle.how_to_use?.de || ""), `${bundle.id}: German usage text missing`);
   assert(!bundle.product_ids.some((id) => /spf|sunscreen/.test(id)), `${bundle.id}: SPF must not be included`);
 
   const source = snapshotByTitle.get(bundle.name);
@@ -73,6 +78,11 @@ for (const product of newProducts) {
   assert(product.inci?.length > 0, `${product.id}: missing INCI`);
   assert(product.safety?.patch_test === true, `${product.id}: patch-test safety missing`);
 }
+
+assert(!products.some((item) => /spf|sunscreen/.test(item.id)), "Removed SPF product is still present");
+assert(products.every((item) => Boolean(item.variant_id)), "A product is missing its Shopify variant ID");
+assert(products.every((item) => typeof item.available_for_sale === "boolean"), "A product is missing availability metadata");
+assert(productById.get("acne-spot-care")?.price === "€29,95", "Acne Spot Care price differs from Shopify");
 
 if (errors.length) {
   console.error(`Catalog audit failed with ${errors.length} issue(s):`);
