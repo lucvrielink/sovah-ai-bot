@@ -17,6 +17,7 @@ source = source.replace(
   image: string;
   price: string;
   description: string;
+  descriptions: Record<Lang, string>;
   products: string[];
   howToUse: Record<Lang, string>;
 };
@@ -59,10 +60,16 @@ function bundleFromCatalog(id: string): Bundle {
     image: entry.image,
     price: entry.price,
     description: entry.description?.en || "",
+    descriptions: {
+      nl: entry.description?.nl || entry.description?.en || "",
+      en: entry.description?.en || "",
+      de: entry.description?.de || entry.description?.en || "",
+    },
     products: (entry.bundle_products || []).map((product) => product.title),
     howToUse: {
       nl: entry.how_to_use?.nl || "",
       en: entry.how_to_use?.en || "",
+      de: entry.how_to_use?.de || entry.how_to_use?.en || "",
     },
   };
 }
